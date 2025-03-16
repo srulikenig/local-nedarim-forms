@@ -1916,7 +1916,11 @@
 
         function SendData() {
 
-            if (GetURLParameter("Demo") == "1") { IAlertConfirm("זהו טופס לדוגמה. לא ניתן לבצע שליחה."); return false; }
+            IAlertConfirm("זהו טופס בפיתוח. לא ניתן לבצע שליחה.");
+            return false;
+            if (GetURLParameter("Demo") == "1") {
+                IAlertConfirm("זהו טופס בפיתוח. לא ניתן לבצע שליחה."); return false;
+            }
 
             //if (GetURLParameter("Zeout") == "") { IAlertConfirm("טופס זה ניתן לשליחה רק מעמדת נדרים פלוס."); return false; }
 
