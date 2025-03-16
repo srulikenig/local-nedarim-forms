@@ -1988,7 +1988,7 @@ function CardFixed_2_listGetAdders(NameVariable, Search, Idadders, idcity) {
     $("#CardFixed_" + NameVariable + "2_listCitywait").show()
 
     $.ajax({
-        url: "/nedarimplus/Forms/Manage.aspx?Action=GetStreets&Cityid=" + $(idcity).attr('Cityid'),
+        url: "https://matara.pro/nedarimplus/Forms/Manage.aspx?Action=GetStreets&Cityid=" + $(idcity).attr('Cityid'),
         context: Text,
         timeout: 16000,
     }).success(function (res) {
