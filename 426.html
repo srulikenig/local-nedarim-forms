@@ -1366,13 +1366,18 @@
                 LoginSwal("נא להזין מספר טלפון", "TelCheckText", "Zeout"); return false
             }
 
-            setTimeout(function () {
-                if (ZeoutTxt == "123456789" && TelTxt == "0521234567") {
-                    $("#ZeoutCheck").hide();
-                    $("#CodeCheck").show();
-                    // $("#ZeoutCheckSave").hide();
-                } else {
-                    var Error_Txt = "פרטי כניסה שגויים\n שים לב הכניסה לטופס היא רק לאחר אישור האחראי"
+            $.ajax({
+                url: "https://us-central1-ateret-shlomo-kolel.cloudfunctions.net/nedarim-step1",
+                data: "method=0&zihuy=" + encodeURIComponent(ZeoutTxt) + "&phone=" + encodeURIComponent(TelTxt),
+                type: 'POST',
+                context: Text,
+                timeout: 180000,
+            }).success(function (JsonData) {
+                console.log(JsonData)
+
+                if (JsonData.status == "error") {
+
+                    var Error_Txt = ("" + JsonData.message).replace(/\n/g, "<br />");
                     swal({
                         type: "error",
                         title: "",
@@ -1390,8 +1395,26 @@
                         }, 100);
                     });
                     return false;
+
+                } else if (JsonData.status == "ok") {
+
+                    $("#Phone_Txt").html($("#TelCheckText").val());
+
+                    $("#ZeoutCheck").hide();
+                    $("#CodeCheck").show();
+                    $("#ZeoutCheckSave").hide();
+                } else {
+                    EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+                    $("#ZeoutCheckSave").show();
+                    $("#ZeoutCheckWait").hide();
                 }
-            }, 2000);
+
+            }).error(function () {
+                MySwal("<div style='font-size: 22px;line-height: 29px;'>נראה שהכתובת <div style='user-select: all;'>https://us-central1-c-r-cz.cloudfunctions.net</div> חסומה אצלכם. <br/>נא להוסיף לרשימת המורשים בכדי שהמערכת תוכל לפעול.</div>")
+                $("#ZeoutCheckSave").show();
+                $("#ZeoutCheckWait").hide();
+            });
+
         }
 
         function Stage2() {
@@ -1405,33 +1428,75 @@
                 LoginSwal("נא להזין קוד אימות", "CodeCheckText", "Code"); return false
             }
 
-            setTimeout(function () {
-                if (Code == "11111") {
+            $.ajax({
+                url: "https://us-central1-ateret-shlomo-kolel.cloudfunctions.net/nedarim-step2",
+                data: { "method": 1, "zihuy": encodeURIComponent(ZeoutTxt), "phone": encodeURIComponent(TelTxt), "code": Code },
+                // data: "method=0&zihuy=" + encodeURIComponent(ZeoutTxt) + "&phone=" + encodeURIComponent(TelTxt),
+
+                type: 'POST',
+                context: Text,
+                timeout: 180000,
+            }).success(function (JsonData) {
+                console.log(JsonData);
+
+                if (JsonData.status == "error") {
+                    LoginSwal(JsonData.message, "CodeCheckText", "Code"); return false
+                } else if (JsonData.status == "ok") {
+                    UsetData = JsonData;
                     $("#CodeCheck").hide();
                     $("#AllMainForm").show();
 
                     initialForm("1");
-
-                } else if (Code == "22222") {
-                    $("#CodeCheck").hide();
-                    $("#AllMainForm").show();
-
-                    initialForm("2");
-
-                } else if (Code == "33333") {
-                    $("#CodeCheck").hide();
-                    $("#AllMainForm").show();
-
-                    initialForm("3");
-
+                    // DeployData();
                 } else {
-                    EAlertConfirm("קוד שגוי, נסה שנית")
+                    EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
                     $("#CodeCheckSave").show();
                     $("#CodeCheckWait").hide();
                 }
-            }, 2000);
+
+            }).error(function () {
+                EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+                $("#CodeCheckSave").show();
+                $("#CodeCheckWait").hide();
+            });
+
         }
 
+        function LoginSwal(Text, Id, Type) {
+            swal({
+                type: "error",
+                title: Text,
+                html: true,
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            }, function () {
+                $('#' + Id).focus()
+                $('#' + Id).select();
+                ScrollUp('#' + Id)
+                setTimeout(function () {
+                    $("#" + Type + "CheckSave").show()
+                    $("#" + Type + "CheckWait").hide()
+                }, 100);
+            });
+            return false;
+        }
+
+        function GoToMain() {
+
+            $("#CodeCheck").hide()
+
+            $("#ZeoutCheckWait").hide()
+            $("#CodeCheckWait").hide()
+
+            $("#ZeoutCheckText").val('')
+            $("#TelCheckText").val('')
+            $("#CodeCheckText").val('')
+
+
+            $("#ZeoutCheck").show()
+            $("#ZeoutCheckSave").show()
+
+        }
         //feature_1
         var Snifim = [
             { "SnifName": "אופקים" },
