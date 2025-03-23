@@ -301,6 +301,7 @@
 
         //
 
+        //מאושרים
         var FormElementsStatus1 = [
 
             //, { "Type": "Div", "ElementId": "Span123", "Text": "", "Style": "margin-top:20px;margin-right:-20px" }
@@ -315,14 +316,18 @@
             , { "ElementId": "FirstName", "MaxLength": 50, "Width": 40, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true, "DbName": "Field3", "Br": true }
 
 
-            , { "Type": "Div", "ElementId": "Citizen", "Text": "<span style='color:indianred'>*</span>אזרחות", "Style": "text-align:rhight;color:#808080;font-family: assistant,Arial;font-size:17px;font-weight: normal;width: 80%;margin-right: 25px;margin-top: 25px;" }
-            , { "ElementId": "Israel", "fieldName": "ישראל", "Type": "CheckBox", "Mandatory": false, "Br": false, "DbName": "Field4", }
-            , { "ElementId": "Chutz", "fieldName": "אזרח חוץ", "Type": "CheckBox", "Mandatory": false, "Br": true, "DbName": "Field65", }
-
+            // , { "Type": "Div", "ElementId": "Citizen", "Text": "<span style='color:indianred'>*</span>אזרחות", "Style": "text-align:rhight;color:#808080;font-family: assistant,Arial;font-size:17px;font-weight: normal;width: 80%;margin-right: 25px;margin-top: 25px;" }
+            // , { "ElementId": "Israel", "fieldName": "ישראל", "Type": "CheckBox", "Mandatory": false, "Br": false, "DbName": "Field4", }
+            // , { "ElementId": "Chutz", "fieldName": "אזרח חוץ", "Type": "CheckBox", "Mandatory": false, "Br": true, "DbName": "Field65", }
+            , {
+                "ElementId": "Citizen", "MaxLength": 50, "Width": 90, "fieldName": "אזרחות", "Type": "Radio", "Mandatory": true, "DbName": "Field4", "Br": false, "br": false, "LblHide": false, "RadioBt": [
+                    { "Text": "ישראל" }
+                    , { "Text": "אזרח חוץ" }]
+            }
 
 
             , { "ElementId": "Zeout1", "MaxLength": 9, "Width": 40, "fieldName": "תעודת זהות", "Type": "Text", "Mandatory": true, "DbName": "Field5", "Br": false }
-            , { "ElementId": "Darkon1", "MaxLength": 9, "Width": 40, "fieldName": "דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field6", "Br": false }
+            // , { "ElementId": "Darkon1", "MaxLength": 9, "Width": 40, "fieldName": "דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field6", "Br": false }
             //, { "ElementId": "citizenship", "MaxLength": 50, "Width": 40, "fieldName": "אזרחות", "Type": "Text", "Mandatory": true, "DbName": "Field7", "Br": false }
             , { "ElementId": "CuntryName", "MaxLength": 30, "Width": 40, "fieldName": "ארץ דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field9", "Br": true }
 
@@ -355,7 +360,7 @@
                     { "Text": "כן" }
                     , { "Text": "לא" }]
             }
-            , { "ElementId": "BDEMarrige", "MaxLength": 30, "Width": 40, "fieldName": "תאריך חתונה", "Type": "Text", "Mandatory": true, "DbName": "Field32", "Br": false }
+            , { "ElementId": "BDEMarrige", "MaxLength": 30, "Width": 40, "fieldName": "תאריך חתונה", "fieldNameShow": "ת.חתונה עברי<br/>בתבנית זאת בלבד<br /> (כב אב תשפ\"א)", "Type": "Text", "Mandatory": true, "DbName": "Field32", "Br": false }
 
             , { "ElementId": "NoteMarrige", "fieldNameShow": "אי רישום לנישואין במשרד הפנים מאבד את הזכאות לתמיכת &quot;דתות&quot; מלאה. יש להירשם לנישואין בהקדם. בכל מקרה של איבוד תמיכה, הסכום יקוזז מהמלגה.", "fieldName": "אי רישום לנישואין במשרד הפנים מאבד את הזכאות לתמיכת &quot;דתות&quot; מלאה. יש להירשם לנישואין בהקדם. בכל מקרה של איבוד תמיכה, הסכום יקוזז מהמלגה.", "Type": "CheckBox", "Mandatory": true, "Br": false, "DbName": "Field95" }
 
@@ -446,9 +451,9 @@
             , { "ElementId": "OA3", "MaxLength": 30, "Width": 40, "fieldNameShow": "שם האם", "fieldName": "שם האם - הורי האברך", "Type": "Text", "Mandatory": false, "DbName": "Field38", "Br": false }
             , { "ElementId": "OA4", "MaxLength": 11, "Width": 40, "fieldNameShow": "טלפון אם", "fieldName": "טלפון - אם האברך", "Type": "Tel", "Mandatory": false, "DbName": "Field39", "Br": false }
             //, { "ElementId": "OA5", "MaxLength": 30, "Width": 40, "fieldNameShow": "כתובת", "fieldName": "כתובת - הורי האברך", "Type": "Text", "Mandatory": false, "DbName": "Field40", "Br": true }
+            , { "ElementId": "OA14", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": false, "DbName": "Field1Max", "Br": false }
             , { "ElementId": "OA5", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": false, "DbName": "Field78", "Br": false }
             , { "ElementId": "OA13", "MaxLength": 50, "Width": 40, "fieldName": "מספר", "Type": "Tel", "Mandatory": false, "DbName": "Field2Max", "Br": false }
-            , { "ElementId": "OA14", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": false, "DbName": "Field1Max", "Br": false }
 
 
             , { "Type": "SubKoteret", "Text": "הורי האשה" }
@@ -460,9 +465,9 @@
             , { "ElementId": "OA9", "MaxLength": 11, "Width": 40, "fieldNameShow": "טלפון אם", "fieldName": "טלפון - אם האשה", "Type": "Tel", "Mandatory": false, "DbName": "Field44", "Br": false }
             //, { "ElementId": "OA10", "MaxLength": 30, "Width": 40, "fieldNameShow": "כתובת", "fieldName": "כתובת - הורי האשה", "Type": "Text", "Mandatory": false, "DbName": "Field45", "Br": true }
 
+            , { "ElementId": "OA12", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": false, "DbName": "Field69", "Br": false }
             , { "ElementId": "OA10", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": false, "DbName": "Field47", "Br": false }
             , { "ElementId": "OA15", "MaxLength": 50, "Width": 40, "fieldName": "מספר", "Type": "Tel", "Mandatory": false, "DbName": "Field59", "Br": false }
-            , { "ElementId": "OA12", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": false, "DbName": "Field69", "Br": false }
 
             , { "Type": "Koteret", "Text": "פרטי צבא" }
             //, { "Type": "SubKoteret2", "Text": "אם אינך יודע בוודאות, אל תסמן כלום" }
@@ -576,17 +581,17 @@
             , { "ElementId": "NoteChul", "fieldNameShow": "ידוע לי כי יציאה לחו&quot;ל שלא בזמני חופשות עלולה לגרום לאיבוד תמיכת &quot;דתות&quot;.יציאה מתוכננת לחו&quot;ל מחייבת הודעה מנומקת מראש לממונה הכולל למניעת איבוד התמיכה. בכל מקרה של איבוד תמיכה, הסכום יקוזז מהמלגה.", "fieldName": "ידוע לי כי יציאה לחו&quot;ל שלא בזמני חופשות עלולה לגרום לאיבוד תמיכת &quot;דתות&quot;.יציאה מתוכננת לחו&quot;ל מחייבת הודעה מנומקת מראש לממונה הכולל למניעת איבוד התמיכה. בכל מקרה של איבוד תמיכה, הסכום יקוזז מהמלגה.", "Type": "CheckBox", "Mandatory": true, "Br": false, "DbName": "Field97" }
 
 
-            , { "ElementId": "ADD1", "MaxLength": 30, "Width": 40, "fieldName": "קבוצה", "Type": "Text", "Mandatory": true, "DbName": "Field80", "Br": true }
-            , { "ElementId": "ADD2", "MaxLength": 30, "Width": 40, "fieldName": "אישור תאריך כניסה לכולל", "Type": "Text", "Mandatory": false, "DbName": "Field81", "Br": false, "SendToMail": true }
-            , { "ElementId": "ADD3", "MaxLength": 30, "Width": 40, "fieldName": "אישור זמן הלימוד", "Type": "Text", "Mandatory": false, "DbName": "Field82", "Br": false, "SendToMail": true }
-            , { "ElementId": "ADD4", "MaxLength": 30, "Width": 40, "fieldName": "פירוט תוספות מיוחדות למלגה – תוספת קבועה", "Type": "Text", "Mandatory": false, "DbName": "Field83", "Br": false, "SendToMail": true }
-            , { "ElementId": "ADD5", "MaxLength": 30, "Width": 40, "fieldName": "פירוט תוספות מיוחדות למלגה – תוספת משתנה", "Type": "Text", "Mandatory": false, "DbName": "Field84", "Br": false, "SendToMail": true }
-            , { "ElementId": "ADD6", "MaxLength": 30, "Width": 40, "fieldName": "פירוט תפקיד/אחריות מיוחדת", "Type": "Text", "Mandatory": false, "DbName": "Field85", "Br": false, "SendToMail": true }
-            , { "ElementId": "ADD7", "MaxLength": 30, "Width": 40, "fieldName": "פעיל / לא פעיל", "Type": "Text", "Mandatory": false, "DbName": "Field86", "Br": false, "SendToMail": true }
-            , { "ElementId": "ADD8", "MaxLength": 30, "Width": 40, "fieldName": "תאריך עזיבה", "Type": "Text", "Mandatory": false, "DbName": "Field87", "Br": false, "SendToMail": true }
-            , { "ElementId": "ADD9", "MaxLength": 30, "Width": 40, "fieldName": "הערות", "Type": "Text", "Mandatory": false, "DbName": "Field88", "Br": false, "SendToMail": true }
-            , { "ElementId": "ADD10", "MaxLength": 30, "Width": 40, "fieldName": "תאריך אישור ממונה", "Type": "Text", "Mandatory": false, "DbName": "Field89", "Br": false, "SendToMail": true }
-            , { "ElementId": "ADD11", "MaxLength": 30, "Width": 40, "fieldName": "חתימת הממונה", "Type": "Text", "Mandatory": false, "DbName": "Field90", "Br": false, "SendToMail": true }
+            // , { "ElementId": "ADD1", "MaxLength": 30, "Width": 40, "fieldName": "קבוצה", "Type": "Text", "Mandatory": true, "DbName": "Field80", "Br": true }
+            // , { "ElementId": "ADD2", "MaxLength": 30, "Width": 40, "fieldName": "אישור תאריך כניסה לכולל", "Type": "Text", "Mandatory": false, "DbName": "Field81", "Br": false, "SendToMail": true }
+            // , { "ElementId": "ADD3", "MaxLength": 30, "Width": 40, "fieldName": "אישור זמן הלימוד", "Type": "Text", "Mandatory": false, "DbName": "Field82", "Br": false, "SendToMail": true }
+            // , { "ElementId": "ADD4", "MaxLength": 30, "Width": 40, "fieldName": "פירוט תוספות מיוחדות למלגה – תוספת קבועה", "Type": "Text", "Mandatory": false, "DbName": "Field83", "Br": false, "SendToMail": true }
+            // , { "ElementId": "ADD5", "MaxLength": 30, "Width": 40, "fieldName": "פירוט תוספות מיוחדות למלגה – תוספת משתנה", "Type": "Text", "Mandatory": false, "DbName": "Field84", "Br": false, "SendToMail": true }
+            // , { "ElementId": "ADD6", "MaxLength": 30, "Width": 40, "fieldName": "פירוט תפקיד/אחריות מיוחדת", "Type": "Text", "Mandatory": false, "DbName": "Field85", "Br": false, "SendToMail": true }
+            // , { "ElementId": "ADD7", "MaxLength": 30, "Width": 40, "fieldName": "פעיל / לא פעיל", "Type": "Text", "Mandatory": false, "DbName": "Field86", "Br": false, "SendToMail": true }
+            // , { "ElementId": "ADD8", "MaxLength": 30, "Width": 40, "fieldName": "תאריך עזיבה", "Type": "Text", "Mandatory": false, "DbName": "Field87", "Br": false, "SendToMail": true }
+            // , { "ElementId": "ADD9", "MaxLength": 30, "Width": 40, "fieldName": "הערות", "Type": "Text", "Mandatory": false, "DbName": "Field88", "Br": false, "SendToMail": true }
+            // , { "ElementId": "ADD10", "MaxLength": 30, "Width": 40, "fieldName": "תאריך אישור ממונה", "Type": "Text", "Mandatory": false, "DbName": "Field89", "Br": false, "SendToMail": true }
+            // , { "ElementId": "ADD11", "MaxLength": 30, "Width": 40, "fieldName": "חתימת הממונה", "Type": "Text", "Mandatory": false, "DbName": "Field90", "Br": false, "SendToMail": true }
 
 
             , { "Type": "Margin", "Height": "25" }
@@ -653,6 +658,8 @@
             , { "Type": "DivClose" }
 
         ];
+
+        //בוגרים
         var FormElementsStatus2 = [
             { "ElementId": "Snif1", "MaxLength": 50, "Width": 40, "fieldName": "סניף מבוקש", "Type": "Text", "Mandatory": true, "DbName": "Field1", "Br": true }
 
@@ -661,14 +668,18 @@
             , { "ElementId": "FirstName", "MaxLength": 50, "Width": 40, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true, "DbName": "Field3", "Br": true }
 
 
-            , { "Type": "Div", "ElementId": "Citizen", "Text": "<span style='color:indianred'>*</span>אזרחות", "Style": "text-align:rhight;color:#808080;font-family: assistant,Arial;font-size:17px;font-weight: normal;width: 80%;margin-right: 25px;margin-top: 25px;" }
-            , { "ElementId": "Israel", "fieldName": "ישראל", "Type": "CheckBox", "Mandatory": false, "Br": false, "DbName": "Field4", }
-            , { "ElementId": "Chutz", "fieldName": "אזרח חוץ", "Type": "CheckBox", "Mandatory": false, "Br": true, "DbName": "Field65", }
+            // , { "Type": "Div", "ElementId": "Citizen", "Text": "<span style='color:indianred'>*</span>אזרחות", "Style": "text-align:rhight;color:#808080;font-family: assistant,Arial;font-size:17px;font-weight: normal;width: 80%;margin-right: 25px;margin-top: 25px;" }
+            // , { "ElementId": "Israel", "fieldName": "ישראל", "Type": "CheckBox", "Mandatory": false, "Br": false, "DbName": "Field4", }
+            // , { "ElementId": "Chutz", "fieldName": "אזרח חוץ", "Type": "CheckBox", "Mandatory": false, "Br": true, "DbName": "Field65", }
 
-
+            , {
+                "ElementId": "Citizen", "MaxLength": 50, "Width": 90, "fieldName": "אזרחות", "Type": "Radio", "Mandatory": true, "DbName": "Field4", "Br": false, "br": false, "LblHide": false, "RadioBt": [
+                    { "Text": "ישראל" }
+                    , { "Text": "אזרח חוץ" }]
+            }
 
             , { "ElementId": "Zeout1", "MaxLength": 9, "Width": 40, "fieldName": "תעודת זהות", "Type": "Text", "Mandatory": true, "DbName": "Field5", "Br": false }
-            , { "ElementId": "Darkon1", "MaxLength": 9, "Width": 40, "fieldName": "דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field6", "Br": false }
+            // , { "ElementId": "Darkon1", "MaxLength": 9, "Width": 40, "fieldName": "דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field6", "Br": false }
             //, { "ElementId": "citizenship", "MaxLength": 50, "Width": 40, "fieldName": "אזרחות", "Type": "Text", "Mandatory": true, "DbName": "Field7", "Br": false }
             , { "ElementId": "CuntryName", "MaxLength": 30, "Width": 40, "fieldName": "ארץ דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field9", "Br": true }
             , { "Type": "Koteret", "Text": "פרטי יצירת קשר" }
@@ -679,13 +690,15 @@
             , { "ElementId": "Mail", "MaxLength": 50, "Width": 60, "fieldName": "מייל", "Type": "Text", "Mandatory": false, "DbName": "Field26", "Br": false }
 
             , { "Type": "Koteret", "Text": "פרטים נוספים" }
-            , { "ElementId": "BDEMarrige", "MaxLength": 30, "Width": 40, "fieldName": "תאריך חתונה", "Type": "Text", "Mandatory": true, "DbName": "Field32", "Br": false }
             , { "ElementId": "City", "MaxLength": 30, "Width": 40, "fieldName": "עיר מגורים לאחר החתונה", "Type": "Text", "Mandatory": true, "DbName": "Field16", "Br": false }
-            , { "ElementId": "VAAD", "MaxLength": 30, "Width": 40, "fieldName": "ועד", "Type": "Text", "Mandatory": true, "Br": true }
+            , { "ElementId": "VAAD", "MaxLength": 30, "Width": 40, "fieldName": "ועד", "Type": "Text", "Mandatory": true, "Br": true, "DbName": "Field80" }
+            , { "ElementId": "BDEMarrige", "MaxLength": 30, "Width": 40, "fieldName": "תאריך חתונה", "fieldNameShow": "ת.חתונה עברי<br/>בתבנית זאת בלבד<br /> (כב אב תשפ\"א)", "Type": "Text", "Mandatory": true, "DbName": "Field32", "Br": false }
 
 
 
         ];
+
+        //מומלצים
         var FormElementsStatus3 = [
             { "ElementId": "Snif1", "MaxLength": 50, "Width": 40, "fieldName": "סניף מבוקש", "Type": "Text", "Mandatory": true, "DbName": "Field1", "Br": true }
 
@@ -694,14 +707,18 @@
             , { "ElementId": "FirstName", "MaxLength": 50, "Width": 40, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true, "DbName": "Field3", "Br": true }
 
 
-            , { "Type": "Div", "ElementId": "Citizen", "Text": "<span style='color:indianred'>*</span>אזרחות", "Style": "text-align:rhight;color:#808080;font-family: assistant,Arial;font-size:17px;font-weight: normal;width: 80%;margin-right: 25px;margin-top: 25px;" }
-            , { "ElementId": "Israel", "fieldName": "ישראל", "Type": "CheckBox", "Mandatory": false, "Br": false, "DbName": "Field4", }
-            , { "ElementId": "Chutz", "fieldName": "אזרח חוץ", "Type": "CheckBox", "Mandatory": false, "Br": true, "DbName": "Field65", }
-
+            // , { "Type": "Div", "ElementId": "Citizen", "Text": "<span style='color:indianred'>*</span>אזרחות", "Style": "text-align:rhight;color:#808080;font-family: assistant,Arial;font-size:17px;font-weight: normal;width: 80%;margin-right: 25px;margin-top: 25px;" }
+            // , { "ElementId": "Israel", "fieldName": "ישראל", "Type": "CheckBox", "Mandatory": false, "Br": false, "DbName": "Field4", }
+            // , { "ElementId": "Chutz", "fieldName": "אזרח חוץ", "Type": "CheckBox", "Mandatory": false, "Br": true, "DbName": "Field65", }
+            , {
+                "ElementId": "Citizen", "MaxLength": 50, "Width": 90, "fieldName": "אזרחות", "Type": "Radio", "Mandatory": true, "DbName": "Field4", "Br": false, "br": false, "LblHide": false, "RadioBt": [
+                    { "Text": "ישראל" }
+                    , { "Text": "אזרח חוץ" }]
+            }
 
 
             , { "ElementId": "Zeout1", "MaxLength": 9, "Width": 40, "fieldName": "תעודת זהות", "Type": "Text", "Mandatory": true, "DbName": "Field5", "Br": false }
-            , { "ElementId": "Darkon1", "MaxLength": 9, "Width": 40, "fieldName": "דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field6", "Br": false }
+            // , { "ElementId": "Darkon1", "MaxLength": 9, "Width": 40, "fieldName": "דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field6", "Br": false }
             //, { "ElementId": "citizenship", "MaxLength": 50, "Width": 40, "fieldName": "אזרחות", "Type": "Text", "Mandatory": true, "DbName": "Field7", "Br": false }
             , { "ElementId": "CuntryName", "MaxLength": 30, "Width": 40, "fieldName": "ארץ דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field9", "Br": true }
             , { "Type": "Koteret", "Text": "פרטי יצירת קשר" }
@@ -711,21 +728,16 @@
             , { "ElementId": "Tel4", "MaxLength": 11, "Width": 40, "fieldName": "נייד אשה", "Type": "Tel", "Mandatory": false, "DbName": "Field25", "Br": false }
             , { "ElementId": "Mail", "MaxLength": 50, "Width": 60, "fieldName": "מייל", "Type": "Text", "Mandatory": false, "DbName": "Field26", "Br": false }
 
-            , { "Type": "Koteret", "Text": "פרטים נוספים" }
-            , { "ElementId": "BDEMarrige", "MaxLength": 30, "Width": 40, "fieldName": "תאריך חתונה", "Type": "Text", "Mandatory": true, "DbName": "Field32", "Br": false }
-            , { "ElementId": "City", "MaxLength": 30, "Width": 40, "fieldName": "עיר מגורים לאחר החתונה", "Type": "Text", "Mandatory": true, "DbName": "Field16", "Br": false }
-            , { "ElementId": "VAAD", "MaxLength": 30, "Width": 40, "fieldName": "ועד", "Type": "Text", "Mandatory": true, "Br": true }
-
             , { "Type": "Koteret", "Text": "מקומות לימוד" }
-            , { "ElementId": "YKName", "MaxLength": 30, "Width": 40, "fieldName": "שם ישיבה קטנה", "Type": "Text", "Mandatory": true, "Br": true }
+            , { "ElementId": "YKName", "MaxLength": 30, "Width": 40, "fieldName": "שם ישיבה קטנה", "Type": "Text", "Mandatory": true, "Br": true, "DbName": "Field81" }
             , { "ElementId": "YGName", "MaxLength": 30, "Width": 40, "fieldName": "שם ישיבה גדולה", "Type": "Text", "Mandatory": true, "DbName": "Field49", "Br": true }
             , { "ElementId": "OWN", "MaxLength": 30, "Width": 40, "fieldName": "שם מקום לימודים קודם", "Type": "Text", "Mandatory": true, "DbName": "Field48", "Br": false }
 
 
             , { "Type": "Koteret", "Text": "פרטי הורים" }
-            , { "ElementId": "OA1", "MaxLength": 30, "Width": 40, "fieldNameShow": "שם האב (שם פרטי ומשפחה)", "fieldName": "שם האב - הורי האברך", "Type": "Text", "Mandatory": true, "DbName": "Field36", "Br": false }
-            , { "ElementId": "OA6", "MaxLength": 30, "Width": 40, "fieldNameShow": "שם משפחה", "fieldName": "שם משפחה - אב האשה", "Type": "Text", "Mandatory": false, "DbName": "Field41", "Br": false }
-            , { "ElementId": "OA11", "MaxLength": 30, "Width": 40, "fieldNameShow": "שם האב(פרטי)", "fieldName": "שם האב - אב האשה", "Type": "Text", "Mandatory": false, "DbName": "Field7", "Br": false }
+            , { "ElementId": "OA1", "MaxLength": 30, "Width": 40, "fieldNameShow": "שם אב האברך שם פרטי", "fieldName": "שם האב - הורי האברך", "Type": "Text", "Mandatory": true, "DbName": "Field36", "Br": false }
+            , { "ElementId": "OA6", "MaxLength": 30, "Width": 40, "fieldNameShow": "שם  משפחה אב האישה", "fieldName": "שם משפחה - אב האשה", "Type": "Text", "Mandatory": false, "DbName": "Field41", "Br": false }
+            , { "ElementId": "OA11", "MaxLength": 30, "Width": 40, "fieldNameShow": "שם פרטי אב האישה", "fieldName": "שם האב - אב האשה", "Type": "Text", "Mandatory": false, "DbName": "Field7", "Br": false }
 
 
         ];
@@ -742,17 +754,19 @@
         }
 
 
-        function initialForm(status) {
+        function initialForm(data) {
+
+            const status = data.statusRishum;
 
             var elemetsArr = []
             switch (status) {
-                case "1":
+                case 1:
                     elemetsArr = FormElementsStatus1
                     break;
-                case "2":
+                case 2:
                     elemetsArr = FormElementsStatus2;
                     break;
-                case "3":
+                case 3:
                     elemetsArr = FormElementsStatus3;
                     break;
 
@@ -893,82 +907,111 @@
             $('#BankPickerDiv').hide()
             $("#MainForm").html(MainForm);
 
-            //$('#BDE').bind('keyup',function (e) {
-            //    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
-            //    if (key !== 8 && key !== 46 && key !== 0) {
-            //        if ($(this).val().length == 2) { $(this).val($(this).val() + "/"); return false; }
-            //        if ($(this).val().length == 5) { $(this).val($(this).val() + "/"); return false; }
-            //    }
-            //});
-
-            $('#ZeoutWifeDiv').hide();
-            $('#NoteIshurAccountWifeDiv').hide();
-
-
-            $('#IshurAccountWife').change(function () {
-                $('#ZeoutWifeDiv').hide();
-                $('#ZeoutWife').val('');
-                $('#AccountN').val('');
-                $('#NoteIshurAccountWifeDiv').hide();
-                $('#NoteIshurAccountWife').prop('checked', false);
-                if ($("#IshurAccountWife").is(":checked") == true) {
-                    $('#ZeoutWifeDiv').show();
-                    $('#NoteIshurAccountWifeDiv').show();
-                }
-            });
-
-
+            //TODO: לבדוק אם אפשר להעיף את השדות האלו
             for (var i = 1; i < 12; i++) {
                 $('#ADD' + i + "Div").hide();
             }
 
-            //   $("#Agent").val(decode(GetURLParameter("Agent")));
+            //סניפים
 
-
-            // $("select#Tashlumim").val('12');
-
-
-            $('#BDE').bind('keyup', function (e) {
-                var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
-                if (key !== 8 && key !== 46 && key !== 0) {
-                    var TempDate = $(this).val().replace(/\//g, "")
-                    if ($.isNumeric(TempDate)) {
-                        if (TempDate.length >= 4) {
-                            TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2, 2) + "/" + TempDate.substr(4)
-                        } else if (TempDate.length >= 2) {
-                            TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2)
-                        }
-                        $(this).val(TempDate)
-                    }
-                }
-
+            //feature_1
+            $("#Snif1").focus(function () {
+                $('#SnifChoose').show()
+                $("#Snif1").blur()
 
             });
 
+            for (var i = 0; i < Snifim.length; i++) {
+                $("#SnifimTable").append('<tr><td id="NatsigTb' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center">' + Snifim[i].SnifName + '</div></td></tr>');
+                (function (i) {
+                    $("#NatsigTb" + i).click(function () {
+                        SetSnif(Snifim[i].SnifName);
+                    });
+                })(i);
+            }
+
+            //
+            $('#Family,#FirstName,#CuntryName,#BDEH,#WifeName,#City,#Street,#OA1,#OA3,#OA6,#OA8,#OWN,#YGName,#AccountN,#EnterKolel,#CC_Name').on('input', function () {
+                onlyHe2(this)
+            })
+
+            //זהות ודרכון
+            $('#citizenshipDiv').hide();
+            $('#CuntryNameDiv').hide();
+            // $('#Zeout1Div').hide();
+            $('input[name=ChutzQ]').attr('checked', false);
+            $('#Zeout1').prop('disabled', true);
+
+            $('#ChutzQ').hide();
+
+            $("input[type=radio][name=Citizen]").change(function () {
+                CitizenFunction();
+            });
 
 
-            $("#Zeout").val("")
-            $("#CreditCard").val("")
-            $("#CardExpiration").val("")
-            $("#CVV").val("")
-            $("#Zeout10").val("")
-            $("#Bank2").val("")
-            $("#Snif2").val("")
-            $("#Account2").val("")
-            $("#Percent").val("")
-            $("#TashlumAmount_CC").val("")
-            $("#DivOpenType").hide()
-            $("#DivOpenCC").hide()
-            $("#DivOpenBank").hide()
-            $('input[name=StatusBank]').prop('checked', false)
-            $("#BoxBank").hide()
-            $("#TashlumAmount_CCDiv").hide()
-            $("#PercentDiv").hide()
-            $("#NoteSnifDiv").hide()
-            $("#IshurDiv").hide()
-            $("#Ishur2Div").hide()
+            //for status 1
+            if (status == 1) {
 
-            if (status == "1") {
+                $('#ZeoutWifeDiv').hide();
+                $('#NoteIshurAccountWifeDiv').hide();
+
+
+                $('#IshurAccountWife').change(function () {
+                    $('#ZeoutWifeDiv').hide();
+                    $('#ZeoutWife').val('');
+                    $('#AccountN').val('');
+                    $('#NoteIshurAccountWifeDiv').hide();
+                    $('#NoteIshurAccountWife').prop('checked', false);
+                    if ($("#IshurAccountWife").is(":checked") == true) {
+                        $('#ZeoutWifeDiv').show();
+                        $('#NoteIshurAccountWifeDiv').show();
+                    }
+                });
+
+
+
+
+                //עבור שדה תאריך לידה לועזי
+                $("#BDE").attr("dir", "ltr")
+                $('#BDE').bind('keyup', function (e) {
+                    var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
+                    if (key !== 8 && key !== 46 && key !== 0) {
+                        var TempDate = $(this).val().replace(/\//g, "")
+                        if ($.isNumeric(TempDate)) {
+                            if (TempDate.length >= 4) {
+                                TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2, 2) + "/" + TempDate.substr(4)
+                            } else if (TempDate.length >= 2) {
+                                TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2)
+                            }
+                            $(this).val(TempDate)
+                        }
+                    }
+                });
+
+
+                $("#Zeout").val("")
+                $("#CreditCard").val("")
+                $("#CardExpiration").val("")
+                $("#CVV").val("")
+                $("#Zeout10").val("")
+                $("#Bank2").val("")
+                $("#Snif2").val("")
+                $("#Account2").val("")
+                $("#Percent").val("")
+                $("#TashlumAmount_CC").val("")
+                $("#DivOpenType").hide()
+                $("#DivOpenCC").hide()
+                $("#DivOpenBank").hide()
+                $('input[name=StatusBank]').prop('checked', false)
+                $("#BoxBank").hide()
+                $("#TashlumAmount_CCDiv").hide()
+                $("#PercentDiv").hide()
+                $("#NoteSnifDiv").hide()
+                $("#IshurDiv").hide()
+                $("#Ishur2Div").hide()
+
+
+                document.getElementById('Span123').appendChild(document.getElementById('Span321'))
 
                 listCityGetAllCity({
                     CityId: '#City',
@@ -976,8 +1019,263 @@
                     Auto_Focus_After_City_Selection: true,
                     list_Citys: []
                 })
+                listCityGetAllCity({
+                    CityId: '#OA14',
+                    StreetId: '#OA5',
+                    Auto_Focus_After_City_Selection: true,
+                    list_Citys: []
+                })
+                listCityGetAllCity({
+                    CityId: '#OA12',
+                    StreetId: '#OA10',
+                    Auto_Focus_After_City_Selection: true,
+                    list_Citys: []
+                })
 
-            } else {
+
+
+
+                $("input[type=radio][name=TashlumStatus]").change(function () {
+
+                    Json.SpecialCheck = "Bank:Field50,Field51,Field52;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;MasavPayment";
+
+                    //console.log($('input[name=TashlumStatus]:checked').val())
+                    if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק אשראי") {
+                        $("#Zeout10").val("")
+                        $("#Bank2").val("")
+                        $("#Snif2").val("")
+                        $("#Account2").val("")
+                        $("#DivOpenBank").hide()
+                        $("#DivOpenCC").show()
+                        $("#TashlumAmount_CC").val("200")
+
+                        $('input[name=StatusBank]').prop('checked', false)
+                        $("#BoxBank").hide()
+                        $("#DivOpenType").show()
+                        $("#TashlumAmount_CCDiv").show()
+
+                    }
+
+                    else if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק בנקאי") {
+                        $("#Zeout").val("")
+                        $("#CreditCard").val("")
+                        $("#CardExpiration").val("")
+                        $("#CVV").val("")
+                        $("#TashlumAmount_CC").val("200")
+
+                        $("#DivOpenCC").hide()
+                        $("#DivOpenBank").show()
+                        $("#DivOpenType").show()
+                        $("#TashlumAmount_CCDiv").show()
+                    }
+
+                    else if ($('input[name=TashlumStatus]:checked').val() == "ללא תרומה") {
+
+                        Json.SpecialCheck = "Bank:Field50,Field51,Field52;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33";
+                        $("#Zeout").val("")
+                        $("#CreditCard").val("")
+                        $("#CardExpiration").val("")
+                        $("#CVV").val("")
+                        $("#Zeout10").val("")
+                        $("#Bank2").val("")
+                        $("#Snif2").val("")
+                        $("#Account2").val("")
+                        $("#Percent").val("")
+                        $("#TashlumAmount_CC").val("")
+
+                        $("#DivOpenType").hide()
+                        $("#DivOpenCC").hide()
+                        $("#DivOpenBank").hide()
+                        $("#BoxBank").hide()
+                        $("#TashlumAmount_CCDiv").hide()
+                        $("#PercentDiv").hide()
+                        $('input[name=StatusBank]').prop('checked', false)
+                        $('input[name=StatusCC]').prop('checked', false)
+                    }
+                });
+
+
+                $("input[type=radio][name=StatusBank]").change(function () {
+                    if ($('input[name=StatusBank]:checked').val() == "אחר") {
+                        $("#Zeout10").val("")
+                        $("#Bank2").val("")
+                        $("#Snif2").val("")
+                        $("#Account2").val("")
+                        $("#BoxBank").show()
+                    }
+
+                    else if ($('input[name=StatusBank]:checked').val() == "זהים לפרטי החשבון לזיכוי המלגה") {
+                        $("#Zeout10").val("")
+                        $("#Bank2").val("")
+                        $("#Snif2").val("")
+                        $("#Account2").val("")
+                        $("#BoxBank").hide()
+                    }
+                });
+
+                $("input[type=radio][name=TimeStudy]").change(function () {
+                    if ($('input[name=TimeStudy]:checked').val() == "יום שלם" || $('input[name=TimeStudy]:checked').val() == "סדר א'" || $('input[name=TimeStudy]:checked').val() == "סדר ב'") {
+                        $("#Ishur2Div").show()
+                    } else {
+                        $("#Ishur2Div").hide()
+                    }
+                });
+
+                $("#EnterKolel").on('input', function () {
+                    $("#IshurDiv").show()
+                });
+
+
+                $("input[type=radio][name=StatusCC]").change(function () {
+                    if ($('input[name=StatusCC]:checked').val() == "תרומה בסכום קבוע") {
+                        $("#PercentDiv").hide()
+                        $("#TashlumAmount_CC").val("")
+                        $("#TashlumAmount_CCDiv").show()
+                    }
+
+                    else if ($('input[name=StatusCC]:checked').val() == "אחוזים מהמלגה") {
+                        $("#PercentDiv").show()
+                        $("#TashlumAmount_CC").val("")
+                        $("#TashlumAmount_CCDiv").hide()
+                        $("#Percent").val("10")
+
+                    }
+                });
+
+
+
+
+                //חשבון שדות
+                $('#TashlumAmount2').bind('keyup', function () {
+                    Calculate()
+                });
+
+
+
+                $('#FirstName').bind('keyup', function () {
+                    AccountN()
+                });
+
+                $('#Family').bind('keyup', function () {
+                    AccountN()
+                });
+
+
+                //בוגר?
+                $('input[type=radio][name=Boger]').change(function () {
+                    $("#Boger1").prop("checked", false);
+                    $("#Boger2").prop("checked", false);
+                    if ($('input[name=Boger]:checked').val() == "כן") {
+                        $('#Boger1Div').show();
+                        $('#Boger2Div').show();
+                    } else {
+                        $('#Boger1Div').hide();
+                        $('#Boger2Div').hide();
+                    }
+                });
+                $('#Boger1Div').hide();
+                $('#Boger2Div').hide();
+
+
+                //הכנסה נוספת
+                $('input[type=radio][name=MoreIncome]').change(function () {
+                    $('#MoreIncome2_Radio0').prop('checked', false);
+                    $('#MoreIncome2_Radio1').prop('checked', false);
+                    $('#TSOS_Radio0').prop('checked', false);
+                    $('#TSOS_Radio1').prop('checked', false);
+                    $('#NoteIncome').hide();
+                    $('#TSOS').hide();
+                    if ($('input[name=MoreIncome]:checked').val() == "כן") {
+                        $('#MoreIncome2').show();
+                        // $('#NoteIncome').show();
+                    } else {
+                        $('#MoreIncome2').hide();
+                        // $('#NoteIncome').hide();
+                    }
+                });
+                $('#MoreIncome2').hide();
+                $('#NoteIncome').hide();
+                $('#DivOpen2').hide();
+
+                $('input[type=radio][name=MoreIncome2]').change(function () {
+                    $('#TSOS_Radio0').prop('checked', false);
+                    $('#TSOS_Radio1').prop('checked', false);
+                    if ($('input[name=MoreIncome2]:checked').val() == "כן") {
+                        $('#NoteIncome').show();
+                        $('#TSOS').show();
+                    } else {
+                        $('#NoteIncome').hide();
+                        $('#TSOS').hide();
+                    }
+                });
+                $('#TSOS').hide();
+
+
+
+                $('input[type=radio][name=ChutzQ]').change(function () {
+                    if ($('input[name=ChutzQ]:checked').val() == "לא") {
+                        $('#NoteDarconDiv').show();
+                    } else {
+                        $('#NoteDarconDiv').hide();
+                    }
+                });
+
+                $('input[type=radio][name=TimeStudy]').change(function () {
+                    TimeStudyFunction();
+                });
+
+
+
+
+
+                $('input[type=radio][name=MarrigeQ]').change(function () {
+                    MarrigeQFunction();
+                });
+
+
+                $('input[type=radio][name=MZS]').change(function () {
+                    NoteMiss();
+                });
+
+                $('input[type=radio][name=MINC]').change(function () {
+                    NoteMiss();
+                });
+
+                $('input[type=radio][name=TSOS]').change(function () {
+                    NoteMiss();
+                });
+
+                $('#BDEMarrigeDiv').hide();
+                $('#NoteMissDiv').hide();
+                $('#NoteDarconDiv').hide();
+                $('#NoteMarrigeDiv').hide();
+                $('#NoteTimeStudyDiv').hide();
+                $('#Boger1Div').css("margin-top", "20px");
+
+                $('#WorkWife').css("margin-bottom", "10px");
+
+
+                $("#TashlumAmount_CC").val("200")
+                $("#TashlumAmount_CC").attr('disabled', 'disabled');
+
+
+                $('#TashlumAmount').attr('disabled', 'disabled');
+                $('#TashlumAmount').css({ "background-image": "url(Files/Nis.png)", "background-position": "left", "background-repeat": "no-repeat", "background-size": "30px 30px" });
+                $('#TashlumAmount_CC').css({ "background-image": "url(Files/Nis.png)", "background-position": "left", "background-repeat": "no-repeat", "background-size": "30px 30px" });
+                $('#Percent').css({ "background-image": "url(Files/Percent_icon.png)", "background-position": "5px 10px", "background-repeat": "no-repeat", "background-size": "17px 17px" });
+
+
+                //init values from DB
+
+            } else if (status == 2) {
+                $('#Span321').hide();
+
+
+
+            } else if (status == 3) {
+
+                $('#Span321').hide();
+
                 listCityGetAllCity({
                     CityId: '#City',
                     // StreetId: '#Street',
@@ -987,363 +1285,209 @@
 
             }
 
-            $("input[type=radio][name=TashlumStatus]").change(function () {
-
-                Json.SpecialCheck = "Bank:Field50,Field51,Field52;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;MasavPayment";
-
-                //console.log($('input[name=TashlumStatus]:checked').val())
-                if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק אשראי") {
-                    $("#Zeout10").val("")
-                    $("#Bank2").val("")
-                    $("#Snif2").val("")
-                    $("#Account2").val("")
-                    $("#DivOpenBank").hide()
-                    $("#DivOpenCC").show()
-                    $("#TashlumAmount_CC").val("200")
-
-                    $('input[name=StatusBank]').prop('checked', false)
-                    $("#BoxBank").hide()
-                    $("#DivOpenType").show()
-                    $("#TashlumAmount_CCDiv").show()
-
-                }
-
-                else if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק בנקאי") {
-                    $("#Zeout").val("")
-                    $("#CreditCard").val("")
-                    $("#CardExpiration").val("")
-                    $("#CVV").val("")
-                    $("#TashlumAmount_CC").val("200")
-
-                    $("#DivOpenCC").hide()
-                    $("#DivOpenBank").show()
-                    $("#DivOpenType").show()
-                    $("#TashlumAmount_CCDiv").show()
-                }
-
-                else if ($('input[name=TashlumStatus]:checked').val() == "ללא תרומה") {
-
-                    Json.SpecialCheck = "Bank:Field50,Field51,Field52;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33";
-                    $("#Zeout").val("")
-                    $("#CreditCard").val("")
-                    $("#CardExpiration").val("")
-                    $("#CVV").val("")
-                    $("#Zeout10").val("")
-                    $("#Bank2").val("")
-                    $("#Snif2").val("")
-                    $("#Account2").val("")
-                    $("#Percent").val("")
-                    $("#TashlumAmount_CC").val("")
-
-                    $("#DivOpenType").hide()
-                    $("#DivOpenCC").hide()
-                    $("#DivOpenBank").hide()
-                    $("#BoxBank").hide()
-                    $("#TashlumAmount_CCDiv").hide()
-                    $("#PercentDiv").hide()
-                    $('input[name=StatusBank]').prop('checked', false)
-                    $('input[name=StatusCC]').prop('checked', false)
-                }
-            });
-
-
-            $("input[type=radio][name=StatusBank]").change(function () {
-                if ($('input[name=StatusBank]:checked').val() == "אחר") {
-                    $("#Zeout10").val("")
-                    $("#Bank2").val("")
-                    $("#Snif2").val("")
-                    $("#Account2").val("")
-                    $("#BoxBank").show()
-                }
-
-                else if ($('input[name=StatusBank]:checked').val() == "זהים לפרטי החשבון לזיכוי המלגה") {
-                    $("#Zeout10").val("")
-                    $("#Bank2").val("")
-                    $("#Snif2").val("")
-                    $("#Account2").val("")
-                    $("#BoxBank").hide()
-                }
-            });
-
-            $("input[type=radio][name=TimeStudy]").change(function () {
-                if ($('input[name=TimeStudy]:checked').val() == "יום שלם" || $('input[name=TimeStudy]:checked').val() == "סדר א'" || $('input[name=TimeStudy]:checked').val() == "סדר ב'") {
-                    $("#Ishur2Div").show()
-                } else {
-                    $("#Ishur2Div").hide()
-                }
-            });
-
-            $("#EnterKolel").on('input', function () {
-                $("#IshurDiv").show()
-            });
-
-
-            $("input[type=radio][name=StatusCC]").change(function () {
-                if ($('input[name=StatusCC]:checked').val() == "תרומה בסכום קבוע") {
-                    $("#PercentDiv").hide()
-                    $("#TashlumAmount_CC").val("")
-                    $("#TashlumAmount_CCDiv").show()
-                }
-
-                else if ($('input[name=StatusCC]:checked').val() == "אחוזים מהמלגה") {
-                    $("#PercentDiv").show()
-                    $("#TashlumAmount_CC").val("")
-                    $("#TashlumAmount_CCDiv").hide()
-                    $("#Percent").val("10")
-
-                }
-            });
-
-
-
-
-
-
-
-
-
-            $("#BDE").attr("dir", "ltr")
-
-            //חשבון שדות
-            $('#TashlumAmount2').bind('keyup', function () {
-                Calculate()
-            });
-
-
-
-            $('#FirstName').bind('keyup', function () {
-                AccountN()
-            });
-
-            $('#Family').bind('keyup', function () {
-                AccountN()
-            });
-
-
-            //feature_1
-            $("#Snif1").focus(function () {
-                $('#SnifChoose').show()
-                $("#Snif1").blur()
-
-            });
-
-
-            //feature_1
-            for (var i = 0; i < Snifim.length; i++) {
-                $("#SnifimTable").append('<tr><td id="NatsigTb' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center">' + Snifim[i].SnifName + '</div></td></tr>');
-                (function (i) {
-                    $("#NatsigTb" + i).click(function () {
-                        SetSnif(Snifim[i].SnifName);
-                    });
-                })(i);
-            }
-            //document.querySelector("div:nth-child(3) div:nth-child(5) div:nth-child(2) ul:nth-child(27) > li:nth-child(1)").style.color = "indianred";
-
-
-
-
-
-
-
-            $('#Darkon1Div').hide();
-            $('#citizenshipDiv').hide();
-            $('#CuntryNameDiv').hide();
-            $('#Zeout1Div').hide();
-            $('#ChutzQ').hide();
-
-
-
-
-
-            $('#Israel').change(function () {
-                CitizenFunction(1);
-            });
-
-            $('#Chutz').change(function () {
-
-                CitizenFunction(2);
-            });
-
-
-
-            $('input[type=radio][name=Boger]').change(function () {
-                $("#Boger1").prop("checked", false);
-                $("#Boger2").prop("checked", false);
-                if ($('input[name=Boger]:checked').val() == "כן") {
-                    $('#Boger1Div').show();
-                    $('#Boger2Div').show();
-                } else {
-                    $('#Boger1Div').hide();
-                    $('#Boger2Div').hide();
-                }
-            });
-            $('#Boger1Div').hide();
-            $('#Boger2Div').hide();
-
-
-
-            $('input[type=radio][name=WorkWife]').change(function () {
-                $("#WWP").val('');
-                $("#WWA").val('');
-                $('#WWK_Radio0').prop('checked', false);
-                $('#WWK_Radio1').prop('checked', false);
-                if ($('input[name=WorkWife]:checked').val() == "כן") {
-                    $('#WWPDiv').show();
-                    $('#WWADiv').show();
-                    $('#WWK').show();
-                    // $('#WWP').focus();
-                } else {
-                    $('#WWPDiv').hide();
-                    $('#WWADiv').hide();
-                    $('#WWK').hide();
-
-                }
-            });
-            $('#WWPDiv').hide();
-            $('#WWADiv').hide();
-            $('#WWK').hide();
-
-
-
-
-            $('input[type=radio][name=MoreIncome]').change(function () {
-                $('#MoreIncome2_Radio0').prop('checked', false);
-                $('#MoreIncome2_Radio1').prop('checked', false);
-                $('#TSOS_Radio0').prop('checked', false);
-                $('#TSOS_Radio1').prop('checked', false);
-                $('#NoteIncome').hide();
-                $('#TSOS').hide();
-                if ($('input[name=MoreIncome]:checked').val() == "כן") {
-                    $('#MoreIncome2').show();
-                    // $('#NoteIncome').show();
-                } else {
-                    $('#MoreIncome2').hide();
-                    // $('#NoteIncome').hide();
-                }
-            });
-            $('#MoreIncome2').hide();
-            $('#NoteIncome').hide();
-            $('#DivOpen2').hide();
-
-            $('input[type=radio][name=MoreIncome2]').change(function () {
-                $('#TSOS_Radio0').prop('checked', false);
-                $('#TSOS_Radio1').prop('checked', false);
-                if ($('input[name=MoreIncome2]:checked').val() == "כן") {
-                    $('#NoteIncome').show();
-                    $('#TSOS').show();
-                } else {
-                    $('#NoteIncome').hide();
-                    $('#TSOS').hide();
-                }
-            });
-
-            /* $('#OWNDiv').hide();*/
-            $('#TSOS').hide();
-
-
-            //$('input[type=radio][name=OldStudy]').change(function () {
-            //    $('#OWN').val('');
-            //    if ($('input[name=OldStudy]:checked').val() == "יש") {
-            //        $('#OWNDiv').show();
-            //        $('#OWN').focus();
-            //    } else {
-            //        $('#OWNDiv').hide();
-            //    }
-            //});
-
-
-            $('input[type=radio][name=ChutzQ]').change(function () {
-                CitizenFunction();
-            });
-
-            $('input[type=radio][name=TimeStudy]').change(function () {
-                TimeStudyFunction();
-            });
-
-
-
-
-
-            $('input[type=radio][name=MarrigeQ]').change(function () {
-                MarrigeQFunction();
-            });
-
-
-            $('input[type=radio][name=MZS]').change(function () {
-                NoteMiss();
-            });
-
-            $('input[type=radio][name=MINC]').change(function () {
-                NoteMiss();
-            });
-
-            $('input[type=radio][name=TSOS]').change(function () {
-                NoteMiss();
-            });
-
-            $('#BDEMarrigeDiv').hide();
-            $('#NoteMissDiv').hide();
-            $('#NoteDarconDiv').hide();
-            $('#NoteMarrigeDiv').hide();
-            $('#NoteTimeStudyDiv').hide();
-
-            //$('#NoteMissDiv').append('<hr style="margin-right:20%;margin-left:20%;margin-top:20px;margin-bottom:10px;">');
-            //$('#NoteDarconDiv').append('<hr style="margin-right:20%;margin-left:20%;margin-top:20px;margin-bottom:10px;">');
-            //$('#NoteMarrigeDiv').append('<hr style="margin-right:20%;margin-left:20%;margin-top:20px;margin-bottom:10px;">');
-
-
-
-
-            //NoteMiss
-            //NoteDarcon
-            //NoteMarrige
-
-
-            //Date
-            //var today = new Date();
-            //today.setDate(today.getDate() + 8);
-            //var dd = String(today.getDate()).padStart(2, '0');
-            //var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-            //var yyyy = today.getFullYear();
-
-            //Newtoday = dd + '/' + mm + '/' + yyyy;
-
-            // document.getElementById('Span123').appendChild(document.getElementById('Span321'))
-            $('#Boger1Div').css("margin-top", "20px");
-            $('#WorkWife').css("margin-bottom", "10px");
-            if (status == "1") {
-                document.getElementById('Span123').appendChild(document.getElementById('Span321'))
-            } else {
-                $('#Span321').hide();
-            }
-
-            $("#TashlumAmount_CC").val("200")
-            $("#TashlumAmount_CC").attr('disabled', 'disabled');
-
-
-            $('#TashlumAmount').attr('disabled', 'disabled');
-            $('#TashlumAmount').css({ "background-image": "url(Files/Nis.png)", "background-position": "left", "background-repeat": "no-repeat", "background-size": "30px 30px" });
-            $('#TashlumAmount_CC').css({ "background-image": "url(Files/Nis.png)", "background-position": "left", "background-repeat": "no-repeat", "background-size": "30px 30px" });
-            $('#Percent').css({ "background-image": "url(Files/Percent_icon.png)", "background-position": "5px 10px", "background-repeat": "no-repeat", "background-size": "17px 17px" });
-            //   $('#TashlumAmount').css({ "background-image": "url(Files/dollar.png)", "background-position": "left", "background-repeat": "no-repeat", "background-size": "10px 17px", "background-position-x": "10px" });
-
-
-
-
-
-            // $("#MainTitle").append("<div style='padding: 10px 10px 0;color: #c11414;font-size: 20px'>טופס רישום זה הינו טופס טכני לצרכי המשרד לאחר הקבלה לכולל, אין למלאות את הטופס מבלי שנתבקשת לכך על ידי הממונה.</div>");
-
-
-
-            $('#Family,#FirstName,#CuntryName,#BDEH,#WifeName,#City,#Street,#OA1,#OA3,#OA6,#OA8,#OWN,#YGName,#AccountN,#EnterKolel,#CC_Name').on('input', function () {
-                onlyHe2(this)
-            })
-
-
-
-
         }
 
+        function initialFormInputValues(data) {
+
+            const status = data.statusRishum;
+
+            const avrechData = data.data;
+
+            console.log(status, "-----", avrechData)
+
+            if (avrechData.isEzrachutZara) {
+                $('#Citizen_Radio1').prop('checked', true).trigger('change');
+
+            } else {
+                $('#Citizen_Radio0').prop('checked', true).trigger('change');
+            }
+            // CitizenFunction()
+            $("#Family").val(avrechData.lastName);
+            $("#FirstName").val(avrechData.firstName);
+            $("#Zeout1").val(avrechData.zihuy);
+            $("#CuntryName").val(avrechData.cuntryEzrachut);
+
+            $("#Tel1").val(avrechData.telephone);
+            $("#Tel2").val(avrechData.pelephone);
+            $("#Tel3").val(avrechData.pelephone2);
+            $("#Tel4").val(avrechData.wifePelephone);
+            $("#Mail").val(avrechData.email);
+
+            if (status == 1) {
+                if (avrechData.isIshurLimudOnDarkon == true) {
+                    $('#ChutzQ_Radio0').prop('checked', true).trigger('change')
+                } else if (avrechData.isIshurLimudOnDarkon == false) {
+                    $('#ChutzQ_Radio1').prop('checked', true).trigger('change');
+                }
+
+                if (avrechData.withoutIshurLimudApprove == true) {
+                    $('#NoteDarcon').prop('checked', true).trigger('change');
+                }
+
+                $("#BDE").val(avrechData.birthDate);
+                $("#BDEH").val(avrechData.heBirthDate);
+
+                $("#WifeName").val(avrechData.wifeName);
+                $("#kids").val(avrechData.kids);
+                $("#kidsMarried").val(avrechData.kidsMarried);
+
+                if (avrechData.registeredAsMarried == true) {
+                    $('#MarrigeQ_Radio0').prop('checked', true).trigger('change')
+                } else if (avrechData.registeredAsMarried == false) {
+                    $('#MarrigeQ_Radio1').prop('checked', true).trigger('change');
+                }
+
+                $("#BDEMarrige").val(avrechData.heMarriedDate);
+                if (avrechData.ishurKizuzDatotRishumNisuin == true) {
+                    $('#NoteMarrige').prop('checked', true).trigger('change');
+                }
+
+                $("#City").val(avrechData.city);
+                $("#Street").val(avrechData.street);
+                $("#Home").val(avrechData.binyan);
+                $("#Enter").val(avrechData.knisa);
+                $("#Dira").val(avrechData.dira);
+                $("#Floor").val(avrechData.koma);
+
+                if (avrechData.isBoger == true) {
+                    $('#Boger_Radio0').prop('checked', true).trigger('change')
+                } else if (avrechData.isBoger == false) {
+                    $('#Boger_Radio1').prop('checked', true).trigger('change');
+                }
+
+                if (avrechData.isBogerYK == true) {
+                    $('#Boger1').prop('checked', true).trigger('change');
+                }
+                if (avrechData.isBogerYG == true) {
+                    $('#Boger2').prop('checked', true).trigger('change');
+                }
+
+                if (avrechData.isHahnasaNosefet == true) {
+                    $('#MoreIncome_Radio0').prop('checked', true).trigger('change')
+                } else if (avrechData.isHahnasaNosefet == false) {
+                    $('#MoreIncome_Radio1').prop('checked', true).trigger('change');
+                }
+                if (avrechData.isHahnasaNosefetMore3000 == true) {
+                    $('#MoreIncome2_Radio0').prop('checked', true).trigger('change')
+                } else if (avrechData.isHahnasaNosefetMore3000 == false) {
+                    $('#MoreIncome2_Radio1').prop('checked', true).trigger('change');
+                }
+
+                $("#OA1").val(avrechData.orimBaalAvName);
+                $("#OA2").val(avrechData.orimBaalAvPhone);
+                $("#OA3").val(avrechData.orimBaalEmName);
+                $("#OA4").val(avrechData.orimBaalEmPhone);
+                $("#OA14").val(avrechData.orimBaalCity);
+                $("#OA5").val(avrechData.orimBaalStreet);
+                $("#OA13").val(avrechData.orimBaalBinyan);
+
+                $("#OA6").val(avrechData.orimIshaLastName);
+                $("#OA11").val(avrechData.orimIshaAvName);
+                $("#OA7").val(avrechData.orimIshaAvPhone);
+                $("#OA8").val(avrechData.orimIshaEmName);
+                $("#OA9").val(avrechData.orimIshaEmPhone);
+                $("#OA12").val(avrechData.orimIshaCity);
+                $("#OA10").val(avrechData.orimIshaStreet);
+                $("#OA15").val(avrechData.orimIshaBinyan);
+
+                if (avrechData.tzavaStatus == 1) {
+                    $('#military_Radio0').prop('checked', true).trigger('change')
+                } else if (avrechData.tzavaStatus == 2) {
+                    $('#military_Radio1').prop('checked', true).trigger('change');
+                }
+
+                $("#OWN").val(avrechData.makomLimudKodem);
+                $("#YGName").val(avrechData.makomLimudYG);
+
+                if (avrechData.isWifeBankAccount == true) {
+                    $('#IshurAccountWife').prop('checked', true).trigger('change');
+                }
+
+                $("#AccountN").val(avrechData.bankAccountName);
+                $("#ZeoutWife").val(avrechData.wifeZihuy);
+                $("#Bank").val(avrechData.bankCode);
+                $("#Snif").val(avrechData.snifCode);
+                $("#Account").val(avrechData.accountNumber);
+
+                if (avrechData.isIshurAccountWife == true) {
+                    $('#NoteIshurAccountWife').prop('checked', true).trigger('change');
+                }
+
+                $("#EnterKolel").val(avrechData.heLearnStartDate).trigger('input');
+                if (avrechData.isIshurLearnStartDate == true) {
+                    $('#Ishur').prop('checked', true).trigger('change');
+                }
+
+                if (avrechData.timeLearn == 1) {
+                    $('#TimeStudy_Radio0').prop('checked', true).trigger('change')
+                } else if (avrechData.timeLearn == 2) {
+                    $('#TimeStudy_Radio1').prop('checked', true).trigger('change');
+                } else if (avrechData.timeLearn == 3) {
+                    $('#TimeStudy_Radio2').prop('checked', true).trigger('change');
+                }
+                if (avrechData.ishurTimeLearn == true) {
+                    $('#Ishur2').prop('checked', true).trigger('change');
+                }
+                if (avrechData.ishurTimeLearn2 == true) {
+                    $('#NoteTimeStudy').prop('checked', true).trigger('change');
+                }
+
+                //מקומות בבית המדרש - להוסיף
+
+                if (avrechData.isFileZhut == true) {
+                    $('#MZS_Radio0').prop('checked', true).trigger('change')
+                } else if (avrechData.isFileZhut == false) {
+                    $('#MZS_Radio1').prop('checked', true).trigger('change');
+                }
+
+                if (avrechData.isFileIshurCheshbon == true) {
+                    $('#MINC_Radio0').prop('checked', true).trigger('change')
+                } else if (avrechData.isFileIshurCheshbon == false) {
+                    $('#MINC_Radio1').prop('checked', true).trigger('change');
+                }
+
+                if (avrechData.isFileHahnasa == true) {
+                    $('#TSOS_Radio0').prop('checked', true).trigger('change')
+                } else if (avrechData.isFileHahnasa == false) {
+                    $('#TSOS_Radio1').prop('checked', true).trigger('change');
+                }
+
+                if (avrechData.isIshur1 == true) {
+                    $('#Note_1').prop('checked', true).trigger('change');
+                }
+                if (avrechData.isIshur2 == true) {
+                    $('#Note_2').prop('checked', true).trigger('change');
+                }
+                if (avrechData.isIshur3 == true) {
+                    $('#Note_3').prop('checked', true).trigger('change');
+                }
+                if (avrechData.isIshurMissFiles == true) {
+                    $('#NoteMiss').prop('checked', true).trigger('change');
+                }
+                if (avrechData.isIshurChul == true) {
+                    $('#NoteChul').prop('checked', true).trigger('change');
+                }
+
+                //אפשרויות תרומה
+
+            } else if (status == 2) {
+
+                $("#City").val(avrechData.city);
+                $("#VAAD").val(avrechData.vaad);
+                $("#BDEMarrige").val(avrechData.heMarriedDate);
+
+            } else if (status == 3) {
+
+                //
+                $("#YKName").val(avrechData.makomLimudYK);
+                $("#YGName").val(avrechData.makomLimudYG);
+                $("#OWN").val(avrechData.makomLimudKodem);
+                $("#OA1").val(avrechData.orimBaalAvName);
+                $("#OA6").val(avrechData.orimIshaLastName);
+                $("#OA11").val(avrechData.orimIshaAvName);
+            }
+
+        }
         function Stage1() {
 
 
@@ -1442,11 +1586,12 @@
                 if (JsonData.status == "error") {
                     LoginSwal(JsonData.message, "CodeCheckText", "Code"); return false
                 } else if (JsonData.status == "ok") {
-                    UsetData = JsonData;
+                    // UsetData = JsonData;
                     $("#CodeCheck").hide();
                     $("#AllMainForm").show();
 
-                    initialForm("1");
+                    initialForm(JsonData);
+                    initialFormInputValues(JsonData);
                     // DeployData();
                 } else {
                     EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
@@ -1630,10 +1775,105 @@
             if (Json.MainLogo !== '') { $("#MainLogo").attr('src', Json.MainLogo); } else { $("#MainLogo").attr('src', 'https://images.matara.pro/ClientsImages/' + Json.MosadId + '.jpg?1'); }
             $("#MainTitle").html(Json.MainTitle);
 
-            $('#ZeoutCheck').show();
-            // initialForm("3");
-            // $("#CodeCheck").hide();
-            // $("#AllMainForm").show();
+            //TODO: test mode
+            // $('#ZeoutCheck').show();
+
+            initialForm({
+                statusRishum: 1,
+            });
+            initialFormInputValues({
+                statusRishum: 1,
+                data: {
+                    snif: 1,
+                    ishurLimud: true,
+                    firstName: "שלמה",
+                    lastName: "כהן",
+                    isEzrachutZara: true,
+                    zihuy: "123456789",
+                    cuntryEzrachut: "ישראל",
+                    isIshurLimudOnDarkon: false,
+                    withoutIshurLimudApprove: true,
+                    birthDate: "01/01/2020",
+                    heBirthDate: "י' אייר תשן",
+                    wifeName: "Rivka",
+                    kids: 3,
+                    kidsMarried: 1,
+                    registeredAsMarried: true,
+                    marriedDate: "כג טבת תשכ",
+                    city: "ירושלים",
+                    street: "הרב כהנמן",
+                    binyan: 5,
+                    knisa: "A",
+                    dira: 12,
+                    koma: 3,
+                    telephone: "02-1234567",
+                    pelephone: "050-9876543",
+                    pelephone2: "052-8765432",
+                    wifePelephone: "054-1234567",
+                    email: "shlomo@example.com",
+                    isBoger: true,
+                    isBogerYK: true,
+                    isBogerYG: false,
+                    isHahnasaNosefet: true,
+                    isHahnasaNosefetMore3000: true,
+                    orimBaalAvName: "David",
+                    orimBaalAvPhone: "03-1234567",
+                    orimBaalEmName: "Sarah",
+                    orimBaalEmPhone: "03-7654321",
+                    orimBaalCity: "בני ברק",
+                    orimBaalStreet: "חזון איש",
+                    orimBaalBinyan: 10,
+                    orimIshaLastName: "Levi",
+                    orimIshaAvName: "Moshe",
+                    orimIshaAvPhone: "04-2233445",
+                    orimIshaEmName: "Esther",
+                    orimIshaEmPhone: "04-5566778",
+                    orimIshaCity: "מודיעין עילית",
+                    orimIshaStreet: "הרב שך",
+                    orimIshaBinyan: 7,
+                    tzavaStatus: 1,
+                    makomLimudKodem: "ישיבת פוניבז'",
+                    makomLimudYG: "חברון",
+                    makomLimudYK: "תפארת צבי",
+                    vaad: "א'",
+                    isWifeBankAccount: true,
+                    bankAccountName: "Shlomo Cohen",
+                    wifeZihuy: "987654321",
+                    bankCode: "10",
+                    snifCode: "123",
+                    accountNumber: "456789",
+                    isIshurAccountWife: true,
+                    heLearnStartDate: "2023-01-01",
+                    isIshurLearnStartDate: false,
+                    timeLearn: 2,
+                    ishurTimeLearn: true,
+                    ishurTimeLearn2: false,
+                    turA: 3,
+                    safsalA: 5,
+                    turB: 2,
+                    safsalB: 4,
+                    isFileZhut: true,
+                    isFileIshurCheshbon: false,
+                    isFileHahnasa: true,
+                    isIshur1: false,
+                    isIshur2: true,
+                    isIshur3: false,
+                    isIshurMissFiles: false,
+                    trumaOption: 2,
+                    tokenAshrai: "tok_abc123",
+                    isTrumaFromCheshbonMilga: false,
+                    trumaZihuy: "111222333",
+                    trumaBankCode: 20,
+                    trumaSnifCode: 456,
+                    trumaAccountNumber: 789012,
+                    trumaAmount: 500,
+                    statusRishum: 1
+                }
+
+            })
+
+            $("#CodeCheck").hide();
+            $("#AllMainForm").show();
 
             $('#ZeoutCheckText').bind('keyup', function (event) {
                 if (event.keyCode === 13) {
@@ -1671,6 +1911,10 @@
             if ($('input[name=MarrigeQ]:checked').val() == "לא") {
                 $('#NoteMarrigeDiv').show();
                 $('#BDEMarrigeDiv').show();
+            } else {
+                $('#NoteMarrigeDiv').hide();
+                $('#BDEMarrigeDiv').hide();
+
             }
 
 
@@ -1701,44 +1945,31 @@
 
 
 
-        function CitizenFunction(Num) {
-            if (Num == 1) {
-                $('#Zeout1Div').hide();
-                $('#Zeout1').val('');
-                if ($("#Israel").is(":checked") == true) {
-                    $('#Zeout1Div').show();
-                }
-                $('input[name=ChutzQ]').attr('checked', false);
-            }
+        function CitizenFunction() {
+            if ($('input[name=Citizen]:checked').val() == "ישראל") {
 
-            if (Num == 2) {
-                $('#Darkon1Div').hide();
-                $('#citizenshipDiv').hide();
+                $('#ChutzQ').hide();
+
                 $('#CuntryNameDiv').hide();
-                $('#Darkon1').val('');
-                $('#citizenship').val('');
                 $('#CuntryName').val('');
-                if ($("#Chutz").is(":checked") == true) {
-                    $('#Darkon1Div').show();
-                    $('#citizenshipDiv').show();
-                    $('#CuntryNameDiv').show();
-                }
+
+                $('#ChutzQ').hide();
+                $('#NoteDarconDiv').hide();
+
                 $('input[name=ChutzQ]').attr('checked', false);
-            }
 
+                $('#Zeout1Div label[for="Zeout1"]').html('<span style="color:indianred">*</span>תעודת זהות');
 
-            $('#ChutzQ').hide();
-            if ($("#Chutz").is(":checked") == true && $("#Israel").is(":checked") == false) {
+            } else if ($('input[name=Citizen]:checked').val() == "אזרח חוץ") {
+
                 $('#ChutzQ').show();
+
+                $('#CuntryNameDiv').show();
+                $('#CuntryName').val('');
+
+                $('input[name=ChutzQ]').attr('checked', false);
+                $('#Zeout1Div label[for="Zeout1"]').html('<span style="color:indianred">*</span>מספר דרכון');
             }
-
-            $('#NoteDarconDiv').hide();
-            $("#NoteDarcon").prop("checked", false);
-            if ($('input[name=ChutzQ]:checked').val() == "לא") {
-                $('#NoteDarconDiv').show();
-            }
-
-
         }
 
 
