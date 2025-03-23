@@ -741,6 +741,10 @@
 
 
         ];
+
+        var formStatus = 0;
+        var elemetsArr = []
+
         var Json = {
             "FormElements": [],
             "TofesId": "426", //426
@@ -758,16 +762,18 @@
 
             const status = data.statusRishum;
 
-            var elemetsArr = []
             switch (status) {
                 case 1:
-                    elemetsArr = FormElementsStatus1
+                    elemetsArr = FormElementsStatus1;
+                    formStatus = 1;
                     break;
                 case 2:
                     elemetsArr = FormElementsStatus2;
+                    formStatus = 2;
                     break;
                 case 3:
                     elemetsArr = FormElementsStatus3;
+                    formStatus = 3;
                     break;
 
                 default:
@@ -1270,18 +1276,18 @@
             } else if (status == 2) {
                 $('#Span321').hide();
 
-
-
-            } else if (status == 3) {
-
-                $('#Span321').hide();
-
                 listCityGetAllCity({
                     CityId: '#City',
                     // StreetId: '#Street',
                     Auto_Focus_After_City_Selection: false,
                     list_Citys: []
                 })
+
+
+            } else if (status == 3) {
+
+                $('#Span321').hide();
+
 
             }
 
@@ -1775,105 +1781,105 @@
             if (Json.MainLogo !== '') { $("#MainLogo").attr('src', Json.MainLogo); } else { $("#MainLogo").attr('src', 'https://images.matara.pro/ClientsImages/' + Json.MosadId + '.jpg?1'); }
             $("#MainTitle").html(Json.MainTitle);
 
+            $('#ZeoutCheck').show();
+
             //TODO: test mode
-            // $('#ZeoutCheck').show();
+            // initialForm({
+            //     statusRishum: 1,
+            // });
+            // initialFormInputValues({
+            //     statusRishum: 1,
+            //     data: {
+            //         snif: 1,
+            //         ishurLimud: true,
+            //         firstName: "שלמה",
+            //         lastName: "כהן",
+            //         isEzrachutZara: true,
+            //         zihuy: "123456789",
+            //         cuntryEzrachut: "ישראל",
+            //         isIshurLimudOnDarkon: false,
+            //         withoutIshurLimudApprove: true,
+            //         birthDate: "01/01/2020",
+            //         heBirthDate: "י' אייר תשן",
+            //         wifeName: "רבקה",
+            //         kids: 3,
+            //         kidsMarried: 1,
+            //         registeredAsMarried: true,
+            //         marriedDate: "כג טבת תשכ",
+            //         city: "ירושלים",
+            //         street: "הרב כהנמן",
+            //         binyan: 5,
+            //         knisa: "A",
+            //         dira: 12,
+            //         koma: 3,
+            //         telephone: "02-1234567",
+            //         pelephone: "050-9876543",
+            //         pelephone2: "052-8765432",
+            //         wifePelephone: "054-1234567",
+            //         email: "shlomo@example.com",
+            //         isBoger: true,
+            //         isBogerYK: true,
+            //         isBogerYG: false,
+            //         isHahnasaNosefet: true,
+            //         isHahnasaNosefetMore3000: true,
+            //         orimBaalAvName: "דוד",
+            //         orimBaalAvPhone: "03-1234567",
+            //         orimBaalEmName: "שרה",
+            //         orimBaalEmPhone: "03-7654321",
+            //         orimBaalCity: "בני ברק",
+            //         orimBaalStreet: "חזון איש",
+            //         orimBaalBinyan: 10,
+            //         orimIshaLastName: "לוי",
+            //         orimIshaAvName: "משה",
+            //         orimIshaAvPhone: "04-2233445",
+            //         orimIshaEmName: "אסתר",
+            //         orimIshaEmPhone: "04-5566778",
+            //         orimIshaCity: "מודיעין עילית",
+            //         orimIshaStreet: "הרב שך",
+            //         orimIshaBinyan: 7,
+            //         tzavaStatus: 1,
+            //         makomLimudKodem: "ישיבת פוניבז'",
+            //         makomLimudYG: "חברון",
+            //         makomLimudYK: "תפארת צבי",
+            //         vaad: "א'",
+            //         isWifeBankAccount: true,
+            //         bankAccountName: "שלמה כהן",
+            //         wifeZihuy: "987654321",
+            //         bankCode: "10",
+            //         snifCode: "123",
+            //         accountNumber: "456789",
+            //         isIshurAccountWife: true,
+            //         heLearnStartDate: "2023-01-01",
+            //         isIshurLearnStartDate: false,
+            //         timeLearn: 2,
+            //         ishurTimeLearn: true,
+            //         ishurTimeLearn2: false,
+            //         turA: 3,
+            //         safsalA: 5,
+            //         turB: 2,
+            //         safsalB: 4,
+            //         isFileZhut: true,
+            //         isFileIshurCheshbon: false,
+            //         isFileHahnasa: true,
+            //         isIshur1: false,
+            //         isIshur2: true,
+            //         isIshur3: false,
+            //         isIshurMissFiles: false,
+            //         trumaOption: 2,
+            //         tokenAshrai: "tok_abc123",
+            //         isTrumaFromCheshbonMilga: false,
+            //         trumaZihuy: "111222333",
+            //         trumaBankCode: 20,
+            //         trumaSnifCode: 456,
+            //         trumaAccountNumber: 789012,
+            //         trumaAmount: 500,
+            //         statusRishum: 1
+            //     }
 
-            initialForm({
-                statusRishum: 1,
-            });
-            initialFormInputValues({
-                statusRishum: 1,
-                data: {
-                    snif: 1,
-                    ishurLimud: true,
-                    firstName: "שלמה",
-                    lastName: "כהן",
-                    isEzrachutZara: true,
-                    zihuy: "123456789",
-                    cuntryEzrachut: "ישראל",
-                    isIshurLimudOnDarkon: false,
-                    withoutIshurLimudApprove: true,
-                    birthDate: "01/01/2020",
-                    heBirthDate: "י' אייר תשן",
-                    wifeName: "Rivka",
-                    kids: 3,
-                    kidsMarried: 1,
-                    registeredAsMarried: true,
-                    marriedDate: "כג טבת תשכ",
-                    city: "ירושלים",
-                    street: "הרב כהנמן",
-                    binyan: 5,
-                    knisa: "A",
-                    dira: 12,
-                    koma: 3,
-                    telephone: "02-1234567",
-                    pelephone: "050-9876543",
-                    pelephone2: "052-8765432",
-                    wifePelephone: "054-1234567",
-                    email: "shlomo@example.com",
-                    isBoger: true,
-                    isBogerYK: true,
-                    isBogerYG: false,
-                    isHahnasaNosefet: true,
-                    isHahnasaNosefetMore3000: true,
-                    orimBaalAvName: "David",
-                    orimBaalAvPhone: "03-1234567",
-                    orimBaalEmName: "Sarah",
-                    orimBaalEmPhone: "03-7654321",
-                    orimBaalCity: "בני ברק",
-                    orimBaalStreet: "חזון איש",
-                    orimBaalBinyan: 10,
-                    orimIshaLastName: "Levi",
-                    orimIshaAvName: "Moshe",
-                    orimIshaAvPhone: "04-2233445",
-                    orimIshaEmName: "Esther",
-                    orimIshaEmPhone: "04-5566778",
-                    orimIshaCity: "מודיעין עילית",
-                    orimIshaStreet: "הרב שך",
-                    orimIshaBinyan: 7,
-                    tzavaStatus: 1,
-                    makomLimudKodem: "ישיבת פוניבז'",
-                    makomLimudYG: "חברון",
-                    makomLimudYK: "תפארת צבי",
-                    vaad: "א'",
-                    isWifeBankAccount: true,
-                    bankAccountName: "Shlomo Cohen",
-                    wifeZihuy: "987654321",
-                    bankCode: "10",
-                    snifCode: "123",
-                    accountNumber: "456789",
-                    isIshurAccountWife: true,
-                    heLearnStartDate: "2023-01-01",
-                    isIshurLearnStartDate: false,
-                    timeLearn: 2,
-                    ishurTimeLearn: true,
-                    ishurTimeLearn2: false,
-                    turA: 3,
-                    safsalA: 5,
-                    turB: 2,
-                    safsalB: 4,
-                    isFileZhut: true,
-                    isFileIshurCheshbon: false,
-                    isFileHahnasa: true,
-                    isIshur1: false,
-                    isIshur2: true,
-                    isIshur3: false,
-                    isIshurMissFiles: false,
-                    trumaOption: 2,
-                    tokenAshrai: "tok_abc123",
-                    isTrumaFromCheshbonMilga: false,
-                    trumaZihuy: "111222333",
-                    trumaBankCode: 20,
-                    trumaSnifCode: 456,
-                    trumaAccountNumber: 789012,
-                    trumaAmount: 500,
-                    statusRishum: 1
-                }
+            // })
 
-            })
-
-            $("#CodeCheck").hide();
-            $("#AllMainForm").show();
+            // $("#CodeCheck").hide();
+            // $("#AllMainForm").show();
 
             $('#ZeoutCheckText').bind('keyup', function (event) {
                 if (event.keyCode === 13) {
@@ -2212,86 +2218,77 @@
 
         function SendData() {
 
-            IAlertConfirm("זהו טופס בפיתוח. לא ניתן לבצע שליחה.");
-            return false;
+            // IAlertConfirm("זהו טופס בפיתוח. לא ניתן לבצע שליחה.");
+            // return false;
             if (GetURLParameter("Demo") == "1") {
                 IAlertConfirm("זהו טופס בפיתוח. לא ניתן לבצע שליחה."); return false;
             }
 
-            //if (GetURLParameter("Zeout") == "") { IAlertConfirm("טופס זה ניתן לשליחה רק מעמדת נדרים פלוס."); return false; }
-
-            //if ($.isNumeric($("#TashlumAmount").val()) == false) { MySwal("אין סכום לתשלום.", "TashlumAmount"); return false; }
-            //if (parseInt($('#TashlumAmount').val()) < 5) { MySwal("נא להזין לפחות 5 ש\"ח", "TashlumAmount"); return false; };
-
-            //if ($('input[name=TashlumType]:checked').val() == "דולר" && $("#Tashlumim option:selected").val() !== 1) { MySwal("לא ניתן לחלק עסקת דולרים בתשלומים, נא לשנות לתשלום 1 או לעשות הוראת קבע", "Tashlumim"); return false; }
-
-            if ($("#Israel").is(":checked") == false && $("#Chutz").is(":checked") == false) { MySwal("חובה לסמן אזרחות", "Israel"); return false; }
-
-            if ($("#Zeout1").val() !== '' && $("#Zeout1").val().length !== 9) { MySwal("נא להקיש מספר זהות בן 9 ספרות", "Zeout1"); return false; }
-            if ($("#Darkon1").val() !== '' && $("#Darkon1").val().length !== 9) { MySwal("נא להקיש מספר דרכון בן 9 ספרות", "Darkon1"); return false; }
-
-
-
-            if ($("#Israel").is(":checked") == false && $("#Chutz").is(":checked") == true) {
-                $("#Zeout1").val($("#Darkon1").val());
-
-                if ($('input[name=TashlumStatus]:checked').val() == "ללא תרומה") {
-                    Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;Date:Field10;CreditCardPayment" //
-                } else {
-                    if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק אשראי") {
-                        Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;Date:Field10;CreditCardPayment" //
-                    } else {
-                        Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;MasavPayment;Date:Field10;CreditCardPayment" //
-                    }
-                }
-            } else {
-                if ($('input[name=TashlumStatus]:checked').val() == "ללא תרומה") {
-                    Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;Zeout:Field5;Date:Field10;CreditCardPayment" //
-                } else {
-                    if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק אשראי") {
-                        Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;Zeout:Field5;Date:Field10;CreditCardPayment" //
-                    } else {
-                        Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;MasavPayment;Zeout:Field5;Date:Field10;CreditCardPayment" //
-
-                    }
-                }
-            }
-
-
-            //var today = new Date();
-            //var dd = String(today.getDate()).padStart(2, '0');
-            //var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-            //var yyyy = today.getFullYear();
-
-            //today = mm + '/' + dd + '/' + yyyy;
-
-
-
             $("#SaveDiv").hide()
             $("#WaitDiv").show()
 
-            if ($("#OA5").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA5"); return false; }
-            if ($("#Family").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "Family"); return false; }
+            if ($("#Zeout1").val() !== '' && $("#Zeout1").val().length !== 9) { MySwal("נא להקיש מספר זהות בן 9 ספרות", "Zeout1"); return false; }
             if ($("#FirstName").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "FirstName"); return false; }
-            //if ($("#CuntryBirth").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "CuntryBirth"); return false; }
-            if ($("#WifeName").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "WifeName"); return false; }
-            if ($("#City").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "City"); return false; }
-            if ($("#Street").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "Street"); return false; }
-            if ($("#OA1").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA1"); return false; }
-            if ($("#OA3").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA3"); return false; }
-            if ($("#OA6").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA6"); return false; }
-            if ($("#OA8").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA8"); return false; }
-            if ($("#OA10").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA10"); return false; }
-            if ($("#OA12").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA12"); return false; }
-            if ($("#OA5").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA5"); return false; }
-            if ($("#OA14").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA14"); return false; }
+            if ($("#Family").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "Family"); return false; }
 
-            //if ($("#MisparAmuta").val().length > 0 && $("#MisparAmuta").val().length < 9) { MySwal("מספר עמותה / ח.פ. חייב להכיל 9 ספרות", "MisparAmuta"); return false; };
 
-            Calculate()
+            if (status == 1) {
+                if ($('input[name=Citizen]:checked').val() == "אזרח חוץ") {
+
+                    if ($('input[name=TashlumStatus]:checked').val() == "ללא תרומה") {
+                        Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;Date:Field10;CreditCardPayment" //
+                    } else {
+                        if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק אשראי") {
+                            Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;Date:Field10;CreditCardPayment" //
+                        } else {
+                            Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;MasavPayment;Date:Field10;CreditCardPayment" //
+                        }
+                    }
+                } else {
+                    if ($('input[name=TashlumStatus]:checked').val() == "ללא תרומה") {
+                        Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;Zeout:Field5;Date:Field10;CreditCardPayment" //
+                    } else {
+                        if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק אשראי") {
+                            Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;Zeout:Field5;Date:Field10;CreditCardPayment" //
+                        } else {
+                            Json.SpecialCheck = "Bank:Field50,Field51,Field52;Bank:Field74,Field75,Field76;Mail:Field26;CreditCardToken:Field5Max;Tokef:Field33;MasavPayment;Zeout:Field5;Date:Field10;CreditCardPayment" //
+
+                        }
+                    }
+                }
+
+
+                if ($("#OA5").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA5"); return false; }
+                //if ($("#CuntryBirth").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "CuntryBirth"); return false; }
+                if ($("#WifeName").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "WifeName"); return false; }
+                if ($("#City").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "City"); return false; }
+                if ($("#Street").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "Street"); return false; }
+                if ($("#OA1").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA1"); return false; }
+                if ($("#OA3").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA3"); return false; }
+                if ($("#OA6").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA6"); return false; }
+                if ($("#OA8").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA8"); return false; }
+                if ($("#OA10").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA10"); return false; }
+                if ($("#OA12").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA12"); return false; }
+                if ($("#OA5").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA5"); return false; }
+                if ($("#OA14").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA14"); return false; }
+
+            } else if (status == 2) {
+                if ($("#City").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "City"); return false; }
+                if ($("#VAAD").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "VAAD"); return false; }
+            } else if (status == 3) {
+                if ($("#YKName").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "YKName"); return false; }
+                if ($("#YGName").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "YGName"); return false; }
+                if ($("#OWN").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OWN"); return false; }
+                if ($("#OA1").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA1"); return false; }
+                if ($("#OA6").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA6"); return false; }
+                if ($("#OA11").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA11"); return false; }
+
+            }
+
+
             var PostData = ''
-            for (var Element in Json.FormElements) {
-                var JsonElement = Json.FormElements[Element]
+            for (var Element in elemetsArr) {
+                var JsonElement = elemetsArr[Element]
                 if (JsonElement.Type == "Margin" || JsonElement.Type == "List" || JsonElement.Type == "Koteret") { continue; }
                 if (JsonElement.ElementId == undefined) { continue; }
 
@@ -2411,80 +2408,153 @@
 
 
 
-
-            var MassavAmount = "1";
-            if ($("#TashlumAmount_CC").val() !== "") { MassavAmount = $("#TashlumAmount_CC").val() }
-
-
-            if ($('input[name=TashlumStatus]:checked').val() !== "ללא תרומה") {
+            if (status == 1) {
+                var MassavAmount = "1";
+                if ($("#TashlumAmount_CC").val() !== "") { MassavAmount = $("#TashlumAmount_CC").val() }
 
 
-                if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק בנקאי") {
-                    if ($('input[name=StatusBank]:checked').val() == "אחר") {
+                if ($('input[name=TashlumStatus]:checked').val() !== "ללא תרומה") {
 
-                        PostData += "&Masav_ClientName=" + encodeURIComponent($("#Family").val() + " " + $("#FirstName").val())
-                        PostData += "&Masav_ClientAdresse=" + encodeURIComponent($("#City").val() + " " + $("#Street").val() + " " + $("#Home").val())
-                        PostData += "&Masav_ClientZeout=" + encodeURIComponent($("#Zeout10").val())
-                        PostData += "&Masav_ClientPhone=" + encodeURIComponent($("#Tel2").val())
-                        PostData += "&Masav_ClientMail=" + encodeURIComponent($("#Mail").val())
-                        PostData += "&Masav_Bank=" + encodeURIComponent($("#Bank2").val())
-                        PostData += "&Masav_Agency=" + encodeURIComponent($("#Snif2").val())
-                        PostData += "&Masav_Account=" + encodeURIComponent($("#Account2").val())
-                        PostData += "&Masav_Amount=" + encodeURIComponent(MassavAmount)
-                        PostData += "&Masav_Tashlumim=" //+ encodeURIComponent($("#Tashlumim option:selected").val())
-                        PostData += "&Masav_Day=10" //+ encodeURIComponent("5") //(1-5-10-15-20-28)
-                        PostData += "&Masav_Comments=" //+ encodeURIComponent($("#Notes").val())
-                        PostData += "&Masav_SignData=" + encodeURIComponent(SignData)
 
-                    } else {
-                        var UserZeout = $("#Zeout1").val();
-                        if ($("#Zeout1").val() == "") { UserZeout = $("#Darkon1").val() }
-                        PostData += "&Masav_ClientName=" + encodeURIComponent($("#AccountN").val())
-                        PostData += "&Masav_ClientAdresse=" + encodeURIComponent($("#City").val() + " " + $("#Street").val() + " " + $("#Home").val())
-                        PostData += "&Masav_ClientZeout=" + encodeURIComponent(UserZeout)
-                        PostData += "&Masav_ClientPhone=" + encodeURIComponent($("#Tel2").val())
-                        PostData += "&Masav_ClientMail=" + encodeURIComponent($("#Mail").val())
-                        PostData += "&Masav_Bank=" + encodeURIComponent($("#Bank").val())
-                        PostData += "&Masav_Agency=" + encodeURIComponent($("#Snif").val())
-                        PostData += "&Masav_Account=" + encodeURIComponent($("#Account").val())
-                        PostData += "&Masav_Amount=" + encodeURIComponent(MassavAmount)
-                        PostData += "&Masav_Tashlumim=" //+ encodeURIComponent($("#Tashlumim option:selected").val())
-                        PostData += "&Masav_Day=10" //+ encodeURIComponent("5") //(1-5-10-15-20-28)
-                        PostData += "&Masav_Comments=" //+ encodeURIComponent($("#Notes").val())
-                        PostData += "&Masav_SignData=" + encodeURIComponent(SignData)
+                    if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק בנקאי") {
+                        if ($('input[name=StatusBank]:checked').val() == "אחר") {
 
+                            PostData += "&Masav_ClientName=" + encodeURIComponent($("#Family").val() + " " + $("#FirstName").val())
+                            PostData += "&Masav_ClientAdresse=" + encodeURIComponent($("#City").val() + " " + $("#Street").val() + " " + $("#Home").val())
+                            PostData += "&Masav_ClientZeout=" + encodeURIComponent($("#Zeout10").val())
+                            PostData += "&Masav_ClientPhone=" + encodeURIComponent($("#Tel2").val())
+                            PostData += "&Masav_ClientMail=" + encodeURIComponent($("#Mail").val())
+                            PostData += "&Masav_Bank=" + encodeURIComponent($("#Bank2").val())
+                            PostData += "&Masav_Agency=" + encodeURIComponent($("#Snif2").val())
+                            PostData += "&Masav_Account=" + encodeURIComponent($("#Account2").val())
+                            PostData += "&Masav_Amount=" + encodeURIComponent(MassavAmount)
+                            PostData += "&Masav_Tashlumim=" //+ encodeURIComponent($("#Tashlumim option:selected").val())
+                            PostData += "&Masav_Day=10" //+ encodeURIComponent("5") //(1-5-10-15-20-28)
+                            PostData += "&Masav_Comments=" //+ encodeURIComponent($("#Notes").val())
+                            PostData += "&Masav_SignData=" + encodeURIComponent(SignData)
+
+                        } else {
+                            var UserZeout = $("#Zeout1").val();
+                            if ($("#Zeout1").val() == "") { UserZeout = $("#Darkon1").val() }
+                            PostData += "&Masav_ClientName=" + encodeURIComponent($("#AccountN").val())
+                            PostData += "&Masav_ClientAdresse=" + encodeURIComponent($("#City").val() + " " + $("#Street").val() + " " + $("#Home").val())
+                            PostData += "&Masav_ClientZeout=" + encodeURIComponent(UserZeout)
+                            PostData += "&Masav_ClientPhone=" + encodeURIComponent($("#Tel2").val())
+                            PostData += "&Masav_ClientMail=" + encodeURIComponent($("#Mail").val())
+                            PostData += "&Masav_Bank=" + encodeURIComponent($("#Bank").val())
+                            PostData += "&Masav_Agency=" + encodeURIComponent($("#Snif").val())
+                            PostData += "&Masav_Account=" + encodeURIComponent($("#Account").val())
+                            PostData += "&Masav_Amount=" + encodeURIComponent(MassavAmount)
+                            PostData += "&Masav_Tashlumim=" //+ encodeURIComponent($("#Tashlumim option:selected").val())
+                            PostData += "&Masav_Day=10" //+ encodeURIComponent("5") //(1-5-10-15-20-28)
+                            PostData += "&Masav_Comments=" //+ encodeURIComponent($("#Notes").val())
+                            PostData += "&Masav_SignData=" + encodeURIComponent(SignData)
+
+                        }
                     }
                 }
+
+                var UserZeout = $("#Zeout1").val();
+                if ($("#Zeout1").val() == "") { UserZeout = $("#Darkon1").val() }
+
+                PostData += "&CreditCard_Type=" + encodeURIComponent('HK')
+                PostData += "&CreditCard_ClientName=" + encodeURIComponent($("#CC_Name").val())
+                PostData += "&CreditCard_Amount=" + encodeURIComponent($("#TashlumAmount_CC").val())
+                PostData += "&CreditCard_Zeout=" + encodeURIComponent(UserZeout)
+                PostData += "&CreditCard_Adresse=" + encodeURIComponent($("#Street").val() + " " + $("#Home").val())
+                PostData += "&CreditCard_City=" + encodeURIComponent($("#City").val())
+                PostData += "&CreditCard_Tashloumim=" // + encodeURIComponent()
+                PostData += "&CreditCard_Phone=" + encodeURIComponent($("#Tel2").val())
+                PostData += "&CreditCard_CreditCard=" + encodeURIComponent($("#CreditCard").val())
+                PostData += "&CreditCard_Tokef=" + encodeURIComponent($("#CardExpiration").val())
+                PostData += "&CreditCard_Cvv=" + encodeURIComponent($("#CVV").val())
+                PostData += "&CreditCard_Mail=" + encodeURIComponent($("#Mail").val())
+                PostData += "&CreditCard_Currency=1" //+ encodeURIComponent($("#Currency").val())
+                PostData += "&CreditCard_Comment=" //+ encodeURIComponent($("#Note").val())
+                PostData += "&CreditCard_HKDay=10" //+ encodeURIComponent($("#HKDay").val())
+                //PostData += "&CreditCard_Groupe=" //+ encodeURIComponent($("#HKDay").val())
+
             }
-
-
-
-            var UserZeout = $("#Zeout1").val();
-            if ($("#Zeout1").val() == "") { UserZeout = $("#Darkon1").val() }
-
-            PostData += "&CreditCard_Type=" + encodeURIComponent('HK')
-            PostData += "&CreditCard_ClientName=" + encodeURIComponent($("#CC_Name").val())
-            PostData += "&CreditCard_Amount=" + encodeURIComponent($("#TashlumAmount_CC").val())
-            PostData += "&CreditCard_Zeout=" + encodeURIComponent(UserZeout)
-            PostData += "&CreditCard_Adresse=" + encodeURIComponent($("#Street").val() + " " + $("#Home").val())
-            PostData += "&CreditCard_City=" + encodeURIComponent($("#City").val())
-            PostData += "&CreditCard_Tashloumim=" // + encodeURIComponent()
-            PostData += "&CreditCard_Phone=" + encodeURIComponent($("#Tel2").val())
-            PostData += "&CreditCard_CreditCard=" + encodeURIComponent($("#CreditCard").val())
-            PostData += "&CreditCard_Tokef=" + encodeURIComponent($("#CardExpiration").val())
-            PostData += "&CreditCard_Cvv=" + encodeURIComponent($("#CVV").val())
-            PostData += "&CreditCard_Mail=" + encodeURIComponent($("#Mail").val())
-            PostData += "&CreditCard_Currency=1" //+ encodeURIComponent($("#Currency").val())
-            PostData += "&CreditCard_Comment=" //+ encodeURIComponent($("#Note").val())
-            PostData += "&CreditCard_HKDay=10" //+ encodeURIComponent($("#HKDay").val())
-            //PostData += "&CreditCard_Groupe=" //+ encodeURIComponent($("#HKDay").val())
-
-
 
             if (Json.NeedSign == true) {
                 if (SignData == "") { $('#SignPad').show(); return false; }
                 PostData += "&SignData=" + encodeURIComponent(SignData)
             }
+
+            var objToSend = {
+                lastName: $("#Family").val(),
+                firstName: $("#FirstName").val(),
+                zihuy: $("#Zeout1").val(),
+                cuntryEzrachut: $("#CuntryName").val(),
+                telephone: $("#Tel1").val(),
+                pelephone: $("#Tel2").val(),
+                pelephone2: $("#Tel3").val(),
+                wifePelephone: $("#Tel4").val(),
+                email: $("#Mail").val(),
+                //zihuy, phone, code
+                phone: $("#TelCheckText").val(),
+                code: $("#CodeCheckText").val(),
+
+            };
+            if ($('input[name=Citizen]:checked').val() == "ישראל") {
+                objToSend.isEzrachutZara = false;
+            } else if ($('input[name=Citizen]:checked').val() == "אזרח חוץ") {
+                objToSend.isEzrachutZara = true;
+            }
+
+            if (status == 1) {
+
+            } else if (status == 2) {
+
+            } else if (status == 3) {
+
+            }
+
+            $.ajax({
+                url: "https://us-central1-ateret-shlomo-kolel.cloudfunctions.net/nedarim-update",
+                data: objToSend,
+                type: 'POST',
+                context: Text,
+                timeout: 180000,
+            }).success(function (JsonData) {
+                if (JsonData.Status == 'Error') {
+                    swal({
+                        type: "error",
+                        title: JsonData.Message,
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                    }, function () {
+                        setTimeout(function () {
+                            $("#SaveDiv").show()
+                            $("#WaitDiv").hide()
+                        }, 100);
+                    });
+                    return false;
+                }
+                else {
+                    $("#WaitDiv").hide()
+
+                    var BtTex = 'חזרה לנדרים פלוס'
+                    if (MasofId == '') BtTex = 'אישור'
+                    swal({
+                        title: "הטופס נשלח בהצלחה",
+                        type: "success",
+                        showCancelButton: false,
+                        confirmButtonText: BtTex,
+                        closeOnConfirm: true,
+                        allowOutsideClick: false,
+                    }, function (isConfirm) {
+                        if (MasofId !== '') { parent.GoToMenu("Tafrit"); parent.closeIFrame() } else { $('html, body').scrollTop(0); location.reload(); }
+                    });
+                }
+            }).error(function () {
+                MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
+                $("#SaveDiv").show()
+                $("#WaitDiv").hide()
+
+            });
+
+            return;
 
             $.ajax({
                 url: "Manage.aspx?Action=AddData&AjaxId=" + $.now() + "&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&Version=" + Json.Version + "&MasofId=" + MasofId + "&ClientId=" + ClientId + "&OldTofesId=" + OldTofesId + "&SpecialCheck=" + encodeURIComponent(Json.SpecialCheck) + "&MainTitle=" + encodeURIComponent(htmlEncode(Json.MainTitle)),
@@ -2496,8 +2566,8 @@
                 if (JsonData.Status == 'Error') {
 
                     var FiledId
-                    for (var Element in Json.FormElements) {
-                        var JsonElement = Json.FormElements[Element]
+                    for (var Element in elemetsArr) {
+                        var JsonElement = elemetsArr[Element]
                         if (JsonElement.DbName == JsonData.FieldId) FiledId = JsonElement.ElementId
                     }
 
