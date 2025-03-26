@@ -760,7 +760,7 @@
 
         function initialForm(data) {
 
-            const status = data.statusRishum;
+            var status = data.statusRishum;
 
             switch (status) {
                 case 1:
@@ -1295,11 +1295,10 @@
 
         function initialFormInputValues(data) {
 
-            const status = data.statusRishum;
 
-            const avrechData = data.data;
+            var avrechData = data.data;
 
-            console.log(status, "-----", avrechData)
+            // console.log(status, "-----", avrechData)
 
             if (avrechData.isEzrachutZara) {
                 $('#Citizen_Radio1').prop('checked', true).trigger('change');
@@ -1319,7 +1318,7 @@
             $("#Tel4").val(avrechData.wifePelephone);
             $("#Mail").val(avrechData.email);
 
-            if (status == 1) {
+            if (formStatus == 1) {
                 if (avrechData.isIshurLimudOnDarkon == true) {
                     $('#ChutzQ_Radio0').prop('checked', true).trigger('change')
                 } else if (avrechData.isIshurLimudOnDarkon == false) {
@@ -1476,15 +1475,14 @@
 
                 //אפשרויות תרומה
 
-            } else if (status == 2) {
+            } else if (formStatus == 2) {
 
                 $("#City").val(avrechData.city);
                 $("#VAAD").val(avrechData.vaad);
                 $("#BDEMarrige").val(avrechData.heMarriedDate);
 
-            } else if (status == 3) {
+            } else if (formStatus == 3) {
 
-                //
                 $("#YKName").val(avrechData.makomLimudYK);
                 $("#YGName").val(avrechData.makomLimudYG);
                 $("#OWN").val(avrechData.makomLimudKodem);
@@ -1783,7 +1781,7 @@
 
             $('#ZeoutCheck').show();
 
-            //TODO: test mode
+            // // TODO: test mode
             // initialForm({
             //     statusRishum: 1,
             // });
@@ -1953,8 +1951,6 @@
 
         function CitizenFunction() {
             if ($('input[name=Citizen]:checked').val() == "ישראל") {
-
-                $('#ChutzQ').hide();
 
                 $('#CuntryNameDiv').hide();
                 $('#CuntryName').val('');
@@ -2232,7 +2228,7 @@
             if ($("#Family").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "Family"); return false; }
 
 
-            if (status == 1) {
+            if (formStatus == 1) {
                 if ($('input[name=Citizen]:checked').val() == "אזרח חוץ") {
 
                     if ($('input[name=TashlumStatus]:checked').val() == "ללא תרומה") {
@@ -2272,10 +2268,10 @@
                 if ($("#OA5").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA5"); return false; }
                 if ($("#OA14").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA14"); return false; }
 
-            } else if (status == 2) {
+            } else if (formStatus == 2) {
                 if ($("#City").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "City"); return false; }
                 if ($("#VAAD").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "VAAD"); return false; }
-            } else if (status == 3) {
+            } else if (formStatus == 3) {
                 if ($("#YKName").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "YKName"); return false; }
                 if ($("#YGName").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "YGName"); return false; }
                 if ($("#OWN").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OWN"); return false; }
@@ -2408,7 +2404,7 @@
 
 
 
-            if (status == 1) {
+            if (formStatus == 1) {
                 var MassavAmount = "1";
                 if ($("#TashlumAmount_CC").val() !== "") { MassavAmount = $("#TashlumAmount_CC").val() }
 
@@ -2502,11 +2498,92 @@
                 objToSend.isEzrachutZara = true;
             }
 
-            if (status == 1) {
+            if (formStatus == 1) {
 
-            } else if (status == 2) {
+                objToSend.isIshurLimudOnDarkon = $('input[name=ChutzQ]:checked').val() == "כן";
+                objToSend.withoutIshurLimudApprove = $("#NoteDarcon").is(":checked") ? true : false
+                objToSend.birthDate = $("#BDE").val() || "";
+                objToSend.heBirthDate = $("#BDEH").val() || "";
+                objToSend.wifeName = $("#WifeName").val() || "";
+                objToSend.kids = $("#kids").val() || "";
+                objToSend.kidsMarried = $("#kidsMarried").val() || "";
+                objToSend.registeredAsMarried = $('input[name=MarrigeQ]:checked').val() == "כן";
+                objToSend.heMarriedDate = $("#BDEMarrige").val() || "";
+                objToSend.ishurKizuzDatotRishumNisuin = $("#NoteMarrige").is(":checked") ? true : false;
+                objToSend.city = $("#City").val() || "";
+                objToSend.street = $("#Street").val() || "";
+                objToSend.binyan = $("#Home").val() || "";
+                objToSend.knisa = $("#Enter").val() || "";
+                objToSend.dira = $("#Dira").val() || "";
+                objToSend.koma = $("#Floor").val() || "";
+                objToSend.isBoger = $('input[name=Boger]:checked').val() == "כן";
+                objToSend.isBogerYK = $("#Boger1").is(":checked") ? true : false;
+                objToSend.isBogerYG = $("#Boger2").is(":checked") ? true : false;
+                objToSend.isHahnasaNosefet = $('input[name=MoreIncome]:checked').val() == "כן";
+                objToSend.isHahnasaNosefetMore3000 = $('input[name=MoreIncome2]:checked').val() == "כן";
+                objToSend.orimBaalAvName = $("#OA1").val() || "";
+                objToSend.orimBaalAvPhone = $("#OA2").val() || "";
+                objToSend.orimBaalEmName = $("#OA3").val() || "";
+                objToSend.orimBaalEmPhone = $("#OA4").val() || "";
+                objToSend.orimBaalCity = $("#OA14").val() || "";
+                objToSend.orimBaalStreet = $("#OA5").val() || "";
+                objToSend.orimBaalBinyan = $("#OA13").val() || "";
 
-            } else if (status == 3) {
+                objToSend.orimIshaLastName = $("#OA6").val() || "";
+                objToSend.orimIshaAvName = $("#OA11").val() || "";
+                objToSend.orimIshaAvPhone = $("#OA7").val() || "";
+                objToSend.orimIshaEmName = $("#OA8").val() || "";
+                objToSend.orimIshaEmPhone = $("#OA9").val() || "";
+                objToSend.orimIshaCity = $("#OA12").val() || "";
+                objToSend.orimIshaStreet = $("#OA10").val() || "";
+                objToSend.orimIshaBinyan = $("#OA15").val() || "";
+                var military = $('input[name=military]:checked').val() || "";
+                objToSend.tzavaStatus = military == "פטור" ? 1 : military == "דיחוי" ? 2 : null;
+                objToSend.makomLimudKodem = $("#OWN").val() || "";
+                objToSend.makomLimudYG = $("#YGName").val() || "";
+                objToSend.isWifeBankAccount = $("#IshurAccountWife").is(":checked") ? true : false;
+                objToSend.bankAccountName = $("#AccountN").val() || "";
+                objToSend.wifeZihuy = $("#ZeoutWife").val() || "";
+                objToSend.bankCode = $("#Bank").val() || "";
+                objToSend.snifCode = $("#Snif").val() || "";
+                objToSend.accountNumber = $("#Account").val() || "";
+                objToSend.isIshurAccountWife = $("#NoteIshurAccountWife").is(":checked") ? true : false;
+                objToSend.heLearnStartDate = $("#EnterKolel").val() || "";
+                objToSend.isIshurLearnStartDate = $("#Ishur").is(":checked") ? true : false;
+                var timeStudy = $('input[name=TimeStudy]:checked').val() || "";
+                objToSend.timeLearn = timeStudy == "יום שלם" ? 1 : timeStudy == "סדר א" ? 2 : timeStudy == "סדר ב" ? 3 : null;
+                objToSend.ishurTimeLearn = $("#Ishur2").is(":checked") ? true : false;
+                objToSend.ishurTimeLearn2 = $("#NoteTimeStudy").is(":checked") ? true : false;
+
+                //מקומות בבית המדרש - להוסיף!!
+                objToSend.isFileZhut = $('input[name=MZS]:checked').val() == "כן";
+                objToSend.isFileIshurCheshbon = $('input[name=MINC]:checked').val() == "כן";
+                objToSend.isFileHahnasa = $('input[name=TSOS]:checked').val() == "כן";
+                objToSend.isIshur1 = $("#Note_1").is(":checked") ? true : false;
+                objToSend.isIshur2 = $("#Note_2").is(":checked") ? true : false;
+                objToSend.isIshur3 = $("#Note_3").is(":checked") ? true : false;
+                objToSend.isIshurMissFiles = $("#NoteMiss").is(":checked") ? true : false;
+                objToSend.isIshurChul = $("#NoteChul").is(":checked") ? true : false;
+
+                //אפשרויות תרומה
+
+
+
+
+            } else if (formStatus == 2) {
+
+                objToSend.city = $("#City").val();
+                objToSend.vaad = $("#VAAD").val();
+                objToSend.heMarriedDate = $("#BDEMarrige").val();
+
+            } else if (formStatus == 3) {
+
+                objToSend.makomLimudYK = $("#YKName").val();
+                objToSend.makomLimudYG = $("#YGName").val();
+                objToSend.makomLimudKodem = $("#OWN").val();
+                objToSend.orimBaalAvName = $("#OA1").val();
+                objToSend.orimIshaLastName = $("#OA6").val();
+                objToSend.orimIshaAvName = $("#OA11").val();
 
             }
 
