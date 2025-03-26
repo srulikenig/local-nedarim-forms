@@ -743,7 +743,9 @@
         ];
 
         var formStatus = 0;
-        var elemetsArr = []
+        var elemetsArr = [];
+        var selectedSnifId = "";
+
 
         var Json = {
             "FormElements": [],
@@ -761,6 +763,7 @@
         function initialForm(data) {
 
             var status = data.statusRishum;
+            Snifim = data.snifim;
 
             switch (status) {
                 case 1:
@@ -928,10 +931,10 @@
             });
 
             for (var i = 0; i < Snifim.length; i++) {
-                $("#SnifimTable").append('<tr><td id="NatsigTb' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center">' + Snifim[i].SnifName + '</div></td></tr>');
+                $("#SnifimTable").append('<tr><td id="NatsigTb' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center">' + Snifim[i].name + '</div></td></tr>');
                 (function (i) {
                     $("#NatsigTb" + i).click(function () {
-                        SetSnif(Snifim[i].SnifName);
+                        SetSnif(Snifim[i].name, Snifim[i].id);
                     });
                 })(i);
             }
@@ -1648,31 +1651,31 @@
         }
         //feature_1
         var Snifim = [
-            { "SnifName": "אופקים" },
-            { "SnifName": "אחיסמך" },
-            { "SnifName": "אלעד" },
-            //{ "SnifName": "בית מאיר" },
-            { "SnifName": "בית שמש רמב\"ש א'" },
-            { "SnifName": "בית שמש רמב\"ש ד'" },
-            { "SnifName": "ביתר עלית" },
-            //{ "SnifName": "בני ברק אהל תמר" },
-            { "SnifName": "בני ברק נאות יוסף" },
-            //{ "SnifName": "בני ברק קרית הרצוג" },
-            { "SnifName": "גני תקווה" },
-            { "SnifName": "חריש" },
-            { "SnifName": "ירוחם" },
-            //{ "SnifName": "ירושלים ילין ליבו חפץ" },
-            { "SnifName": "ירושלים ילין" },
-            { "SnifName": "ירושלים ילין עיון הדף" },
-            //{ "SnifName": "ירושלים ילין כלל חסידי" },
-            //   { "SnifName": "ירושלים ילין מעלות דפנה" },
-            { "SnifName": "ירושלים נווה יעקב" },
+            // { "SnifName": "אופקים" },
+            // { "SnifName": "אחיסמך" },
+            // { "SnifName": "אלעד" },
+            // //{ "SnifName": "בית מאיר" },
+            // { "SnifName": "בית שמש רמב\"ש א'" },
+            // { "SnifName": "בית שמש רמב\"ש ד'" },
+            // { "SnifName": "ביתר עלית" },
+            // //{ "SnifName": "בני ברק אהל תמר" },
+            // { "SnifName": "בני ברק נאות יוסף" },
+            // //{ "SnifName": "בני ברק קרית הרצוג" },
+            // { "SnifName": "גני תקווה" },
+            // { "SnifName": "חריש" },
+            // { "SnifName": "ירוחם" },
+            // //{ "SnifName": "ירושלים ילין ליבו חפץ" },
+            // { "SnifName": "ירושלים ילין" },
+            // { "SnifName": "ירושלים ילין עיון הדף" },
+            // //{ "SnifName": "ירושלים ילין כלל חסידי" },
+            // //   { "SnifName": "ירושלים ילין מעלות דפנה" },
+            // { "SnifName": "ירושלים נווה יעקב" },
 
 
-            { "SnifName": "פתח תקווה" },
-            { "SnifName": "קרית ספר" },
-            { "SnifName": "משיבים" },
-            //{ "SnifName": "אחר" },
+            // { "SnifName": "פתח תקווה" },
+            // { "SnifName": "קרית ספר" },
+            // { "SnifName": "משיבים" },
+            // //{ "SnifName": "אחר" },
         ]
 
 
@@ -2093,7 +2096,8 @@
         }
 
         //feature_1
-        function SetSnif(SnifName) {
+        function SetSnif(SnifName, id) {
+            selectedSnifId = id;
             $("#Snif1").val(SnifName)
 
             if (SnifName == "קרית ספר") {
@@ -2490,6 +2494,7 @@
                 //zihuy, phone, code
                 phone: $("#TelCheckText").val(),
                 code: $("#CodeCheckText").val(),
+                snifLimud: selectedSnifId,
 
             };
             if ($('input[name=Citizen]:checked').val() == "ישראל") {
