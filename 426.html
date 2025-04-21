@@ -471,12 +471,12 @@
 
             // , { "Type": "Koteret", "Text": "פרטי צבא" }//גקךקאק
             // , {
-                //     "ElementId": "military", "MaxLength": 50, "Width": 90, "fieldName": "פרטי צבא", "fieldNameShow": "<b>פרטי צבא</b><br />*אם אינך יודע בוודאות, אל תסמן כלום", "Type": "Radio", "Mandatory": false, "DbName": "Field46", "Br": false, "br": false, "LblHide": false, "RadioBt": [
-                    //         { "Text": "פטור", "Sh1ow": "<b>פטור</b>" }
-                    //         , { "Text": "דיחוי", "Sho1w": "<b>דיחוי</b>" }]
-                    // }
-                    , { "Type": "Margin", "Height": "10" }
-                    
+            //     "ElementId": "military", "MaxLength": 50, "Width": 90, "fieldName": "פרטי צבא", "fieldNameShow": "<b>פרטי צבא</b><br />*אם אינך יודע בוודאות, אל תסמן כלום", "Type": "Radio", "Mandatory": false, "DbName": "Field46", "Br": false, "br": false, "LblHide": false, "RadioBt": [
+            //         { "Text": "פטור", "Sh1ow": "<b>פטור</b>" }
+            //         , { "Text": "דיחוי", "Sho1w": "<b>דיחוי</b>" }]
+            // }
+            , { "Type": "Margin", "Height": "10" }
+
             , { "Type": "Koteret", "Text": "היסטוריית לימודים" }
 
             , { "ElementId": "OWN", "MaxLength": 30, "Width": 40, "fieldName": "שם מקום לימודים קודם", "Type": "Text", "Mandatory": true, "DbName": "Field48", "Br": false }
@@ -679,16 +679,17 @@
             //, { "ElementId": "citizenship", "MaxLength": 50, "Width": 40, "fieldName": "אזרחות", "Type": "Text", "Mandatory": true, "DbName": "Field7", "Br": false }
             , { "ElementId": "CuntryName", "MaxLength": 30, "Width": 40, "fieldName": "ארץ דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field9", "Br": true }
             , { "Type": "Koteret", "Text": "פרטי יצירת קשר" }
-            , { "ElementId": "Tel1", "MaxLength": 11, "Width": 40, "fieldName": "טלפון בית", "Type": "Tel", "Mandatory": false, "DbName": "Field22", "Br": false }
+            // , { "ElementId": "Tel1", "MaxLength": 11, "Width": 40, "fieldName": "טלפון בית", "Type": "Tel", "Mandatory": false, "DbName": "Field22", "Br": false }
             , { "ElementId": "Tel2", "MaxLength": 11, "Width": 40, "fieldName": "נייד", "Type": "Tel", "Mandatory": true, "DbName": "Field23", "Br": false }
             , { "ElementId": "Tel3", "MaxLength": 11, "Width": 40, "fieldName": "מספר נוסף", "Type": "Tel", "Mandatory": false, "DbName": "Field24", "Br": false }
-            , { "ElementId": "Tel4", "MaxLength": 11, "Width": 40, "fieldName": "נייד אשה", "Type": "Tel", "Mandatory": false, "DbName": "Field25", "Br": false }
-            , { "ElementId": "Mail", "MaxLength": 50, "Width": 60, "fieldName": "מייל", "Type": "Text", "Mandatory": false, "DbName": "Field26", "Br": false }
+            // , { "ElementId": "Tel4", "MaxLength": 11, "Width": 40, "fieldName": "נייד אשה", "Type": "Tel", "Mandatory": false, "DbName": "Field25", "Br": false }
+            // , { "ElementId": "Mail", "MaxLength": 50, "Width": 60, "fieldName": "מייל", "Type": "Text", "Mandatory": false, "DbName": "Field26", "Br": false }
 
             , { "Type": "Koteret", "Text": "פרטים נוספים" }
             , { "ElementId": "City", "MaxLength": 30, "Width": 40, "fieldName": "עיר מגורים לאחר החתונה", "Type": "Text", "Mandatory": true, "DbName": "Field16", "Br": false }
             , { "ElementId": "VAAD", "MaxLength": 30, "Width": 40, "fieldName": "ועד", "Type": "Text", "Mandatory": true, "Br": true, "DbName": "Field80" }
             , { "ElementId": "BDEMarrige", "MaxLength": 30, "Width": 40, "fieldName": "תאריך חתונה", "fieldNameShow": "ת.חתונה עברי<br/>בתבנית זאת בלבד<br /> (כב אב תשפ\"א)", "Type": "Text", "Mandatory": true, "DbName": "Field32", "Br": false }
+            , { "ElementId": "note", "MaxLength": 1000, "Width": 90, "fieldName": "הערות", "Type": "textarea", "Rows": 3, "Mandatory": true, "DbName": "Field2Max", "Br": false }
 
 
 
@@ -717,17 +718,39 @@
             // , { "ElementId": "Darkon1", "MaxLength": 9, "Width": 40, "fieldName": "דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field6", "Br": false }
             //, { "ElementId": "citizenship", "MaxLength": 50, "Width": 40, "fieldName": "אזרחות", "Type": "Text", "Mandatory": true, "DbName": "Field7", "Br": false }
             , { "ElementId": "CuntryName", "MaxLength": 30, "Width": 40, "fieldName": "ארץ דרכון", "Type": "Text", "Mandatory": true, "DbName": "Field9", "Br": true }
+            , { "Type": "SubKoteret2", "Text": "נא למלא בתבניות כמו בדוגמאות שבסוגריים בלבד!" }
+            , { "ElementId": "BDE", "MaxLength": 10, "Width": 40, "fieldName": "ת.לידה לועזי", "fieldNameShow": "ת.לידה לועזי<br/>בתבנית זאת בלבד<br /> (25/05/2019)", "Type": "Tel", "Mandatory": true, "DbName": "Field10", "Br": false, "Dtae": true }
+            , { "ElementId": "BDEH", "MaxLength": 30, "Width": 40, "fieldName": "ת.לידה עברי", "fieldNameShow": "ת.לידה עברי<br/>בתבנית זאת בלבד<br /> (כב אב תשפ\"א)", "Type": "Text", "Mandatory": true, "DbName": "Field11", "Br": true }
+
+            , { "Type": "Koteret", "Text": "כתובת" }
+            , { "ElementId": "City", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field16", "Br": false }
+            , { "ElementId": "Street", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": true, "DbName": "Field17", "Br": false }
+            , { "ElementId": "Home", "MaxLength": 5, "Width": 40, "fieldName": "מס' בית", "Type": "Tel", "Mandatory": true, "DbName": "Field18", "Br": false }
+
             , { "Type": "Koteret", "Text": "פרטי יצירת קשר" }
-            , { "ElementId": "Tel1", "MaxLength": 11, "Width": 40, "fieldName": "טלפון בית", "Type": "Tel", "Mandatory": false, "DbName": "Field22", "Br": false }
+            // , { "ElementId": "Tel1", "MaxLength": 11, "Width": 40, "fieldName": "טלפון בית", "Type": "Tel", "Mandatory": false, "DbName": "Field22", "Br": false }
             , { "ElementId": "Tel2", "MaxLength": 11, "Width": 40, "fieldName": "נייד", "Type": "Tel", "Mandatory": true, "DbName": "Field23", "Br": false }
             , { "ElementId": "Tel3", "MaxLength": 11, "Width": 40, "fieldName": "מספר נוסף", "Type": "Tel", "Mandatory": false, "DbName": "Field24", "Br": false }
-            , { "ElementId": "Tel4", "MaxLength": 11, "Width": 40, "fieldName": "נייד אשה", "Type": "Tel", "Mandatory": false, "DbName": "Field25", "Br": false }
-            , { "ElementId": "Mail", "MaxLength": 50, "Width": 60, "fieldName": "מייל", "Type": "Text", "Mandatory": false, "DbName": "Field26", "Br": false }
+            // , { "ElementId": "Tel4", "MaxLength": 11, "Width": 40, "fieldName": "נייד אשה", "Type": "Tel", "Mandatory": false, "DbName": "Field25", "Br": false }
+            // , { "ElementId": "Mail", "MaxLength": 50, "Width": 60, "fieldName": "מייל", "Type": "Text", "Mandatory": false, "DbName": "Field26", "Br": false }
 
-            , { "Type": "Koteret", "Text": "מקומות לימוד" }
-            , { "ElementId": "YKName", "MaxLength": 30, "Width": 40, "fieldName": "שם ישיבה קטנה", "Type": "Text", "Mandatory": true, "Br": true, "DbName": "Field81" }
-            , { "ElementId": "YGName", "MaxLength": 30, "Width": 40, "fieldName": "שם ישיבה גדולה", "Type": "Text", "Mandatory": true, "DbName": "Field49", "Br": true }
-            , { "ElementId": "OWN", "MaxLength": 30, "Width": 40, "fieldName": "שם מקום לימודים קודם", "Type": "Text", "Mandatory": true, "DbName": "Field48", "Br": false }
+            , { "Type": "Koteret", "Text": "היסטוריית לימודים" }
+            , { "ElementId": "YKName", "MaxLength": 30, "Width": 40, "fieldName": "שם ישיבה קטנה", "Type": "Text", "Mandatory": true, "DbName": "Field81" }
+            // , { "ElementId": "YGName", "MaxLength": 30, "Width": 40, "fieldName": "שם ישיבה גדולה", "Type": "Text", "Mandatory": true, "DbName": "Field49", }
+            // , { "ElementId": "OWN", "MaxLength": 30, "Width": 40, "fieldName": "שם מקום לימודים קודם", "Type": "Text", "Mandatory": true, "DbName": "Field48",  }
+            , { "Type": "SubKoteret", "Text": "ישיבה גדולה" }
+            , { "Type": "DivOpen", "ElementId": "DivOpenYG1", "Text": "", "Style": "margin-right: 20px;" }, { "ElementId": "NameYG1", "Type": "Span", "Text": "1.", "BeforeBr": false }, { "ElementId": "NameYeshivaG1", "MaxLength": 50, "Width": 40, "fieldNameShow": "שם הישיבה", "fieldName": "שם ישיבה 1", "Type": "Text", "Mandatory": true, "Br": false }, { "Type": "DivClose" }
+            , { "Type": "DivOpen", "ElementId": "DivOpenYG2", "Text": "", "Style": "margin-right: 20px;" }, { "ElementId": "NameYG2", "Type": "Span", "Text": "2.", "BeforeBr": false }, { "ElementId": "NameYeshivaG2", "MaxLength": 50, "Width": 40, "fieldNameShow": "שם הישיבה", "fieldName": "שם ישיבה 2", "Type": "Text", "Mandatory": true, "Br": false }, { "Type": "DivClose" }
+            , { "Type": "DivOpen", "ElementId": "DivOpenYG3", "Text": "", "Style": "margin-right: 20px;" }, { "ElementId": "NameYG3", "Type": "Span", "Text": "3.", "BeforeBr": false }, { "ElementId": "NameYeshivaG3", "MaxLength": 50, "Width": 40, "fieldNameShow": "שם הישיבה", "fieldName": "שם ישיבה 3", "Type": "Text", "Mandatory": true, "Br": false }, { "Type": "DivClose" }
+            , { "ElementId": "AddYGRow", "Type": "Span", "Text": "לחץ כאן להוספת שם נוסף" }
+            , { "ElementId": "RemoveYGRow", "Type": "Span", "Text": "הסר שורה אחרונה" }
+
+            , { "Type": "SubKoteret", "Text": "כוללים" }
+            , { "Type": "DivOpen", "ElementId": "DivOpenK1", "Text": "", "Style": "margin-right: 20px;" }, { "ElementId": "NameK1", "Type": "Span", "Text": "1.", "BeforeBr": false }, { "ElementId": "NameKolel1", "MaxLength": 50, "Width": 40, "fieldNameShow": "שם כולל", "fieldName": "שם כולל 1", "Type": "Text", "Mandatory": true, "Br": false }, { "Type": "DivClose" }
+            , { "Type": "DivOpen", "ElementId": "DivOpenK2", "Text": "", "Style": "margin-right: 20px;" }, { "ElementId": "NameK2", "Type": "Span", "Text": "2.", "BeforeBr": false }, { "ElementId": "NameKolel2", "MaxLength": 50, "Width": 40, "fieldNameShow": "שם כולל", "fieldName": "שם כולל 2", "Type": "Text", "Mandatory": true, "Br": false }, { "Type": "DivClose" }
+            , { "Type": "DivOpen", "ElementId": "DivOpenK3", "Text": "", "Style": "margin-right: 20px;" }, { "ElementId": "NameK3", "Type": "Span", "Text": "3.", "BeforeBr": false }, { "ElementId": "NameKolel3", "MaxLength": 50, "Width": 40, "fieldNameShow": "שם כולל", "fieldName": "שם כולל 3", "Type": "Text", "Mandatory": true, "Br": false }, { "Type": "DivClose" }
+            , { "ElementId": "AddKRow", "Type": "Span", "Text": "לחץ כאן להוספת שם נוסף" }
+            , { "ElementId": "RemoveKRow", "Type": "Span", "Text": "הסר שורה אחרונה" }
 
 
             , { "Type": "Koteret", "Text": "פרטי הורים" }
@@ -816,14 +839,14 @@
 
                     } else if (JsonElement.Type == "Span") {
 
-                        var SpanId = ""
-                        if (JsonElement.ElementId !== undefined) SpanId = "id='" + JsonElement.ElementId + "'"
-                        MainForm += (JsonElement.BeforeBr == true ? "<br id='" + JsonElement.ElementId + "Br' />" : '') + '<span ' + SpanId + ' style="-webkit-user-select: none;width:90%;margin:0px 30px;font-size:medium;display:inline-block;color:#2B3A63;font-family:Assistant">' + JsonElement.Text + '</span>'
+                        // var SpanId = ""
+                        // if (JsonElement.ElementId !== undefined) SpanId = "id='" + JsonElement.ElementId + "'"
+                        // MainForm += (JsonElement.BeforeBr == true ? "<br id='" + JsonElement.ElementId + "Br' />" : '') + '<span ' + SpanId + ' style="-webkit-user-select: none;width:90%;margin:0px 30px;font-size:medium;display:inline-block;color:#2B3A63;font-family:Assistant">' + JsonElement.Text + '</span>'
 
                         //רשימת מספרים
-                        //var SpanId = ""
-                        //if (JsonElement.ElementId !== undefined) SpanId = "id='" + JsonElement.ElementId + "'"
-                        //MainForm += (JsonElement.BeforeBr == true ? "<br id='" + JsonElement.ElementId + "Br' />" : '') + '<span ' + SpanId + ' style="-webkit-user-select: none;margin-top:15px;font-weight:bold;font-size:large;display:inline-block;color:#2B3A63;font-family:Assistant;background-color:cadetblue ;padding:3px 6px;color:white;font-weight:normal;border-radius:2px;margin-left: -10px;">' + JsonElement.Text + '</span>'
+                        var SpanId = ""
+                        if (JsonElement.ElementId !== undefined) SpanId = "id='" + JsonElement.ElementId + "'"
+                        MainForm += (JsonElement.BeforeBr == true ? "<br id='" + JsonElement.ElementId + "Br' />" : '') + '<span ' + SpanId + ' style="-webkit-user-select: none;margin-top:15px;font-weight:bold;font-size:large;display:inline-block;color:#2B3A63;font-family:Assistant;background-color:cadetblue ;padding:3px 6px;color:white;font-weight:normal;border-radius:2px;margin-left: -10px;">' + JsonElement.Text + '</span>'
 
 
 
@@ -912,10 +935,7 @@
             $('#BankPickerDiv').hide()
             $("#MainForm").html(MainForm);
 
-            //TODO: לבדוק אם אפשר להעיף את השדות האלו
-            for (var i = 1; i < 12; i++) {
-                $('#ADD' + i + "Div").hide();
-            }
+
 
             //סניפים
 
@@ -956,6 +976,7 @@
 
             //for status 1
             if (status == 1) {
+                $('#TitleForStatus1').show()
 
                 $('#ZeoutWifeDiv').hide();
                 $('#NoteIshurAccountWifeDiv').hide();
@@ -974,7 +995,7 @@
                 });
 
 
-
+                AutoFillMail("Mail")
 
                 //עבור שדה תאריך לידה לועזי
                 $("#BDE").attr("dir", "ltr")
@@ -1273,6 +1294,7 @@
                 //init values from DB
 
             } else if (status == 2) {
+                $('#TitleForStatus2').show()
                 $('#Span321').hide();
 
                 listCityGetAllCity({
@@ -1284,10 +1306,77 @@
 
 
             } else if (status == 3) {
+                $('#TitleForStatus3').show()
 
                 $('#Span321').hide();
+                listCityGetAllCity({
+                    CityId: '#City',
+                    StreetId: '#Street',
+                    Auto_Focus_After_City_Selection: true,
+                    list_Citys: []
+                })
+
+                //טיפול בכמה ישיבות 
+                for (var i = 2; i < 4; i++) {
+                    $('#DivOpenYG' + i).hide()
+                }
+                $('#AddYGRow').click(function () {
+                    CurrentYG += 1
+                    $('#DivOpenYG' + CurrentYG).show()
+                    if (CurrentYG == 3) { $('#AddYGRow').hide() } else { $('#AddYGRow').show() }
+                    if (CurrentYG > 1) { $('#RemoveYGRow').show() }
+                    $('#NameYeshivaG' + CurrentYG).focus();
+
+                });
+
+                $('#RemoveYGRow').click(function () {
+                    $('#DivOpenYG' + CurrentYG).hide()
+                    $('#NameYeshivaG' + CurrentYG).val('');
+
+                    CurrentYG -= 1
+                    if (CurrentYG == 1) { $('#RemoveYGRow').hide() } else { $('#AddYGRow').show() }
+                });
+                $('#AddYGRow')
+                    .css("margin-right", "25px")
+                    .css("cursor", "pointer")
 
 
+                $('#RemoveYGRow')
+                    .css("margin-right", "25px")
+                    .css("cursor", "pointer")
+                    .css("background-color", "indianred")
+                $('#RemoveYGRow').hide();
+
+                //טיפול בכמה כוללים 
+                for (var i = 2; i < 4; i++) {
+                    $('#DivOpenK' + i).hide()
+                }
+                $('#AddKRow').click(function () {
+                    CurrentK += 1
+                    $('#DivOpenK' + CurrentK).show()
+                    if (CurrentK == 3) { $('#AddKRow').hide() } else { $('#AddKRow').show() }
+                    if (CurrentK > 1) { $('#RemoveKRow').show() }
+                    $('#NameKolel' + CurrentK).focus();
+
+                });
+
+                $('#RemoveKRow').click(function () {
+                    $('#DivOpenK' + CurrentK).hide()
+                    $('#NameKolel' + CurrentK).val('');
+
+                    CurrentK -= 1
+                    if (CurrentK == 1) { $('#RemoveKRow').hide() } else { $('#AddKRow').show() }
+                });
+                $('#AddKRow')
+                    .css("margin-right", "25px")
+                    .css("cursor", "pointer")
+
+
+                $('#RemoveKRow')
+                    .css("margin-right", "25px")
+                    .css("cursor", "pointer")
+                    .css("background-color", "indianred")
+                $('#RemoveKRow').hide();
             }
 
         }
@@ -1683,6 +1772,9 @@
         var ColorList = '';
         var ListCount = 1;
 
+        var CurrentYG = 1;
+        var CurrentK = 1;
+
         function UpdateClick() {
             if (MasofId !== '') parent.UpdateClick()
         }
@@ -1780,9 +1872,9 @@
 
             $('#ZeoutCheck').show();
 
-            // // TODO: test mode
+            // TODO: test mode
             // initialForm({
-            //     statusRishum: 1,
+            //     statusRishum: 3,
             //     snifim: [
             //         { name: "אופקים", id: 1 },
             //     ]
@@ -2579,6 +2671,7 @@
                 objToSend.city = $("#City").val();
                 objToSend.vaad = $("#VAAD").val();
                 objToSend.heMarriedDate = $("#BDEMarrige").val();
+                objToSend.note = $("#note").val();
 
             } else if (formStatus == 3) {
 
@@ -2812,9 +2905,23 @@
 
 
         <div id="AllMainForm" style="display: none;">
-            <div
-                style="color: #888;margin-right: auto;margin-left: auto;text-align: center;font-family: Assistant;width:80%;">
-                מילוי הטופס אורך מספר דקות ודורש סבלנות ושימת לב. נא מלא את הפרטים במתינות. בהצלחה</div>
+            <div id="TitleForStatus1"
+                style="color: #888;margin-right: auto;margin-left: auto;text-align: center;font-family: Assistant;width:80%;display: none;">
+                מילוי הטופס אורך מספר דקות ודורש סבלנות ושימת לב. נא מלא את הפרטים במתינות. בהצלחה
+            </div>
+
+            <div id="TitleForStatus2"
+                style="text-align:center;color:#2B3A63;font-family:assistant,Arial;display: none;">
+                <h3> בן ישיבתנו היקר! </h3>
+                <h3> ברוך הבא למערכת רישום מוקדם לכולל שע"י ישיבת </h3>
+                <h3> "עטרת שלמה" </h3>
+            </div>
+            <div id="TitleForStatus3"
+                style="text-align:center;color:#2B3A63;font-family:assistant,Arial;display: none;">
+                <h3> אברך יקר! </h3>
+                <h3> ברוך הבא למערכת רישום מוקדם לכולל שע"י ישיבת </h3>
+                <h3> "עטרת שלמה" </h3>
+            </div>
 
 
 
