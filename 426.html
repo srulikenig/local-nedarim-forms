@@ -689,7 +689,7 @@
             , { "ElementId": "City", "MaxLength": 30, "Width": 40, "fieldName": "עיר מגורים לאחר החתונה", "Type": "Text", "Mandatory": true, "DbName": "Field16", "Br": false }
             , { "ElementId": "VAAD", "MaxLength": 30, "Width": 40, "fieldName": "ועד", "Type": "Text", "Mandatory": true, "Br": true, "DbName": "Field80" }
             , { "ElementId": "BDEMarrige", "MaxLength": 30, "Width": 40, "fieldName": "תאריך חתונה", "fieldNameShow": "ת.חתונה עברי<br/>בתבנית זאת בלבד<br /> (כב אב תשפ\"א)", "Type": "Text", "Mandatory": true, "DbName": "Field32", "Br": false }
-            , { "ElementId": "Note", "MaxLength": 1000, "Width": 90, "fieldName": "הערות", "Type": "textarea", "Rows": 3, "Mandatory": true, "DbName": "Field2Max", "Br": false }
+            , { "ElementId": "Note", "MaxLength": 1000, "Width": 90, "fieldName": "הערות", "Type": "textarea", "Rows": 3, "Br": false }
 
 
 
@@ -1406,12 +1406,13 @@
             $("#Tel4").val(avrechData.wifePelephone);
             $("#Mail").val(avrechData.email);
 
-            if(avrechData.snifLimud){
+            if (avrechData.snifLimud) {
                 const findSnif = Snifim.find(snif => snif.id == avrechData.snifLimud);
                 if (findSnif) {
                     $("#Snif1").val(findSnif.name);
                     selectedSnifId = avrechData.snifLimud;
                     $('#Snif1').prop('disabled', true);
+                    $("#Snif1").blur()
                 }
             }
 
