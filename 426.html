@@ -1406,6 +1406,15 @@
             $("#Tel4").val(avrechData.wifePelephone);
             $("#Mail").val(avrechData.email);
 
+            if(avrechData.snifLimud){
+                const findSnif = Snifim.find(snif => snif.id == avrechData.snifLimud);
+                if (findSnif) {
+                    $("#Snif1").val(findSnif.name);
+                    selectedSnifId = avrechData.snifLimud;
+                    $('#Snif1').prop('disabled', true);
+                }
+            }
+
             if (formStatus == 1) {
                 if (avrechData.isIshurLimudOnDarkon == true) {
                     $('#ChutzQ_Radio0').prop('checked', true).trigger('change')
