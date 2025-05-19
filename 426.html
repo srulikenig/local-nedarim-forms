@@ -2686,8 +2686,10 @@
 
             $.ajax({
                 url: "https://us-central1-ateret-shlomo-kolel.cloudfunctions.net/nedarim-update",
-                data: objToSend,
+                data: JSON.stringify(objToSend),
+                contentType: "application/json",
                 type: 'POST',
+                processData: false,
                 context: Text,
                 timeout: 180000,
             }).success(function (JsonData) {
