@@ -2108,6 +2108,12 @@
                             if (Response.data[i].phone) {
                                 html += '<div style="font-size: 14px;color: #666; margin-top: 2px;">טל: ' + Response.data[i].phone + '</div>'
                             }
+
+                            // הצגת הערה אם קיימת
+                            if (Response.data[i].note && Response.data[i].note.trim() !== "") {
+                                html += '<div style="font-size: 15px; color: #fff; background: #ff9800; font-weight: bold; padding: 6px 10px; border-radius: 5px; margin-top: 7px; margin-bottom: 2px; display: inline-block;">הערה: ' + Response.data[i].note + '</div>'
+                            }
+
                             html += '</div>'
 
                             html += '<div style="display: flex; align-items: center;">'
@@ -2120,11 +2126,9 @@
                             html += '<i class="fa-solid fa-check"></i>'
                             html += '</div>'
 
-
                             html += '<div onclick="SendMesaage(\'' + Response.data[i].orderId + '\')" style="font-weight: bold; cursor: pointer; display: flex; justify-content: center; align-items: center; border-radius: 5px 0 0 5px; height: 33px; box-sizing: border-box; font-size: 15px; width: 34px; background: #d9d9d9; border: 1px solid #b5b5b5;background: rgb(159 221 248);">'
                             html += '<i class="fa-solid fa-paper-plane"></i>'
                             html += '</div>'
-
 
                             html += '</div>'
                             html += '</div>'
