@@ -754,7 +754,7 @@
             // עדכון המשתנה הגלובלי עם הנתונים מהשרת
             if (serverData && serverData.selectOptions) {
                 GlobalSelectOptions = serverData.selectOptions;
-                
+
                 // עדכון כל הסלקטים הקיימים עם הנתונים החדשים
                 updateAllSelectsWithNewOptions();
             }
@@ -884,6 +884,8 @@
 
         function SendData() {
 
+            IAlertConfirm("זהו טופס בפיתוח. לא ניתן לבצע שליחה.");
+            return false;
             if (GetURLParameter("Demo") == "1") { IAlertConfirm("זהו טופס לדוגמה. לא ניתן לבצע שליחה."); return false; }
 
             $("#SaveDiv").hide()
@@ -1795,12 +1797,12 @@
                 var childInstitutionOptions = [
                     "בחר מוסד",
                     "ישיבה קטנה",
-                    "ישיבה גדולה", 
+                    "ישיבה גדולה",
                     "תלמוד תורה בית שמש",
                     "תלמוד תורה ירושלים",
                     "גן ילדים"
                 ];
-                
+
                 // עדכון סלקטים של מוסדי ילדים
                 updateChildInstitutionSelects(childInstitutionOptions);
             }
