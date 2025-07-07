@@ -1880,21 +1880,21 @@
             var UserType;
             var UserName;
             var CurrentTab = 1; // משתנה לשמירת הטאב הנוכחי
-            
+
             function ShowMainScreen() {
                 // הסתרת מסכי הכניסה והצגת המסך הראשי
                 $(".Card").hide();
                 $("#Logo").hide();
                 $("#CardGetMagneticCard").hide();
                 $("#DivOrders").show();
-                
+
                 // יצירת הטאבים
                 CreateTabs();
-                
+
                 // הצגת הטאב הראשון כברירת מחדל
                 ShowTab(1);
             }
-            
+
             function CreateTabs() {
                 // יצירת HTML של הטאבים
                 var tabsHTML = '<div id="TabsContainer" style="display: flex; width: 100%; border-bottom: 2px solid #e0e0e0; background: #f5f5f5;">';
@@ -1902,36 +1902,36 @@
                 tabsHTML += '<div id="Tab2" class="tab-button" onclick="ShowTab(2)" style="flex: 1; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">פיזור</div>';
                 tabsHTML += '<div id="Tab3" class="tab-button" onclick="ShowTab(3)" style="flex: 1; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">משלוחים</div>';
                 tabsHTML += '</div>';
-                
+
                 // הוספת הטאבים למסך
                 $("#Tabs").after(tabsHTML);
             }
-            
+
             function ShowTab(tabNumber) {
 
-                if(tabNumber){
+                if (tabNumber) {
                     CurrentTab = tabNumber;
                 }
-                
+
                 // עדכון עיצוב הטאבים
                 $(".tab-button").css({
                     "background": "#e0e0e0",
                     "color": "#666",
                     "border-bottom": "3px solid transparent"
                 });
-                
+
                 $("#Tab" + CurrentTab).css({
                     "background": "#009688",
                     "color": "white",
                     "border-bottom": "3px solid #00695c"
                 });
-                
+
                 // עדכון תוכן המסך
                 var content = "";
                 $("#TabContent1").hide();
                 $("#TabContent2").hide();
                 $("#TabContent3").hide();
-                switch(CurrentTab) {
+                switch (CurrentTab) {
                     case 1:
                         // content = '';
                         // $("#DivBuildings_Data").html(content);
@@ -1948,7 +1948,7 @@
                         // content = '<div style="text-align: center; padding: 50px; font-size: 36px; font-weight: bold; color: #009688;">משלוחים</div>';
                         break;
                 }
-                
+
             }
 
             function CheckUser() {
@@ -1981,7 +1981,7 @@
 
 
 
-        
+
             var ListOrders = []
             function GetOrders() {
 
@@ -2076,7 +2076,7 @@
                             })
                         })(i);
                     };
-                 
+
                     Filter_Search()
                     $("#UpdateList_Options").hide();
 
@@ -2089,7 +2089,7 @@
 
 
             function Filter_Search() {
-                if($('#Filter_Search').val() == undefined ||$('#Filter_Search').val() == null) return false
+                if ($('#Filter_Search').val() == undefined || $('#Filter_Search').val() == null) return false
                 if ($('#Filter_Search').val().trim() == "") {
                     $('#Filter_Search').css('background', '#ffffff')
                 } else {
@@ -2237,7 +2237,7 @@
                 $("#UpdateList_Options_BtSave").html("עדכון " + UpdateList.length + " הזמנות")
             }
 
-     
+
             function UpdateList_Save() {
                 var UpdateList = []
 
@@ -2318,7 +2318,7 @@
 
 
 
-       
+
 
 
         <div id="DivOrders" style="display: none;" class="Card">
@@ -2347,41 +2347,138 @@
             <!-- <div style="height: 45px;"></div> -->
             <div style="text-align: center; font-size: 22px; color: rgb(43 47 78); font-weight: 900; direction: rtl; border-top: 1px solid #d9d9d9;"
                 id="Tabs"></div>
-<div id="TabContent1" style="display:none;">
-<div style="text-align: center; padding: 50px; font-size: 36px; font-weight: bold; color: #009688;">איסוף</div>
-</div>
-<div id="TabContent2" style="display:none;">
-<div style="text-align: center; padding: 50px; font-size: 36px; font-weight: bold; color: #009688;">פיזור</div>
-</div>
-<div id="TabContent3" style="display:none;">
+            <div id="TabContent1" style="display:none;">
+                <div style="padding: 0 10px 20px;">
+                    <!-- כותרת הרשימה -->
+                    <div
+                        style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">
+                        רשימת מוצרים לאיסוף
+                    </div>
 
-            <div style="display: flex; justify-content: center; align-items: center; padding: 0 10px 20px;">
-                <input autocomplete="off" type="search" id="Filter_Search" oninput="Filter_Search()"
-                    placeholder="חיפוש הזמנה"
-                    style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">
-            </div>
+                    <!-- שורות מוצרים -->
+                    <div id="ProductRow1" class="product-row" data-collected="false"
+                        style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; margin: 3px auto; background: #fffdfa; font-size: 15px; box-sizing: border-box; border: 1px solid #e7e7e7; border-right: 7px solid #009688; overflow: hidden; height: 40px;">
+                        <div
+                            style="background: #4db6ac; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: 100%;">
+                            001</div>
+                        <div style="flex: 1; padding: 5px 8px; display: flex; align-items: center;">
+                            <div style="font-size: 14px; color: #666;">קרמו דארק במלוי שוקולד פרווה 25 גר' טעמן</div>
+                        </div>
+                        <div
+                            style="background: #009688; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 50px; height: 100%;">
+                            <div style="font-size: 16px; font-weight: bold;">5</div>
+                            <div style="font-size: 10px;">יח'</div>
+                        </div>
+                    </div>
 
+                    <div id="ProductRow2" class="product-row" data-collected="false"
+                        style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; margin: 3px auto; background: #fffdfa; font-size: 15px; box-sizing: border-box; border: 1px solid #e7e7e7; border-right: 7px solid #009688; overflow: hidden; height: 40px;">
+                        <div style="flex: 1; padding: 5px 8px; display: flex; align-items: center;">
+                            <div style="font-size: 14px; color: #666;">חלב 3% גלילה</div>
+                        </div>
+                        <div
+                            style="background: #4db6ac; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 40px; height: 100%;">
+                            <div style="font-size: 10px;">מדף</div>
+                            <div style="font-size: 16px; font-weight: bold;">2</div>
+                        </div>
+                        <div
+                            style="background: #009688; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 50px; height: 100%;">
+                            <div style="font-size: 10px;">יח'</div>
+                            <div style="font-size: 16px; font-weight: bold;">2</div>
+                        </div>
+                    </div>
 
+                    <div id="ProductRow3" class="product-row" data-collected="false"
+                        style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; margin: 3px auto; background: #fffdfa; font-size: 15px; box-sizing: border-box; border: 1px solid #e7e7e7; border-right: 7px solid #009688; overflow: hidden; height: 40px;">
+                        <div
+                            style="background: #4db6ac; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: 100%;">
+                            003</div>
+                        <div style="flex: 1; padding: 5px 8px; display: flex; align-items: center;">
+                            <div style="font-size: 14px; color: #666;">ביצים טריות</div>
+                        </div>
+                        <div
+                            style="background: #009688; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 50px; height: 100%;">
+                            <div style="font-size: 16px; font-weight: bold;">12</div>
+                            <div style="font-size: 10px;">יח'</div>
+                        </div>
+                    </div>
 
+                    <div id="ProductRow4" class="product-row" data-collected="false"
+                        style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; margin: 3px auto; background: #fffdfa; font-size: 15px; box-sizing: border-box; border: 1px solid #e7e7e7; border-right: 7px solid #009688; overflow: hidden; height: 40px;">
+                        <div style="flex: 1; padding: 5px 8px; display: flex; align-items: center;">
+                            <div style="font-size: 14px; color: #666;">גבינה לבנה 5%</div>
+                        </div>
+                        <div
+                            style="background: #4db6ac; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: 100%;">
+                            004</div>
+                        <div
+                            style="background: #009688; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 50px; height: 100%;">
+                            <div style="font-size: 16px; font-weight: bold;">3</div>
+                            <div style="font-size: 10px;">יח'</div>
+                        </div>
+                    </div>
 
-            <div id="DivBuildings_Data" style="padding: 0 10px 52px;"></div>
+                    <div id="ProductRow5" class="product-row" data-collected="false"
+                        style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; margin: 3px auto; background: #fffdfa; font-size: 15px; box-sizing: border-box; border: 1px solid #e7e7e7; border-right: 7px solid #009688; overflow: hidden; height: 40px;">
+                        <div
+                            style="background: #4db6ac; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: 100%;">
+                            005</div>
+                        <div style="flex: 1; padding: 5px 8px; display: flex; align-items: center;">
+                            <div style="font-size: 14px; color: #666;">לחם שחור פרוס</div>
+                        </div>
+                        <div
+                            style="background: #009688; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 50px; height: 100%;">
+                            <div style="font-size: 16px; font-weight: bold;">1</div>
+                            <div style="font-size: 10px;">יח'</div>
+                        </div>
+                    </div>
 
-
-
-
-            <div style="position:fixed;bottom:0;left:0;width:100%;" id="UpdateList_Options">
-                <div
-                    style="max-width: 500px; width: 95%; margin: auto; position: relative; background: #ffffff; padding: 8px; box-sizing: border-box; border-top: 2px solid #cbcbcb; ">
-
-                    <div style="display: flex; justify-content: center; align-items: center;">
-                        <div onclick="UpdateList_Save()" id="UpdateList_Options_Bt"
-                            style="display: flex; justify-content: center; align-items: center; background: #8bc34a; font-weight: bold; color: #4a4a4a; cursor: pointer; width: max-content; height: 100%; padding: 10px; box-sizing: border-box; border-radius: 3px; height: 35px; margin: 0 10px; ">
-                            <i class="fa-solid fa-check"></i>
-                            <span style="padding: 0 5px 0 0;" id="UpdateList_Options_BtSave">אשר 15 הזמנות</span>
+                    <!-- סיכום -->
+                    <div
+                        style="background: #e8f5e8; border: 2px solid #4caf50; border-radius: 5px; padding: 10px; margin-top: 15px; text-align: center;">
+                        <div style="font-size: 16px; font-weight: bold; color: #2e7d32; margin-bottom: 5px;">
+                            סיכום איסוף
+                        </div>
+                        <div id="CollectionSummary" style="font-size: 14px; color: #388e3c;">
+                            נאספו: 0 מתוך 5 מוצרים
                         </div>
                     </div>
                 </div>
+
             </div>
+            <div id="TabContent2" style="display:none;">
+                <div style="text-align: center; padding: 50px; font-size: 36px; font-weight: bold; color: #009688;">
+                    פיזור</div>
+            </div>
+            <div id="TabContent3" style="display:none;">
+
+                <div style="display: flex; justify-content: center; align-items: center; padding: 0 10px 20px;">
+                    <input autocomplete="off" type="search" id="Filter_Search" oninput="Filter_Search()"
+                        placeholder="חיפוש הזמנה"
+                        style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">
+                </div>
+
+
+
+
+                <div id="DivBuildings_Data" style="padding: 0 10px 52px;"></div>
+
+
+
+
+                <div style="position:fixed;bottom:0;left:0;width:100%;" id="UpdateList_Options">
+                    <div
+                        style="max-width: 500px; width: 95%; margin: auto; position: relative; background: #ffffff; padding: 8px; box-sizing: border-box; border-top: 2px solid #cbcbcb; ">
+
+                        <div style="display: flex; justify-content: center; align-items: center;">
+                            <div onclick="UpdateList_Save()" id="UpdateList_Options_Bt"
+                                style="display: flex; justify-content: center; align-items: center; background: #8bc34a; font-weight: bold; color: #4a4a4a; cursor: pointer; width: max-content; height: 100%; padding: 10px; box-sizing: border-box; border-radius: 3px; height: 35px; margin: 0 10px; ">
+                                <i class="fa-solid fa-check"></i>
+                                <span style="padding: 0 5px 0 0;" id="UpdateList_Options_BtSave">אשר 15 הזמנות</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -2392,7 +2489,7 @@
 
 
 
-   
+
 
     <div id="CardGetMagneticCard" style="max-width: 500px;margin:auto;"></div>
     <div id="Height_POS" style="height:200px;display:none;"></div>
