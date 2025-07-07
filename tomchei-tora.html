@@ -335,21 +335,21 @@
     </style>
     <script>
 
-
-
         var Json = {
             "FormElements": [
 
                 { "Type": "Koteret", "Text": "פרטים אישיים" }
+                , { "ElementId": "IdNumber", "MaxLength": 9, "Width": 40, "fieldName": "תעודת זהות", "Type": "Tel", "Mandatory": true, "DbName": "Field11", "Br": true, "Send": true }
                 , { "ElementId": "FirstName", "MaxLength": 50, "Width": 40, "Bold": false, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true, "DbName": "Field1", "Style": "", "Br": false, "Send": true }
                 , { "ElementId": "LastName", "MaxLength": 50, "Width": 40, "fieldName": "שם משפחה", "Type": "Text", "Mandatory": true, "DbName": "Field2", "Br": false, "Send": true }
-                , { "ElementId": "IdNumber", "MaxLength": 9, "Width": 40, "fieldName": "תעודת זהות", "Type": "Tel", "Mandatory": true, "DbName": "Field11", "Br": false, "Send": true }
                 , { "ElementId": "BirthDate", "MaxLength": 10, "Width": 40, "fieldName": "תאריך לידה", "fieldNameShow": "תאריך לידה<br/>בתבנית: 25/05/1990", "Type": "Tel", "Mandatory": true, "DbName": "Field10", "Br": false, "Date": true, "Send": true }
 
                 , { "Type": "Koteret", "Text": "פרטי קשר" }
                 , { "ElementId": "Phone", "MaxLength": 11, "Width": 40, "fieldName": "טלפון", "Type": "Tel", "Mandatory": true, "DbName": "Field3", "Br": false, "Send": true }
-                , { "ElementId": "Mobile", "MaxLength": 11, "Width": 40, "fieldName": "פלאפון", "Type": "Tel", "Mandatory": false, "DbName": "Field4", "Br": false, "Send": true }
+                , { "ElementId": "Mobile", "MaxLength": 11, "Width": 40, "fieldName": "פלאפון", "Type": "Tel", "Mandatory": true, "DbName": "Field4", "Br": false, "Send": true }
+                , { "ElementId": "Mobile2", "MaxLength": 11, "Width": 40, "fieldName": "פלאפון נוסף", "Type": "Tel", "Mandatory": false, "DbName": "Field12", "Br": false, "Send": true }
                 , { "ElementId": "Email", "MaxLength": 50, "Width": 60, "fieldName": "אימייל", "Type": "Text", "Mandatory": false, "DbName": "Field5", "Br": false, "Send": true }
+                , { "ElementId": "Email2", "MaxLength": 50, "Width": 60, "fieldName": "אימייל נוסף", "Type": "Text", "Mandatory": false, "DbName": "Field13", "Br": false, "Send": true }
 
                 , { "Type": "Koteret", "Text": "כתובת" }
                 , { "ElementId": "City", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field6", "Br": false, "Send": true }
@@ -364,13 +364,20 @@
                 , { "ElementId": "Institution", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field21", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
                 , { "Type": "Margin", "Height": "25" }
 
+                , { "ElementId": "GraduateAteret", "fieldName": "בוגר ישיבה גדולה - עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field23", "Width": 70, "Br": false, "Send": true }
+                , { "ElementId": "GraduateCycle", "MaxLength": 50, "Width": 50, "fieldName": "בחר מחזור", "Type": "Select", "Mandatory": false, "DbName": "Field24", "Br": false, "Send": true, "SelectVal": "בחר מחזור,קיבוץ,מחזור א,מחזור ב,מחזור ג,מחזור ד,מחזור ה,מחזור ו,מחזור ז,מחזור ח,מחזור ט,מחזור י" }
+                , { "Type": "Margin", "Height": "25" }
+
                 , { "ElementId": "ParentAtAteret", "fieldName": "הורה לילדים במוסדות עטרת שלמה?", "Type": "CheckBox", "Mandatory": false, "DbName": "Field22", "Width": 70, "Br": false, "Send": true }
 
                 , {
                     "Type": "GroupFields", "ElementId": "Children", "fieldName": "פרטי ילדים", "DbName": "Field50", "MaxRows": 10, "DefaultRows": 1, "Mandatory": false, "Send": true, "Fields": [
-                        { "ElementId": "ChildName", "MaxLength": 50, "Width": 47.5, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true },
-                        { "ElementId": "ChildId", "MaxLength": 9, "Width": 47.5, "fieldName": "מספר זהות", "Type": "Tel", "Mandatory": true },
-                        { "ElementId": "ChildInstitution", "Width": 47.5, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
+                        { "ElementId": "ChildName", "MaxLength": 50, "Width": 30, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true },
+                        { "ElementId": "ChildId", "MaxLength": 9, "Width": 30, "fieldName": "מספר זהות", "Type": "Tel", "Mandatory": true },
+                        { "ElementId": "ChildBirthDate", "MaxLength": 10, "Width": 30, "fieldName": "תאריך לידה לועזי", "fieldNameShow": "תאריך לידה לועזי<br/>בתבנית: 25/05/1990", "Type": "Tel", "Mandatory": true, "Date": true },
+                        { "ElementId": "ChildInstitution", "Width": 30, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "Br": true, "Send": true, "SelectVal": "בחר מוסד" },
+                        { "ElementId": "ChildBranch", "Width": 30, "fieldName": "בחר סניף", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר סניף" },
+                        { "ElementId": "ChildClass", "Width": 30, "fieldName": "כיתה/שיעור", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר כיתה/שיעור" }
                     ]
                 }
 
@@ -597,6 +604,7 @@
             $("#MainForm").html(MainForm);
 
             AutoFillMail("Email")
+            AutoFillMail("Email2")
             // אתחול קבוצות שדות דינמיות
             initializeGroupFields();
 
@@ -748,6 +756,129 @@
 
         // משתנה גלובלי לאחסון אופציות הסלקטים שמגיעות מהשרת
         var GlobalSelectOptions = {};
+
+        // מערך אופציות הסלקטים הראשי
+        var selectOptions = {
+            // סלקטים רגילים
+            Institution: [
+                "בחר מוסד",
+                "אופקים ",
+                "אחיסמך ",
+                "אלעד ",
+                "בית מאיר ",
+                "בית שמש רמבש א ",
+                "בית שמש רמבש ד ",
+                "ביתר עילת ",
+                "בני ברק ",
+                "חריש ",
+                "ירוחם ",
+                "ירושלים עגערט ",
+                "ירושלים עיון הדף ",
+                "ירושלים ליבו חפץ ",
+                "ירושלים נווה יעקב ",
+                "מודיעין עילית ",
+                "פתח תקווה ",
+                "קרית הישיבה "
+            ],
+            
+            // מחזורים לבוגר ישיבה גדולה
+            GraduateCycle: [
+                "בחר מחזור",
+                "קיבוץ",
+                "מחזור א",
+                "מחזור ב",
+                "מחזור ג",
+                "מחזור ד",
+                "מחזור ה",
+                "מחזור ו",
+                "מחזור ז",
+                "מחזור ח",
+                "מחזור ט",
+                "מחזור י"
+            ],
+            
+            // מוסדות לאיש צוות
+            MitzvotType: [
+                "בחר מוסד",
+                "ישיבה קטנה",
+                "ישיבה גדולה",
+                "תלמוד תורה בית שמש",
+                "תלמוד תורה ירושלים",
+                "תומכי תורה"
+            ],
+            
+            // מוסדות ילדים - רמה ראשונה
+            ChildInstitutions: [
+                {
+                    name: "תלמוד תורה",
+                    branches: [
+                        {
+                            name: "בית שמש א",
+                            classes: ["כיתה א", "כיתה ב", "כיתה ג", "כיתה ד", "כיתה ה", "כיתה ו"]
+                        },
+                        {
+                            name: "בית שמש ב", 
+                            classes: ["כיתה א", "כיתה ב", "כיתה ג", "כיתה ד"]
+                        },
+                        {
+                            name: "ירושלים",
+                            classes: ["כיתה א", "כיתה ב", "כיתה ג", "כיתה ד", "כיתה ה"]
+                        }
+                    ]
+                },
+                {
+                    name: "ישיבה קטנה",
+                    branches: [
+                        {
+                            name: "בית שמש",
+                            classes: ["כיתה ט", "כיתה י", "כיתה יא", "כיתה יב"]
+                        },
+                        {
+                            name: "ירושלים",
+                            classes: ["כיתה ט", "כיתה י", "כיתה יא"]
+                        },
+                        {
+                            name: "מודיעין עילית",
+                            classes: ["כיתה ט", "כיתה י", "כיתה יא", "כיתה יב"]
+                        }
+                    ]
+                },
+                {
+                    name: "ישיבה גדולה",
+                    branches: [
+                        {
+                            name: "בית שמש",
+                            classes: ["שיעור א", "שיעור ב", "שיעור ג", "שיעור ד"]
+                        },
+                        {
+                            name: "ירושלים",
+                            classes: ["שיעור א", "שיעור ב", "שיעור ג"]
+                        },
+                        {
+                            name: "קרית הישיבה",
+                            classes: ["שיעור א", "שיעור ב", "שיעור ג", "שיעור ד", "שיעור ה"]
+                        }
+                    ]
+                },
+                {
+                    name: "גן ילדים",
+                    branches: [
+                        {
+                            name: "בית שמש א",
+                            classes: ["גן א", "גן ב", "גן ג"]
+                        },
+                        {
+                            name: "בית שמש ב",
+                            classes: ["גן א", "גן ב"]
+                        },
+                        {
+                            name: "ירושלים",
+                            classes: ["גן א", "גן ב", "גן ג", "גן ד"]
+                        }
+                    ]
+                }
+            ]
+        };
 
         // פונקציה לקבלת נתוני אופציות מהשרת ועדכון כל הסלקטים
         function updateSelectOptionsFromServer(serverData) {
@@ -1234,6 +1365,11 @@
             $('#' + groupId + 'Rows').append(rowHtml);
             config.currentRows++;
 
+            // הוספת event listeners לסלקטים החדשים של ילדים
+            if (groupId === 'Children') {
+                setupChildRowEventListeners(rowIndex);
+            }
+
             // עדכון כפתורי ההסרה
             updateRemoveButtons(groupId);
 
@@ -1701,49 +1837,13 @@
                 return;
             }
 
-            // אופציות ברירת מחדל אם אין נתונים מהשרת
-            var institutionOptions = [
-                "בחר מוסד",
-                "אופקים ",
-                "אחיסמך ",
-                "אלעד ",
-                "בית מאיר ",
-                "בית שמש רמבש א ",
-                "בית שמש רמבש ד ",
-                "ביתר עילת ",
-                "בני ברק ",
-                "חריש ",
-                "ירוחם ",
-                "ירושלים עגערט ",
-                "ירושלים עיון הדף ",
-                "ירושלים ליבו חפץ ",
-                "ירושלים נווה יעקב ",
-                "מודיעין עילית ",
-                "פתח תקווה ",
-                "קרית הישיבה "];
-
-            var childInstitutionOptions = [
-                "בחר מוסד",
-                "ישיבה קטנה",
-                "ישיבה גדולה",
-                "תלמוד תורה בית שמש",
-                "תלמוד תורה ירושלים",
-                "גן ילדים"
-            ];
-
-            var teamInstitutionOptions = [
-                "בחר מוסד",
-                "ישיבה קטנה",
-                "ישיבה גדולה",
-                "תלמוד תורה בית שמש",
-                "תלמוד תורה ירושלים",
-                "תומכי תורה"
-            ];
-
-            // מילוי הסלקטים
-            updateSelectOptions("#Institution", institutionOptions);
-            updateChildInstitutionSelects(childInstitutionOptions);
-            updateSelectOptions("#MitzvotType", teamInstitutionOptions);
+            // מילוי הסלקטים עם הנתונים מ-selectOptions
+            updateSelectOptions("#Institution", selectOptions.Institution);
+            updateSelectOptions("#GraduateCycle", selectOptions.GraduateCycle);
+            updateSelectOptions("#MitzvotType", selectOptions.MitzvotType);
+            
+            // אתחול סלקטי ילדים
+            initializeChildrenSelects();
         }
 
         // פונקציה לעדכון אופציות של סלקט יחיד
@@ -1755,23 +1855,151 @@
                     $select.append('<option value="' + option + '">' + option + '</option>');
                 });
             }
+        }        // פונקציה לאתחול סלקטים של ילדים
+        function initializeChildrenSelects() {
+            // יצירת רשימת מוסדות
+            var institutionOptions = ["בחר מוסד"];
+            for (var i = 0; i < selectOptions.ChildInstitutions.length; i++) {
+                institutionOptions.push(selectOptions.ChildInstitutions[i].name);
+            }
+            
+            // אתחול סלקטי מוסדות
+            updateAllChildrenSelects("Children_ChildInstitution", institutionOptions);
+            
+            // הסתרת סלקטי סניפים וכיתות בהתחלה
+            $('select[id^="Children_ChildBranch"]').parent().hide();
+            $('select[id^="Children_ChildClass"]').parent().hide();
         }
 
-        // פונקציה לעדכון סלקטים של מוסדי ילדים בכל קבוצות השדות
-        function updateChildInstitutionSelects(options) {
-            // עדכון כל הסלקטים הקיימים של ChildInstitution
-            $('select[id^="ChildInstitution"]').each(function () {
+        // פונקציה כללית לעדכון סלקטים של ילדים
+        function updateAllChildrenSelects(selectPrefix, options) {
+            $('select[id^="' + selectPrefix + '"]').each(function () {
                 var $select = $(this);
-                var currentValue = $select.val(); // שמירת הערך הנוכחי
+                var currentValue = $select.val();
                 $select.empty();
                 options.forEach(function (option) {
                     $select.append('<option value="' + option + '">' + option + '</option>');
                 });
-                // החזרת הערך הקודם אם הוא עדיין קיים
                 if (currentValue && options.indexOf(currentValue) !== -1) {
                     $select.val(currentValue);
                 }
             });
+        }
+
+        // פונקציה לעדכון סניפים לפי מוסד נבחר
+        function updateChildBranches(institutionSelectId) {
+            var rowIndex = institutionSelectId.split('_')[2]; // ChildInstitution_0 -> 0
+            var selectedInstitution = $('#' + institutionSelectId).val();
+            var branchSelectId = 'Children_ChildBranch_' + rowIndex;
+            var classSelectId = 'Children_ChildClass_' + rowIndex;
+
+            // איפוס וסטור סלקט כיתות
+            $('#' + classSelectId).empty().append('<option value="בחר כיתה/שיעור">בחר כיתה/שיעור</option>');
+            $('#' + classSelectId).parent().hide();
+
+            if (selectedInstitution && selectedInstitution !== "בחר מוסד") {
+                // חיפוש המוסד במערך
+                var institution = null;
+                for (var i = 0; i < selectOptions.ChildInstitutions.length; i++) {
+                    if (selectOptions.ChildInstitutions[i].name === selectedInstitution) {
+                        institution = selectOptions.ChildInstitutions[i];
+                        break;
+                    }
+                }
+
+                if (institution && institution.branches) {
+                    // הצגת סלקט סניפים
+                    $('#' + branchSelectId).parent().show();
+
+                    // מילוי אופציות סניפים
+                    var branchOptions = ["בחר סניף"];
+                    for (var j = 0; j < institution.branches.length; j++) {
+                        branchOptions.push(institution.branches[j].name);
+                    }
+
+                    var $branchSelect = $('#' + branchSelectId);
+                    $branchSelect.empty();
+                    branchOptions.forEach(function (option) {
+                        $branchSelect.append('<option value="' + option + '">' + option + '</option>');
+                    });
+                } else {
+                    // הסתרת סלקט סניפים
+                    $('#' + branchSelectId).parent().hide();
+                    $('#' + branchSelectId).empty().append('<option value="בחר סניף">בחר סניף</option>');
+                }
+            } else {
+                // הסתרת סלקט סניפים
+                $('#' + branchSelectId).parent().hide();
+                $('#' + branchSelectId).empty().append('<option value="בחר סניף">בחר סניף</option>');
+            }
+        }
+
+        // פונקציה לעדכון כיתות לפי סניף נבחר
+        function updateChildClasses(branchSelectId) {
+            var rowIndex = branchSelectId.split('_')[2]; // ChildBranch_0 -> 0
+            var institutionSelectId = 'Children_ChildInstitution_' + rowIndex;
+            var selectedInstitution = $('#' + institutionSelectId).val();
+            var selectedBranch = $('#' + branchSelectId).val();
+            var classSelectId = 'Children_ChildClass_' + rowIndex;
+
+            if (selectedBranch && selectedBranch !== "בחר סניף" && selectedInstitution) {
+                // חיפוש המוסד והסניף במערך
+                var institution = null;
+                for (var i = 0; i < selectOptions.ChildInstitutions.length; i++) {
+                    if (selectOptions.ChildInstitutions[i].name === selectedInstitution) {
+                        institution = selectOptions.ChildInstitutions[i];
+                        break;
+                    }
+                }
+
+                var branch = null;
+                if (institution && institution.branches) {
+                    for (var j = 0; j < institution.branches.length; j++) {
+                        if (institution.branches[j].name === selectedBranch) {
+                            branch = institution.branches[j];
+                            break;
+                        }
+                    }
+                }
+
+                if (branch && branch.classes) {
+                    // הצגת סלקט כיתות
+                    $('#' + classSelectId).parent().show();
+
+                    // מילוי אופציות כיתות
+                    var classOptions = ["בחר כיתה/שיעור"];
+                    for (var k = 0; k < branch.classes.length; k++) {
+                        classOptions.push(branch.classes[k]);
+                    }
+
+                    var $classSelect = $('#' + classSelectId);
+                    $classSelect.empty();
+                    classOptions.forEach(function (option) {
+                        $classSelect.append('<option value="' + option + '">' + option + '</option>');
+                    });
+                } else {
+                    // הסתרת סלקט כיתות
+                    $('#' + classSelectId).parent().hide();
+                    $('#' + classSelectId).empty().append('<option value="בחר כיתה/שיעור">בחר כיתה/שיעור</option>');
+                }
+            } else {
+                // הסתרת סלקט כיתות
+                $('#' + classSelectId).parent().hide();
+                $('#' + classSelectId).empty().append('<option value="בחר כיתה/שיעור">בחר כיתה/שיעור</option>');
+            }
+        }
+
+        // פונקציה לעדכון סלקטים של מוסדי ילדים בכל קבוצות השדות
+        function updateChildInstitutionSelects(options) {
+            // אם לא סופקו אופציות, צור רשימה מהמערך הראשי
+            var optionsToUse = options;
+            if (!optionsToUse) {
+                optionsToUse = ["בחר מוסד"];
+                for (var i = 0; i < selectOptions.ChildInstitutions.length; i++) {
+                    optionsToUse.push(selectOptions.ChildInstitutions[i].name);
+                }
+            }
+            updateAllChildrenSelects("Children_ChildInstitution", optionsToUse);
         }
 
         // פונקציה גנרית לעדכון כל הסלקטים עם אופציות חדשות
@@ -1793,18 +2021,8 @@
                     });
                 }
             } else {
-                // אופציות ברירת מחדל אם אין נתונים מהשרת
-                var childInstitutionOptions = [
-                    "בחר מוסד",
-                    "ישיבה קטנה",
-                    "ישיבה גדולה",
-                    "תלמוד תורה בית שמש",
-                    "תלמוד תורה ירושלים",
-                    "גן ילדים"
-                ];
-
-                // עדכון סלקטים של מוסדי ילדים
-                updateChildInstitutionSelects(childInstitutionOptions);
+                // אופציות ברירת מחדל מתוך selectOptions
+                updateChildInstitutionSelects();
             }
         }
 
@@ -1815,11 +2033,28 @@
                 mutations.forEach(function (mutation) {
                     mutation.addedNodes.forEach(function (node) {
                         if (node.nodeType === 1) { // Element node
-                            // חיפוש אחר סלקטים חדשים
+                            // חיפוש אחר שורות ילדים חדשות
+                            var newChildRows = $(node).find('div[id^="Children_Row"]');
+                            if (newChildRows.length > 0) {
+                                newChildRows.each(function () {
+                                    var rowId = $(this).attr('id');
+                                    var rowIndex = rowId.split('_Row')[1];
+                                    if (rowIndex !== undefined) {
+                                        setupChildRowEventListeners(parseInt(rowIndex));
+                                    }
+                                });
+                            }
+
+                            // חיפוש אחר סלקטים חדשים אחרים
                             var newSelects = $(node).find('select');
                             if (newSelects.length > 0) {
-                                // עדכון האופציות לכל הסלקטים החדשים
-                                updateAllSelectsWithNewOptions();
+                                // עדכון האופציות לכל הסלקטים החדשים (לא של ילדים)
+                                newSelects.each(function () {
+                                    var selectId = $(this).attr('id');
+                                    if (selectId && !selectId.includes('Children_')) {
+                                        updateAllSelectsWithNewOptions();
+                                    }
+                                });
                             }
                         }
                     });
@@ -1854,6 +2089,7 @@
         function setupConditionalFields() {
             // הסתרת שדות תלויים בתחילה
             $("#InstitutionDiv").hide();
+            $("#GraduateCycleDiv").hide();
             $("#ChildrenContainer").hide();
             $("#MitzvotTypeDiv").hide();
 
@@ -1864,6 +2100,15 @@
                 } else {
                     $("#InstitutionDiv").hide();
                     $("#Institution").val(""); // איפוס הערך
+                }
+            });
+
+            $("#GraduateAteret").change(function () {
+                if ($(this).is(':checked')) {
+                    $("#GraduateCycleDiv").show();
+                } else {
+                    $("#GraduateCycleDiv").hide();
+                    $("#GraduateCycle").val(""); // איפוס הערך
                 }
             });
 
@@ -1885,6 +2130,48 @@
                 } else {
                     $("#MitzvotTypeDiv").hide();
                     $("#MitzvotType").val(""); // איפוס הערך
+                }
+            });
+        }
+
+        // פונקציה להגדרת event listeners עבור שורת ילד חדשה
+        function setupChildRowEventListeners(rowIndex) {
+            var institutionSelectId = 'Children_ChildInstitution_' + rowIndex;
+            var branchSelectId = 'Children_ChildBranch_' + rowIndex;
+            var classSelectId = 'Children_ChildClass_' + rowIndex;
+
+            // מילוי אופציות מוסדות מתוך selectOptions
+            var institutionOptions = ["בחר מוסד"];
+            for (var i = 0; i < selectOptions.ChildInstitutions.length; i++) {
+                institutionOptions.push(selectOptions.ChildInstitutions[i].name);
+            }
+            updateSelectOptions('#' + institutionSelectId, institutionOptions);
+
+            // הסתרת סלקטי סניפים וכיתות בהתחלה
+            $('#' + branchSelectId).parent().hide();
+            $('#' + classSelectId).parent().hide();
+
+            // event listener לבחירת מוסד
+            $('#' + institutionSelectId).change(function () {
+                updateChildBranches(institutionSelectId);
+            });
+
+            // event listener לבחירת סניף
+            $('#' + branchSelectId).change(function () {
+                updateChildClasses(branchSelectId);
+            });
+
+            // הוספת פורמט תאריך לשדה תאריך לידה
+            var birthDateId = 'Children_ChildBirthDate_' + rowIndex;
+            $('#' + birthDateId).on('input', function () {
+                var TempDate = $(this).val().replace(/\//g, "");
+                if ($.isNumeric(TempDate)) {
+                    if (TempDate.length >= 4) {
+                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2, 2) + "/" + TempDate.substr(4);
+                    } else if (TempDate.length >= 2) {
+                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2);
+                    }
+                    $(this).val(TempDate);
                 }
             });
         }
