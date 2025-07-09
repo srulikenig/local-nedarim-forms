@@ -1,3 +1,4 @@
+<!-- קוד JS הועבר ל-head -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="he-IL" translate="no">
 
@@ -24,1766 +25,1114 @@
 
     <title>טופס - נדרים פלוס</title>
 
-    <!--<meta name="og:image" content="https://images.matara.pro/ClientsImages/0.jpg?2" runat="server" id="Og1" />
+    <script type="text/javascript">
+        // קבלת מוצרים לפיזור והצגה בטאב 1 עם הפרדה לפי סטטוס
+        var ListProducts = [];
+        function getProducts() {
+            $.ajax({
+                url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/products",
+                context: Text,
+                timeout: 16000,
+                headers: {
+                    "authorization": UserToken
+                }
+            }).success(function (Response) {
+                if (Response.status == 'error') {
+                    MySwal(Response.massege)
+                    return false;
+                }
+                ListProducts = Response.data;
+                // הפרדה לפי סטטוס
+                var productsStatus1 = ListProducts.filter(function (p) { return p.status == 1; });
+                var productsStatus2 = ListProducts.filter(function (p) { return p.status == 2; });
+
+                var html = '';
+                html += '<div style="padding: 0 10px 20px;">';
+                html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">רשימת מוצרים לאיסוף</div>';
+                html += '<div id="ProductsListStatus1">';
+                if (productsStatus1.length === 0) {
+                    html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין מוצרים לאיסוף</div>';
+                } else {
+                    for (var i = 0; i < productsStatus1.length; i++) {
+                        html += renderProductRow(productsStatus1[i], i, 1);
+                    }
+                }
+                html += '</div>';
+                // קו חוצץ וכותרת "פריטים בעגלה"
+                html += '<div style="margin: 18px 0 10px 0; display: flex; align-items: center;">'
+                    + '<hr style="flex:1; border:none; border-top:1.5px solid #e0e0e0; margin:0 10px;">'
+                    + '<span style="color:#888; font-size:15px; background:#fff; padding:0 10px;">פריטים בעגלה</span>'
+                    + '<hr style="flex:1; border:none; border-top:1.5px solid #e0e0e0; margin:0 10px;">'
+                    + '</div>';
+                html += '<div id="ProductsListStatus2">';
+                if (productsStatus2.length === 0) {
+                    html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין מוצרים בעגלה</div>';
+                } else {
+                    for (var j = 0; j < productsStatus2.length; j++) {
+                        html += renderProductRow(productsStatus2[j], j, 2);
+                    }
+                }
+                html += '</div>';
+                html += '</div>';
+                $("#TabContent1").html(html);
+
+                // אירוע אישור מוצר (רק לסטטוס 1)
+                $(".approve-product-btn[data-status='1']").off("click").on("click", function () {
+                    var idx = $(this).data("index");
+                    var prod = productsStatus1[idx];
+                    swal({
+                        type: "warning",
+                        title: "האם לאשר איסוף מוצר זה?",
+                        text: prod.productName,
+                        showConfirmButton: true,
+                        confirmButtonText: 'אישור',
+                        confirmButtonColor: 'rgb(140, 212, 245)',
+                        showCancelButton: true,
+                        cancelButtonText: 'ביטול',
+                        allowOutsideClick: false,
+                        html: true
+                    }, function (res) {
+                        if (res == true) {
+                            $.ajax({
+                                type: "POST",
+                                url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/approveProducts",
+                                data: { products: [prod.id] },
+                                context: Text,
+                                timeout: 60000,
+                                headers: {
+                                    "authorization": UserToken
+                                }
+                            }).success(function (Response) {
+                                if (Response.status == 'error') {
+                                    MySwal(Response.massege)
+                                    return false;
+                                }
+                                getProducts();
+                                MySwal(Response.massege, undefined, "success");
+                            }).error(function () {
+                                MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
+                            });
+                        }
+                    });
+                });
+            }).error(function () {
+                MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
+            });
+        }
+
+        // פונקציה ליצירת שורת מוצר לאיסוף (Tab 1)
+        function renderProductRow(prod, idx, status) {
+            var html = '';
+            html += '<div class="product-row" data-collected="false" style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; margin: 5px auto; background: #fffdfa; font-size: 15px; box-sizing: border-box; border: 1px solid #e7e7e7; overflow: hidden; height: 40px;">';
+            html += '<div style="background: #4db6ac; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: 100%; position: relative;">';
+            html += '<span style="font-size: 16px; font-weight: bold; padding: 0 2px;">' + (prod.productPlace || '') + '</span>';
+            html += '<i class="fa-solid fa-location-dot" style="font-size: 12px; position: absolute; top: 1px; left: 50%; transform: translateX(-50%); opacity: 0.8;"></i>';
+            html += '</div>';
+            html += '<div style="flex: 1; padding: 5px 8px; display: flex; align-items: center;">';
+            html += '<div style="font-size: 14px; color: #666;">' + (prod.productName || '') + '</div>';
+            html += '</div>';
+            html += '<div style="background: #4db6ac; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; font-weight: bold; font-size: 25px; height: 100%; position: relative;">';
+            html += '<span style="position: relative; top: -3px; padding: 0 2px;">' + (prod.quantityOrWeight || '') + '</span>';
+            html += '<span style="font-size: 10px; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%); opacity: 0.8;">יח&#39;</span>';
+            html += '</div>';
+            // כפתור אישור רק לסטטוס 1
+            if (status == 1) {
+                html += '<div style="background: #00695c; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; height: 100%; cursor: pointer;" class="approve-product-btn" data-index="' + idx + '" data-status="1">';
+                html += '<i class="fa-solid fa-cart-plus" style="font-size: 14px;"></i>';
+                html += '</div>';
+            } else {
+                html += '<div style="background: #bdbdbd; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; height: 100%;">';
+                html += '<i class="fa-solid fa-check-double" style="font-size: 14px; opacity:0.7;"></i>';
+                html += '</div>';
+            }
+            html += '</div>';
+            return html;
+        }
+
+        // פונקציה ליצירת שורת מוצר לפיזור (Tab 2) - עיצוב חדש עם אייקון ארגז
+        function renderOrderProductRow(prod, idx) {
+            var html = '';
+            html += '<div class="product-row" style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; margin: 5px auto; background: #f8faff; font-size: 15px; box-sizing: border-box; border: 1px solid #e7e7e7; overflow: hidden; height: 40px;">';
+            // צד ימין: מספר ארגז עם אייקון fa-box-open
+            html += '<div style="background: #1976d2; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: 100%; position: relative;">';
+            html += '<span style="font-size: 16px; font-weight: bold; padding: 0 2px;">' + (prod.collectionGroupOrder || '') + '</span>';
+            html += '<i class="fa-solid fa-box-open" style="font-size: 15px; position: absolute; top: 1px; left: 50%; transform: translateX(-50%); opacity: 0.8;"></i>';
+            html += '</div>';
+            html += '<div style="flex: 1; padding: 5px 8px; display: flex; align-items: center;">';
+            html += '<div style="font-size: 14px; color: #666;">' + (prod.productName || '') + '</div>';
+            html += '</div>';
+            html += '<div style="background: #1976d2; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; font-weight: bold; font-size: 25px; height: 100%; position: relative;">';
+            html += '<span style="position: relative; top: -3px; padding: 0 2px;">' + (prod.quantityOrWeight || '') + '</span>';
+            html += '<span style="font-size: 10px; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%); opacity: 0.8;">יח&#39;</span>';
+            html += '</div>';
+            // כפתור אישור פיזור (אייקון fa-box-check אם קיים, אחרת fa-check-to-slot, אחרת fa-check)
+            html += '<div style="background: #388e3c; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; height: 100%; cursor: pointer;" class="approve-order-product-btn" data-index="' + idx + '">';
+            html += '<i class="fa-solid fa-box-check fa-check-to-slot fa-check" style="font-size: 17px;"></i>';
+            html += '</div>';
+            html += '</div>';
+            return html;
+        }
+
+        // קבלת מוצרים לפיזור והצגה בטאב 2
+        function getOrderProducts() {
+            $.ajax({
+                url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/orderProducts",
+                context: Text,
+                timeout: 16000,
+                headers: {
+                    "authorization": UserToken
+                }
+            }).success(function (Response) {
+                if (Response.status == 'error') {
+                    MySwal(Response.massege)
+                    return false;
+                }
+                var orderProducts = Response.data || [];
+                var html = '';
+                html += '<div style="padding: 0 10px 20px;">';
+                html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #1976d2; margin: 10px 0;">רשימת מוצרים לפיזור</div>';
+                html += '<div id="OrderProductsList">';
+                if (orderProducts.length === 0) {
+                    html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין מוצרים ברשימה</div>';
+                } else {
+                    for (var i = 0; i < orderProducts.length; i++) {
+                        html += renderOrderProductRow(orderProducts[i], i);
+                    }
+                }
+                html += '</div>';
+                html += '</div>';
+                $("#TabContent2").html(html);
+
+                // אירוע אישור פיזור מוצר
+                $(".approve-order-product-btn").off("click").on("click", function () {
+                    var idx = $(this).data("index");
+                    var prod = orderProducts[idx];
+                    swal({
+                        type: "warning",
+                        title: "האם לאשר פיזור מוצר זה?",
+                        text: prod.productName,
+                        showConfirmButton: true,
+                        confirmButtonText: 'אישור',
+                        confirmButtonColor: 'rgb(56, 142, 60)',
+                        showCancelButton: true,
+                        cancelButtonText: 'ביטול',
+                        allowOutsideClick: false,
+                        html: true
+                    }, function (res) {
+                        if (res == true) {
+                            $.ajax({
+                                type: "POST",
+                                url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/approveOrderProducts",
+                                data: { orderProducts: [prod.id] },
+                                context: Text,
+                                timeout: 60000,
+                                headers: {
+                                    "authorization": UserToken
+                                }
+                            }).success(function (Response) {
+                                if (Response.status == 'error') {
+                                    MySwal(Response.massege)
+                                    return false;
+                                }
+                                getOrderProducts();
+                                MySwal(Response.massege, undefined, "success");
+                            }).error(function () {
+                                MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
+                            });
+                        }
+                    });
+                });
+            }).error(function () {
+                MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
+            });
+        }
+    </script>
+    <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/xhtml" lang="he-IL" translate="no">
+
+    <head>
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta charset="UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="robots" content="noindex" />
+
+        <link rel="preload" as="image" href="waitnew.gif">
+        <link href="https://fonts.googleapis.com/css?family=Assistant:400,600,700&display=swap&subset=hebrew"
+            rel="stylesheet" />
+        <link rel="stylesheet" href="Files/signature-pad.css" />
+        <link rel="stylesheet" type="text/css" href="Files/sweetalert.css?0" />
+
+        <script src="Files/sweetalert.min.js"></script>
+        <script type="text/javascript" src="Files/jquery-1.10.2.js"></script>
+        <script type="text/javascript" src="Files/jquery-ui.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+
+        <title>טופס - נדרים פלוס</title>
+
+        <!--<meta name="og:image" content="https://images.matara.pro/ClientsImages/0.jpg?2" runat="server" id="Og1" />
     <meta name="og:image:type" content="image/jpg" />
     <meta name="og:title" content="מילוי טופס" runat="server" id="Og2" />
     <meta name="og:description" content="נדרים פלוס" />-->
 
-    <style>
-        * {
-            font-family: 'Assistant', Arial, sans-serif;
-        }
-
-        @media screen and (max-width: 400px) {
-            .DivTelText {
-                width: 80% !important
+        <style>
+            * {
+                font-family: 'Assistant', Arial, sans-serif;
             }
-        }
 
-        @media screen and (max-width: 500px) {
-            #MainForm {
-                margin-right: 0px !important
-            }
-        }
-
-        .TextBox {
-            -webkit-appearance: none;
-            font-size: large;
-            color: #3f475e;
-            text-align: right;
-            padding: 6px;
-            border-color: #f7bb4d;
-            border-style: solid;
-            border-width: 2px;
-            margin: 5px 5px;
-            background-color: #FFFFFB;
-            -webkit-box-sizing: border-box;
-            border-radius: 5px;
-            margin-top: 0;
-            outline: none;
-        }
-
-        .RadioBtLbl {
-            border-style: solid;
-            border-color: #f7bb4d;
-            border-width: 0px 0px 2px 0px;
-            margin: 0px 10px;
-            background-color: #FFFFFB;
-            padding: 10px 2px 10px 10px;
-            border-radius: 2px;
-            -webkit-user-select: none;
-            cursor: pointer;
-            display: inline-block;
-        }
-
-
-        .SelectValLbl {
-            border-style: solid;
-            width: 90%;
-            text-align-last: center;
-            border-color: #f7bb4d;
-            border-width: 0px 0px 2px 0px;
-            font-size: large;
-            color: #3f475e;
-            margin: 0px 5px;
-            background-color: #FFFFFB;
-            padding: 7px 2px 10px 10px;
-            border-radius: 2px;
-            -webkit-user-select: none;
-            cursor: pointer;
-            display: inline-block;
-            outline: none;
-        }
-
-        .Koteret {
-            font-size: 22px;
-            color: #ff6a00;
-            font-weight: bold;
-            text-align: right;
-            padding-right: 27px;
-            width: 90%;
-            margin-top: 27px;
-            margin-bottom: 10px;
-            -webkit-user-select: none;
-        }
-
-
-        li {
-            text-align: right;
-            padding: 0px 0px 0px 25px;
-            font-size: 17px;
-            -webkit-user-select: none;
-        }
-
-        .checkbox {
-            text-align: right;
-            color: #2B3A63;
-            padding: 0px 0px 0px 25px;
-            font-size: 17px;
-        }
-
-
-
-
-        .Bt {
-            -webkit-appearance: none;
-            font-size: large;
-            color: white;
-            background-color: #38c232;
-            text-align: center;
-            padding: 12px 24px 12px 24px;
-            border-color: #fff;
-            border-style: solid;
-            border-width: 2px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0, 0, 0);
-            background-color: rgba(0, 0, 0, 0.5);
-            -webkit-overflow-scrolling: touch;
-        }
-
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            color: #808080;
-            -webkit-box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.75);
-            background-color: white;
-            max-width: 500px;
-            min-width: 200px;
-            min-height: 250px;
-            border-radius: 20px;
-            text-align: center;
-        }
-
-        td {
-            color: #296c8d;
-            font-size: 20px;
-            border: 1px solid #d7cece;
-            padding-left: 5px;
-            padding-right: 5px;
-            padding-top: 15px;
-            padding-bottom: 15px;
-        }
-
-        th {
-            min-height: 500px;
-            border: 1px solid #d7cece;
-            color: #2B3A63;
-            font-family: assistant, Arial;
-        }
-
-        .bordered td,
-        .bordered th {
-            border-left: 1px solid #ccc;
-            border-top: 1px solid #ccc;
-            padding: 5px;
-        }
-
-        .TableLightFont {
-            font-weight: lighter;
-            font-size: 14px;
-        }
-
-
-        table {
-            border-collapse: collapse;
-            border: 1px solid #d7cece;
-            margin-right: auto;
-            margin-left: auto;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .TableKoteret {
-            text-align: center;
-            padding-right: 20px;
-            /*background-color: aliceblue;*/
-            font-size: 25px;
-            color: steelblue;
-            /*lightslategrey*/
-            font-weight: normal;
-        }
-
-        .fieldName {
-            display: inline-block;
-            text-align: right;
-            width: 100%;
-            font-size: medium;
-            margin-right: 5px;
-            color: #808080;
-            -webkit-user-select: none;
-            margin-right: 10px
-        }
-    </style>
-    <script>
-
-        var Json = {
-            "FormElements": [
-
-            ],
-            "TofesId": "2801",//
-            "Version": "",
-            "AllowChanges": false,
-            "NeedSign": false,
-            "PreData": false,
-            "MosadId": "7005570", //0
-            "MainLogo": "", // Files/Pic/000_logo.jpg
-            "MainTitle": "מערכת זמן אמת.",
-            "SpecialCheck": "" //Phone: Date: MasavPayment "CreditCardPayment" //Zeout:Field7,Field10 //Mail:Field8 //CreditCardToken:Max //CheckDouble: //Bank: //CopyMail: //Tokef:Field8
-        }
-
-
-        var MasofId = ''
-        var ClientId = '';
-        var Zeout = '';
-        var OldTofesId = '';
-        var Demo = ''
-        var SignData = ''
-        var FixedWaiting = true;
-
-
-        var CheckElementId = [];
-        var CheckDbName = [];
-        var CheckDBFree = [];
-
-
-        var MainForm = '';
-        $(document).ready(function () {
-            $.ajaxSetup({ cache: false });
-
-            FixedWaitingStyle()
-
-            $(document).ajaxStart(function () {
-                if (FixedWaiting == true) {
-                    $('#FixedWaiting').show();
+            @media screen and (max-width: 400px) {
+                .DivTelText {
+                    width: 80% !important
                 }
-            });
-            $(document).ajaxStop(function (e) {
-                $('#FixedWaiting').hide();
-            });
+            }
+
+            @media screen and (max-width: 500px) {
+                #MainForm {
+                    margin-right: 0px !important
+                }
+            }
+
+            .TextBox {
+                -webkit-appearance: none;
+                font-size: large;
+                color: #3f475e;
+                text-align: right;
+                padding: 6px;
+                border-color: #f7bb4d;
+                border-style: solid;
+                border-width: 2px;
+                margin: 5px 5px;
+                background-color: #FFFFFB;
+                -webkit-box-sizing: border-box;
+                border-radius: 5px;
+                margin-top: 0;
+                outline: none;
+            }
+
+            .RadioBtLbl {
+                border-style: solid;
+                border-color: #f7bb4d;
+                border-width: 0px 0px 2px 0px;
+                margin: 0px 10px;
+                background-color: #FFFFFB;
+                padding: 10px 2px 10px 10px;
+                border-radius: 2px;
+                -webkit-user-select: none;
+                cursor: pointer;
+                display: inline-block;
+            }
 
 
-            if (Json.MainLogo !== '') { $("#MainLogo").attr('src', Json.MainLogo); } else { $("#MainLogo").attr('src', 'https://images.matara.pro/ClientsImages/' + Json.MosadId + '.jpg?1'); }
+            .SelectValLbl {
+                border-style: solid;
+                width: 90%;
+                text-align-last: center;
+                border-color: #f7bb4d;
+                border-width: 0px 0px 2px 0px;
+                font-size: large;
+                color: #3f475e;
+                margin: 0px 5px;
+                background-color: #FFFFFB;
+                padding: 7px 2px 10px 10px;
+                border-radius: 2px;
+                -webkit-user-select: none;
+                cursor: pointer;
+                display: inline-block;
+                outline: none;
+            }
 
-            //AddClientLogin("1");
+            .Koteret {
+                font-size: 22px;
+                color: #ff6a00;
+                font-weight: bold;
+                text-align: right;
+                padding-right: 27px;
+                width: 90%;
+                margin-top: 27px;
+                margin-bottom: 10px;
+                -webkit-user-select: none;
+            }
 
-            if (GetURLParameter("Demo") == '1') Demo = "&Demo=1";
-            MasofId = GetURLParameter("MasofId");
-            ClientId = GetURLParameter("ClientId");
-            Zeout = GetURLParameter("Zeout");
 
-            if (GetURLParameter("Admin") == '1') $("#AdminBt").show();
-            if (MasofId !== '') $("#BackToNedarim").show();
-            if (Json.NeedSign == true) $("#SignAlert").show();
+            li {
+                text-align: right;
+                padding: 0px 0px 0px 25px;
+                font-size: 17px;
+                -webkit-user-select: none;
+            }
+
+            .checkbox {
+                text-align: right;
+                color: #2B3A63;
+                padding: 0px 0px 0px 25px;
+                font-size: 17px;
+            }
 
 
-            for (var Element in Json.FormElements) {
-                var JsonElement = Json.FormElements[Element]
-                var Style = ""
-                if (JsonElement.Style) Style = JsonElement.Style
-                if (JsonElement.Type == "Koteret") {
-                    MainForm += '<div class="Koteret" style="' + Style + '">' + JsonElement.Text + '</div>'
-                } else {
-                    var dir = "rtl"
-                    var Bold = ""
-                    if (JsonElement.Bold == true) Bold = "font-weight:bold"
-                    if (JsonElement.Type == 'Tel') dir = "ltr"
-                    var FieldName = JsonElement.fieldName
-                    if (JsonElement.fieldNameShow !== undefined) FieldName = JsonElement.fieldNameShow
-                    var Lbl = '<label for="' + JsonElement.ElementId + '" class="fieldName" style="' + Bold + ';' + Style + '">' + ((JsonElement.Mandatory == true) ? '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;">*</span>' : '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;display:none">*</span>') + FieldName + '</label><br>'
-                    if (JsonElement.LblHide == true) Lbl = ''
-                    if (JsonElement.Type == "Select") {
-                        var DivData = '<div id="' + JsonElement.ElementId + 'Div"  style="width:' + JsonElement.Width + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:10px;margin-right:20px;margin-bottom: 4px;' + Style + '">' + Lbl + '<select class="SelectValLbl"  id="' + JsonElement.ElementId + '">'
-                        for (i = 0; i < JsonElement.SelectVal.split(",").length; i++) {
-                            DivData += '<option value="' + JsonElement.SelectVal.split(",")[i].replace(/"/g, '&quot;') + '"> ' + JsonElement.SelectVal.split(",")[i] + '</option>'
-                        }
-                        DivData += '</select></div>'
-                        MainForm += DivData
+
+
+            .Bt {
+                -webkit-appearance: none;
+                font-size: large;
+                color: white;
+                background-color: #38c232;
+                text-align: center;
+                padding: 12px 24px 12px 24px;
+                border-color: #fff;
+                border-style: solid;
+                border-width: 2px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 100;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgb(0, 0, 0);
+                background-color: rgba(0, 0, 0, 0.5);
+                -webkit-overflow-scrolling: touch;
+            }
+
+
+            .modal-content {
+                background-color: #fefefe;
+                margin: 50px auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%;
+                color: #808080;
+                -webkit-box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.75);
+                background-color: white;
+                max-width: 500px;
+                min-width: 200px;
+                min-height: 250px;
+                border-radius: 20px;
+                text-align: center;
+            }
+
+            td {
+                color: #296c8d;
+                font-size: 20px;
+                border: 1px solid #d7cece;
+                padding-left: 5px;
+                padding-right: 5px;
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+
+            th {
+                min-height: 500px;
+                border: 1px solid #d7cece;
+                color: #2B3A63;
+                font-family: assistant, Arial;
+            }
+
+            .bordered td,
+            .bordered th {
+                border-left: 1px solid #ccc;
+                border-top: 1px solid #ccc;
+                padding: 5px;
+            }
+
+            .TableLightFont {
+                font-weight: lighter;
+                font-size: 14px;
+            }
+
+
+            table {
+                border-collapse: collapse;
+                border: 1px solid #d7cece;
+                margin-right: auto;
+                margin-left: auto;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            .TableKoteret {
+                text-align: center;
+                padding-right: 20px;
+                /*background-color: aliceblue;*/
+                font-size: 25px;
+                color: steelblue;
+                /*lightslategrey*/
+                font-weight: normal;
+            }
+
+            .fieldName {
+                display: inline-block;
+                text-align: right;
+                width: 100%;
+                font-size: medium;
+                margin-right: 5px;
+                color: #808080;
+                -webkit-user-select: none;
+                margin-right: 10px
+            }
+        </style>
+        <script>
+
+            var Json = {
+                "FormElements": [
+
+                ],
+                "TofesId": "3590",//
+                "Version": "",
+                "AllowChanges": false,
+                "NeedSign": false,
+                "PreData": false,
+                "MosadId": "7013571", //0
+                "MainLogo": "", // Files/Pic/000_logo.jpg
+                "MainTitle": "ניהול הזמנות.",
+                "SpecialCheck": "" //Phone: Date: MasavPayment "CreditCardPayment" //Zeout:Field7,Field10 //Mail:Field8 //CreditCardToken:Max //CheckDouble: //Bank: //CopyMail: //Tokef:Field8
+            }
+
+
+            var MasofId = ''
+            var ClientId = '';
+            var Zeout = '';
+            var OldTofesId = '';
+            var Demo = ''
+            var SignData = ''
+            var FixedWaiting = true;
+
+
+            var CheckElementId = [];
+            var CheckDbName = [];
+            var CheckDBFree = [];
+
+
+            var MainForm = '';
+            $(document).ready(function () {
+                $.ajaxSetup({ cache: false });
+
+                FixedWaitingStyle()
+
+                $(document).ajaxStart(function () {
+                    if (FixedWaiting == true) {
+                        $('#FixedWaiting').show();
                     }
-                    else if (JsonElement.Type == "Margin") {
-                        MainForm += '<div style="height:' + JsonElement.Height + 'px"></div>'
-                    }
-                    else if (JsonElement.Type == "Hr") {
-                        MainForm += '<hr style="margin-right:20%;margin-left:20%;margin-top:' + JsonElement.MarginTop + 'px;margin-bottom:' + JsonElement.MarginBottom + 'px;' + Style + '" > '
-                    }
-                    else if (JsonElement.Type == "IndexNumber") {
-                        var SpanId = ""
-                        if (JsonElement.ElementId !== undefined) SpanId = "id='" + JsonElement.ElementId + "'"
-                        MainForm += (JsonElement.BeforeBr == true ? "<br id='" + JsonElement.ElementId + "Br' />" : '') + '<span ' + SpanId + ' style="-webkit-user-select: none;margin-top:15px;font-weight:bold;font-size:large;display:inline-block;color:#2B3A63;font-family:Assistant;background-color:cadetblue ;padding:3px 6px;color:white;font-weight:normal;border-radius:2px;margin-left: -10px;vertical-align: top;">' + JsonElement.Text + '</span>'
-                    } else if (JsonElement.Type == "Div") {
-                        MainForm += '<div  id="' + JsonElement.ElementId + '" style="' + Style + ';' + Bold + '">' + JsonElement.Text + '</div>'
-                    }
-                    else if (JsonElement.Type == "DivOpen") {
-                        MainForm += '<div  id="' + JsonElement.ElementId + '" style="' + Style + ';' + Bold + '">' + JsonElement.Text
-                    }
-                    else if (JsonElement.Type == "DivClose") {
-                        MainForm += '</div>'
-                    }
-                    else if (JsonElement.Type == "List") {
-                        MainForm += '<ol start=' + JsonElement.Number + ' style="-webkit-user-select:none;text-align:right;font-weight: bold;color: #2B3A63;' + (!JsonElement.Number ? 'list-style-type: disc;' : '') + ';' + Style + '"><li>' + JsonElement.Text + '</li></ol>'
-                    }
-                    else if (JsonElement.Type == "CheckBox") {
+                });
+                $(document).ajaxStop(function (e) {
+                    $('#FixedWaiting').hide();
+                });
 
+                if (Json.MainLogo !== '') { $("#MainLogo").attr('src', Json.MainLogo); } else { $("#MainLogo").attr('src', 'https://images.matara.pro/ClientsImages/' + Json.MosadId + '.jpg?1'); }
 
+                //AddClientLogin("1");
+
+                if (GetURLParameter("Demo") == '1') Demo = "&Demo=1";
+                MasofId = GetURLParameter("MasofId");
+                ClientId = GetURLParameter("ClientId");
+                Zeout = GetURLParameter("Zeout");
+
+                if (GetURLParameter("Admin") == '1') $("#AdminBt").show();
+                if (MasofId !== '') $("#BackToNedarim").show();
+                if (Json.NeedSign == true) $("#SignAlert").show();
+
+                for (var Element in Json.FormElements) {
+                    var JsonElement = Json.FormElements[Element]
+                    var Style = ""
+                    if (JsonElement.Style) Style = JsonElement.Style
+                    if (JsonElement.Type == "Koteret") {
+                        MainForm += '<div class="Koteret" style="' + Style + '">' + JsonElement.Text + '</div>'
+                    } else {
+                        var dir = "rtl"
+                        var Bold = ""
+                        if (JsonElement.Bold == true) Bold = "font-weight:bold"
+                        if (JsonElement.Type == 'Tel') dir = "ltr"
                         var FieldName = JsonElement.fieldName
                         if (JsonElement.fieldNameShow !== undefined) FieldName = JsonElement.fieldNameShow
-                        MainForm += '<div id="' + JsonElement.ElementId + 'Div" class="checkbox" style="-webkit-user-select:none;width:' + JsonElement.Width + '%;display:inline-block;vertical-align:top;text-align:right;margin:10px 20px 10px 0px;' + Style + ';' + Bold + '"><label for="' + JsonElement.ElementId + '"><input type="CheckBox" dir="' + dir + '" id="' + JsonElement.ElementId + '"/>' + ((JsonElement.Mandatory == true) ? '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;">*</span>' : '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;display:none">*</span>') + '<span id="' + JsonElement.ElementId + '_Txt" style="cursor: pointer; width: 90%; display: inline-block; vertical-align: top;padding-right: 3px;">' + FieldName + '</span></label></div>'
-                    }
-                    else if (JsonElement.Type == "textarea") {
-                        MainForm += '<div id="' + JsonElement.ElementId + 'Div" style="resize:none;width:' + JsonElement.Width + '%;display:inline-block;vertical-align:top;text-align:right;margin-top:10px;margin-right:20px;' + Style + '">' + Lbl + '<textarea class="TextBox"  rows="' + JsonElement.Rows + '" dir="' + dir + '" autocomplete="off" type="' + JsonElement.Type + '" style="width:90%;resize:none;" maxlength="' + JsonElement.MaxLength + '" id="' + JsonElement.ElementId + '" onfocus="ScrollUp(this)"/></div>'
-                    }
-                    else if (JsonElement.Type == "Text" || JsonElement.Type == "Tel") {
-                        var OnInput = ""
-                        if (JsonElement.Type == "Tel") OnInput = 'oninput="OnlyNumber(this.id)"'
-                        MainForm += '<div class="DivTelText" id="' + JsonElement.ElementId + 'Div" style="width:' + JsonElement.Width + '%;display:inline-block;vertical-align:top;text-align:right;margin-top:10px;margin-right:20px;">' + Lbl + '<input class="TextBox" dir="' + dir + '" autocomplete="off" type="' + JsonElement.Type + '" style="width:90%" maxlength="' + JsonElement.MaxLength + '" id="' + JsonElement.ElementId + '" onfocus="ScrollUp(this)" ' + OnInput + '/></div>'
-                    } else if (JsonElement.Type == "Radio") {
-                        var Br = ""
-                        if (JsonElement.br == true) Br = "<br/>"
-                        var DivData = '<div id="' + JsonElement.ElementId + '" style="width:' + JsonElement.Width + '%;display:inline-block;vertical-align:top;text-align:right;margin: 15px 20px 10px;' + Style + '">' + Lbl
-                        for (i = 0; i < JsonElement.RadioBt.length; i++) {
-                            var Show = JsonElement.RadioBt[i].Text
-                            if (JsonElement.RadioBt[i].Show !== undefined) { Show = JsonElement.RadioBt[i].Show }
-                            DivData += '<div id="' + JsonElement.ElementId + '_RadioLbl' + i + '" style="display:inline-block"><label class="RadioBtLbl" for="' + JsonElement.ElementId + '_Radio' + i + '" style="' + Style + ';' + (JsonElement.RadioBt[i].Bold == true ? 'font-weight:bold' : '') + '"><input id="' + JsonElement.ElementId + '_Radio' + i + '" type="radio" name="' + JsonElement.ElementId + '" value="' + JsonElement.RadioBt[i].Text.replace(/"/g, '&quot;') + '"> <span id="' + JsonElement.ElementId + '_RadioLblShow' + i + '">' + Show + '</span></label></div>' + Br
-                        }
-                        DivData += '</div>'
-                        MainForm += DivData
-                    }
-                    if (JsonElement.Br == true) MainForm += '<br/>';
-
-
-
-                    // בדיקות
-                    if (JsonElement.DbName !== undefined) {
-                        if (CheckDbName.indexOf(JsonElement.DbName) > -1) { alert("נמצא כפילות DbName ב: " + JsonElement.DbName) }
-                        if (JsonElement.DbName.substring(0, 5) != "Field") { alert("לא תקין DbName: " + JsonElement.DbName) }
-                        if (JsonElement.DbName.indexOf("Max") > -1) {
-                            if ($.isNumeric(JsonElement.DbName.split('Field')[1].split('Max')[0]) == false || JsonElement.DbName.split('Field')[1].split('Max')[1] != "") { alert("לא תקין DbName: " + JsonElement.DbName) }
-                            if (JsonElement.DbName.split('Field')[1].split('Max')[0] < 1 || JsonElement.DbName.split('Field')[1].split('Max')[0] > 10) { alert("נמצא חריגה  DbNameMax: " + JsonElement.DbName) }
-                        }
-                        else if ($.isNumeric(JsonElement.DbName.split('Field')[1]) == false) { alert("לא תקין DbName: " + JsonElement.DbName) }
-                        if (parseInt(JsonElement.DbName.split("Field")[1]) > 99) { alert("נמצא חריגה DbName ב: " + JsonElement.DbName) }
-                        CheckDbName.push(JsonElement.DbName)
-                    }
-
-                    if (JsonElement.ElementId !== undefined) {
-                        if (CheckElementId.indexOf(JsonElement.ElementId) > -1) { alert("נמצא כפילות ElementId ב: " + JsonElement.ElementId) }
-                        CheckElementId.push(JsonElement.ElementId);
-                    }
-
-                    if (JsonElement.ElementId == "CreditCard" || JsonElement.ElementId == "CardExpiration") {
-                        if ((Json.SpecialCheck.indexOf("CreditCardPayment") < 0) && (Json.SpecialCheck.indexOf("CreditCardToken") < 0)) { alert("לא קיימת שליחת אשראי.") }
-                        if (JsonElement.DbName && JsonElement.ElementId == "CreditCard" && (Json.SpecialCheck.indexOf("CreditCardToken:" + JsonElement.DbName) < 0)) { alert("כרטיס אשראי נשלח ללא CreditCardToken") }
-                    }
-                }
-            }
-
-            $("#MainForm").html(MainForm);
-        });
-
-
-        function CheckVersion() {
-            $.ajax({
-                url: "Manage.aspx?Action=CheckVersion&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId,
-                context: Text,
-                timeout: 60000,
-            }).success(function (JsonData) {
-                console.log(JsonData)
-            }).error(function () {
-                EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
-            });
-        }
-
-
-
-        function GetTofesSettings() {
-
-            $.ajax({
-                url: "Manage.aspx?Action=GetTofesSettings&TofesId=" + Json.TofesId + "&MosadId=" + Json.MosadId,
-                type: 'POST',
-                context: Text,
-                timeout: 180000,
-            }).success(function (JsonData) {
-                AllowedUsesJson = JsonData;
-                for (var Elem in AllowedUsesJson) {
-                    var TempZeout = AllowedUsesJson[Elem].Data.split("ǂ");
-
-                    var NewZeout = "";
-                    for (var elem in TempZeout) {
-                        if ($.isNumeric(TempZeout[elem])) {
-                            NewZeout += TempZeout[elem];
-                        }
-                    }
-
-                    AllowedUses.push(NewZeout);
-                }
-            }).error(function () {
-                $("#ZeoutCheck").html('<div style="font-size: 19px;text-align: center;color: indianred; font-weight: bold;font-family: Assistant;margin-top: 50px;margin-bottom: 150px;"><span style="font-size:24px"></span>שגיאת תוכנה.<br/>פנה לתמיכה טכנית.</div>');
-                $("#WaitDiv2").hide()
-                EAlertConfirm("שגיאת תוכנה. פנה לתמיכה טכנית.");
-            });
-
-        }
-
-        function Open_Tashlum() {
-
-            if (MasofId !== '') {
-                parent.GetMosadData(7009250, 'SetMosad', function () {
-                    parent.GoToMenu('NewPaiement')
-                })
-
-            } else {
-                window.open("https://www.matara.pro/nedarimplus/online/?mosad=7009250");
-            }
-
-            //if (Device == 'true') {
-            //    $('#PayBt').click(function () {
-            //        parent.GetMosadData(7001566, 'SetMosad', function () {
-            //            parent.GoToMenu('NewPaiement')
-            //        })
-            //    })
-            //} else {
-            //    $('#PayBt').click(function () { window.open("https://www.matara.pro/nedarimplus/online/?mosad=7001566"); });
-            //}
-        }
-
-
-
-
-        function LoginSwal(Text, Id) {
-            swal({
-                type: "error",
-                title: Text,
-                showConfirmButton: true,
-                allowOutsideClick: false,
-            }, function () {
-                $('#' + Id).focus()
-                $('#' + Id).select();
-                ScrollUp('#' + Id)
-                setTimeout(function () {
-                    $("#ZeoutCheckSave").show()
-                    $("#ZeoutCheckWait").hide()
-                }, 100);
-            });
-            return false;
-        }
-
-
-        function listCityOpenCloseCardFixed(Type, Num) {
-            if (Type == "Close") {
-                $("#CardFixed_" + Num + '_listCity').hide();
-                $("#CardFixed_" + Num + '_listCity_Search').val('');
-            }
-            else {
-                $("#CardFixed_" + Num + '_listCity').show().scrollTop(0)
-                $("#CardFixed_" + Num + '_listCity_Search').focus();
-            }
-        }
-        var listCityAllCity = []
-        function listCityGetAllCity(data) {
-            var city = data.CityId
-            var Adders = data.StreetId
-            var Action = data.Auto_Focus_After_City_Selection
-            var listCitys = data.list_Citys
-
-
-            $.ajax({
-                url: "Manage.aspx?Action=GetCitys",
-                context: Text,
-                timeout: 16000,
-            }).success(function (res) {
-
-                if (res.Status == 'Error') {
-                    swal({
-                        title: res.Message,
-                        type: "error",
-                        showCancelButton: false,
-                        confirmButtonText: 'אישור',
-                        closeOnConfirm: true,
-                        allowOutsideClick: false,
-                    })
-                    return false
-                }
-
-                for (i = 0; i < res.Data.length; i++) {
-                    listCityAllCity.push({ name: res.Data[i].CityName.trim(), Cityid: res.Data[i].CityId.trim() })
-                }
-
-                if (listCitys) {
-                    if (JSON.stringify(listCitys) != '[]') {
-                        listCityAllCity = listCityAllCity.filter(function (elm) { return listCitys.indexOf(elm.name) > -1 })
-                    }
-                }
-
-                listCityAllCity.sort(function (a, b) {
-                    if (a.name < b.name) return -1
-                    return a.name > b.name ? 1 : 0
-                })
-
-                listCityBuildHtml(city, Adders, Action)
-            }).error(function () {
-                swal({
-                    title: "שגיאה בקבלת נתונים. בדוק תקשורת",
-                    type: "error",
-                    showCancelButton: false,
-                    confirmButtonText: 'אישור',
-                    closeOnConfirm: true,
-                    allowOutsideClick: false,
-                })
-            })
-        }
-
-
-        function SendMail(Cause, Value) {
-            $.ajax({
-                type: "POST",
-                url: "Manage.aspx?Action=JSError",
-                context: Text,
-                timeout: 30000,
-                data: "Masof=" + encodeURIComponent(GetURLParameter("MasofId"))
-                    + "&url=" + encodeURIComponent(window.location.href)
-                    + "&msg=" + encodeURIComponent("<br/>" + "שליחת מייל עקב שגיאה חוזרת <br/> " + Cause + " :<br/> " + Value)
-            });
-        }
-
-
-        function listCityBuildHtml(City, Adders, Action) {
-            var html = ''
-            html += '<style>'
-            html += '.listCityModal {'
-            html += 'display: none;'
-            html += 'position: fixed;'
-            html += 'z-index: 100;'
-            html += 'left: 0;'
-            html += 'top: 0;'
-            html += 'width: 100%;'
-            html += 'height: 100%;'
-            html += 'overflow: auto;'
-            html += 'padding: 14px 0;'
-            html += 'background-color: rgba(0, 0, 0, 0.5);}'
-
-            html += '.listCitymodal-content {'
-            html += 'max-width:400px;'
-            html += 'margin: 5px auto 20px;'
-            html += 'background-color: #fefefe;'
-            html += 'padding: 20px;'
-            html += 'border: 1px solid #888;'
-            html += 'width: 80%;'
-            html += 'color: #808080;'
-            html += 'font-family: "Assistant", sans-serif;'
-            html += '-webkit-box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.75);'
-            html += 'background-color: white;'
-            html += 'max-width: 500px;'
-            html += 'min-width: 200px;'
-            html += 'min-height: 250px;'
-            html += 'position: relative;'
-            html += 'border-radius: 20px;'
-            html += 'text-align: center;}'
-
-            html += 'td {'
-            html += 'color: #2B3A63;'
-            html += 'font-size: 20px;'
-            html += 'border-bottom: 1px solid #d7cece;'
-            html += 'padding-left: 5px;'
-            html += 'padding-right: 5px;'
-            html += 'padding-top: 15px;'
-            html += 'padding-bottom: 15px;}'
-
-
-            html += 'th {'
-            html += 'color: #2B3A63;'
-            html += 'font-family: assistant,Arial;}'
-
-
-            html += '.bordered td, .bordered th {'
-            html += 'border-left: 1px solid #ccc;'
-            html += 'border-top: 1px solid #ccc;'
-            html += 'padding: 5px;'
-
-            html += '.TableLightFont {'
-            html += 'font-weight: lighter;'
-            html += 'font-size: 14px;}'
-
-            html += 'table {'
-            html += 'border-collapse: collapse;'
-            html += 'border: 1px solid #d7cece;'
-            html += 'font-family: "Assistant", sans-serif;'
-            html += 'margin-right: auto;'
-            html += 'margin-left: auto;}'
-
-            html += 'tr:nth-child(even) {'
-            html += 'background-color: #f2f2f2;}'
-            html += '</style>'
-
-
-            html += '<div dir="rtl" id="CardFixed_1_listCity" class="listCityModal" onclick="if (event.target == this) listCityOpenCloseCardFixed(\'Close\', \'1\')">'
-            html += '<div class="listCitymodal-content">'
-            html += '<div style="-webkit-user-select: none;"> <span style="cursor: pointer; width: 25px; height: auto; margin-top: 10px; margin-right: 10px; position: absolute; background: indianred; padding: 6px 8px; color: white; font-weight: 600; font-size: 22px; border-radius: 8px 16px; top: -6px; right: -6px;" onclick="listCityOpenCloseCardFixed(\'Close\', \'1\')">X</span>'
-            html += '<div style="text-align:center">'
-            html += '<div style="display: inline-block; font-family: Assistant, sans-serif; font-size: 22px; color: #ff6a00; font-weight: bold; width: 90%; margin-top: 27px; margin-bottom: 10px; -webkit-user-select: none; text-align: center; padding: 0;">בחר עיר:</div>'
-            html += '<input autocomplete="off" id="CardFixed_1_listCity_Search" style="-webkit-appearance: none; font-family: Assistant,Arial; font-size: large; color: #3f475e;outline: none; padding: 6px; border-color: #f7bb4d; border-style: solid; border-width: 0px 0px 2px 0px; margin: 5px 5px; background-color: #FFFFFB; -webkit-box-sizing: border-box;text-align:center" type="text" placeholder="חפש עיר" />'
-            html += '<div style="padding: 5px 0 13px;">סה"כ תוצאות: <span id="CardFixed_1_listCity_Count"></span></div>'
-            html += '<table id="CardFixed_1_listCity_Table" style="text-align:center;width:95%;font-size:medium;background-color:white"></table>'
-            html += '</div></div></div></div>'
-
-
-            if (Adders != '') {
-                html += '<div dir="rtl" id="CardFixed_2_listCity" class="listCityModal" onclick="if (event.target == this) listCityOpenCloseCardFixed(\'Close\', \'2\')">'
-                html += '<div class="listCitymodal-content">'
-                html += '<div style="-webkit-user-select: none;"> <span style="cursor: pointer; width: 25px; height: auto; margin-top: 10px; margin-right: 10px; position: absolute; background: indianred; padding: 6px 8px; color: white; font-weight: 600; font-size: 22px; border-radius: 8px 16px; top: -6px; right: -6px;" onclick="listCityOpenCloseCardFixed(\'Close\', \'2\')">X</span>'
-                html += '<div style="text-align:center">'
-                html += '<div style="display: inline-block; font-family: Assistant, sans-serif; font-size: 22px; color: #ff6a00; font-weight: bold; width: 90%; margin-top: 27px; margin-bottom: 10px; -webkit-user-select: none; text-align: center; padding: 0;">בחר רחוב:</div>'
-                html += '<input autocomplete="off" id="CardFixed_2_listCity_Search" style="-webkit-appearance: none; font-family: Assistant,Arial; font-size: large; color: #3f475e;outline: none; padding: 6px; border-color: #f7bb4d; border-style: solid; border-width: 0px 0px 2px 0px; margin: 5px 5px; background-color: #FFFFFB; -webkit-box-sizing: border-box;text-align:center" type="text" placeholder="חפש רחוב" />'
-                html += '<div id="CardFixed_2_listCitywait" style="display:none;padding: 5px 0 13px;"><img style="width: 49px;" src="https://matara.pro/nedarimplus/waitnew.gif"/><div>נא להמתין..</div></div>'
-                html += '<div id="CardFixed_2_listCity_Count" style="padding: 5px 0 13px;">סה"כ תוצאות: <span></span></div>'
-                html += '<table id="CardFixed_2_listCity_Table" style="text-align:center;width:95%;font-size:medium;background-color:white"></table>'
-                html += '</div></div></div>'
-            }
-
-            $('body').append(html)
-
-
-            if (City != '') {
-                $(City).focus(function () {
-                    $(City).blur()
-                    $("#CardFixed_1_listCity_Search").on('input', function () {
-                        CardFixed_1_listCityDom($('#CardFixed_1_listCity_Search').val(), City, Adders, Action)
-                    });
-                    CardFixed_1_listCityDom('', City, Adders, Action)
-                    listCityOpenCloseCardFixed('Open', '1')
-                });
-            }
-
-
-            if (Adders != '') {
-                $(Adders).focus(function () {
-                    $(Adders).blur()
-                    if ($(City).val() == '') {
-                        $(City).focus()
-                        return false
-                    }
-
-                    $("#CardFixed_2_listCity_Search").on('input', function () {
-                        CardFixed_2_listCityDom($('#CardFixed_2_listCity_Search').val(), Adders)
-                    });
-
-                    CardFixed_2_listGetAdders('', Adders, City)
-                    listCityOpenCloseCardFixed('Open', '2')
-                });
-            }
-
-        }
-        function CardFixed_1_listCityDom(Search, idcity, Idadders, Action) {
-            $("#CardFixed_1_listCity_Table").html('')
-            var KeyWord = Search.split(' ')
-            var Counter = 0
-            for (var i = 0; i < listCityAllCity.length; i++) {
-                var Exist = true
-                for (var j = 0; j < KeyWord.length; j++) {
-                    if (listCityAllCity[i].name.indexOf(KeyWord[j]) < 0) { Exist = false }
-                }
-                if (listCityAllCity[i].name == Search) { Exist = true }
-                if (Exist == true) {
-                    Counter += 1
-                    if (Counter > 200) continue;
-                    $("#CardFixed_1_listCity_Table").append('<tr><td id="CardFixed_1_listCity_Table_Row_' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center;font-size: 20px;color: #2B3A63;">' + listCityAllCity[i].name + '</div></td></tr>');
-                    (function (i) {
-                        $("#CardFixed_1_listCity_Table_Row_" + i).click(function () {
-                            if ($(idcity).val() != listCityAllCity[i].name) {
-                                $(idcity).val(listCityAllCity[i].name).attr('Cityid', listCityAllCity[i].Cityid)
-                                $(Idadders).val('')
+                        var Lbl = '<label for="' + JsonElement.ElementId + '" class="fieldName" style="' + Bold + ';' + Style + '">' + ((JsonElement.Mandatory == true) ? '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;">*</span>' : '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;display:none">*</span>') + FieldName + '</label><br>'
+                        if (JsonElement.LblHide == true) Lbl = ''
+                        if (JsonElement.Type == "Select") {
+                            var DivData = '<div id="' + JsonElement.ElementId + 'Div"  style="width:' + JsonElement.Width + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:10px;margin-right:20px;margin-bottom: 4px;' + Style + '">' + Lbl + '<select class="SelectValLbl"  id="' + JsonElement.ElementId + '">'
+                            for (i = 0; i < JsonElement.SelectVal.split(",").length; i++) {
+                                DivData += '<option value="' + JsonElement.SelectVal.split(",")[i].replace(/"/g, '&quot;') + '"> ' + JsonElement.SelectVal.split(",")[i] + '</option>'
                             }
-
-                            if (Action == true) {
-                                $(Idadders).focus()
-                            }
-                            listCityOpenCloseCardFixed('Close', '1')
-                        });
-                    })(i);
-                };
-            }
-            $('#CardFixed_1_listCity_Count').html(Counter)
-        }
-        var ValCity = ''
-        var listCityAllAdders = []
-        function CardFixed_2_listGetAdders(Search, Idadders, idcity) {
-            if ($(idcity).val() == ValCity) {
-                CardFixed_2_listCityDom(Search, Idadders)
-                return false
-            } else {
-                ValCity = $(idcity).val()
-            }
-
-            $("#CardFixed_2_listCity_Table").html('')
-            listCityAllAdders = []
-
-            $("#CardFixed_2_listCity_Count").hide()
-            $("#CardFixed_2_listCitywait").show()
-
-            $.ajax({
-                url: "Manage.aspx?Action=GetStreets&Cityid=" + $(idcity).attr('Cityid'),
-                context: Text,
-                timeout: 16000,
-            }).success(function (res) {
-
-                if (res.Status == 'Error') {
-                    swal({
-                        title: res.Message,
-                        type: "error",
-                        showCancelButton: false,
-                        confirmButtonText: 'אישור',
-                        closeOnConfirm: true,
-                        allowOutsideClick: false,
-                    })
-                    return false
-                }
-
-                for (i = 0; i < res.Data.length; i++) {
-                    listCityAllAdders.push({ name: res.Data[i].StreetName.trim() })
-                }
-
-                listCityAllAdders.sort(function (a, b) {
-                    if (a.name < b.name) return -1
-                    return a.name > b.name ? 1 : 0
-                })
-
-                CardFixed_2_listCityDom(Search, Idadders)
-            }).error(function () {
-                swal({
-                    title: "שגיאה בקבלת נתונים. בדוק תקשורת",
-                    type: "error",
-                    showCancelButton: false,
-                    confirmButtonText: 'אישור',
-                    closeOnConfirm: true,
-                    allowOutsideClick: false,
-                })
-            }).complete(function () {
-                $("#CardFixed_2_listCity_Count").show()
-                $("#CardFixed_2_listCitywait").hide()
-            });
-        }
-        function CardFixed_2_listCityDom(Search, Idadders) {
-            $("#CardFixed_2_listCity_Table").html('')
-            var KeyWord = Search.split(' ')
-            var Counter = 0
-            for (var i = 0; i < listCityAllAdders.length; i++) {
-                var Exist = true
-                for (var j = 0; j < KeyWord.length; j++) {
-                    if (listCityAllAdders[i].name.indexOf(KeyWord[j]) < 0) { Exist = false }
-                }
-                if (listCityAllAdders[i].name == Search) { Exist = true }
-                if (Exist == true) {
-                    Counter += 1
-                    if (Counter > 200) continue;
-                    $("#CardFixed_2_listCity_Table").append('<tr><td id="CardFixed_2_listCity_Table_Row_' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center;font-size: 20px;color: #2B3A63;">' + listCityAllAdders[i].name + '</div></td></tr>');
-                    (function (i) {
-                        $("#CardFixed_2_listCity_Table_Row_" + i).click(function () {
-                            $(Idadders).val(listCityAllAdders[i].name)
-                            listCityOpenCloseCardFixed('Close', '2')
-                        });
-                    })(i);
-                };
-            }
-            $('#CardFixed_2_listCity_Count span').html(Counter)
-        }
+                            DivData += '</select></div>'
+                            MainForm += DivData
+                        }
+                        else if (JsonElement.Type == "Margin") {
+                            MainForm += '<div style="height:' + JsonElement.Height + 'px"></div>'
+                        }
+                        else if (JsonElement.Type == "Hr") {
+                            MainForm += '<hr style="margin-right:20%;margin-left:20%;margin-top:' + JsonElement.MarginTop + 'px;margin-bottom:' + JsonElement.MarginBottom + 'px;' + Style + '" > '
+                        }
+                        else if (JsonElement.Type == "IndexNumber") {
+                            var SpanId = ""
+                            if (JsonElement.ElementId !== undefined) SpanId = "id='" + JsonElement.ElementId + "'"
+                            MainForm += (JsonElement.BeforeBr == true ? "<br id='" + JsonElement.ElementId + "Br' />" : '') + '<span ' + SpanId + ' style="-webkit-user-select: none;margin-top:15px;font-weight:bold;font-size:large;display:inline-block;color:#2B3A63;font-family:Assistant;background-color:cadetblue ;padding:3px 6px;color:white;font-weight:normal;border-radius:2px;margin-left: -10px;vertical-align: top;">' + JsonElement.Text + '</span>'
+                        } else if (JsonElement.Type == "Div") {
+                            MainForm += '<div  id="' + JsonElement.ElementId + '" style="' + Style + ';' + Bold + '">' + JsonElement.Text + '</div>'
+                        }
+                        else if (JsonElement.Type == "DivOpen") {
+                            MainForm += '<div  id="' + JsonElement.ElementId + '" style="' + Style + ';' + Bold + '">' + JsonElement.Text
+                        }
+                        else if (JsonElement.Type == "DivClose") {
+                            MainForm += '</div>'
+                        }
+                        else if (JsonElement.Type == "List") {
+                            MainForm += '<ol start=' + JsonElement.Number + ' style="-webkit-user-select:none;text-align:right;font-weight: bold;color: #2B3A63;' + (!JsonElement.Number ? 'list-style-type: disc;' : '') + ';' + Style + '"><li>' + JsonElement.Text + '</li></ol>'
+                        }
+                        else if (JsonElement.Type == "CheckBox") {
 
 
-
-
-        //swal({
-        //    type: "warning",
-        //    title: "שימו לב!",
-        //    text: "סימנתם רק רישום לצהרון בקיץ, ללא רישום לצהרון בשנת הלימודים תשפ\"ג",
-        //    showConfirmButton: true,
-        //    confirmButtonText: "שלח טופס",
-        //    confirmButtonColor: '#38c232',
-        //    showCancelButton: true,
-        //    cancelButtonText: "תיקון בחירה",
-        //    allowOutsideClick: false,
-        //    html: true
-        //}, function (res) {
-        //    if (res !== true) {
-        //        $('#RishumTsaaron').focus()
-        //        $('#RishumTsaaron').select();
-        //        ScrollUp('#RishumTsaaron')
-        //    } else {
-        //        setTimeout(function () {
-        //            SendData2();
-        //        }, 500)
-        //    }
-        //});
-
-
-        function GetOldTofesData() {
-
-
-            if (parent.ClientJson) {
-                ClientJson = parent.ClientJson;
-            }
-
-            $("#AllMainForm").hide();
-            $("#WaitDiv2").show()
-            $.ajax({
-                url: "Manage.aspx?Action=GetOldTofesData&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId,
-                data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID),
-                type: 'POST',
-                context: Text,
-                timeout: 60000,
-            }).success(function (JsonData) {
-                $("#WaitDiv2").hide()
-                $("#AllMainForm").show();
-
-                //if (JsonData.Status == 'Error' && JsonData.Message == 'NOT FOUND') { return false }
-                if (JsonData.Status == 'Error' && JsonData.Message == 'NOT FOUND') {
-                    return false;
-                }
-
-                OldTofesId = JsonData.ID;
-                $("#EditNote").show();
-
-                for (var Element in Json.FormElements) {
-                    var JsonElement = Json.FormElements[Element]
-                    if (JsonElement.DbName !== undefined) {
-
-                        if (JsonElement.Type == 'CheckBox') {
-                            if (JsonData[JsonElement.DbName] == "מסומן") { $("#" + JsonElement.ElementId).prop('checked', true); }
-                        } else if (JsonElement.Type == 'Radio') {
+                            var FieldName = JsonElement.fieldName
+                            if (JsonElement.fieldNameShow !== undefined) FieldName = JsonElement.fieldNameShow
+                            MainForm += '<div id="' + JsonElement.ElementId + 'Div" class="checkbox" style="-webkit-user-select:none;width:' + JsonElement.Width + '%;display:inline-block;vertical-align:top;text-align:right;margin:10px 20px 10px 0px;' + Style + ';' + Bold + '"><label for="' + JsonElement.ElementId + '"><input type="CheckBox" dir="' + dir + '" id="' + JsonElement.ElementId + '"/>' + ((JsonElement.Mandatory == true) ? '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;">*</span>' : '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;display:none">*</span>') + '<span id="' + JsonElement.ElementId + '_Txt" style="cursor: pointer; width: 90%; display: inline-block; vertical-align: top;padding-right: 3px;">' + FieldName + '</span></label></div>'
+                        }
+                        else if (JsonElement.Type == "textarea") {
+                            MainForm += '<div id="' + JsonElement.ElementId + 'Div" style="resize:none;width:' + JsonElement.Width + '%;display:inline-block;vertical-align:top;text-align:right;margin-top:10px;margin-right:20px;' + Style + '">' + Lbl + '<textarea class="TextBox"  rows="' + JsonElement.Rows + '" dir="' + dir + '" autocomplete="off" type="' + JsonElement.Type + '" style="width:90%;resize:none;" maxlength="' + JsonElement.MaxLength + '" id="' + JsonElement.ElementId + '" onfocus="ScrollUp(this)"/></div>'
+                        }
+                        else if (JsonElement.Type == "Text" || JsonElement.Type == "Tel") {
+                            var OnInput = ""
+                            if (JsonElement.Type == "Tel") OnInput = 'oninput="OnlyNumber(this.id)"'
+                            MainForm += '<div class="DivTelText" id="' + JsonElement.ElementId + 'Div" style="width:' + JsonElement.Width + '%;display:inline-block;vertical-align:top;text-align:right;margin-top:10px;margin-right:20px;">' + Lbl + '<input class="TextBox" dir="' + dir + '" autocomplete="off" type="' + JsonElement.Type + '" style="width:90%" maxlength="' + JsonElement.MaxLength + '" id="' + JsonElement.ElementId + '" onfocus="ScrollUp(this)" ' + OnInput + '/></div>'
+                        } else if (JsonElement.Type == "Radio") {
+                            var Br = ""
+                            if (JsonElement.br == true) Br = "<br/>"
+                            var DivData = '<div id="' + JsonElement.ElementId + '" style="width:' + JsonElement.Width + '%;display:inline-block;vertical-align:top;text-align:right;margin: 15px 20px 10px;' + Style + '">' + Lbl
                             for (i = 0; i < JsonElement.RadioBt.length; i++) {
-                                if (JsonElement.RadioBt[i].Text == JsonData[JsonElement.DbName]) { $("#" + JsonElement.ElementId + '_Radio' + i).prop('checked', 'checked') }
+                                var Show = JsonElement.RadioBt[i].Text
+                                if (JsonElement.RadioBt[i].Show !== undefined) { Show = JsonElement.RadioBt[i].Show }
+                                DivData += '<div id="' + JsonElement.ElementId + '_RadioLbl' + i + '" style="display:inline-block"><label class="RadioBtLbl" for="' + JsonElement.ElementId + '_Radio' + i + '" style="' + Style + ';' + (JsonElement.RadioBt[i].Bold == true ? 'font-weight:bold' : '') + '"><input id="' + JsonElement.ElementId + '_Radio' + i + '" type="radio" name="' + JsonElement.ElementId + '" value="' + JsonElement.RadioBt[i].Text.replace(/"/g, '&quot;') + '"> <span id="' + JsonElement.ElementId + '_RadioLblShow' + i + '">' + Show + '</span></label></div>' + Br
                             }
-                        } else {
-                            $("#" + JsonElement.ElementId).val(JsonData[JsonElement.DbName])
+                            DivData += '</div>'
+                            MainForm += DivData
+                        }
+                        if (JsonElement.Br == true) MainForm += '<br/>';
+
+
+
+                        // בדיקות
+                        if (JsonElement.DbName !== undefined) {
+                            if (CheckDbName.indexOf(JsonElement.DbName) > -1) { alert("נמצא כפילות DbName ב: " + JsonElement.DbName) }
+                            if (JsonElement.DbName.substring(0, 5) != "Field") { alert("לא תקין DbName: " + JsonElement.DbName) }
+                            if (JsonElement.DbName.indexOf("Max") > -1) {
+                                if ($.isNumeric(JsonElement.DbName.split('Field')[1].split('Max')[0]) == false || JsonElement.DbName.split('Field')[1].split('Max')[1] != "") { alert("לא תקין DbName: " + JsonElement.DbName) }
+                                if (JsonElement.DbName.split('Field')[1].split('Max')[0] < 1 || JsonElement.DbName.split('Field')[1].split('Max')[0] > 10) { alert("נמצא חריגה  DbNameMax: " + JsonElement.DbName) }
+                            }
+                            else if ($.isNumeric(JsonElement.DbName.split('Field')[1]) == false) { alert("לא תקין DbName: " + JsonElement.DbName) }
+                            if (parseInt(JsonElement.DbName.split("Field")[1]) > 99) { alert("נמצא חריגה DbName ב: " + JsonElement.DbName) }
+                            CheckDbName.push(JsonElement.DbName)
                         }
 
+                        if (JsonElement.ElementId !== undefined) {
+                            if (CheckElementId.indexOf(JsonElement.ElementId) > -1) { alert("נמצא כפילות ElementId ב: " + JsonElement.ElementId) }
+                            CheckElementId.push(JsonElement.ElementId);
+                        }
+
+                        if (JsonElement.ElementId == "CreditCard" || JsonElement.ElementId == "CardExpiration") {
+                            if ((Json.SpecialCheck.indexOf("CreditCardPayment") < 0) && (Json.SpecialCheck.indexOf("CreditCardToken") < 0)) { alert("לא קיימת שליחת אשראי.") }
+                            if (JsonElement.DbName && JsonElement.ElementId == "CreditCard" && (Json.SpecialCheck.indexOf("CreditCardToken:" + JsonElement.DbName) < 0)) { alert("כרטיס אשראי נשלח ללא CreditCardToken") }
+                        }
                     }
-
                 }
-                Calculate()
-            }).error(function () {
 
-                var BtTex = 'חזרה לנדרים פלוס'
-                if (MasofId == '') BtTex = 'אישור'
-                swal({
-                    title: "שגיאה בקבלת נתונים. בדוק תקשורת",
-                    type: "error",
-                    showCancelButton: false,
-                    confirmButtonText: BtTex,
-                    closeOnConfirm: true,
-                    allowOutsideClick: false,
-                }, function (isConfirm) {
-                    if (MasofId !== '') { parent.GoToMenu("Tafrit"); parent.closeIFrame() } else { $('html, body').scrollTop(0); location.reload(); }
+                $("#MainForm").html(MainForm);
+
+                // קריאה אוטומטית להצגת מוצרים בטאב 1
+
+            });
+
+
+            function CheckVersion() {
+                $.ajax({
+                    url: "Manage.aspx?Action=CheckVersion&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId,
+                    context: Text,
+                    timeout: 60000,
+                }).success(function (JsonData) {
+                    console.log(JsonData)
+                }).error(function () {
+                    EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
                 });
-
-            });
-        }
+            }
 
 
-        function CheckDouble(FieldName, FieldData) {
 
-            $.ajax({
-                url: "Manage.aspx?Action=CheckDouble&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&FieldName=" + encodeURIComponent(FieldName) + "&FieldData=" + encodeURIComponent(FieldData),
-                context: Text,
-                timeout: 60000,
-            }).success(function (JsonData) {
+            function GetTofesSettings() {
 
-            }).error(function () {
-                EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
-            }).complete(function () {
-                if (ExamId !== '') GetExamData(Json.TofesId);
-            });
+                $.ajax({
+                    url: "Manage.aspx?Action=GetTofesSettings&TofesId=" + Json.TofesId + "&MosadId=" + Json.MosadId,
+                    type: 'POST',
+                    context: Text,
+                    timeout: 180000,
+                }).success(function (JsonData) {
+                    AllowedUsesJson = JsonData;
+                    for (var Elem in AllowedUsesJson) {
+                        var TempZeout = AllowedUsesJson[Elem].Data.split("ǂ");
 
-        }
-
-
-        function CheckDouble(FieldName, FieldData, Result, Function) {
-            $.ajax({
-                url: "Manage.aspx?Action=CheckDouble&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&FieldName=" + encodeURIComponent(FieldName) + "&FieldData=" + encodeURIComponent(FieldData),
-                context: Text,
-                timeout: 60000,
-            }).success(function (JsonData) {
-                window[Result] = JsonData
-                Function()
-            }).error(function () {
-                EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
-            });
-        }
-
-
-        function UpdateClick() {
-            if (MasofId !== '') parent.UpdateClick()
-        }
-
-
-        function GetClientData() {
-            $("#AllMainForm").hide();
-            $("#WaitDiv2").show()
-
-            $.ajax({
-                url: "Manage.aspx?Action=GetClientData&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&ClientId=" + ClientId + "&Zeout=" + Zeout,
-                context: Text,
-                timeout: 60000,
-            }).success(function (JsonData) {
-                $("#WaitDiv2").hide()
-                $("#AllMainForm").show();
-
-                if (JsonData.Status == 'Error' && JsonData.Message == 'NOT FOUND') { return false }
-                OldTofesId = JsonData.ID;
-                $("#EditNote").show();
-
-                for (var Element in Json.FormElements) {
-                    var JsonElement = Json.FormElements[Element]
-                    if (JsonElement.DbName !== undefined) {
-                        if (JsonElement.Type == 'Radio') {
-                            for (i = 0; i < JsonElement.RadioBt.length; i++) {
-                                if (JsonElement.RadioBt[i].Text == JsonData[JsonElement.DbName]) { $("#" + JsonElement.ElementId + '_Radio' + i).prop('checked', 'checked') }
+                        var NewZeout = "";
+                        for (var elem in TempZeout) {
+                            if ($.isNumeric(TempZeout[elem])) {
+                                NewZeout += TempZeout[elem];
                             }
                         }
-                        else
-                            $("#" + JsonElement.ElementId).val(JsonData[JsonElement.DbName])
+
+                        AllowedUses.push(NewZeout);
                     }
-                }
-                Calculate()
-
-            }).error(function () {
-
-                var BtTex = 'חזרה לנדרים פלוס'
-                if (MasofId == '') BtTex = 'איפוס טופס'
-                swal({
-                    title: "שגיאה בקבלת נתונים. בדוק תקשורת",
-                    type: "error",
-                    showCancelButton: false,
-                    confirmButtonText: BtTex,
-                    closeOnConfirm: true,
-                    allowOutsideClick: false,
-                }, function (isConfirm) {
-                    if (MasofId !== '') { parent.GoToMenu("Tafrit"); parent.closeIFrame() } else { $('html, body').scrollTop(0); location.reload(); }
+                }).error(function () {
+                    $("#ZeoutCheck").html('<div style="font-size: 19px;text-align: center;color: indianred; font-weight: bold;font-family: Assistant;margin-top: 50px;margin-bottom: 150px;"><span style="font-size:24px"></span>שגיאת תוכנה.<br/>פנה לתמיכה טכנית.</div>');
+                    $("#WaitDiv2").hide()
+                    EAlertConfirm("שגיאת תוכנה. פנה לתמיכה טכנית.");
                 });
 
-            });
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        function Add_Client_Dt() {
-            $("#Client_Div").hide();
-            if (parent.ClientJson) {
-                $("#ZeoutZ").val(parent.ClientJson.Zeout)
-                $('#FullNameZ').val(parent.ClientJson.Name);
-                $('#NHZ').val(parent.ClientJson.Adresse);
-                $('#CityZ').val(parent.ClientJson.City);
-                $('#TelZ').val(parent.ClientJson.Phone);
-                $('#MailZ').val(parent.ClientJson.Mail);
-            } else if (ClientJson) {
-                $("#ZeoutZ").val(ClientJson.Zeout)
-                $('#FullNameZ').val(ClientJson.Name);
-                $('#NHZ').val(ClientJson.Adresse);
-                $('#CityZ').val(ClientJson.City);
-                $('#TelZ').val(ClientJson.Phone);
-                $('#MailZ').val(ClientJson.Mail);
             }
-        }
 
-
-
-        //AllowCount:Field11;
-        function GetSumCount() {
-            $.ajax({
-                url: "Manage.aspx?Action=GetSumCount&TofesId=1895&FiledName=Field11&Type=Count&Text=2", // Text לא חובה
-                context: Text,
-                timeout: 60000,
-            }).success(function (JsonData) {
-                console.log(JsonData.Message)
-            }).error(function () {
-                EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
-            })
-
-        }
-
-
-
-
-
-        //function ZeoutCheck() {
-
-        //    $("#ZeoutCheckSave").hide()
-        //    $("#ZeoutCheckWait").show()
-        //    setTimeout(function () {
-        //        ZeoutNumber = $("#ZeoutCheckText").val();
-        //        if ($.isNumeric(ZeoutNumber) == false) { LoginSwal("נא להקיש מספר זהות בספרות בלבד, ללא סימנים", "ZeoutCheckText"); return false };
-        //        for (var Elem in MatrimJson) {
-        //            var KidZeout = MatrimJson[Elem].Name.split("|")[0].trim()
-        //            console.log("KidZeout: " + KidZeout)
-        //            console.log("ZeoutNumber: " + ZeoutNumber)
-        //            if (KidZeout == ZeoutNumber) {
-        //                OpenPage(KidZeout, MatrimJson[Elem].Name.split("|")[1], MatrimJson[Elem].Name.split("|")[2]);
-        //                return false;
-        //            }
-        //        }
-        //        LoginSwal("מספר הזהות שהוקש לא נמצא במערכת."); return false;
-        //$("#ZeoutCheckSave").show()
-        //$("#ZeoutCheckWait").hide()
-
-
-
-
-
-
-        //    }, 1000)
-        //}
-
-
-        //function ZeoutCheck() {
-
-        //    $("#ZeoutCheckSave").hide()
-        //    $("#ZeoutCheckWait").show()
-        //    ZeoutNumber = $("#ZeoutCheckText").val();
-        //    if ($.isNumeric(ZeoutNumber) == false) { LoginSwal("נא להקיש מספר זהות בספרות בלבד, ללא סימנים", "ZeoutCheckText"); return false };
-
-        //    $.ajax({
-        //        url: "Manage.aspx?Action=CheckAllowedZeout&MosadId=" + Json.MosadId + "&Zeout=" + encodeURIComponent(ZeoutNumber),
-        //        context: Text,
-        //        timeout: 60000,
-        //    }).success(function (JsonData) {
-        //        if (JsonData.Status == 'Error' || JsonData.Result == 'Error') {
-        //            swal({
-        //                type: "warning",
-        //                title: "מספר הזהות שהוקש לא נמצא במערכת <br/> הנך מועבר לטופס הרשמה למערכת",
-        //                timer: 3000,
-        //                showConfirmButton: false,
-        //                html: true
-        //            }, function (r) {
-        //                Open(968)
-        //            })
-        //        }
-        //        else {
-        //            $('#AllMainForm').show();
-        //            $('#ZeoutCheck').hide();
-        //            $("#Zeout").val(ZeoutNumber);
-        //            $("#Zeout").attr('disabled', 'disabled');
-        //            return false;
-        //        }
-        //    }).error(function () {
-        //        EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
-        //    });
-
-
-        //}
-
-
-
-
-
-        function GetPreData_UserName() {
-            $.ajax({
-                url: "Manage.aspx?Action=GetPreData_UserName&TofesId=" + Json.TofesId,
-                data: "UserName=ASD" + encodeURIComponent("39660675") + "&Password=SDF", //לא חובה
-                type: 'POST',
-                context: Text,
-                timeout: 60000,
-            }).success(function (JsonData) {
-                console.log(JsonData)
-            }).error(function () {
-                ParsePreData("ERROR")
-            });
-        }
-
-
-
-
-
-
-        function SignCancel() {
-            $('#SignPad,#WaitDiv').hide();
-            $('#SaveDiv').show();
-        }
-
-
-
-        // *** MatchPlusData 490***
-        //var MatchPlusData;
-
-        //function MatchPlus() {
-        //    $.ajax({
-        //        url: "../V6/MatchPlus.aspx?Action=ShowGoal&MatchingId=229",
-        //        context: Text,
-        //        timeout: 5000,
-        //    }).success(function (data) {
-        //        MatchPlusData = data
-        //        ShowDataMatchPlus()
-        //    }).error(function () {
-
-        //        EAlertConfirm("תקלת תקשורת - שגיאה בקבלת נתונים", '', 6000);
-        //    })
-        //}
-
-        //var Sign = '₪'
-        //function ShowDataMatchPlus() {
-        //    try {
-        //        $('#CurDonator').html(MatchPlusData.Donator)
-        //        //MatchPlusData.data.relationships.campaign_stats.data.total=2005268
-        //        $('#CurAmount').html((+MatchPlusData.Donated).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').replace('.00', '') + ' ' + Sign)
-        //        var Goal = +MatchPlusData.Goal
-        //        var GoalText = 'יעד'
-        //        //if (MatchPlusData.data.attributes.rounds.length > 1) {
-        //        //    if (MatchPlusData.data.attributes.rounds[1].goal !== undefined) {
-        //        //        if (parseFloat(MatchPlusData.data.relationships.campaign_stats.data.total) > parseFloat(Goal)) {
-        //        //            Goal = MatchPlusData.data.attributes.rounds[1].goal
-        //        //            GoalText = 'יעד בונוס'
-        //        //        }
-        //        //    }
-        //        //}
-        //        $('#goal').html(GoalText + ': ' + Goal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').replace('.00', '') + ' ' + Sign)
-
-        //        // $('#goal').html(GoalText + ': ' + Goal.replace(/\d(?=(\d{3})+\.)/g, '$&,').replace('.00', '') + ' ' + Sign)
-        //        var Percent = +MatchPlusData.Donated / Goal * 100
-        //        $('#CurPercent').html((Percent).toFixed(2) + '%')
-        //        if (Percent > 100) Percent = 100;
-        //        $('#progress').css('width', (Percent).toFixed(2) + '%')
-        //        $('.goal-stat').show()
-        //    }
-        //    catch (err) {
-        //        console.log(err.message);
-        //    }
-        //    //CountDownTimer(MatchPlusData.data.attributes.end_date, 'countdown');
-        //}
-
-
-
-        function GetMailData() {
-
-
-            var data = "<div style='margin: auto;font-weight: 600;padding-left: 20px;width: 210mm;border: 1px solid #e9e9e9;position: relative;font-family: system-ui;padding:0 0 20px'>"
-            data += "<div style='padding: 13px 20px 35px 21px; direction: rtl; font-size: 15px; color: gray; font-weight: 600; justify-content: space-between;'><div style='margin: 0 0 0 20px;display: inline-block;'>בס\"ד</div><div style='display: inline-block;    float: left;'>נוצר באמצעות [MasofId] | [TofesDate]</div></div>"
-
-            data += '[MasofId]'
-            data += '[Id]'
-            data += '[TransactionId]'
-
-            data += "<div dir='rtl' style='margin: 5px 25px 0 0;text-align: right;'>"
-            data += "<div dir='rtl' style='margin: 0 0 30px; text-align: center; font-weight: 600; font-size: 20px; color: #171717;'>טופס הרשמה</div>"
-            data += "<div style='margin: 5px 0 20px;color: cadetblue;font-size: 17px;'>פרטים אישיים:</div>"
-
-            data += "<div style='margin: 5px 0 20px'>"
-            data += "שם פרטי: <div style='display: inline-block;width: 180px;border-bottom: 1px solid #888888;padding:0 8px;'>" + $('#FirstName').val() + "</div>"
-            data += "שם משפחה: <div style='display: inline-block;width: 180px;border-bottom: 1px solid #888888;padding:0 8px;'>" + $('#Family').val() + "</div>"
-            data += "ת.ז: <div style='display: inline-block;width: 120px;border-bottom: 1px solid #888888;padding:0 8px;'>" + $('#Zeout').val() + "</div>"
-            data += "</div>"
-
-            data += "<div style='margin: 30px 0 20px;color: cadetblue;font-size: 17px;'>הערות:</div>"
-            data += "<div style='margin: 5px 0 20px'>"
-            data += "<div style='display: inline-block;width:700px;border-bottom: 1px solid #888888;padding:0 8px;'>" + $('#Notes').val() + "</div>"
-            data += "</div>"
-
-
-
-            data += '<div style="margin-left: 30px;text-align: left;direction: ltr;">'
-            data += '<div style="width: 250px;">'
-            data += '[Sign]'
-            data += '</div>'
-            data += ' <div style="padding: 0px 17px;border-top: 2px solid gray;width: max-content;padding: 0 100px;">חתימה</div>'
-            data += '</div>'
-
-            data += "</div>"
-            data += "</div>"
-
-            return data
-        }
-
-
-        function Calculate() {
-
-            // מחיקת תו לא חוקי
-            //if ($.isNumeric($('#Row' + i).val()) == false && $('#Row' + i).val().length > 1) { $('#Row' + i).val($('#Row' + i).val().substring(0,$('#Row' + i).val().length-1)) }
-            //if ($.isNumeric($('#Row' + i).val()) == false) { $('#Row' + i).val(''); continue; }
-            //if (parseFloat($('#Row' + i).val()) <0) { $('#Row' + i).val(''); continue; }
-
-
-
-        }
-
-
-
-
-
-
-
-        //feature_1
-        function CloseNatsig() {
-            $('#SnifChoose').hide();
-            setTimeout(function () { ScrollUp($('#Snif1')) }, 100);
-        }
-
-        //feature_1
-        function SetSnif(SnifName) {
-            $("#Snif1").val(SnifName)
-            CloseNatsig()
-        }
-
-
-        function ScrollUp(Input) {
-            if ($(Input).val() !== undefined) {
-                $('html, body').animate({ scrollTop: $(Input).position().top - 200 }, 'slow');
+            function Open_Tashlum() {
+
+                if (MasofId !== '') {
+                    parent.GetMosadData(7009250, 'SetMosad', function () {
+                        parent.GoToMenu('NewPaiement')
+                    })
+
+                } else {
+                    window.open("https://www.matara.pro/nedarimplus/online/?mosad=7009250");
+                }
+
+                //if (Device == 'true') {
+                //    $('#PayBt').click(function () {
+                //        parent.GetMosadData(7001566, 'SetMosad', function () {
+                //            parent.GoToMenu('NewPaiement')
+                //        })
+                //    })
+                //} else {
+                //    $('#PayBt').click(function () { window.open("https://www.matara.pro/nedarimplus/online/?mosad=7001566"); });
+                //}
             }
-        }
 
 
 
-        function EAlertConfirm(message, insidetext) {
-            swal({
-                type: "error",
-                title: message, text: insidetext,
-                timer: 10000,
-                showConfirmButton: true,
-                allowOutsideClick: false,
-            });
-        }
-        function IAlertConfirm(message, insidetext) {
-            swal({
-                type: "info",
-                title: message, text: insidetext,
-                timer: 30000,
-                html: true,
-                showConfirmButton: true,
-                allowOutsideClick: false,
-            });
-        }
-        function CheckFilled(Name, ErrorString) {
-            if ($("#" + Name).val() == '') {
+
+            function LoginSwal(Text, Id) {
                 swal({
                     type: "error",
-                    title: ErrorString,
+                    title: Text,
                     showConfirmButton: true,
                     allowOutsideClick: false,
                 }, function () {
-                    setTimeout(function () { $('#' + Name).focus() }, 100);
+                    $('#' + Id).focus()
+                    $('#' + Id).select();
+                    ScrollUp('#' + Id)
+                    setTimeout(function () {
+                        $("#ZeoutCheckSave").show()
+                        $("#ZeoutCheckWait").hide()
+                    }, 100);
                 });
                 return false;
-            } else {
-                return true;
             }
 
-        }
-        function EnableForm(Enable) {
-            $.ajax({
-                url: "Manage.aspx?Action=EnableForm&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&Enable=" + encodeURIComponent(Enable),
-                context: Text,
-                timeout: 60000,
-            }).success(function (JsonData) {
-                if (JsonData.Status == 'Error' || JsonData.Result == 'Error') {
-                    EAlertConfirm("שגיאה", JsonData.Message)
+
+            function listCityOpenCloseCardFixed(Type, Num) {
+                if (Type == "Close") {
+                    $("#CardFixed_" + Num + '_listCity').hide();
+                    $("#CardFixed_" + Num + '_listCity_Search').val('');
                 }
                 else {
-                    IAlertConfirm("הפעולה בוצעה בהצלחה");
+                    $("#CardFixed_" + Num + '_listCity').show().scrollTop(0)
+                    $("#CardFixed_" + Num + '_listCity_Search').focus();
                 }
-            }).error(function () {
-                EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
-            });
-        }
-
-
-        function GetExcel() {
-
-            var url = "Manage.aspx?Action=GetExcel&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId
-            var FormData = '<form action="' + url + '" method="post" target="_blank" style="display:none">'
-            for (var Element in Json.FormElements) {
-                var JsonElement = Json.FormElements[Element]
-                if (JsonElement.Type == "Margin" || JsonElement.Type == "List" || JsonElement.Type == "Koteret" || JsonElement.DbName == undefined) { continue; }
-                FormData += '<input type="text" name="' + JsonElement.DbName + '" value="' + JsonElement.fieldName.replace(/"/g, '&quot;').replace(/<b>/g, '').replace(/<\/b>/g, '') + '" />'
-
             }
-
-            FormData += '</form>'
-            var form = $(FormData);
-            $('body').append(form);
-            form.submit();
-
-            //$.ajax({
-            //    url: "Manage.aspx?Action=GetExcel&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId ,
-            //    context: Text,
-            //    timeout: 60000,
-            //    type: "POST",
-            //    data: PostData,
-            //})
-
-        }
-
-        function IsVisible(Element) {
-            if (Element == undefined) return false
-            var element = document.getElementById(Element);
-            while (element.parentNode) {
-                if ($("#" + element.id).css('display') == 'none') return false
-                element = element.parentNode;
-            }
-            return true
-        }
-
-
-        function getDate(Start, End) {
-            // Formt - 24/02/2020
-            if (End == 'Today') {
-                End = new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear()
-            }
-            if (Start == 'Today') {
-                Start = new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear()
-            }
-
-            var date1 = Start.split('/')
-            var date2 = End.split('/');
-
-            date1 = new Date(date1[2], date1[1], date1[0]);
-            date2 = new Date(date2[2], date2[1], date2[0]);
-
-            date1 = parseInt(date1.getTime() / 1000);
-            date2 = parseInt(date2.getTime() / 1000);
-
-            return ((date2 - date1) / 60 / 60 / 24).toFixed()
-        }
-
-
-        function GetTime() {
-
-            $.ajax({
-                url: "Manage.aspx?Action=GetTime",
-                context: Text,
-                timeout: 180000,
-            }).success(function (JsonData) {
-
-                console.log(JsonData.Time)
-                Current_Houer = +JsonData.Time.split(":")[0];
-                Current_Minute = +JsonData.Time.split(":")[1];
-                GetMatrimJson();
-
-            }).error(function () {
-                $("#AllMainForm").html('<div style="font-size: 19px;text-align: center;color: indianred; font-weight: bold;font-family: Assistant;margin-top: 20px;margin-bottom: 15px;"><span style="font-size:24px">שים לב!</span><br>שגיאה בקבלת נתונים. יש לפנות לאחראי.<br /></div>');
-                EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
-                $("#WaitDiv2").hide()
-                $("#AllMainForm").show()
-            });
-
-        }
-
-
-
-
-        function SendData() {
-
-
-
-            for (i = 1; i <= +$("#NumYladim").val(); i++) {
-                if ($('#BDH1Yled' + i).val() !== "") {
-                    if (CheckDate($('#BDH1Yled' + i).val()) == false) {
-                        MySwal('תאריך לידה לא תקין', 'BDH1Yled' + i)
-                        return false;
-                    }
-                }
-
-
-                if ($('#ZeoutYled' + i).val() !== "") {
-                    if (ValidateID($('#ZeoutYled' + i).val()) == false) {
-                        MySwal('תעודת זהות לא תקינה', 'ZeoutYled' + i)
-                        return false;
-                    }
-                }
-
-
-
-            }
-
-
-            //if (Zeout == "" && MasofId !== "" && ($('input[name=TashlumStatus]:checked').val() !== "אשראי")) {
-            //    MySwal("תשלום במזומן ניתן לאחר הזדהות בלבד", "TashlumStatus"); return false;
-            //};
-
-
-            //var Txt = '';
-            //for (var i = 1; i <= 20; i++) {
-            //    Txt += ', { "Type": "DivOpen", "ElementId": "DivOpen' + i + '", "Text": "", "Style": "" }'
-            //    Txt += ', { "ElementId": "Name' + i + '", "Type": "Span", "Text": "' + i + '.", "BeforeBr": false }'
-            //    Txt += ', { "ElementId": "KidName' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true, "Br": false }'
-            //    Txt += ', { "ElementId": "KidFamily' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "שם משפחה", "Type": "Text", "Mandatory": true, "Br": false }'
-            //    Txt += ', { "ElementId": "KidId' + i + '", "MaxLength": 9, "Width": 40, "fieldName": "תעודת זהות", "Type": "Tel", "Mandatory": true, "Br": false }'
-            //    Txt += ', { "ElementId": "Gender' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מגדר", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "LblHide": false, "RadioBt": [{ "Text": "בן" }, { "Text": "בת" }] }'
-            //    Txt += ', { "ElementId": "KidBDE' + i + '", "MaxLength": 10, "Width": 40, "fieldName": "ת.לידה", "Type": "Tel", "Mandatory": true, "Br": false}'
-            //    Txt += ', { "ElementId": "KidScholl' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מקום לימודים", "Type": "Text", "Mandatory": true, "Br": false }'
-            //    Txt += ', { "ElementId": "KidStatus' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "נשוי", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "LblHide": false, "RadioBt": [{ "Text": "כן" }, { "Text": "לא" }] }'
-            //    Txt += ', { "Type": "DivClose" }Moshe'
-
-
-
-            //}
-            //console.log(Txt)
-
-
-            //var a = 50;
-            //var Txt = '';
-            //for (var i = 1; i <= 5; i++) {
-            //    Txt += ', { "Type": "DivOpen", "ElementId": "DivOpen_' + i + '", "Text": "", "Style": "margin-right: 10px;display:none" }'
-            //    Txt += ', { "ElementId": "Num_' + i + '","Type": "IndexNumber", "ElementId": "DivOpenIndexNumber_' + i + '", "Text": "' + i + '", "Style": "" }'
-            //    Txt += ', { "ElementId": "Masechet_' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מסכת ממבחן קודם",  "Type": "Text", "Mandatory": true, "Br": true , "DbName": "Field' + a++ + '"}'
-            //    Txt += ', { "ElementId": "Dapim' + i + '", "MaxLength": 2, "Width": 40, "fieldName": "דפים למבחן הקודם",  "Type": "Tel", "Mandatory": true, "Br": false , "DbName": "Field' + a++ + '"}'
-            //    Txt += ', { "ElementId": "Maslul' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מסלול מבחן קודם","fieldNameShow": "מסלול מבחן קודם (30-50)",  "Type": "Tel", "Mandatory": true, "Br": false, "DbName": "Field' + a++ + '" }'
-            //    Txt += ', {"ElementId": "RGPT' + i + '", "MaxLength": 50, "Width": 40, "fieldName":"רש\\"י / גפ\\"ת", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "DbName": "Field' + a++ + '", "LblHide": false, "RadioBt": [{ "Text": "רש\\"י" }, { "Text": "גפ\\"ת" }]}'
-            //    Txt += ', {"ElementId": "TestMonth' + i + '", "MaxLength": 50, "Width": 40, "fieldName":"תאריך המבחן הקודם", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "DbName": "Field' + a++ + '", "LblHide": false, "RadioBt": [{ "Text": "תשרי" }, { "Text": "ניסן" }]}'
-            //    Txt += ', {"ElementId": "TestMonthYear' + i + '", "MaxLength": 50, "Width": 40, "fieldName":"שנת", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "DbName": "Field' + a++ + '", "LblHide": false, "RadioBt": [{ "Text": "תשפ\\"ב" }, { "Text": "תשפ\\"ג" }]}'
-            //    Txt += ', { "Type": "DivClose" }Moshe'
-            //}
-            //console.log(Txt)
-
-
-
-            //var Bank = 0;
-            //if ($('#Bank').val() !== "") { Bank += 1 }
-            //if ($('#Snif').val() !== "") { Bank += 1 }
-            //if ($('#Account').val() !== "") { Bank += 1 }
-
-            //if (Bank == 1 || Bank == 2) {
-            //    MySwal("לא ניתן להזין פרטי בנק באופן חלקי", "SpanBankList"); return false;
-            //}
-
-            //OemHtml
-            //if ($('input[name=GanSelected]:checked').val() == "תינוקיה" || $('input[name=GanSelected]:checked').val() == "גן אסנת" || $('input[name=GanSelected]:checked').val() == "גן רבקי") {
-            //    //$('#MailTashlumPrivate').html($("input[name=TashlumAmount_Private]:checked").val() + "₪");
-            //    //document.getElementById('MailTashlumPrivate').appendChild(document.getElementById('Field' + i))
-            //    OemHtml = '<div dir="rtl" style="text-align: right;color:rgb(32,18,77) ;font-family:inherit;font-size: 13px;margin:10px;text-align: justify;width: 90%;max-width:700px;">'
-            //        + '<span style="font-size: large;font-weight:bold;">תקנון</span> <br/>'
-            //        + '<ol>'
-
-            //        + '<li>התשלום שנקבע הוא: ' + $("input[name=TashlumAmount_Private]:checked").val() + ' ₪ </li>'
-            //        + '<li>שנת הלימודים הינה החל מ-1 בספטמבר עד ה-8 באוגוסט כולל קייטנת קיץ ראשונה. עבור קייטנת קיץ שניה עד ה-15 באוגוסט, יגבה תשלום נוסף בנפרד.</li>'
-
-            //        + '</ol>'
-
-            //        + '</div>'
-            //}
-
-
-
-
-            //console.log("Type: " + CreditCard_Type);
-            //console.log("Amount: " + CreditCard_Amount);
-            //console.log("Tashloumim: " + CreditCard_Tashloumim);
-            //console.log("HKDay: " + $("#HKDay").val());
-
-
-            //$("#SaveDiv").show()
-            //$("#WaitDiv").hide()
-            //return false;
-
-
-
-            //if ($('input[name=RemeberDate]:checked').val() !== undefined) {
-            //    if ($('input[name=RemeberDate]:checked').val().indexOf('לא ידוע תאריך מדויק') !== -1) {
-            //        var TotalDate = getDate($("#BDE1").val(), $("#BDE2").val())
-            //        if (TotalDate > 90) { MySwal("לא ניתן להזין טווח תאריכים גדול מ3 חודשים.", "BDE2"); return false; }
-            //        if (TotalDate < 0) { MySwal("נא להזין תאריך סיום מאוחר מתאריך התחלה", "BDE2"); return false; }
-            //        if (getDate($("#BDE1").val(), 'Today') < 0) { MySwal("אין להזין תאריך עתידי", "BDE1"); return false; }
-            //        if (getDate('Today', $("#BDE2").val()) > 0) { MySwal("אין להזין תאריך עתידי", "BDE2"); return false; }
-
-
-
-            //    } else if ($('input[name=RemeberDate]:checked').val().indexOf('ידוע תאריך מדויק') !== -1) {
-            //        if (getDate($("#BDE3").val(), 'Today') < 0) { MySwal("אין להזין תאריך עתידי", "BDE3"); return false; }
-
-            //        $("#BDE1").val($("#BDE3").val());
-            //        $("#BDE2").val($("#BDE3").val());
-            //    }
-            //}
-
-
-
-
-            if (GetURLParameter("Demo") == "1") { IAlertConfirm("זהו טופס לדוגמה. לא ניתן לבצע שליחה."); return false; }
-
-            //if (GetURLParameter("Zeout") == "") { IAlertConfirm("טופס זה ניתן לשליחה רק מעמדת נדרים פלוס."); return false; }
-
-            //if ($.isNumeric($("#TashlumAmount").val()) == false) { MySwal("אין סכום לתשלום.", "TashlumAmount"); return false; }
-            //if (parseInt($('#TashlumAmount').val()) < 5) { MySwal("נא להזין לפחות 5 ש\"ח", "TashlumAmount"); return false; };
-
-            //if ($('input[name=TashlumType]:checked').val() == "דולר" && $("#Tashlumim option:selected").val() !== 1) { MySwal("לא ניתן לחלק עסקת דולרים בתשלומים, נא לשנות לתשלום 1 או לעשות הוראת קבע", "Tashlumim"); return false; }
-
-
-
-            //var today = new Date();
-            //var dd = String(today.getDate()).padStart(2, '0');
-            //var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-            //var yyyy = today.getFullYear();
-
-            //today = mm + '/' + dd + '/' + yyyy;
-
-
-
-            $("#SaveDiv").hide()
-            $("#WaitDiv").show()
-
-
-            //if ($("#MisparAmuta").val().length > 0 && $("#MisparAmuta").val().length < 9) { MySwal("מספר עמותה / ח.פ. חייב להכיל 9 ספרות", "MisparAmuta"); return false; };
-
-            //Calculate()
-            var PostData = ''
-            for (var Element in Json.FormElements) {
-                var JsonElement = Json.FormElements[Element]
-                if (JsonElement.Type == "Margin" || JsonElement.Type == "List" || JsonElement.Type == "Koteret") { continue; }
-                if (JsonElement.ElementId == undefined) { continue; }
-
-                var ElementValue
-                var ElementVisible = true
-                var ErrorTitle = "חובה למלא ";
-
-                if (JsonElement.Type == "Radio") {
-                    ElementValue = $('input[name=' + JsonElement.ElementId + ']:checked').val();
-                    if (ElementValue == undefined) { ElementValue = '' };
-                    if (IsVisible(JsonElement.ElementId) == false) { continue; }
-                } else if (JsonElement.Type == "CheckBox") {
-                    ErrorTitle = "חובה לסמן "
-                    ElementValue = ($("#" + JsonElement.ElementId).is(":checked") ? "מסומן" : "")
-                    if (IsVisible(JsonElement.ElementId) == false) { continue; }
-                } else if (JsonElement.Type == "Select") {
-                    ElementValue = $("#" + JsonElement.ElementId + " option:selected").val()
-                    if (ElementValue == undefined) { ElementValue = '' };
-                    if (IsVisible(JsonElement.ElementId) == false) { continue; }
-                } else {
-                    ElementValue = $("#" + JsonElement.ElementId).val().trim()
-                    ElementVisible = IsVisible(JsonElement.ElementId)
-                    if (Json.AllowChanges == false && ((ElementVisible == false || (ElementValue == '' && JsonElement.Mandatory == false)) && JsonElement.Send !== true)) { continue; };
-                };
-
-                //
-
-                if (JsonElement.Mandatory == true && ElementValue == '' && ElementVisible == true) {
-                    swal({
-                        type: "error",
-                        title: ErrorTitle + JsonElement.fieldName,
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                    }, function () {
-                        $('#' + JsonElement.ElementId).focus()
-                        $('#' + JsonElement.ElementId).select();
-                        ScrollUp('#' + JsonElement.ElementId)
-                        setTimeout(function () {
-                            $("#SaveDiv").show()
-                            $("#WaitDiv").hide()
-                        }, 100);
-                    });
-                    return false;
-                }
-
-                if (JsonElement.Type == 'Tel' && ElementValue !== '' && $.isNumeric(ElementValue.replace(/-/g, "")) == false && $.isNumeric(ElementValue.replace(/\//g, "")) == false) {
-                    swal({
-                        type: "error",
-                        title: "בשדה " + JsonElement.fieldName + " יש להזין ספרות בלבד",
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                    }, function () {
-                        $('#' + JsonElement.ElementId).focus()
-                        $('#' + JsonElement.ElementId).select();
-
-                        setTimeout(function () {
-                            $("#SaveDiv").show()
-                            $("#WaitDiv").hide()
-                        }, 100);
-                    });
-                    return false;
-                }
-                if (JsonElement.MinLenght !== undefined && ElementValue !== '' && ElementValue.length < JsonElement.MinLenght) {
-                    swal({
-                        type: "error",
-                        title: "בשדה " + JsonElement.fieldName + " יש להזין לפחות " + JsonElement.MinLenght + " תווים",
-                        showConfirmButton: true,
-                        allowOutsideClick: false,
-                    }, function () {
-                        $('#' + JsonElement.ElementId).focus()
-                        $('#' + JsonElement.ElementId).select();
-                        setTimeout(function () {
-                            $("#SaveDiv").show()
-                            $("#WaitDiv").hide()
-                        }, 100);
-                    });
-                    return false;
-                }
-
-                if (JsonElement.DbName == undefined) { continue; }
-                PostData = PostData + "&" + JsonElement.DbName + "=" + encodeURIComponent(htmlEncode(ElementValue)) + "&" + JsonElement.DbName + "_Name=" + encodeURIComponent(JsonElement.fieldName.replace(/<b>/g, '').replace(/<\/b>/g, ''))
-
-
-
-
-            }
-            PostData = PostData.substring(1, PostData.length)
-
-
-
-            //for (var i = 1; i < 21; i++) {
-            //    if ($('#DivOpen' + i).css('display') != 'none') {
-            //        if (ValidateID($('#KidId' + i).val()) == false) {
-            //            MySwal('תעודת זהות לא תקינה', 'KidId' + i)
-            //            return false
-            //        }
-            //    }
-            //}
-
-
-            //for (var i = 1; i <= 10; i++) {
-            //    if ($('#KidBDE' + i).val() != '' && $('#Home_' + i).css('display') != 'none') {
-            //        if (CheckDate($('#KidBDE' + i).val()) == false) { MySwal("נא להזין תאריך מלא ותקין", "KidBDE" + i); return false; }
-            //        var TotalDate = getDate($('#KidBDE' + i).val(), today)
-            //        if (TotalDate < 0) { MySwal("לא ניתן להזין תאריך עתידי", "KidBDE" + i); return false; }
-            //    }
-            //}
-
-
-            //if ($("#TashlumAmount").val() !== undefined && ($.isNumeric($("#TashlumAmount").val()) == false || $("#TashlumAmount").val() == 0)) {
-            //    EAlertConfirm("אין סכום לתשלום...");
-            //    $("#SaveDiv").show()
-            //    $("#WaitDiv").hide()
-            //    return false;
-            //}
-
-            //if (IsVisible("CreditCard") == false) $("#CreditCard").val('')
-            //var CreditCard_Type = 'Ragil'
-            //var CreditCard_Amount = parseFloat($('#TashlumimNew').val()) * parseFloat($('#TashlumAmount1').val())
-            //var CreditCard_Tashloumim = parseInt($('#TashlumimNew').val())
-
-            // תשלומים
-            //if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק אשראי") {
-            //    var CreditCard_Type = 'HK'
-            //    var CreditCard_Amount = parseFloat($('#TashlumAmount').val())
-            //    var CreditCard_Tashloumim = $('#TashlumimNew').val()
-            //}
-
-            //var Address = $("#Address").val() + " " + $("#City").val();
-            //if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק אשראי") { Address = $("#Address").val() }
-
-
-            ///////////////CREDITCARD (CreditCardPayment)    *******
-            //PostData += "&CreditCard_Type=" + encodeURIComponent(CreditCard_Type)
-            //PostData += "&CreditCard_ClientName=" + encodeURIComponent($("#Family").val() + " " + $("#FirstName").val())
-            //PostData += "&CreditCard_Amount=" + encodeURIComponent(CreditCard_Amount)
-            //PostData += "&CreditCard_Zeout=" + encodeURIComponent($("#Zeout").val())
-            //PostData += "&CreditCard_Adresse=" + encodeURIComponent(Address)
-            //PostData += "&CreditCard_City=" + encodeURIComponent($("#City").val())
-            //PostData += "&CreditCard_Tashloumim=" + encodeURIComponent(CreditCard_Tashloumim)
-            //PostData += "&CreditCard_Phone=" + encodeURIComponent($("#Tel2").val())
-            //PostData += "&CreditCard_CreditCard=" + encodeURIComponent($("#CreditCard").val())
-            //PostData += "&CreditCard_Tokef=" + encodeURIComponent($("#CardExpiration").val())
-            //PostData += "&CreditCard_Cvv=" + encodeURIComponent($("#CVV").val())
-            //PostData += "&CreditCard_Mail=" + encodeURIComponent($("#Mail").val())
-            //PostData += "&CreditCard_Currency=" //+ encodeURIComponent($("#Currency").val())
-            //PostData += "&CreditCard_Comment=" //+ encodeURIComponent($("#Note").val())
-            //PostData += "&CreditCard_HKDay=" //+ encodeURIComponent($("#HKDay").val())
-            //PostData += "&CreditCard_Groupe=" //+ encodeURIComponent($("#HKDay").val())
-            //PostData += "&CreditCard_Frequency=" //1. Normal | 2. Weekly  | 3. Izkor
-
-
-            // OemHtml
-            //PostData += "&HtmlMail=" + encodeURIComponent(htmlEncode(OemHtml));
-
-            ///////////////MASAV (MasavPayment)  *******
-            //PostData += "&Masav_ClientName=" + encodeURIComponent($("#Family").val() + " " + $("#FirstName").val())
-            //PostData += "&Masav_ClientAdresse=" + encodeURIComponent($("#Address").val())
-            //PostData += "&Masav_ClientZeout=" + encodeURIComponent($("#Zeout").val())
-            //PostData += "&Masav_ClientPhone=" + encodeURIComponent($("#Tel").val())
-            //PostData += "&Masav_ClientMail=" + encodeURIComponent($("#Mail").val())
-            //PostData += "&Masav_Bank=" + encodeURIComponent($("#Bank").val())
-            //PostData += "&Masav_Agency=" + encodeURIComponent($("#Snif").val())
-            //PostData += "&Masav_Account=" + encodeURIComponent($("#Account").val())
-            //PostData += "&Masav_Amount=" + encodeURIComponent($("#TashlumAmount").val())
-            //PostData += "&Masav_Tashlumim=" + encodeURIComponent($("#Tashlumim option:selected").val())
-            //PostData += "&Masav_Day=" + encodeURIComponent("5") //(1-5-10-15-20-28)
-            //PostData += "&Masav_Comments=" + encodeURIComponent($("#Notes").val())
-            //PostData += "&Masav_SignData=" + encodeURIComponent(SignData)
-            //PostData += "&Masav_Groupe=" + encodeURIComponent("פדיון נפש")
-
-            if (Json.NeedSign == true) {
-                if (SignData == "") { $('#SignPad').show(); return false; }
-                PostData += "&SignData=" + encodeURIComponent(SignData)
-            }
-
-            $.ajax({
-                url: "Manage.aspx?Action=AddData&AjaxId=" + $.now() + "&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&Version=" + Json.Version + "&MasofId=" + MasofId + "&ClientId=" + ClientId + "&OldTofesId=" + OldTofesId + "&SpecialCheck=" + encodeURIComponent(Json.SpecialCheck) + "&MainTitle=" + encodeURIComponent(htmlEncode(Json.MainTitle)),
-                context: Text,
-                timeout: 32000,
-                type: "POST",
-                data: PostData,
-            }).success(function (JsonData) {
-                if (JsonData.Status == 'Error') {
-                    if (JsonData.Message == 'הטופס לא מעודכן, יש לרענן את הדף.') {
+            var listCityAllCity = []
+            function listCityGetAllCity(data) {
+                var city = data.CityId
+                var Adders = data.StreetId
+                var Action = data.Auto_Focus_After_City_Selection
+                var listCitys = data.list_Citys
+
+
+                $.ajax({
+                    url: "Manage.aspx?Action=GetCitys",
+                    context: Text,
+                    timeout: 16000,
+                }).success(function (res) {
+
+                    if (res.Status == 'Error') {
                         swal({
+                            title: res.Message,
                             type: "error",
-                            title: JsonData.Message,
-                            showConfirmButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: 'אישור',
+                            closeOnConfirm: true,
                             allowOutsideClick: false,
-                            confirmButtonText: 'רענן את הדף'
-                        }, function () {
-                            $('html, body').scrollTop(0); location.reload();
-                        });
-                        return false;
-                    }
-                    var FiledId
-                    for (var Element in Json.FormElements) {
-                        var JsonElement = Json.FormElements[Element]
-                        if (JsonElement.DbName == JsonData.FieldId) FiledId = JsonElement.ElementId
+                        })
+                        return false
                     }
 
+                    for (i = 0; i < res.Data.length; i++) {
+                        listCityAllCity.push({ name: res.Data[i].CityName.trim(), Cityid: res.Data[i].CityId.trim() })
+                    }
+
+                    if (listCitys) {
+                        if (JSON.stringify(listCitys) != '[]') {
+                            listCityAllCity = listCityAllCity.filter(function (elm) { return listCitys.indexOf(elm.name) > -1 })
+                        }
+                    }
+
+                    listCityAllCity.sort(function (a, b) {
+                        if (a.name < b.name) return -1
+                        return a.name > b.name ? 1 : 0
+                    })
+
+                    listCityBuildHtml(city, Adders, Action)
+                }).error(function () {
                     swal({
+                        title: "שגיאה בקבלת נתונים. בדוק תקשורת",
                         type: "error",
-                        title: JsonData.Message,
-                        showConfirmButton: true,
+                        showCancelButton: false,
+                        confirmButtonText: 'אישור',
+                        closeOnConfirm: true,
                         allowOutsideClick: false,
-                    }, function () {
-                        if (FiledId !== undefined) {
-                            $('#' + FiledId).focus();
-                            $('#' + FiledId).select();
-                            ScrollUp('#' + FiledId);
+                    })
+                })
+            }
+
+
+            function SendMail(Cause, Value) {
+                $.ajax({
+                    type: "POST",
+                    url: "Manage.aspx?Action=JSError",
+                    context: Text,
+                    timeout: 30000,
+                    data: "Masof=" + encodeURIComponent(GetURLParameter("MasofId"))
+                        + "&url=" + encodeURIComponent(window.location.href)
+                        + "&msg=" + encodeURIComponent("<br/>" + "שליחת מייל עקב שגיאה חוזרת <br/> " + Cause + " :<br/> " + Value)
+                });
+            }
+
+
+            function listCityBuildHtml(City, Adders, Action) {
+                var html = ''
+                html += '<style>'
+                html += '.listCityModal {'
+                html += 'display: none;'
+                html += 'position: fixed;'
+                html += 'z-index: 100;'
+                html += 'left: 0;'
+                html += 'top: 0;'
+                html += 'width: 100%;'
+                html += 'height: 100%;'
+                html += 'overflow: auto;'
+                html += 'padding: 14px 0;'
+                html += 'background-color: rgba(0, 0, 0, 0.5);}'
+
+                html += '.listCitymodal-content {'
+                html += 'max-width:400px;'
+                html += 'margin: 5px auto 20px;'
+                html += 'background-color: #fefefe;'
+                html += 'padding: 20px;'
+                html += 'border: 1px solid #888;'
+                html += 'width: 80%;'
+                html += 'color: #808080;'
+                html += 'font-family: "Assistant", sans-serif;'
+                html += '-webkit-box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.75);'
+                html += 'background-color: white;'
+                html += 'max-width: 500px;'
+                html += 'min-width: 200px;'
+                html += 'min-height: 250px;'
+                html += 'position: relative;'
+                html += 'border-radius: 20px;'
+                html += 'text-align: center;}'
+
+                html += 'td {'
+                html += 'color: #2B3A63;'
+                html += 'font-size: 20px;'
+                html += 'border-bottom: 1px solid #d7cece;'
+                html += 'padding-left: 5px;'
+                html += 'padding-right: 5px;'
+                html += 'padding-top: 15px;'
+                html += 'padding-bottom: 15px;}'
+
+
+                html += 'th {'
+                html += 'color: #2B3A63;'
+                html += 'font-family: assistant,Arial;}'
+
+
+                html += '.bordered td, .bordered th {'
+                html += 'border-left: 1px solid #ccc;'
+                html += 'border-top: 1px solid #ccc;'
+                html += 'padding: 5px;'
+
+                html += '.TableLightFont {'
+                html += 'font-weight: lighter;'
+                html += 'font-size: 14px;}'
+
+                html += 'table {'
+                html += 'border-collapse: collapse;'
+                html += 'border: 1px solid #d7cece;'
+                html += 'font-family: "Assistant", sans-serif;'
+                html += 'margin-right: auto;'
+                html += 'margin-left: auto;}'
+
+                html += 'tr:nth-child(even) {'
+                html += 'background-color: #f2f2f2;}'
+                html += '</style>'
+
+
+                html += '<div dir="rtl" id="CardFixed_1_listCity" class="listCityModal" onclick="if (event.target == this) listCityOpenCloseCardFixed(\'Close\', \'1\')">'
+                html += '<div class="listCitymodal-content">'
+                html += '<div style="-webkit-user-select: none;"> <span style="cursor: pointer; width: 25px; height: auto; margin-top: 10px; margin-right: 10px; position: absolute; background: indianred; padding: 6px 8px; color: white; font-weight: 600; font-size: 22px; border-radius: 8px 16px; top: -6px; right: -6px;" onclick="listCityOpenCloseCardFixed(\'Close\', \'1\')">X</span>'
+                html += '<div style="text-align:center">'
+                html += '<div style="display: inline-block; font-family: Assistant, sans-serif; font-size: 22px; color: #ff6a00; font-weight: bold; width: 90%; margin-top: 27px; margin-bottom: 10px; -webkit-user-select: none; text-align: center; padding: 0;">בחר עיר:</div>'
+                html += '<input autocomplete="off" id="CardFixed_1_listCity_Search" style="-webkit-appearance: none; font-family: Assistant,Arial; font-size: large; color: #3f475e;outline: none; padding: 6px; border-color: #f7bb4d; border-style: solid; border-width: 0px 0px 2px 0px; margin: 5px 5px; background-color: #FFFFFB; -webkit-box-sizing: border-box;text-align:center" type="text" placeholder="חפש עיר" />'
+                html += '<div style="padding: 5px 0 13px;">סה"כ תוצאות: <span id="CardFixed_1_listCity_Count"></span></div>'
+                html += '<table id="CardFixed_1_listCity_Table" style="text-align:center;width:95%;font-size:medium;background-color:white"></table>'
+                html += '</div></div></div></div>'
+
+
+                if (Adders != '') {
+                    html += '<div dir="rtl" id="CardFixed_2_listCity" class="listCityModal" onclick="if (event.target == this) listCityOpenCloseCardFixed(\'Close\', \'2\')">'
+                    html += '<div class="listCitymodal-content">'
+                    html += '<div style="-webkit-user-select: none;"> <span style="cursor: pointer; width: 25px; height: auto; margin-top: 10px; margin-right: 10px; position: absolute; background: indianred; padding: 6px 8px; color: white; font-weight: 600; font-size: 22px; border-radius: 8px 16px; top: -6px; right: -6px;" onclick="listCityOpenCloseCardFixed(\'Close\', \'2\')">X</span>'
+                    html += '<div style="text-align:center">'
+                    html += '<div style="display: inline-block; font-family: Assistant, sans-serif; font-size: 22px; color: #ff6a00; font-weight: bold; width: 90%; margin-top: 27px; margin-bottom: 10px; -webkit-user-select: none; text-align: center; padding: 0;">בחר רחוב:</div>'
+                    html += '<input autocomplete="off" id="CardFixed_2_listCity_Search" style="-webkit-appearance: none; font-family: Assistant,Arial; font-size: large; color: #3f475e;outline: none; padding: 6px; border-color: #f7bb4d; border-style: solid; border-width: 0px 0px 2px 0px; margin: 5px 5px; background-color: #FFFFFB; -webkit-box-sizing: border-box;text-align:center" type="text" placeholder="חפש רחוב" />'
+                    html += '<div id="CardFixed_2_listCitywait" style="display:none;padding: 5px 0 13px;"><img style="width: 49px;" src="https://matara.pro/nedarimplus/waitnew.gif"/><div>נא להמתין..</div></div>'
+                    html += '<div id="CardFixed_2_listCity_Count" style="padding: 5px 0 13px;">סה"כ תוצאות: <span></span></div>'
+                    html += '<table id="CardFixed_2_listCity_Table" style="text-align:center;width:95%;font-size:medium;background-color:white"></table>'
+                    html += '</div></div></div>'
+                }
+
+                $('body').append(html)
+
+
+                if (City != '') {
+                    $(City).focus(function () {
+                        $(City).blur()
+                        $("#CardFixed_1_listCity_Search").on('input', function () {
+                            CardFixed_1_listCityDom($('#CardFixed_1_listCity_Search').val(), City, Adders, Action)
+                        });
+                        CardFixed_1_listCityDom('', City, Adders, Action)
+                        listCityOpenCloseCardFixed('Open', '1')
+                    });
+                }
+
+
+                if (Adders != '') {
+                    $(Adders).focus(function () {
+                        $(Adders).blur()
+                        if ($(City).val() == '') {
+                            $(City).focus()
+                            return false
                         }
 
-                        setTimeout(function () {
-                            $("#SaveDiv").show()
-                            $("#WaitDiv").hide()
-                        }, 100);
+                        $("#CardFixed_2_listCity_Search").on('input', function () {
+                            CardFixed_2_listCityDom($('#CardFixed_2_listCity_Search').val(), Adders)
+                        });
+
+                        CardFixed_2_listGetAdders('', Adders, City)
+                        listCityOpenCloseCardFixed('Open', '2')
                     });
-                    return false;
                 }
-                else {
-                    $("#WaitDiv").hide();
+
+            }
+            function CardFixed_1_listCityDom(Search, idcity, Idadders, Action) {
+                $("#CardFixed_1_listCity_Table").html('')
+                var KeyWord = Search.split(' ')
+                var Counter = 0
+                for (var i = 0; i < listCityAllCity.length; i++) {
+                    var Exist = true
+                    for (var j = 0; j < KeyWord.length; j++) {
+                        if (listCityAllCity[i].name.indexOf(KeyWord[j]) < 0) { Exist = false }
+                    }
+                    if (listCityAllCity[i].name == Search) { Exist = true }
+                    if (Exist == true) {
+                        Counter += 1
+                        if (Counter > 200) continue;
+                        $("#CardFixed_1_listCity_Table").append('<tr><td id="CardFixed_1_listCity_Table_Row_' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center;font-size: 20px;color: #2B3A63;">' + listCityAllCity[i].name + '</div></td></tr>');
+                        (function (i) {
+                            $("#CardFixed_1_listCity_Table_Row_" + i).click(function () {
+                                if ($(idcity).val() != listCityAllCity[i].name) {
+                                    $(idcity).val(listCityAllCity[i].name).attr('Cityid', listCityAllCity[i].Cityid)
+                                    $(Idadders).val('')
+                                }
+
+                                if (Action == true) {
+                                    $(Idadders).focus()
+                                }
+                                listCityOpenCloseCardFixed('Close', '1')
+                            });
+                        })(i);
+                    };
+                }
+                $('#CardFixed_1_listCity_Count').html(Counter)
+            }
+            var ValCity = ''
+            var listCityAllAdders = []
+            function CardFixed_2_listGetAdders(Search, Idadders, idcity) {
+                if ($(idcity).val() == ValCity) {
+                    CardFixed_2_listCityDom(Search, Idadders)
+                    return false
+                } else {
+                    ValCity = $(idcity).val()
+                }
+
+                $("#CardFixed_2_listCity_Table").html('')
+                listCityAllAdders = []
+
+                $("#CardFixed_2_listCity_Count").hide()
+                $("#CardFixed_2_listCitywait").show()
+
+                $.ajax({
+                    url: "Manage.aspx?Action=GetStreets&Cityid=" + $(idcity).attr('Cityid'),
+                    context: Text,
+                    timeout: 16000,
+                }).success(function (res) {
+
+                    if (res.Status == 'Error') {
+                        swal({
+                            title: res.Message,
+                            type: "error",
+                            showCancelButton: false,
+                            confirmButtonText: 'אישור',
+                            closeOnConfirm: true,
+                            allowOutsideClick: false,
+                        })
+                        return false
+                    }
+
+                    for (i = 0; i < res.Data.length; i++) {
+                        listCityAllAdders.push({ name: res.Data[i].StreetName.trim() })
+                    }
+
+                    listCityAllAdders.sort(function (a, b) {
+                        if (a.name < b.name) return -1
+                        return a.name > b.name ? 1 : 0
+                    })
+
+                    CardFixed_2_listCityDom(Search, Idadders)
+                }).error(function () {
+                    swal({
+                        title: "שגיאה בקבלת נתונים. בדוק תקשורת",
+                        type: "error",
+                        showCancelButton: false,
+                        confirmButtonText: 'אישור',
+                        closeOnConfirm: true,
+                        allowOutsideClick: false,
+                    })
+                }).complete(function () {
+                    $("#CardFixed_2_listCity_Count").show()
+                    $("#CardFixed_2_listCitywait").hide()
+                });
+            }
+            function CardFixed_2_listCityDom(Search, Idadders) {
+                $("#CardFixed_2_listCity_Table").html('')
+                var KeyWord = Search.split(' ')
+                var Counter = 0
+                for (var i = 0; i < listCityAllAdders.length; i++) {
+                    var Exist = true
+                    for (var j = 0; j < KeyWord.length; j++) {
+                        if (listCityAllAdders[i].name.indexOf(KeyWord[j]) < 0) { Exist = false }
+                    }
+                    if (listCityAllAdders[i].name == Search) { Exist = true }
+                    if (Exist == true) {
+                        Counter += 1
+                        if (Counter > 200) continue;
+                        $("#CardFixed_2_listCity_Table").append('<tr><td id="CardFixed_2_listCity_Table_Row_' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center;font-size: 20px;color: #2B3A63;">' + listCityAllAdders[i].name + '</div></td></tr>');
+                        (function (i) {
+                            $("#CardFixed_2_listCity_Table_Row_" + i).click(function () {
+                                $(Idadders).val(listCityAllAdders[i].name)
+                                listCityOpenCloseCardFixed('Close', '2')
+                            });
+                        })(i);
+                    };
+                }
+                $('#CardFixed_2_listCity_Count span').html(Counter)
+            }
+
+
+
+
+            //swal({
+            //    type: "warning",
+            //    title: "שימו לב!",
+            //    text: "סימנתם רק רישום לצהרון בקיץ, ללא רישום לצהרון בשנת הלימודים תשפ\"ג",
+            //    showConfirmButton: true,
+            //    confirmButtonText: "שלח טופס",
+            //    confirmButtonColor: '#38c232',
+            //    showCancelButton: true,
+            //    cancelButtonText: "תיקון בחירה",
+            //    allowOutsideClick: false,
+            //    html: true
+            //}, function (res) {
+            //    if (res !== true) {
+            //        $('#RishumTsaaron').focus()
+            //        $('#RishumTsaaron').select();
+            //        ScrollUp('#RishumTsaaron')
+            //    } else {
+            //        setTimeout(function () {
+            //            SendData2();
+            //        }, 500)
+            //    }
+            //});
+
+
+            function GetOldTofesData() {
+
+
+                if (parent.ClientJson) {
+                    ClientJson = parent.ClientJson;
+                }
+
+                $("#AllMainForm").hide();
+                $("#WaitDiv2").show()
+                $.ajax({
+                    url: "Manage.aspx?Action=GetOldTofesData&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId,
+                    data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID),
+                    type: 'POST',
+                    context: Text,
+                    timeout: 60000,
+                }).success(function (JsonData) {
+                    $("#WaitDiv2").hide()
+                    $("#AllMainForm").show();
+
+                    //if (JsonData.Status == 'Error' && JsonData.Message == 'NOT FOUND') { return false }
+                    if (JsonData.Status == 'Error' && JsonData.Message == 'NOT FOUND') {
+                        return false;
+                    }
+
+                    OldTofesId = JsonData.ID;
+                    $("#EditNote").show();
+
+                    for (var Element in Json.FormElements) {
+                        var JsonElement = Json.FormElements[Element]
+                        if (JsonElement.DbName !== undefined) {
+
+                            if (JsonElement.Type == 'CheckBox') {
+                                if (JsonData[JsonElement.DbName] == "מסומן") { $("#" + JsonElement.ElementId).prop('checked', true); }
+                            } else if (JsonElement.Type == 'Radio') {
+                                for (i = 0; i < JsonElement.RadioBt.length; i++) {
+                                    if (JsonElement.RadioBt[i].Text == JsonData[JsonElement.DbName]) { $("#" + JsonElement.ElementId + '_Radio' + i).prop('checked', 'checked') }
+                                }
+                            } else {
+                                $("#" + JsonElement.ElementId).val(JsonData[JsonElement.DbName])
+                            }
+
+                        }
+
+                    }
+                    Calculate()
+                }).error(function () {
+
                     var BtTex = 'חזרה לנדרים פלוס'
                     if (MasofId == '') BtTex = 'אישור'
                     swal({
-                        title: "הטופס נשלח בהצלחה",
-                        // מספר טופס
-                        // text: JsonData.Message,
-                        type: "success",
+                        title: "שגיאה בקבלת נתונים. בדוק תקשורת",
+                        type: "error",
                         showCancelButton: false,
                         confirmButtonText: BtTex,
                         closeOnConfirm: true,
@@ -1792,25 +1141,926 @@
                         if (MasofId !== '') { parent.GoToMenu("Tafrit"); parent.closeIFrame() } else { $('html, body').scrollTop(0); location.reload(); }
                     });
 
+                });
+            }
+
+
+            function CheckDouble(FieldName, FieldData) {
+
+                $.ajax({
+                    url: "Manage.aspx?Action=CheckDouble&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&FieldName=" + encodeURIComponent(FieldName) + "&FieldData=" + encodeURIComponent(FieldData),
+                    context: Text,
+                    timeout: 60000,
+                }).success(function (JsonData) {
+
+                }).error(function () {
+                    EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+                }).complete(function () {
+                    if (ExamId !== '') GetExamData(Json.TofesId);
+                });
+
+            }
+
+
+            function CheckDouble(FieldName, FieldData, Result, Function) {
+                $.ajax({
+                    url: "Manage.aspx?Action=CheckDouble&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&FieldName=" + encodeURIComponent(FieldName) + "&FieldData=" + encodeURIComponent(FieldData),
+                    context: Text,
+                    timeout: 60000,
+                }).success(function (JsonData) {
+                    window[Result] = JsonData
+                    Function()
+                }).error(function () {
+                    EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+                });
+            }
+
+
+            function UpdateClick() {
+                if (MasofId !== '') parent.UpdateClick()
+            }
+
+
+            function GetClientData() {
+                $("#AllMainForm").hide();
+                $("#WaitDiv2").show()
+
+                $.ajax({
+                    url: "Manage.aspx?Action=GetClientData&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&ClientId=" + ClientId + "&Zeout=" + Zeout,
+                    context: Text,
+                    timeout: 60000,
+                }).success(function (JsonData) {
+                    $("#WaitDiv2").hide()
+                    $("#AllMainForm").show();
+
+                    if (JsonData.Status == 'Error' && JsonData.Message == 'NOT FOUND') { return false }
+                    OldTofesId = JsonData.ID;
+                    $("#EditNote").show();
+
+                    for (var Element in Json.FormElements) {
+                        var JsonElement = Json.FormElements[Element]
+                        if (JsonElement.DbName !== undefined) {
+                            if (JsonElement.Type == 'Radio') {
+                                for (i = 0; i < JsonElement.RadioBt.length; i++) {
+                                    if (JsonElement.RadioBt[i].Text == JsonData[JsonElement.DbName]) { $("#" + JsonElement.ElementId + '_Radio' + i).prop('checked', 'checked') }
+                                }
+                            }
+                            else
+                                $("#" + JsonElement.ElementId).val(JsonData[JsonElement.DbName])
+                        }
+                    }
+                    Calculate()
+
+                }).error(function () {
+
+                    var BtTex = 'חזרה לנדרים פלוס'
+                    if (MasofId == '') BtTex = 'איפוס טופס'
+                    swal({
+                        title: "שגיאה בקבלת נתונים. בדוק תקשורת",
+                        type: "error",
+                        showCancelButton: false,
+                        confirmButtonText: BtTex,
+                        closeOnConfirm: true,
+                        allowOutsideClick: false,
+                    }, function (isConfirm) {
+                        if (MasofId !== '') { parent.GoToMenu("Tafrit"); parent.closeIFrame() } else { $('html, body').scrollTop(0); location.reload(); }
+                    });
+
+                });
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            function Add_Client_Dt() {
+                $("#Client_Div").hide();
+                if (parent.ClientJson) {
+                    $("#ZeoutZ").val(parent.ClientJson.Zeout)
+                    $('#FullNameZ').val(parent.ClientJson.Name);
+                    $('#NHZ').val(parent.ClientJson.Adresse);
+                    $('#CityZ').val(parent.ClientJson.City);
+                    $('#TelZ').val(parent.ClientJson.Phone);
+                    $('#MailZ').val(parent.ClientJson.Mail);
+                } else if (ClientJson) {
+                    $("#ZeoutZ").val(ClientJson.Zeout)
+                    $('#FullNameZ').val(ClientJson.Name);
+                    $('#NHZ').val(ClientJson.Adresse);
+                    $('#CityZ').val(ClientJson.City);
+                    $('#TelZ').val(ClientJson.Phone);
+                    $('#MailZ').val(ClientJson.Mail);
+                }
+            }
+
+
+
+            //AllowCount:Field11;
+            function GetSumCount() {
+                $.ajax({
+                    url: "Manage.aspx?Action=GetSumCount&TofesId=1895&FiledName=Field11&Type=Count&Text=2", // Text לא חובה
+                    context: Text,
+                    timeout: 60000,
+                }).success(function (JsonData) {
+                    console.log(JsonData.Message)
+                }).error(function () {
+                    EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+                })
+
+            }
+
+
+
+
+
+            //function ZeoutCheck() {
+
+            //    $("#ZeoutCheckSave").hide()
+            //    $("#ZeoutCheckWait").show()
+            //    setTimeout(function () {
+            //        ZeoutNumber = $("#ZeoutCheckText").val();
+            //        if ($.isNumeric(ZeoutNumber) == false) { LoginSwal("נא להקיש מספר זהות בספרות בלבד, ללא סימנים", "ZeoutCheckText"); return false };
+            //        for (var Elem in MatrimJson) {
+            //            var KidZeout = MatrimJson[Elem].Name.split("|")[0].trim()
+            //            console.log("KidZeout: " + KidZeout)
+            //            console.log("ZeoutNumber: " + ZeoutNumber)
+            //            if (KidZeout == ZeoutNumber) {
+            //                OpenPage(KidZeout, MatrimJson[Elem].Name.split("|")[1], MatrimJson[Elem].Name.split("|")[2]);
+            //                return false;
+            //            }
+            //        }
+            //        LoginSwal("מספר הזהות שהוקש לא נמצא במערכת."); return false;
+            //$("#ZeoutCheckSave").show()
+            //$("#ZeoutCheckWait").hide()
+
+
+
+
+
+
+            //    }, 1000)
+            //}
+
+
+            //function ZeoutCheck() {
+
+            //    $("#ZeoutCheckSave").hide()
+            //    $("#ZeoutCheckWait").show()
+            //    ZeoutNumber = $("#ZeoutCheckText").val();
+            //    if ($.isNumeric(ZeoutNumber) == false) { LoginSwal("נא להקיש מספר זהות בספרות בלבד, ללא סימנים", "ZeoutCheckText"); return false };
+
+            //    $.ajax({
+            //        url: "Manage.aspx?Action=CheckAllowedZeout&MosadId=" + Json.MosadId + "&Zeout=" + encodeURIComponent(ZeoutNumber),
+            //        context: Text,
+            //        timeout: 60000,
+            //    }).success(function (JsonData) {
+            //        if (JsonData.Status == 'Error' || JsonData.Result == 'Error') {
+            //            swal({
+            //                type: "warning",
+            //                title: "מספר הזהות שהוקש לא נמצא במערכת <br/> הנך מועבר לטופס הרשמה למערכת",
+            //                timer: 3000,
+            //                showConfirmButton: false,
+            //                html: true
+            //            }, function (r) {
+            //                Open(968)
+            //            })
+            //        }
+            //        else {
+            //            $('#AllMainForm').show();
+            //            $('#ZeoutCheck').hide();
+            //            $("#Zeout").val(ZeoutNumber);
+            //            $("#Zeout").attr('disabled', 'disabled');
+            //            return false;
+            //        }
+            //    }).error(function () {
+            //        EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+            //    });
+
+
+            //}
+
+
+
+
+
+            function GetPreData_UserName() {
+                $.ajax({
+                    url: "Manage.aspx?Action=GetPreData_UserName&TofesId=" + Json.TofesId,
+                    data: "UserName=ASD" + encodeURIComponent("39660675") + "&Password=SDF", //לא חובה
+                    type: 'POST',
+                    context: Text,
+                    timeout: 60000,
+                }).success(function (JsonData) {
+                    console.log(JsonData)
+                }).error(function () {
+                    ParsePreData("ERROR")
+                });
+            }
+
+
+
+
+
+
+            function SignCancel() {
+                $('#SignPad,#WaitDiv').hide();
+                $('#SaveDiv').show();
+            }
+
+
+
+            // *** MatchPlusData 490***
+            //var MatchPlusData;
+
+            //function MatchPlus() {
+            //    $.ajax({
+            //        url: "../V6/MatchPlus.aspx?Action=ShowGoal&MatchingId=229",
+            //        context: Text,
+            //        timeout: 5000,
+            //    }).success(function (data) {
+            //        MatchPlusData = data
+            //        ShowDataMatchPlus()
+            //    }).error(function () {
+
+            //        EAlertConfirm("תקלת תקשורת - שגיאה בקבלת נתונים", '', 6000);
+            //    })
+            //}
+
+            //var Sign = '₪'
+            //function ShowDataMatchPlus() {
+            //    try {
+            //        $('#CurDonator').html(MatchPlusData.Donator)
+            //        //MatchPlusData.data.relationships.campaign_stats.data.total=2005268
+            //        $('#CurAmount').html((+MatchPlusData.Donated).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').replace('.00', '') + ' ' + Sign)
+            //        var Goal = +MatchPlusData.Goal
+            //        var GoalText = 'יעד'
+            //        //if (MatchPlusData.data.attributes.rounds.length > 1) {
+            //        //    if (MatchPlusData.data.attributes.rounds[1].goal !== undefined) {
+            //        //        if (parseFloat(MatchPlusData.data.relationships.campaign_stats.data.total) > parseFloat(Goal)) {
+            //        //            Goal = MatchPlusData.data.attributes.rounds[1].goal
+            //        //            GoalText = 'יעד בונוס'
+            //        //        }
+            //        //    }
+            //        //}
+            //        $('#goal').html(GoalText + ': ' + Goal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').replace('.00', '') + ' ' + Sign)
+
+            //        // $('#goal').html(GoalText + ': ' + Goal.replace(/\d(?=(\d{3})+\.)/g, '$&,').replace('.00', '') + ' ' + Sign)
+            //        var Percent = +MatchPlusData.Donated / Goal * 100
+            //        $('#CurPercent').html((Percent).toFixed(2) + '%')
+            //        if (Percent > 100) Percent = 100;
+            //        $('#progress').css('width', (Percent).toFixed(2) + '%')
+            //        $('.goal-stat').show()
+            //    }
+            //    catch (err) {
+            //        console.log(err.message);
+            //    }
+            //    //CountDownTimer(MatchPlusData.data.attributes.end_date, 'countdown');
+            //}
+
+
+
+            function GetMailData() {
+
+
+                var data = "<div style='margin: auto;font-weight: 600;padding-left: 20px;width: 210mm;border: 1px solid #e9e9e9;position: relative;font-family: system-ui;padding:0 0 20px'>"
+                data += "<div style='padding: 13px 20px 35px 21px; direction: rtl; font-size: 15px; color: gray; font-weight: 600; justify-content: space-between;'><div style='margin: 0 0 0 20px;display: inline-block;'>בס\"ד</div><div style='display: inline-block;    float: left;'>נוצר באמצעות [MasofId] | [TofesDate]</div></div>"
+
+                data += '[MasofId]'
+                data += '[Id]'
+                data += '[TransactionId]'
+
+                data += "<div dir='rtl' style='margin: 5px 25px 0 0;text-align: right;'>"
+                data += "<div dir='rtl' style='margin: 0 0 30px; text-align: center; font-weight: 600; font-size: 20px; color: #171717;'>טופס הרשמה</div>"
+                data += "<div style='margin: 5px 0 20px;color: cadetblue;font-size: 17px;'>פרטים אישיים:</div>"
+
+                data += "<div style='margin: 5px 0 20px'>"
+                data += "שם פרטי: <div style='display: inline-block;width: 180px;border-bottom: 1px solid #888888;padding:0 8px;'>" + $('#FirstName').val() + "</div>"
+                data += "שם משפחה: <div style='display: inline-block;width: 180px;border-bottom: 1px solid #888888;padding:0 8px;'>" + $('#Family').val() + "</div>"
+                data += "ת.ז: <div style='display: inline-block;width: 120px;border-bottom: 1px solid #888888;padding:0 8px;'>" + $('#Zeout').val() + "</div>"
+                data += "</div>"
+
+                data += "<div style='margin: 30px 0 20px;color: cadetblue;font-size: 17px;'>הערות:</div>"
+                data += "<div style='margin: 5px 0 20px'>"
+                data += "<div style='display: inline-block;width:700px;border-bottom: 1px solid #888888;padding:0 8px;'>" + $('#Notes').val() + "</div>"
+                data += "</div>"
+
+
+
+                data += '<div style="margin-left: 30px;text-align: left;direction: ltr;">'
+                data += '<div style="width: 250px;">'
+                data += '[Sign]'
+                data += '</div>'
+                data += ' <div style="padding: 0px 17px;border-top: 2px solid gray;width: max-content;padding: 0 100px;">חתימה</div>'
+                data += '</div>'
+
+                data += "</div>"
+                data += "</div>"
+
+                return data
+            }
+
+
+            function Calculate() {
+
+                // מחיקת תו לא חוקי
+                //if ($.isNumeric($('#Row' + i).val()) == false && $('#Row' + i).val().length > 1) { $('#Row' + i).val($('#Row' + i).val().substring(0,$('#Row' + i).val().length-1)) }
+                //if ($.isNumeric($('#Row' + i).val()) == false) { $('#Row' + i).val(''); continue; }
+                //if (parseFloat($('#Row' + i).val()) <0) { $('#Row' + i).val(''); continue; }
+
+
+
+            }
+
+
+
+
+
+
+
+            //feature_1
+            function CloseNatsig() {
+                $('#SnifChoose').hide();
+                setTimeout(function () { ScrollUp($('#Snif1')) }, 100);
+            }
+
+            //feature_1
+            function SetSnif(SnifName) {
+                $("#Snif1").val(SnifName)
+                CloseNatsig()
+            }
+
+
+            function ScrollUp(Input) {
+                if ($(Input).val() !== undefined) {
+                    $('html, body').animate({ scrollTop: $(Input).position().top - 200 }, 'slow');
+                }
+            }
+
+
+
+            function EAlertConfirm(message, insidetext) {
+                swal({
+                    type: "error",
+                    title: message, text: insidetext,
+                    timer: 10000,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                });
+            }
+            function IAlertConfirm(message, insidetext) {
+                swal({
+                    type: "info",
+                    title: message, text: insidetext,
+                    timer: 30000,
+                    html: true,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                });
+            }
+            function CheckFilled(Name, ErrorString) {
+                if ($("#" + Name).val() == '') {
+                    swal({
+                        type: "error",
+                        title: ErrorString,
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                    }, function () {
+                        setTimeout(function () { $('#' + Name).focus() }, 100);
+                    });
+                    return false;
+                } else {
+                    return true;
+                }
+
+            }
+            function EnableForm(Enable) {
+                $.ajax({
+                    url: "Manage.aspx?Action=EnableForm&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&Enable=" + encodeURIComponent(Enable),
+                    context: Text,
+                    timeout: 60000,
+                }).success(function (JsonData) {
+                    if (JsonData.Status == 'Error' || JsonData.Result == 'Error') {
+                        EAlertConfirm("שגיאה", JsonData.Message)
+                    }
+                    else {
+                        IAlertConfirm("הפעולה בוצעה בהצלחה");
+                    }
+                }).error(function () {
+                    EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+                });
+            }
+
+
+            function GetExcel() {
+
+                var url = "Manage.aspx?Action=GetExcel&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId
+                var FormData = '<form action="' + url + '" method="post" target="_blank" style="display:none">'
+                for (var Element in Json.FormElements) {
+                    var JsonElement = Json.FormElements[Element]
+                    if (JsonElement.Type == "Margin" || JsonElement.Type == "List" || JsonElement.Type == "Koteret" || JsonElement.DbName == undefined) { continue; }
+                    FormData += '<input type="text" name="' + JsonElement.DbName + '" value="' + JsonElement.fieldName.replace(/"/g, '&quot;').replace(/<b>/g, '').replace(/<\/b>/g, '') + '" />'
 
                 }
 
-            }).error(function () {
-                EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
-                $("#SaveDiv").show()
-                $("#WaitDiv").hide()
-            });
-        }
+                FormData += '</form>'
+                var form = $(FormData);
+                $('body').append(form);
+                form.submit();
+
+                //$.ajax({
+                //    url: "Manage.aspx?Action=GetExcel&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId ,
+                //    context: Text,
+                //    timeout: 60000,
+                //    type: "POST",
+                //    data: PostData,
+                //})
+
+            }
+
+            function IsVisible(Element) {
+                if (Element == undefined) return false
+                var element = document.getElementById(Element);
+                while (element.parentNode) {
+                    if ($("#" + element.id).css('display') == 'none') return false
+                    element = element.parentNode;
+                }
+                return true
+            }
 
 
-        function FixedWaitingStyle() {
-            $('#FixedWaiting img').css('top', (($('#FixedWaiting').height()) / 2) - ($('#FixedWaiting img').height() / 2))
-            $('#FixedWaiting img').css('left', (($('#FixedWaiting').width()) / 2) - ($('#FixedWaiting img').width() / 2))
-        }
+            function getDate(Start, End) {
+                // Formt - 24/02/2020
+                if (End == 'Today') {
+                    End = new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear()
+                }
+                if (Start == 'Today') {
+                    Start = new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear()
+                }
+
+                var date1 = Start.split('/')
+                var date2 = End.split('/');
+
+                date1 = new Date(date1[2], date1[1], date1[0]);
+                date2 = new Date(date2[2], date2[1], date2[0]);
+
+                date1 = parseInt(date1.getTime() / 1000);
+                date2 = parseInt(date2.getTime() / 1000);
+
+                return ((date2 - date1) / 60 / 60 / 24).toFixed()
+            }
 
 
-    </script>
-</head>
+            function GetTime() {
+
+                $.ajax({
+                    url: "Manage.aspx?Action=GetTime",
+                    context: Text,
+                    timeout: 180000,
+                }).success(function (JsonData) {
+
+                    console.log(JsonData.Time)
+                    Current_Houer = +JsonData.Time.split(":")[0];
+                    Current_Minute = +JsonData.Time.split(":")[1];
+                    GetMatrimJson();
+
+                }).error(function () {
+                    $("#AllMainForm").html('<div style="font-size: 19px;text-align: center;color: indianred; font-weight: bold;font-family: Assistant;margin-top: 20px;margin-bottom: 15px;"><span style="font-size:24px">שים לב!</span><br>שגיאה בקבלת נתונים. יש לפנות לאחראי.<br /></div>');
+                    EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+                    $("#WaitDiv2").hide()
+                    $("#AllMainForm").show()
+                });
+
+            }
+
+
+
+
+            function SendData() {
+
+
+
+                for (i = 1; i <= +$("#NumYladim").val(); i++) {
+                    if ($('#BDH1Yled' + i).val() !== "") {
+                        if (CheckDate($('#BDH1Yled' + i).val()) == false) {
+                            MySwal('תאריך לידה לא תקין', 'BDH1Yled' + i)
+                            return false;
+                        }
+                    }
+
+
+                    if ($('#ZeoutYled' + i).val() !== "") {
+                        if (ValidateID($('#ZeoutYled' + i).val()) == false) {
+                            MySwal('תעודת זהות לא תקינה', 'ZeoutYled' + i)
+                            return false;
+                        }
+                    }
+
+
+
+                }
+
+
+                //if (Zeout == "" && MasofId !== "" && ($('input[name=TashlumStatus]:checked').val() !== "אשראי")) {
+                //    MySwal("תשלום במזומן ניתן לאחר הזדהות בלבד", "TashlumStatus"); return false;
+                //};
+
+
+                //var Txt = '';
+                //for (var i = 1; i <= 20; i++) {
+                //    Txt += ', { "Type": "DivOpen", "ElementId": "DivOpen' + i + '", "Text": "", "Style": "" }'
+                //    Txt += ', { "ElementId": "Name' + i + '", "Type": "Span", "Text": "' + i + '.", "BeforeBr": false }'
+                //    Txt += ', { "ElementId": "KidName' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true, "Br": false }'
+                //    Txt += ', { "ElementId": "KidFamily' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "שם משפחה", "Type": "Text", "Mandatory": true, "Br": false }'
+                //    Txt += ', { "ElementId": "KidId' + i + '", "MaxLength": 9, "Width": 40, "fieldName": "תעודת זהות", "Type": "Tel", "Mandatory": true, "Br": false }'
+                //    Txt += ', { "ElementId": "Gender' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מגדר", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "LblHide": false, "RadioBt": [{ "Text": "בן" }, { "Text": "בת" }] }'
+                //    Txt += ', { "ElementId": "KidBDE' + i + '", "MaxLength": 10, "Width": 40, "fieldName": "ת.לידה", "Type": "Tel", "Mandatory": true, "Br": false}'
+                //    Txt += ', { "ElementId": "KidScholl' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מקום לימודים", "Type": "Text", "Mandatory": true, "Br": false }'
+                //    Txt += ', { "ElementId": "KidStatus' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "נשוי", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "LblHide": false, "RadioBt": [{ "Text": "כן" }, { "Text": "לא" }] }'
+                //    Txt += ', { "Type": "DivClose" }Moshe'
+
+
+
+                //}
+                //console.log(Txt)
+
+
+                //var a = 50;
+                //var Txt = '';
+                //for (var i = 1; i <= 5; i++) {
+                //    Txt += ', { "Type": "DivOpen", "ElementId": "DivOpen_' + i + '", "Text": "", "Style": "margin-right: 10px;display:none" }'
+                //    Txt += ', { "ElementId": "Num_' + i + '","Type": "IndexNumber", "ElementId": "DivOpenIndexNumber_' + i + '", "Text": "' + i + '", "Style": "" }'
+                //    Txt += ', { "ElementId": "Masechet_' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מסכת ממבחן קודם",  "Type": "Text", "Mandatory": true, "Br": true , "DbName": "Field' + a++ + '"}'
+                //    Txt += ', { "ElementId": "Dapim' + i + '", "MaxLength": 2, "Width": 40, "fieldName": "דפים למבחן הקודם",  "Type": "Tel", "Mandatory": true, "Br": false , "DbName": "Field' + a++ + '"}'
+                //    Txt += ', { "ElementId": "Maslul' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מסלול מבחן קודם","fieldNameShow": "מסלול מבחן קודם (30-50)",  "Type": "Tel", "Mandatory": true, "Br": false, "DbName": "Field' + a++ + '" }'
+                //    Txt += ', {"ElementId": "RGPT' + i + '", "MaxLength": 50, "Width": 40, "fieldName":"רש\\"י / גפ\\"ת", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "DbName": "Field' + a++ + '", "LblHide": false, "RadioBt": [{ "Text": "רש\\"י" }, { "Text": "גפ\\"ת" }]}'
+                //    Txt += ', {"ElementId": "TestMonth' + i + '", "MaxLength": 50, "Width": 40, "fieldName":"תאריך המבחן הקודם", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "DbName": "Field' + a++ + '", "LblHide": false, "RadioBt": [{ "Text": "תשרי" }, { "Text": "ניסן" }]}'
+                //    Txt += ', {"ElementId": "TestMonthYear' + i + '", "MaxLength": 50, "Width": 40, "fieldName":"שנת", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "DbName": "Field' + a++ + '", "LblHide": false, "RadioBt": [{ "Text": "תשפ\\"ב" }, { "Text": "תשפ\\"ג" }]}'
+                //    Txt += ', { "Type": "DivClose" }Moshe'
+                //}
+                //console.log(Txt)
+
+
+
+                //var Bank = 0;
+                //if ($('#Bank').val() !== "") { Bank += 1 }
+                //if ($('#Snif').val() !== "") { Bank += 1 }
+                //if ($('#Account').val() !== "") { Bank += 1 }
+
+                //if (Bank == 1 || Bank == 2) {
+                //    MySwal("לא ניתן להזין פרטי בנק באופן חלקי", "SpanBankList"); return false;
+                //}
+
+                //OemHtml
+                //if ($('input[name=GanSelected]:checked').val() == "תינוקיה" || $('input[name=GanSelected]:checked').val() == "גן אסנת" || $('input[name=GanSelected]:checked').val() == "גן רבקי") {
+                //    //$('#MailTashlumPrivate').html($("input[name=TashlumAmount_Private]:checked").val() + "₪");
+                //    //document.getElementById('MailTashlumPrivate').appendChild(document.getElementById('Field' + i))
+                //    OemHtml = '<div dir="rtl" style="text-align: right;color:rgb(32,18,77) ;font-family:inherit;font-size: 13px;margin:10px;text-align: justify;width: 90%;max-width:700px;">'
+                //        + '<span style="font-size: large;font-weight:bold;">תקנון</span> <br/>'
+                //        + '<ol>'
+
+                //        + '<li>התשלום שנקבע הוא: ' + $("input[name=TashlumAmount_Private]:checked").val() + ' ₪ </li>'
+                //        + '<li>שנת הלימודים הינה החל מ-1 בספטמבר עד ה-8 באוגוסט כולל קייטנת קיץ ראשונה. עבור קייטנת קיץ שניה עד ה-15 באוגוסט, יגבה תשלום נוסף בנפרד.</li>'
+
+                //        + '</ol>'
+
+                //        + '</div>'
+                //}
+
+
+
+
+                //console.log("Type: " + CreditCard_Type);
+                //console.log("Amount: " + CreditCard_Amount);
+                //console.log("Tashloumim: " + CreditCard_Tashloumim);
+                //console.log("HKDay: " + $("#HKDay").val());
+
+
+                //$("#SaveDiv").show()
+                //$("#WaitDiv").hide()
+                //return false;
+
+
+
+                //if ($('input[name=RemeberDate]:checked').val() !== undefined) {
+                //    if ($('input[name=RemeberDate]:checked').val().indexOf('לא ידוע תאריך מדויק') !== -1) {
+                //        var TotalDate = getDate($("#BDE1").val(), $("#BDE2").val())
+                //        if (TotalDate > 90) { MySwal("לא ניתן להזין טווח תאריכים גדול מ3 חודשים.", "BDE2"); return false; }
+                //        if (TotalDate < 0) { MySwal("נא להזין תאריך סיום מאוחר מתאריך התחלה", "BDE2"); return false; }
+                //        if (getDate($("#BDE1").val(), 'Today') < 0) { MySwal("אין להזין תאריך עתידי", "BDE1"); return false; }
+                //        if (getDate('Today', $("#BDE2").val()) > 0) { MySwal("אין להזין תאריך עתידי", "BDE2"); return false; }
+
+
+
+                //    } else if ($('input[name=RemeberDate]:checked').val().indexOf('ידוע תאריך מדויק') !== -1) {
+                //        if (getDate($("#BDE3").val(), 'Today') < 0) { MySwal("אין להזין תאריך עתידי", "BDE3"); return false; }
+
+                //        $("#BDE1").val($("#BDE3").val());
+                //        $("#BDE2").val($("#BDE3").val());
+                //    }
+                //}
+
+
+
+
+                if (GetURLParameter("Demo") == "1") { IAlertConfirm("זהו טופס לדוגמה. לא ניתן לבצע שליחה."); return false; }
+
+                //if (GetURLParameter("Zeout") == "") { IAlertConfirm("טופס זה ניתן לשליחה רק מעמדת נדרים פלוס."); return false; }
+
+                //if ($.isNumeric($("#TashlumAmount").val()) == false) { MySwal("אין סכום לתשלום.", "TashlumAmount"); return false; }
+                //if (parseInt($('#TashlumAmount').val()) < 5) { MySwal("נא להזין לפחות 5 ש\"ח", "TashlumAmount"); return false; };
+
+                //if ($('input[name=TashlumType]:checked').val() == "דולר" && $("#Tashlumim option:selected").val() !== 1) { MySwal("לא ניתן לחלק עסקת דולרים בתשלומים, נא לשנות לתשלום 1 או לעשות הוראת קבע", "Tashlumim"); return false; }
+
+
+
+                //var today = new Date();
+                //var dd = String(today.getDate()).padStart(2, '0');
+                //var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                //var yyyy = today.getFullYear();
+
+                //today = mm + '/' + dd + '/' + yyyy;
+
+
+
+                $("#SaveDiv").hide()
+                $("#WaitDiv").show()
+
+
+                //if ($("#MisparAmuta").val().length > 0 && $("#MisparAmuta").val().length < 9) { MySwal("מספר עמותה / ח.פ. חייב להכיל 9 ספרות", "MisparAmuta"); return false; };
+
+                //Calculate()
+                var PostData = ''
+                for (var Element in Json.FormElements) {
+                    var JsonElement = Json.FormElements[Element]
+                    if (JsonElement.Type == "Margin" || JsonElement.Type == "List" || JsonElement.Type == "Koteret") { continue; }
+                    if (JsonElement.ElementId == undefined) { continue; }
+
+                    var ElementValue
+                    var ElementVisible = true
+                    var ErrorTitle = "חובה למלא ";
+
+                    if (JsonElement.Type == "Radio") {
+                        ElementValue = $('input[name=' + JsonElement.ElementId + ']:checked').val();
+                        if (ElementValue == undefined) { ElementValue = '' };
+                        if (IsVisible(JsonElement.ElementId) == false) { continue; }
+                    } else if (JsonElement.Type == "CheckBox") {
+                        ErrorTitle = "חובה לסמן "
+                        ElementValue = ($("#" + JsonElement.ElementId).is(":checked") ? "מסומן" : "")
+                        if (IsVisible(JsonElement.ElementId) == false) { continue; }
+                    } else if (JsonElement.Type == "Select") {
+                        ElementValue = $("#" + JsonElement.ElementId + " option:selected").val()
+                        if (ElementValue == undefined) { ElementValue = '' };
+                        if (IsVisible(JsonElement.ElementId) == false) { continue; }
+                    } else {
+                        ElementValue = $("#" + JsonElement.ElementId).val().trim()
+                        ElementVisible = IsVisible(JsonElement.ElementId)
+                        if (Json.AllowChanges == false && ((ElementVisible == false || (ElementValue == '' && JsonElement.Mandatory == false)) && JsonElement.Send !== true)) { continue; };
+                    };
+
+                    //
+
+                    if (JsonElement.Mandatory == true && ElementValue == '' && ElementVisible == true) {
+                        swal({
+                            type: "error",
+                            title: ErrorTitle + JsonElement.fieldName,
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                        }, function () {
+                            $('#' + JsonElement.ElementId).focus()
+                            $('#' + JsonElement.ElementId).select();
+                            ScrollUp('#' + JsonElement.ElementId)
+                            setTimeout(function () {
+                                $("#SaveDiv").show()
+                                $("#WaitDiv").hide()
+                            }, 100);
+                        });
+                        return false;
+                    }
+
+                    if (JsonElement.Type == 'Tel' && ElementValue !== '' && $.isNumeric(ElementValue.replace(/-/g, "")) == false && $.isNumeric(ElementValue.replace(/\//g, "")) == false) {
+                        swal({
+                            type: "error",
+                            title: "בשדה " + JsonElement.fieldName + " יש להזין ספרות בלבד",
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                        }, function () {
+                            $('#' + JsonElement.ElementId).focus()
+                            $('#' + JsonElement.ElementId).select();
+
+                            setTimeout(function () {
+                                $("#SaveDiv").show()
+                                $("#WaitDiv").hide()
+                            }, 100);
+                        });
+                        return false;
+                    }
+                    if (JsonElement.MinLenght !== undefined && ElementValue !== '' && ElementValue.length < JsonElement.MinLenght) {
+                        swal({
+                            type: "error",
+                            title: "בשדה " + JsonElement.fieldName + " יש להזין לפחות " + JsonElement.MinLenght + " תווים",
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                        }, function () {
+                            $('#' + JsonElement.ElementId).focus()
+                            $('#' + JsonElement.ElementId).select();
+                            setTimeout(function () {
+                                $("#SaveDiv").show()
+                                $("#WaitDiv").hide()
+                            }, 100);
+                        });
+                        return false;
+                    }
+
+                    if (JsonElement.DbName == undefined) { continue; }
+                    PostData = PostData + "&" + JsonElement.DbName + "=" + encodeURIComponent(htmlEncode(ElementValue)) + "&" + JsonElement.DbName + "_Name=" + encodeURIComponent(JsonElement.fieldName.replace(/<b>/g, '').replace(/<\/b>/g, ''))
+
+
+
+
+                }
+                PostData = PostData.substring(1, PostData.length)
+
+
+
+                //for (var i = 1; i < 21; i++) {
+                //    if ($('#DivOpen' + i).css('display') != 'none') {
+                //        if (ValidateID($('#KidId' + i).val()) == false) {
+                //            MySwal('תעודת זהות לא תקינה', 'KidId' + i)
+                //            return false
+                //        }
+                //    }
+                //}
+
+
+                //for (var i = 1; i <= 10; i++) {
+                //    if ($('#KidBDE' + i).val() != '' && $('#Home_' + i).css('display') != 'none') {
+                //        if (CheckDate($('#KidBDE' + i).val()) == false) { MySwal("נא להזין תאריך מלא ותקין", "KidBDE" + i); return false; }
+                //        var TotalDate = getDate($('#KidBDE' + i).val(), today)
+                //        if (TotalDate < 0) { MySwal("לא ניתן להזין תאריך עתידי", "KidBDE" + i); return false; }
+                //    }
+                //}
+
+
+                //if ($("#TashlumAmount").val() !== undefined && ($.isNumeric($("#TashlumAmount").val()) == false || $("#TashlumAmount").val() == 0)) {
+                //    EAlertConfirm("אין סכום לתשלום...");
+                //    $("#SaveDiv").show()
+                //    $("#WaitDiv").hide()
+                //    return false;
+                //}
+
+                //if (IsVisible("CreditCard") == false) $("#CreditCard").val('')
+                //var CreditCard_Type = 'Ragil'
+                //var CreditCard_Amount = parseFloat($('#TashlumimNew').val()) * parseFloat($('#TashlumAmount1').val())
+                //var CreditCard_Tashloumim = parseInt($('#TashlumimNew').val())
+
+                // תשלומים
+                //if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק אשראי") {
+                //    var CreditCard_Type = 'HK'
+                //    var CreditCard_Amount = parseFloat($('#TashlumAmount').val())
+                //    var CreditCard_Tashloumim = $('#TashlumimNew').val()
+                //}
+
+                //var Address = $("#Address").val() + " " + $("#City").val();
+                //if ($('input[name=TashlumStatus]:checked').val() == "הו\"ק אשראי") { Address = $("#Address").val() }
+
+
+                ///////////////CREDITCARD (CreditCardPayment)    *******
+                //PostData += "&CreditCard_Type=" + encodeURIComponent(CreditCard_Type)
+                //PostData += "&CreditCard_ClientName=" + encodeURIComponent($("#Family").val() + " " + $("#FirstName").val())
+                //PostData += "&CreditCard_Amount=" + encodeURIComponent(CreditCard_Amount)
+                //PostData += "&CreditCard_Zeout=" + encodeURIComponent($("#Zeout").val())
+                //PostData += "&CreditCard_Adresse=" + encodeURIComponent(Address)
+                //PostData += "&CreditCard_City=" + encodeURIComponent($("#City").val())
+                //PostData += "&CreditCard_Tashloumim=" + encodeURIComponent(CreditCard_Tashloumim)
+                //PostData += "&CreditCard_Phone=" + encodeURIComponent($("#Tel2").val())
+                //PostData += "&CreditCard_CreditCard=" + encodeURIComponent($("#CreditCard").val())
+                //PostData += "&CreditCard_Tokef=" + encodeURIComponent($("#CardExpiration").val())
+                //PostData += "&CreditCard_Cvv=" + encodeURIComponent($("#CVV").val())
+                //PostData += "&CreditCard_Mail=" + encodeURIComponent($("#Mail").val())
+                //PostData += "&CreditCard_Currency=" //+ encodeURIComponent($("#Currency").val())
+                //PostData += "&CreditCard_Comment=" //+ encodeURIComponent($("#Note").val())
+                //PostData += "&CreditCard_HKDay=" //+ encodeURIComponent($("#HKDay").val())
+                //PostData += "&CreditCard_Groupe=" //+ encodeURIComponent($("#HKDay").val())
+                //PostData += "&CreditCard_Frequency=" //1. Normal | 2. Weekly  | 3. Izkor
+
+
+                // OemHtml
+                //PostData += "&HtmlMail=" + encodeURIComponent(htmlEncode(OemHtml));
+
+                ///////////////MASAV (MasavPayment)  *******
+                //PostData += "&Masav_ClientName=" + encodeURIComponent($("#Family").val() + " " + $("#FirstName").val())
+                //PostData += "&Masav_ClientAdresse=" + encodeURIComponent($("#Address").val())
+                //PostData += "&Masav_ClientZeout=" + encodeURIComponent($("#Zeout").val())
+                //PostData += "&Masav_ClientPhone=" + encodeURIComponent($("#Tel").val())
+                //PostData += "&Masav_ClientMail=" + encodeURIComponent($("#Mail").val())
+                //PostData += "&Masav_Bank=" + encodeURIComponent($("#Bank").val())
+                //PostData += "&Masav_Agency=" + encodeURIComponent($("#Snif").val())
+                //PostData += "&Masav_Account=" + encodeURIComponent($("#Account").val())
+                //PostData += "&Masav_Amount=" + encodeURIComponent($("#TashlumAmount").val())
+                //PostData += "&Masav_Tashlumim=" + encodeURIComponent($("#Tashlumim option:selected").val())
+                //PostData += "&Masav_Day=" + encodeURIComponent("5") //(1-5-10-15-20-28)
+                //PostData += "&Masav_Comments=" + encodeURIComponent($("#Notes").val())
+                //PostData += "&Masav_SignData=" + encodeURIComponent(SignData)
+                //PostData += "&Masav_Groupe=" + encodeURIComponent("פדיון נפש")
+
+                if (Json.NeedSign == true) {
+                    if (SignData == "") { $('#SignPad').show(); return false; }
+                    PostData += "&SignData=" + encodeURIComponent(SignData)
+                }
+
+                $.ajax({
+                    url: "Manage.aspx?Action=AddData&AjaxId=" + $.now() + "&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&Version=" + Json.Version + "&MasofId=" + MasofId + "&ClientId=" + ClientId + "&OldTofesId=" + OldTofesId + "&SpecialCheck=" + encodeURIComponent(Json.SpecialCheck) + "&MainTitle=" + encodeURIComponent(htmlEncode(Json.MainTitle)),
+                    context: Text,
+                    timeout: 32000,
+                    type: "POST",
+                    data: PostData,
+                }).success(function (JsonData) {
+                    if (JsonData.Status == 'Error') {
+                        if (JsonData.Message == 'הטופס לא מעודכן, יש לרענן את הדף.') {
+                            swal({
+                                type: "error",
+                                title: JsonData.Message,
+                                showConfirmButton: true,
+                                allowOutsideClick: false,
+                                confirmButtonText: 'רענן את הדף'
+                            }, function () {
+                                $('html, body').scrollTop(0); location.reload();
+                            });
+                            return false;
+                        }
+                        var FiledId
+                        for (var Element in Json.FormElements) {
+                            var JsonElement = Json.FormElements[Element]
+                            if (JsonElement.DbName == JsonData.FieldId) FiledId = JsonElement.ElementId
+                        }
+
+                        swal({
+                            type: "error",
+                            title: JsonData.Message,
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                        }, function () {
+                            if (FiledId !== undefined) {
+                                $('#' + FiledId).focus();
+                                $('#' + FiledId).select();
+                                ScrollUp('#' + FiledId);
+                            }
+
+                            setTimeout(function () {
+                                $("#SaveDiv").show()
+                                $("#WaitDiv").hide()
+                            }, 100);
+                        });
+                        return false;
+                    }
+                    else {
+                        $("#WaitDiv").hide();
+                        var BtTex = 'חזרה לנדרים פלוס'
+                        if (MasofId == '') BtTex = 'אישור'
+                        swal({
+                            title: "הטופס נשלח בהצלחה",
+                            // מספר טופס
+                            // text: JsonData.Message,
+                            type: "success",
+                            showCancelButton: false,
+                            confirmButtonText: BtTex,
+                            closeOnConfirm: true,
+                            allowOutsideClick: false,
+                        }, function (isConfirm) {
+                            if (MasofId !== '') { parent.GoToMenu("Tafrit"); parent.closeIFrame() } else { $('html, body').scrollTop(0); location.reload(); }
+                        });
+
+
+                    }
+
+                }).error(function () {
+                    EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+                    $("#SaveDiv").show()
+                    $("#WaitDiv").hide()
+                });
+            }
+
+
+            function FixedWaitingStyle() {
+                $('#FixedWaiting img').css('top', (($('#FixedWaiting').height()) / 2) - ($('#FixedWaiting img').height() / 2))
+                $('#FixedWaiting img').css('left', (($('#FixedWaiting').width()) / 2) - ($('#FixedWaiting img').width() / 2))
+            }
+
+
+        </script>
+    </head>
 
 <body onresize="FixedWaitingStyle()" dir="rtl" style="background: #eee;-webkit-user-select: none;"
     onscroll="UpdateClick()" oninput="UpdateClick()">
@@ -1875,9 +2125,12 @@
 
         <script>
 
+            //TODO: clean
+            // var UserToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InNydWxpayIsInVzZXJJZCI6ImNjOTN3eFo2Q0NpR3dSY3ZwNDNkIiwiaWF0IjoxNzUyMDcyNjQyLCJleHAiOjE3NTIyNDU0NDJ9.UaW-oDQxO8y5I-hMpl2weZaeqTGpI_eybkfcixCjiBU"
+            // var UserName = "srulik kenig";
             var UserToken = ""
+            var UserName = "";
             var UserType;
-            var UserName;
             var CurrentTab = 1; // משתנה לשמירת הטאב הנוכחי
 
             function ShowMainScreen() {
@@ -1935,11 +2188,13 @@
                         // content = '';
                         // $("#DivBuildings_Data").html(content);
                         $("#TabContent1").show();
+                        getProducts();
                         break;
                     case 2:
                         // content = '';
                         // $("#DivBuildings_Data").html(content);
                         $("#TabContent2").show();
+                        getOrderProducts()
                         break;
                     case 3:
                         $("#TabContent3").show();
@@ -2283,7 +2538,7 @@
                 <div>
                     <div style="margin: 10px 0px 3px; color: #607D8B; font-size: large; text-align: center; font-weight: bold; "
                         id="CheckUserNameKoteret">הזן שם:</div>
-                    <div style="text-align:center" id="CheckUserNameDiv"><input value="srulik" id="CheckUserName"
+                    <div style="text-align:center" id="CheckUserNameDiv"><input value="" id="CheckUserName"
                             class="TextBox" type="text" dir="ltr" autocomplete="off" maxlength="11"
                             style="border-color: #9eafb6; max-width: 200px; border-width: 1px; text-align: center; font-weight: bold; font-size: 19px; height: 41px; ">
                     </div>
@@ -2292,7 +2547,7 @@
                 <div>
                     <div style="margin: 10px 0px 3px; color: #607D8B; font-size: large; text-align: center; font-weight: bold; "
                         id="CheckUserPassKoteret">הזן סיסמה:</div>
-                    <div style="text-align:center" id="CheckUserPassDiv"><input value="1234" id="CheckUserPass"
+                    <div style="text-align:center" id="CheckUserPassDiv"><input value="" id="CheckUserPass"
                             class="TextBox" type="password" dir="ltr" autocomplete="off" maxlength="11"
                             style="border-color: #9eafb6; max-width: 200px; border-width: 1px; text-align: center; font-weight: bold; font-size: 19px; height: 41px; ">
                     </div>
@@ -2558,8 +2813,8 @@
             }
 
 
-            // OpenCardGetMagneticCard()
-            ShowMainScreen()
+            OpenCardGetMagneticCard()
+            // ShowMainScreen()
 
             GetBattery()
         })
