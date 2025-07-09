@@ -2126,9 +2126,11 @@
         <script>
 
             //TODO: clean
-            var UserToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InNydWxpayIsInVzZXJJZCI6ImNjOTN3eFo2Q0NpR3dSY3ZwNDNkIiwiaWF0IjoxNzUyMDcyNjQyLCJleHAiOjE3NTIyNDU0NDJ9.UaW-oDQxO8y5I-hMpl2weZaeqTGpI_eybkfcixCjiBU"
+            // var UserToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InNydWxpayIsInVzZXJJZCI6ImNjOTN3eFo2Q0NpR3dSY3ZwNDNkIiwiaWF0IjoxNzUyMDcyNjQyLCJleHAiOjE3NTIyNDU0NDJ9.UaW-oDQxO8y5I-hMpl2weZaeqTGpI_eybkfcixCjiBU"
+            // var UserName = "srulik kenig";
+            var UserToken = ""
+            var UserName = "";
             var UserType;
-            var UserName = "srulik kenig";
             var CurrentTab = 1; // משתנה לשמירת הטאב הנוכחי
 
             function ShowMainScreen() {
@@ -2536,7 +2538,7 @@
                 <div>
                     <div style="margin: 10px 0px 3px; color: #607D8B; font-size: large; text-align: center; font-weight: bold; "
                         id="CheckUserNameKoteret">הזן שם:</div>
-                    <div style="text-align:center" id="CheckUserNameDiv"><input value="srulik" id="CheckUserName"
+                    <div style="text-align:center" id="CheckUserNameDiv"><input value="" id="CheckUserName"
                             class="TextBox" type="text" dir="ltr" autocomplete="off" maxlength="11"
                             style="border-color: #9eafb6; max-width: 200px; border-width: 1px; text-align: center; font-weight: bold; font-size: 19px; height: 41px; ">
                     </div>
@@ -2545,7 +2547,7 @@
                 <div>
                     <div style="margin: 10px 0px 3px; color: #607D8B; font-size: large; text-align: center; font-weight: bold; "
                         id="CheckUserPassKoteret">הזן סיסמה:</div>
-                    <div style="text-align:center" id="CheckUserPassDiv"><input value="1234" id="CheckUserPass"
+                    <div style="text-align:center" id="CheckUserPassDiv"><input value="" id="CheckUserPass"
                             class="TextBox" type="password" dir="ltr" autocomplete="off" maxlength="11"
                             style="border-color: #9eafb6; max-width: 200px; border-width: 1px; text-align: center; font-weight: bold; font-size: 19px; height: 41px; ">
                     </div>
@@ -2811,8 +2813,8 @@
             }
 
 
-            // OpenCardGetMagneticCard()
-            ShowMainScreen()
+            OpenCardGetMagneticCard()
+            // ShowMainScreen()
 
             GetBattery()
         })
