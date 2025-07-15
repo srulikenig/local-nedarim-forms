@@ -271,12 +271,15 @@
             return html;
         }
 
+        // משתנה גלובלי לסוג התצוגה
+        window.ViewMode = 'order'; // 'order' או 'product'
+
         // קבלת מוצרים לפיזור והצגה בטאב 2
         function getOrderProducts() {
             // איפוס בחירות בטאב 2 בכל רענון
             window.SelectedOrderProducts = [];
             $.ajax({
-                url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/orderProducts",
+                url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/orderProducts?viewMode=" + window.ViewMode,
                 context: Text,
                 timeout: 16000,
                 headers: {
@@ -294,6 +297,15 @@
                 html += '<div style="padding: 0 10px 70px;">';
                 // שדה חיפוש וכותרת כמו בטאב 3
                 html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">מוצרים לארגזים</div>';
+
+                // טוגל בוטון לבחירת סוג התצוגה
+                html += '<div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">';
+                html += '<div style="background: #f0f0f0; border-radius: 25px; padding: 3px; display: inline-flex; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">';
+                html += '<button id="viewByOrder" onclick="toggleViewMode(\'order\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ViewMode === 'order' ? 'white' : '#666') + '; background: ' + (window.ViewMode === 'order' ? '#009688' : 'transparent') + ';">לפי הזמנה</button>';
+                html += '<button id="viewByProduct" onclick="toggleViewMode(\'product\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ViewMode === 'product' ? 'white' : '#666') + '; background: ' + (window.ViewMode === 'product' ? '#009688' : 'transparent') + ';">לפי מוצר</button>';
+                html += '</div>';
+                html += '</div>';
+
                 html += '<div style="display: flex; justify-content: center; align-items: center; padding: 0 0 10px 0;">';
                 // html += '<input autocomplete="off" type="search" id="Filter_Search" oninput="Filter_Search()" placeholder="חיפוש הזמנה" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
                 html += '</div>';
@@ -335,6 +347,10 @@
             });
         }
 
+        function toggleViewMode(mode) {
+            window.ViewMode = mode;
+            getOrderProducts(); // רענון הנתונים עם המצב החדש
+        }
         // עדכון UI של בחירה וכפתור אישור מרובה לפיזור
         function updateSelectedOrderProductsUI(orderProducts) {
             $("#OrderProductsList .order-product-row").each(function (idx) {
