@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="he-IL" translate="no">
+
+<head>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="robots" content="noindex" />
+
+    <link rel="preload" as="image" href="waitnew.gif">
+    <link href="https://fonts.googleapis.com/css?family=Assistant:400,600,700&display=swap&subset=hebrew"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="Files/signature-pad.css" />
+    <link rel="stylesheet" type="text/css" href="Files/sweetalert.css?0" />
+
+    <script src="Files/sweetalert.min.js"></script>
+    <script type="text/javascript" src="Files/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="Files/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+    <title>ניהול תרומות ותורמים - נדרים פלוס</title>
+
+    <style>
+        * {
+            font-family: 'Assistant', Arial, sans-serif;
+        }
+
+        @media screen and (max-width: 400px) {
+            .DivTelText {
+                width: 80% !important
+            }
+        }
+
+        @media screen and (max-width: 500px) {
+            #MainForm {
+                margin-right: 0px !important
+            }
+        }
+
+        .TextBox {
+            -webkit-appearance: none;
+            font-size: large;
+            color: #3f475e;
+            text-align: right;
+            padding: 6px;
+            border-color: #f7bb4d;
+            border-style: solid;
+            border-width: 0px 0px 2px 0px;
+            margin: 5px 5px;
+            background-color: #FFFFFB;
+            -webkit-box-sizing: border-box
+        }
+
+        .RadioBtLbl {
+            border-style: solid;
+            border-color: #f7bb4d;
+            border-width: 0px 0px 2px 0px;
+            margin: 0px 10px;
+            background-color: #FFFFFB;
+            padding: 10px 2px 10px 10px;
+            border-radius: 2px;
+            -webkit-user-select: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+
+        .SelectValLbl {
+            border-style: solid;
+            width: 90%;
+            text-align-last: center;
+            border-color: #f7bb4d;
+            border-width: 0px 0px 2px 0px;
+            font-size: large;
+            color: #3f475e;
+            margin: 0px 5px;
+            background-color: #FFFFFB;
+            padding: 7px 2px 10px 10px;
+            border-radius: 2px;
+            -webkit-user-select: none;
+            cursor: pointer;
+            display: inline-block;
+            outline: none;
+        }
+
+        .Koteret {
+            font-size: 22px;
+            color: #ff6a00;
+            font-weight: bold;
+            text-align: right;
+            padding-right: 27px;
+            width: 90%;
+            margin-top: 27px;
+            margin-bottom: 10px;
+            -webkit-user-select: none;
+        }
+
+
+        li {
+            text-align: right;
+            padding: 0px 0px 0px 25px;
+            font-size: 17px;
+            -webkit-user-select: none;
+        }
+
+        .checkbox {
+            text-align: right;
+            color: #2B3A63;
+            padding: 0px 0px 0px 25px;
+            font-size: 17px;
+        }
+
+
+
+        textarea:focus,
+        input[type=text]:focus,
+        input[type=tel]:focus {
+            outline: none;
+            border-width: 0px 0px 2px 0px;
+            border-color: #38c232
+        }
+
+        .Bt {
+            -webkit-appearance: none;
+            font-size: large;
+            color: white;
+            background-color: #38c232;
+            text-align: center;
+            padding: 12px 24px 12px 24px;
+            border-color: #fff;
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.5);
+            -webkit-overflow-scrolling: touch;
+        }
+
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            color: #808080;
+            -webkit-box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.75);
+            background-color: white;
+            max-width: 500px;
+            min-width: 200px;
+            min-height: 250px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        td {
+            color: #296c8d;
+            font-size: 20px;
+            border: 1px solid #d7cece;
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        th {
+            min-height: 500px;
+            border: 1px solid #d7cece;
+            color: #2B3A63;
+            font-family: assistant, Arial;
+        }
+
+        .bordered td,
+        .bordered th {
+            border-left: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            padding: 5px;
+        }
+
+        .TableLightFont {
+            font-weight: lighter;
+            font-size: 14px;
+        }
+
+
+        table {
+            border-collapse: collapse;
+            border: 1px solid #d7cece;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .TableKoteret {
+            text-align: center;
+            padding-right: 20px;
+            /*background-color: aliceblue;*/
+            font-size: 25px;
+            color: steelblue;
+            /*lightslategrey*/
+            font-weight: normal;
+        }
+
+        .fieldName {
+            display: inline-block;
+            text-align: right;
+            width: 100%;
+            font-size: medium;
+            margin-right: 5px;
+            color: #808080;
+            -webkit-user-select: none;
+            margin-right: 10px
+        }
+
+        /* סגנונות ספציפיים לתורמים */
+        .donor-row {
+            display: flex;
+            align-items: stretch;
+            text-align: right;
+            position: relative;
+            border-radius: 5px;
+            margin: 5px auto;
+            font-size: 15px;
+            box-sizing: border-box;
+            border: 2px solid #e7e7e7;
+            overflow: hidden;
+            height: 50px;
+            transition: background 0.2s, border 0.2s;
+            cursor: pointer;
+        }
+
+        .donor-row:hover {
+            background: #f0f8ff;
+        }
+
+        .donor-row.donated {
+            opacity: 0.6;
+            background: #f5f5f5;
+            border-color: #d0d0d0;
+            cursor: default;
+        }
+
+        .donor-row.donated:hover {
+            background: #f5f5f5;
+        }
+
+        .donor-info {
+            flex: 1;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .donor-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: #2B3A63;
+        }
+
+        .donor-note {
+            font-size: 13px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .donor-amount {
+            background: #4db6ac;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+            font-weight: bold;
+            font-size: 14px;
+            height: 100%;
+        }
+
+        .donor-amount.donated {
+            background: #9e9e9e;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff6a00;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .back-button:hover {
+            background: #e55a00;
+        }
+    </style>
+
+    <script type="text/javascript">
+        // משתנים גלובליים
+        var donorsList = [];
+        var selectedDonor = null;
+        var paymentFieldsArray = [];
+        var deviceHolderName = "";
+        var messagesList = [];
+
+        // טעינת רשימת תורמים מהשרת
+        function loadDonors() {
+            $.ajax({
+                url: "https://your-server.com/api/donors", // להחליף לכתובת השרת שלך
+                method: "GET",
+                timeout: 16000,
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).success(function (response) {
+                if (response.status === 'success') {
+                    donorsList = response.data.donors || response.data;
+                    deviceHolderName = response.data.deviceHolderName || "";
+                    messagesList = response.data.messages || [];
+                    displayDonors();
+                } else {
+                    MySwal("שגיאה בקבלת נתונים: " + response.message);
+                }
+            }).error(function () {
+                // MySwal("שגיאה בתקשורת עם השרת");
+                // נתונים לדוגמה למקרה של שגיאה
+                loadSampleData();
+            });
+        }
+
+        // נתונים לדוגמה (לפיתוח)
+        function loadSampleData() {
+            deviceHolderName = "יוסי כהן";
+            messagesList = [
+                { type: 'info', text: 'מתרים יקר! זכור, עניי השכונה זקוקים לעזרתך' },
+                { type: 'info', text: 'לבעיות טכניות פנו למספר: 03-1234567' }
+            ];
+            donorsList = [
+                {
+                    id: 1,
+                    name: "יהודה כהן",
+                    note: "תורם קבוע מזה 3 שנים",
+                    hasDonated: false,
+                    donationAmount: 0
+                },
+                {
+                    id: 2,
+                    name: "שרה לוי",
+                    note: "מעוניינת בתרומה חודשית",
+                    hasDonated: false,
+                    donationAmount: 0
+                },
+                {
+                    id: 3,
+                    name: "דוד רוזן",
+                    note: "תרם בעבר 500 שקל",
+                    hasDonated: true,
+                    donationAmount: 500
+                },
+                {
+                    id: 4,
+                    name: "מרים שמידט",
+                    note: "תורמת לזכר בעלה ז\"ל",
+                    hasDonated: true,
+                    donationAmount: 1200
+                },
+                {
+                    id: 5,
+                    name: "אברהם גולדברג",
+                    note: "מתעניין בפרויקטים חדשים",
+                    hasDonated: false,
+                    donationAmount: 0
+                }
+            ];
+            displayDonors();
+        }
+
+        // הצגת רשימת התורמים
+        function displayDonors() {
+            var availableDonors = donorsList.filter(function (donor) { return !donor.hasDonated; });
+            var donatedDonors = donorsList.filter(function (donor) { return donor.hasDonated; });
+
+            var html = '';
+
+            // הצגת שם המחזיק במכשיר - אלמנט נפרד מחוץ לדיב הראשי
+            if (deviceHolderName) {
+                html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #2B3A63; margin: 10px auto 10px; padding: 10px; background-color: #f8f9fa; border-radius: 5px; border: 1px solid #dee2e6; width: 98%; max-width: 500px; box-sizing: border-box;">מתרים: ' + deviceHolderName + '</div>';
+            }
+
+            // תחילת הדיב הראשי הלבן
+            html += '<div style="text-align: right; background-color: white; border-radius: 5px; margin: 10px auto; width: 98%; max-width: 500px; padding: 15px 10px 20px; box-sizing: border-box;">';
+
+            // כותרת תורמים זמינים
+            html += '<div style="text-align: center; font-size: 22px; font-weight: bold; color: #ff6a00; margin: 20px 0;">תורמים זמינים</div>';
+
+            // תורמים זמינים
+            html += '<div id="AvailableDonorsList">';
+            if (availableDonors.length === 0) {
+                html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:20px 0;">אין תורמים זמינים</div>';
+            } else {
+                for (var i = 0; i < availableDonors.length; i++) {
+                    html += renderDonorRow(availableDonors[i], false);
+                }
+            }
+            html += '</div>';
+
+            // קו מפריד
+            html += '<div style="margin: 25px 0 15px 0; display: flex; align-items: center;">'
+                + '<hr style="flex:1; border:none; border-top:2px solid #e0e0e0; margin:0 10px;">'
+                + '<span style="color:#888; font-size:16px; background:#fff; padding:0 15px; font-weight: bold;">כבר תרמו</span>'
+                + '<hr style="flex:1; border:none; border-top:2px solid #e0e0e0; margin:0 10px;">'
+                + '</div>';
+
+            // תורמים שכבר תרמו
+            html += '<div id="DonatedDonorsList">';
+            if (donatedDonors.length === 0) {
+                html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין תורמים שתרמו</div>';
+            } else {
+                for (var j = 0; j < donatedDonors.length; j++) {
+                    html += renderDonorRow(donatedDonors[j], true);
+                }
+            }
+            html += '</div>';
+
+            // הצגת הודעות ישירות באלמנט
+            if (messagesList && messagesList.length > 0) {
+                html += '<div style="margin: 25px 0px 10px; padding: 15px;  border: 1px solid #bee5eb; border-radius: 5px;">';
+                html += '<div style="font-weight: bold; color: #0c5460; margin-bottom: 10px; text-align: center;">הודעות חשובות</div>';
+                for (var k = 0; k < messagesList.length; k++) {
+                    var message = messagesList[k];
+                    var messageClass = '';
+                    var iconClass = '';
+
+                    switch (message.type) {
+                        case 'error':
+                            messageClass = 'color: #dc3545; background-color: #f8d7da; border-color: #f5c6cb;';
+                            iconClass = 'fa-exclamation-triangle';
+                            break;
+                        case 'warning':
+                            messageClass = 'color: #856404; background-color: #fff3cd; border-color: #ffeaa7;';
+                            iconClass = 'fa-exclamation-circle';
+                            break;
+                        case 'success':
+                            messageClass = 'color: #155724; background-color: #d4edda; border-color: #c3e6cb;';
+                            iconClass = 'fa-check-circle';
+                            break;
+                        default:
+                            messageClass = 'color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb;';
+                            iconClass = 'fa-info-circle';
+                            break;
+                    }
+
+                    html += '<div style="margin: 5px 0; padding: 10px; border: 1px solid; border-radius: 5px; ' + messageClass + '">';
+                    html += '<i class="fa ' + iconClass + '" style="margin-left: 8px;"></i>';
+                    html += message.text;
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+
+            html += '</div>';
+
+            $("#DonorsListContainer").html(html);
+
+            // הוספת אירועי לחיצה רק לתורמים זמינים
+            $("#AvailableDonorsList .donor-row").off("click").on("click", function () {
+                var donorId = parseInt($(this).data('donor-id'));
+                var donor = donorsList.find(function (d) { return d.id === donorId; });
+                if (donor && !donor.hasDonated) {
+                    openDonationForm(donor);
+                }
+            });
+        }
+
+        // הצגת הודעות מהשרת (לא בשימוש - ההודעות מוצגות ב-displayDonors)
+        function displayMessages() {
+            // פונקציה זו לא בשימוש - ההודעות מוצגות ישירות ב-displayDonors
+        }
+
+        // יצירת שורת תורם
+        function renderDonorRow(donor, isDonated) {
+            var html = '';
+            var additionalClass = isDonated ? ' donated' : '';
+            var rowStyle = '';
+            var amountContent = '';
+
+            if (isDonated) {
+                // תורם שכבר תרם - רקע רגיל עם סכום
+                rowStyle = '';
+                amountContent = '<div class="donor-amount donated" style="background: #9e9e9e;">₪' + donor.donationAmount + '</div>';
+            } else {
+                // תורם זמין - רקע כחול בהיר ללא תוכן בצד
+                rowStyle = 'background-color: #f0f8ff; border-color: #b3d9ff;';
+                amountContent = '';
+            }
+
+            html += '<div class="donor-row' + additionalClass + '" data-donor-id="' + donor.id + '" style="' + rowStyle + '">';
+            html += '<div class="donor-info">';
+            html += '<div class="donor-name">' + (donor.name || '') + '</div>';
+            if (donor.note) {
+                html += '<div class="donor-note">' + donor.note + '</div>';
+            }
+            html += '</div>';
+            html += amountContent;
+            html += '</div>';
+            return html;
+        }
+
+        // פתיחת טופס תרומה
+        function openDonationForm(donor) {
+            selectedDonor = donor;
+            $("#DonorsScreen").hide();
+            $("#DonationScreen").show();
+            $(".back-button").show();
+
+            // עדכון כותרת עם שם התורם
+            $("#DonorNameTitle").text(donor.name);
+
+            // בניית שדות התשלום
+            buildPaymentFields();
+        }
+
+        // חזרה למסך התורמים
+        function backToDonors() {
+            selectedDonor = null;
+            $("#DonationScreen").hide();
+            $(".back-button").hide();
+            $("#DonorsScreen").show();
+
+            // איפוס הטופס
+            $("#PaymentForm").html('');
+            $("#SubmitDiv").show();
+            $("#WaitDiv").hide();
+        }
+
+        // בניית שדות תשלום מתוך מערך
+        function buildFieldsFromArray(fieldsArray, targetElement) {
+            if (!fieldsArray || !Array.isArray(fieldsArray)) {
+                console.error('fieldsArray must be an array');
+                return;
+            }
+
+            var html = '';
+
+            for (var i = 0; i < fieldsArray.length; i++) {
+                var field = fieldsArray[i];
+
+                if (field.Type === "Koteret") {
+                    html += '<div class="Koteret" style="' + (field.Style || '') + '">' + field.Text + '</div>';
+                }
+                else if (field.Type === "Text" || field.Type === "Tel") {
+                    var dir = field.Type === "Tel" ? "ltr" : "rtl";
+                    var onInput = field.Type === "Tel" ? 'oninput="OnlyNumber(this.id)"' : '';
+                    var mandatory = field.Mandatory ? '<span style="color:indianred;">*</span>' : '';
+
+                    html += '<div class="DivTelText" id="' + field.ElementId + 'Div" style="width:' + (field.Width || 90) + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:10px;margin-right:20px;">';
+                    html += '<label for="' + field.ElementId + '" class="fieldName">' + mandatory + (field.fieldName || '') + '</label><br>';
+                    html += '<input class="TextBox" dir="' + dir + '" autocomplete="off" type="' + field.Type + '" style="width:90%" maxlength="' + (field.MaxLength || 50) + '" id="' + field.ElementId + '" onfocus="ScrollUp(this)" ' + onInput + '/>';
+                    html += '</div>';
+                }
+                else if (field.Type === "Select") {
+                    var mandatory = field.Mandatory ? '<span style="color:indianred;">*</span>' : '';
+                    html += '<div id="' + field.ElementId + 'Div" style="width:' + (field.Width || 90) + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:10px;margin-right:20px;">';
+                    html += '<label for="' + field.ElementId + '" class="fieldName">' + mandatory + (field.fieldName || '') + '</label><br>';
+                    html += '<select class="SelectValLbl" id="' + field.ElementId + '">';
+
+                    var options = field.SelectVal ? field.SelectVal.split(",") : [""];
+                    for (var j = 0; j < options.length; j++) {
+                        html += '<option value="' + options[j].replace(/"/g, '&quot;') + '">' + options[j] + '</option>';
+                    }
+                    html += '</select></div>';
+                }
+                else if (field.Type === "Radio") {
+                    var mandatory = field.Mandatory ? '<span style="color:indianred;">*</span>' : '';
+                    html += '<div id="' + field.ElementId + '" style="width:' + (field.Width || 90) + '%;display:inline-block;vertical-align:top;text-align:right;margin: 15px 20px 10px;">';
+                    html += '<label class="fieldName">' + mandatory + (field.fieldName || '') + '</label><br>';
+
+                    if (field.RadioBt && Array.isArray(field.RadioBt)) {
+                        for (var k = 0; k < field.RadioBt.length; k++) {
+                            var radioOption = field.RadioBt[k];
+                            html += '<div style="display:inline-block">';
+                            html += '<label class="RadioBtLbl" for="' + field.ElementId + '_Radio' + k + '">';
+                            html += '<input id="' + field.ElementId + '_Radio' + k + '" type="radio" name="' + field.ElementId + '" value="' + radioOption.Text.replace(/"/g, '&quot;') + '"> ';
+                            html += '<span>' + radioOption.Text + '</span>';
+                            html += '</label></div>';
+                            if (field.br) html += '<br/>';
+                        }
+                    }
+                    html += '</div>';
+                }
+                else if (field.Type === "CheckBox") {
+                    var mandatory = field.Mandatory ? '<span style="color:indianred;">*</span>' : '';
+                    html += '<div id="' + field.ElementId + 'Div" class="checkbox" style="width:' + (field.Width || 90) + '%;display:inline-block;vertical-align:top;text-align:right;margin:10px 20px 10px 0px;">';
+                    html += '<label for="' + field.ElementId + '">';
+                    html += '<input type="CheckBox" id="' + field.ElementId + '"/>';
+                    html += mandatory + '<span style="cursor: pointer; width: 90%; display: inline-block; vertical-align: top;padding-right: 3px;">' + (field.fieldName || '') + '</span>';
+                    html += '</label></div>';
+                }
+                else if (field.Type === "textarea") {
+                    var mandatory = field.Mandatory ? '<span style="color:indianred;">*</span>' : '';
+                    html += '<div id="' + field.ElementId + 'Div" style="width:' + (field.Width || 90) + '%;display:inline-block;vertical-align:top;text-align:right;margin-top:10px;margin-right:20px;">';
+                    html += '<label for="' + field.ElementId + '" class="fieldName">' + mandatory + (field.fieldName || '') + '</label><br>';
+                    html += '<textarea class="TextBox" rows="' + (field.Rows || 3) + '" dir="rtl" autocomplete="off" style="width:90%;resize:none;" maxlength="' + (field.MaxLength || 500) + '" id="' + field.ElementId + '" onfocus="ScrollUp(this)"></textarea>';
+                    html += '</div>';
+                }
+                else if (field.Type === "Margin") {
+                    html += '<div style="height:' + (field.Height || 10) + 'px"></div>';
+                }
+                else if (field.Type === "Hr") {
+                    html += '<hr style="margin-right:20%;margin-left:20%;margin-top:' + (field.MarginTop || 20) + 'px;margin-bottom:' + (field.MarginBottom || 20) + 'px;" >';
+                }
+
+                if (field.Br) html += '<br/>';
+            }
+
+            $(targetElement).html(html);
+        }
+
+        // בניית שדות תשלום
+        function buildPaymentFields() {
+            // הגדרת מערך שדות התשלום
+            paymentFieldsArray = [
+                { "Type": "Koteret", "Text": "פרטי תרומה" },
+
+                { "ElementId": "DonationAmount", "MaxLength": 10, "Width": 45, "fieldName": "סכום לחודש", "Type": "Tel", "Mandatory": true, "Br": false },
+                { "ElementId": "MonthsLimit", "MaxLength": 3, "Width": 45, "fieldName": "הגבלת חודשים", "fieldNameShow": "הגבלת חודשים<br><span style='font-size:12px;color:#999;'>השאר ריק להו\"ק ללא הגבלה</span>", "Type": "Tel", "Mandatory": false, "Br": false },
+
+                { "Type": "Margin", "Height": "15" },
+                { "Type": "Koteret", "Text": "פרטי תשלום" },
+
+                {
+                    "ElementId": "PaymentMethod", "Width": 90, "fieldName": "אמצעי תשלום", "Type": "Radio", "Mandatory": true, "RadioBt": [
+                        { "Text": "כרטיס אשראי" },
+                        { "Text": "העברה בנקאית" }
+                    ], "Br": false
+                },
+
+                { "Type": "Margin", "Height": "10" },
+
+                { "ElementId": "CardNumber", "MaxLength": 19, "Width": 45, "fieldName": "מספר כרטיס אשראי", "Type": "Tel", "Mandatory": false, "Br": false },
+                { "ElementId": "CardExpiry", "MaxLength": 5, "Width": 25, "fieldName": "תוקף", "Type": "Tel", "Mandatory": false, "Br": false },
+                { "ElementId": "CardCVV", "MaxLength": 4, "Width": 25, "fieldName": "CVV", "Type": "Tel", "Mandatory": false, "Br": false },
+
+                { "ElementId": "CardHolderName", "MaxLength": 50, "Width": 90, "fieldName": "שם בעל הכרטיס", "Type": "Text", "Mandatory": false, "Br": false },
+                { "ElementId": "CardHolderId", "MaxLength": 9, "Width": 45, "fieldName": "ת.ז. בעל הכרטיס", "Type": "Tel", "Mandatory": false, "Br": false },
+
+                { "Type": "Margin", "Height": "15" },
+                { "Type": "Koteret", "Text": "פרטי התורם" },
+
+                { "ElementId": "DonorPhone", "MaxLength": 11, "Width": 45, "fieldName": "טלפון", "Type": "Tel", "Mandatory": false, "Br": false },
+                { "ElementId": "DonorEmail", "MaxLength": 50, "Width": 45, "fieldName": "אימייל", "Type": "Text", "Mandatory": false, "Br": false },
+
+                { "ElementId": "DonorAddress", "MaxLength": 100, "Width": 90, "fieldName": "כתובת", "Type": "Text", "Mandatory": false, "Br": false },
+
+                { "ElementId": "DonationNote", "MaxLength": 500, "Width": 90, "fieldName": "הערות", "Type": "textarea", "Rows": 3, "Mandatory": false, "Br": false },
+
+                { "Type": "Margin", "Height": "20" },
+
+                { "ElementId": "SendReceipt", "fieldName": "שלח קבלה למייל", "Type": "CheckBox", "Mandatory": false, "Width": 90 },
+                { "ElementId": "IsAnonymous", "fieldName": "תרומה אנונימית", "Type": "CheckBox", "Mandatory": false, "Width": 90 }
+            ];
+
+            // בניית השדות - כעת הכפתור כבר קיים ב-HTML
+            buildFieldsFromArray(paymentFieldsArray, "#PaymentForm");
+        }
+
+        // שליחת התרומה
+        function submitDonation() {
+            MySwal("אין אפשרות לתרום, הטופס בפיתוח");
+            return;
+
+            if (!selectedDonor) {
+                MySwal("שגיאה: לא נבחר תורם");
+                return;
+            }
+
+            // בדיקת שדות חובה
+            var donationAmount = $("#DonationAmount").val();
+            if (!donationAmount || donationAmount <= 0) {
+                MySwal("נא להזין סכום תרומה");
+                $("#DonationAmount").focus();
+                return;
+            }
+
+            var paymentMethod = $('input[name=PaymentMethod]:checked').val();
+            if (!paymentMethod) {
+                MySwal("נא לבחור אמצעי תשלום");
+                return;
+            }
+
+            // הצגת מסך המתנה
+            $("#SubmitDiv").hide();
+            $("#WaitDiv").show();
+
+            // איסוף הנתונים
+            var donationData = {
+                donorId: selectedDonor.id,
+                donorName: selectedDonor.name,
+                amount: donationAmount,
+                currency: $("#DonationCurrency").val(),
+                paymentMethod: paymentMethod,
+                cardNumber: $("#CardNumber").val(),
+                cardExpiry: $("#CardExpiry").val(),
+                cardCVV: $("#CardCVV").val(),
+                cardHolderName: $("#CardHolderName").val(),
+                cardHolderId: $("#CardHolderId").val(),
+                donorPhone: $("#DonorPhone").val(),
+                donorEmail: $("#DonorEmail").val(),
+                donorAddress: $("#DonorAddress").val(),
+                note: $("#DonationNote").val(),
+                sendReceipt: $("#SendReceipt").is(":checked"),
+                isAnonymous: $("#IsAnonymous").is(":checked"),
+                timestamp: new Date().toISOString()
+            };
+
+            // שליחה לשרת
+            $.ajax({
+                url: "https://your-server.com/api/donations", // להחליף לכתובת השרת שלך
+                method: "POST",
+                data: JSON.stringify(donationData),
+                contentType: "application/json",
+                timeout: 60000
+            }).success(function (response) {
+                $("#WaitDiv").hide();
+
+                if (response.status === 'success') {
+                    // עדכון הסטטוס של התורם
+                    selectedDonor.hasDonated = true;
+                    selectedDonor.donationAmount = parseFloat(donationAmount);
+
+                    swal({
+                        type: "success",
+                        title: "התרומה נשלחה בהצלחה!",
+                        text: "תרומה בסך " + donationAmount + " " + $("#DonationCurrency").val(),
+                        showConfirmButton: true,
+                        confirmButtonText: "חזרה לרשימה",
+                        allowOutsideClick: false
+                    }, function () {
+                        backToDonors();
+                        displayDonors(); // רענון הרשימה
+                    });
+                } else {
+                    MySwal("שגיאה בשליחת התרומה: " + response.message);
+                    $("#SubmitDiv").show();
+                }
+            }).error(function () {
+                $("#WaitDiv").hide();
+                $("#SubmitDiv").show();
+                MySwal("שגיאה בתקשורת עם השרת");
+            });
+        }
+
+        // פונקציות עזר
+        function MySwal(text, id, type) {
+            if (type === "success") {
+                swal({
+                    type: "success",
+                    title: text,
+                    showConfirmButton: true,
+                    allowOutsideClick: false
+                });
+            } else {
+                swal({
+                    type: "error",
+                    title: text,
+                    showConfirmButton: true,
+                    allowOutsideClick: false
+                }, function () {
+                    if (id) {
+                        $('#' + id).focus();
+                        $('#' + id).select();
+                    }
+                });
+            }
+        }
+
+        function OnlyNumber(id) {
+            var value = $("#" + id).val();
+            $("#" + id).val(value.replace(/[^0-9]/g, ''));
+        }
+
+        function ScrollUp(element) {
+            $('html, body').animate({ scrollTop: $(element).position().top - 200 }, 'slow');
+        }
+
+        // אתחול כשהעמוד נטען
+        $(document).ready(function () {
+            loadDonors();
+        });
+    </script>
+</head>
+
+<body dir="rtl" style="background-color: #eee;-webkit-user-select: none;">
+
+    <!-- כפתור חזרה -->
+    <button class="back-button" onclick="backToDonors()">
+        <i class="fa-solid fa-arrow-right"></i>
+    </button>
+
+    <!-- לוגו -->
+    <div style="text-align: right;border-radius: 5px;width: 98%;padding: 15px 10px 5px;max-width: 500px;margin: auto;box-sizing: border-box;"
+        id="Logo">
+        <div style="text-align: center;">
+            <img style="border: 0px solid #f1f1f1; border-radius: 7px; height: 140px;"
+                src="https://images.matara.pro/ClientsImages/7003974.jpg" alt="נדרים פלוס" />
+        </div>
+    </div>
+
+    <!-- מסך רשימת התורמים -->
+    <div id="DonorsScreen">
+        <div id="DonorsListContainer">
+            <!-- הרשימה תיבנה כאן באמצעות JavaScript -->
+        </div>
+    </div>
+
+    <!-- מסך טופס התרומה -->
+    <div id="DonationScreen" style="display: none;">
+        <div
+            style="text-align:right;background-color:white;border-radius:10px;margin-top:10px;width:92%;margin-left:auto;margin-right:auto;padding-bottom:20px;padding-top:20px;max-width:600px">
+
+            <!-- כותרת עם שם התורם -->
+            <div style="text-align:center;margin:20px;color:#2B3A63;">
+                <h2 style="margin: 0;">תורם: <span id="DonorNameTitle"></span></h2>
+            </div>
+            <hr style="margin-right:20%;margin-left:20%" />
+
+            <div id="AllMainForm" style="display:block;">
+                <!-- טופס פרטי התשלום -->
+                <div id="PaymentForm" style="margin-right:20px;margin-top:30px;">
+                    <!-- השדות יבנו כאן באמצעות JavaScript -->
+                </div>
+
+                <div style="text-align:center;margin:40px" id="SubmitDiv">
+                    <input class="Bt" type="button" value="אישור תרומה" onclick="submitDonation()" />
+                </div>
+                <div style="text-align:center;margin:40px;color:#808080;display:none" id="WaitDiv">
+                    <img src="waitnew.gif" style="width:50px;" /><br />שומר נתונים
+                </div>
+
+                <div style="height:200px"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- תמונת אבטחה -->
+    <div id="SecurityLogo"
+        style="text-align:center;width:98%; max-width:400px;margin-left:auto;margin-right:auto;user-select:none">
+        <img src="Files/Pic/Security.PNG" style="width:70%" />
+    </div>
+
+    <!-- כותרת תחתונה -->
+    <div id="FooterLogo"
+        style="text-decoration:none;padding:20px;padding-top:5px;padding-bottom:5px;margin-bottom:20px;color:gray;width: 200px;border-radius:5px;opacity:0.7;margin-left : auto; margin-right: auto;text-align:center;font-size:75%;">
+        <img src="nedarim.png" /><br />מופעל באמצעות<br /><strong>נדרים פלוס מבית מטרה הפקות</strong><br />לשיווק
+        ותמיכה: 03-7630543<br />
+    </div>
+
+    <script type="text/javascript" src="Files/FormsFunction.js"></script>
+
+</body>
+
+</html>
