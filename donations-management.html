@@ -646,48 +646,54 @@
         function buildPaymentFields() {
             // הגדרת מערך שדות התשלום
             paymentFieldsArray = [
-                { "Type": "Koteret", "Text": "פרטי תרומה" },
-
-                { "ElementId": "DonationAmount", "MaxLength": 10, "Width": 45, "fieldName": "סכום לחודש", "Type": "Tel", "Mandatory": true, "Br": false },
-                { "ElementId": "MonthsLimit", "MaxLength": 3, "Width": 45, "fieldName": "הגבלת חודשים", "fieldNameShow": "הגבלת חודשים<br><span style='font-size:12px;color:#999;'>השאר ריק להו\"ק ללא הגבלה</span>", "Type": "Tel", "Mandatory": false, "Br": false },
-
-                { "Type": "Margin", "Height": "15" },
-                { "Type": "Koteret", "Text": "פרטי תשלום" },
-
-                {
-                    "ElementId": "PaymentMethod", "Width": 90, "fieldName": "אמצעי תשלום", "Type": "Radio", "Mandatory": true, "RadioBt": [
-                        { "Text": "כרטיס אשראי" },
-                        { "Text": "העברה בנקאית" }
-                    ], "Br": false
-                },
-
-                { "Type": "Margin", "Height": "10" },
-
-                { "ElementId": "CardNumber", "MaxLength": 19, "Width": 45, "fieldName": "מספר כרטיס אשראי", "Type": "Tel", "Mandatory": false, "Br": false },
-                { "ElementId": "CardExpiry", "MaxLength": 5, "Width": 25, "fieldName": "תוקף", "Type": "Tel", "Mandatory": false, "Br": false },
-                { "ElementId": "CardCVV", "MaxLength": 4, "Width": 25, "fieldName": "CVV", "Type": "Tel", "Mandatory": false, "Br": false },
-
-                { "ElementId": "CardHolderName", "MaxLength": 50, "Width": 90, "fieldName": "שם בעל הכרטיס", "Type": "Text", "Mandatory": false, "Br": false },
-                { "ElementId": "CardHolderId", "MaxLength": 9, "Width": 45, "fieldName": "ת.ז. בעל הכרטיס", "Type": "Tel", "Mandatory": false, "Br": false },
-
-                { "Type": "Margin", "Height": "15" },
+                // { "Type": "Margin", "Height": "15" },
                 { "Type": "Koteret", "Text": "פרטי התורם" },
+
+                { "ElementId": "DonorFirstName", "MaxLength": 30, "Width": 45, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": false, "Br": false },
+                { "ElementId": "DonorLastName", "MaxLength": 30, "Width": 45, "fieldName": "שם משפחה", "Type": "Text", "Mandatory": false, "Br": false },
+
+                { "ElementId": "DonorId", "MaxLength": 9, "Width": 45, "fieldName": "ת.ז.", "Type": "Tel", "Mandatory": false, "Br": false },
 
                 { "ElementId": "DonorPhone", "MaxLength": 11, "Width": 45, "fieldName": "טלפון", "Type": "Tel", "Mandatory": false, "Br": false },
                 { "ElementId": "DonorEmail", "MaxLength": 50, "Width": 45, "fieldName": "אימייל", "Type": "Text", "Mandatory": false, "Br": false },
 
-                { "ElementId": "DonorAddress", "MaxLength": 100, "Width": 90, "fieldName": "כתובת", "Type": "Text", "Mandatory": false, "Br": false },
+                { "ElementId": "DonorAddress", "MaxLength": 100, "Width": 45, "fieldName": "כתובת", "Type": "Text", "Mandatory": false, "Br": false },
 
-                { "ElementId": "DonationNote", "MaxLength": 500, "Width": 90, "fieldName": "הערות", "Type": "textarea", "Rows": 3, "Mandatory": false, "Br": false },
+                { "ElementId": "DonationNote", "MaxLength": 500, "Width": 90, "fieldName": "הערות", "Type": "Text", "Rows": 3, "Mandatory": false, "Br": false },
 
-                { "Type": "Margin", "Height": "20" },
+                { "Type": "Margin", "Height": "15" },
 
-                { "ElementId": "SendReceipt", "fieldName": "שלח קבלה למייל", "Type": "CheckBox", "Mandatory": false, "Width": 90 },
-                { "ElementId": "IsAnonymous", "fieldName": "תרומה אנונימית", "Type": "CheckBox", "Mandatory": false, "Width": 90 }
+                // { "ElementId": "SendReceipt", "fieldName": "שלח קבלה למייל", "Type": "CheckBox", "Mandatory": false, "Width": 90 },
+                // { "ElementId": "IsAnonymous", "fieldName": "תרומה אנונימית", "Type": "CheckBox", "Mandatory": false, "Width": 90 }
+                { "Type": "Koteret", "Text": "פרטי תרומה" },
+
+                { "ElementId": "DonationAmount", "MaxLength": 10, "Width": 45, "fieldName": "סכום לחודש", "Type": "Tel", "Mandatory": true, "Br": false },
+                { "ElementId": "MonthsLimit", "MaxLength": 3, "Width": 45, "fieldName": "הגבלת חודשים - ריק = ללא הגבלה", "fieldNameShow": "הגבלת חודשים<br><span style='font-size:12px;color:#999;'>השאר ריק להו\"ק ללא הגבלה</span>", "Type": "Tel", "Mandatory": false, "Br": false },
+
+                { "Type": "Margin", "Height": "15" },
+                { "Type": "Koteret", "Text": "פרטי תשלום" },
+
+                // {
+                //     "ElementId": "PaymentMethod", "Width": 90, "fieldName": "אמצעי תשלום", "Type": "Radio", "Mandatory": true, "RadioBt": [
+                //         { "Text": "כרטיס אשראי" },
+                //         { "Text": "העברה בנקאית" }
+                //     ], "Br": false
+                // },
+
+                { "Type": "Margin", "Height": "10" },
+
+                { "ElementId": "CreditCard", "MaxLength": 19, "Width": 45, "fieldName": "מספר כרטיס אשראי", "Type": "Tel", "Mandatory": false, "Br": false },
+                { "ElementId": "CardExpiration", "MaxLength": 5, "Width": 25, "fieldName": "תוקף", "Type": "Tel", "Mandatory": false, "Br": false },
+                { "ElementId": "CVV", "MaxLength": 4, "Width": 25, "fieldName": "CVV", "Type": "Tel", "Mandatory": false, "Br": false },
+
+                // { "ElementId": "CardHolderName", "MaxLength": 50, "Width": 90, "fieldName": "שם בעל הכרטיס", "Type": "Text", "Mandatory": false, "Br": false },
+                // { "ElementId": "CardHolderId", "MaxLength": 9, "Width": 45, "fieldName": "ת.ז. בעל הכרטיס", "Type": "Tel", "Mandatory": false, "Br": false },
+
             ];
 
             // בניית השדות - כעת הכפתור כבר קיים ב-HTML
             buildFieldsFromArray(paymentFieldsArray, "#PaymentForm");
+            AddCreditCardHtml(undefined, 'CreditCardDiv');
         }
 
         // שליחת התרומה
