@@ -88,7 +88,7 @@
 
         .Koteret {
             font-size: 22px;
-            color: #ff6a00;
+            color: #2B3A63;
             font-weight: bold;
             text-align: right;
             padding-right: 27px;
@@ -249,7 +249,7 @@
         }
 
         .donor-row:hover {
-            background: #f0f8ff;
+            background: #e3f2fd;
         }
 
         .donor-row.donated {
@@ -299,11 +299,87 @@
             background: #9e9e9e;
         }
 
+        /* לחצני פעולה */
+        .action-buttons {
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+            min-width: 80px;
+        }
+
+        .action-button {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 9px;
+            color: white;
+            font-weight: bold;
+            padding: 2px;
+            border: none;
+            outline: none;
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .action-button:first-child {
+            border-left: none;
+        }
+
+        .action-button.not-available {
+            background: #ff8a65;
+        }
+
+        .action-button.not-available:hover {
+            background: #ff7043;
+        }
+
+        .action-button.available {
+            background: #4db6ac;
+        }
+
+        .action-button.available:hover {
+            background: #26a69a;
+        }
+
+        .action-button i {
+            font-size: 12px;
+            margin-bottom: 2px;
+        }
+
+        /* סטטוס כנס */
+        .status-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            min-width: 35px;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            padding: 2px;
+        }
+
+        .status-arrived {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border-right: 4px solid #2B3A63;
+        }
+
+        .status-not-arrived {
+            background: #ffeaea;
+            color: #c62828;
+            border-right: 4px solid #2B3A63;
+        }
+
         .back-button {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #ff6a00;
+            background: #2B3A63;
             color: white;
             border: none;
             border-radius: 50%;
@@ -317,7 +393,32 @@
         }
 
         .back-button:hover {
-            background: #e55a00;
+            background: #1e2a4a;
+        }
+
+        /* סטיילים לטוגול בוטון */
+        .toggle-button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0 2px;
+        }
+
+        .toggle-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-container {
+            background: #f0f0f0;
+            border-radius: 25px;
+            padding: 3px;
+            display: inline-flex;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     </style>
 
@@ -328,12 +429,17 @@
         var paymentFieldsArray = [];
         var deviceHolderName = "";
         var messagesList = [];
+        var viewMode = 'my'; // 'my' = התורמים שלי, 'all' = כל התורמים
+        var searchTerm = ''; // מונח החיפוש הנוכחי
 
         // טעינת רשימת תורמים מהשרת
         function loadDonors() {
             $.ajax({
                 url: "https://your-server.com/api/donors", // להחליף לכתובת השרת שלך
                 method: "GET",
+                data: {
+                    viewMode: viewMode // שליחת מצב התצוגה לשרת
+                },
                 timeout: 16000,
                 headers: {
                     "Content-Type": "application/json"
@@ -348,10 +454,43 @@
                     MySwal("שגיאה בקבלת נתונים: " + response.message);
                 }
             }).error(function () {
-                // MySwal("שגיאה בתקשורת עם השרת");
-                // נתונים לדוגמה למקרה של שגיאה
-                loadSampleData();
+                // הצגת הודעת שגיאה במקום נתוני דמו
+                displayDeviceError();
+                
+                // נתונים לדוגמה למקרה של פיתוח - כרגע מוסתר
+                // loadSampleData();
             });
+        }
+
+        // הצגת הודעת שגיאה כשהמכשיר לא מוגדר
+        function displayDeviceError() {
+            var deviceId = "123"; // מספר מכשיר לדוגמה - יש לקבל מהשרת או מהמערכת
+            
+            var errorHtml = '<div style="display: flex; align-items: center; justify-content: center; min-height: 70vh; padding: 20px; box-sizing: border-box;">';
+            errorHtml += '<div style="text-align: center; background-color: white; border-radius: 10px; padding: 40px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 400px; width: 100%; box-sizing: border-box;">';
+            
+            // אייקון שגיאה
+            errorHtml += '<div style="margin-bottom: 20px;">';
+            errorHtml += '<i class="fa fa-exclamation-triangle" style="font-size: 60px; color: #ff6b6b; margin-bottom: 10px;"></i>';
+            errorHtml += '</div>';
+            
+            // הודעת שגיאה
+            errorHtml += '<div style="color: #2B3A63; font-size: 20px; font-weight: bold; margin-bottom: 15px; line-height: 1.4;">מספר מכשיר לא מוגדר</div>';
+            errorHtml += '<div style="color: #666; font-size: 16px; margin-bottom: 20px; line-height: 1.4;">להגדרה פנה לאחראי</div>';
+            
+            // מספר מכשיר
+            errorHtml += '<div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; margin-bottom: 25px;">';
+            errorHtml += '<div style="color: #495057; font-size: 14px; margin-bottom: 5px;">מספר מכשיר:</div>';
+            errorHtml += '<div style="color: #2B3A63; font-size: 18px; font-weight: bold; font-family: monospace;">' + deviceId + '</div>';
+            errorHtml += '</div>';
+            
+            // כפתור לטעינת נתוני דמו (למצב פיתוח)
+            // errorHtml += '<button onclick="loadSampleData()" style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; margin-top: 10px; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor=\'#5a6268\'" onmouseout="this.style.backgroundColor=\'#6c757d\'">טעינת נתוני דמו</button>';
+            
+            errorHtml += '</div>';
+            errorHtml += '</div>';
+            
+            $("#DonorsListContainer").html(errorHtml);
         }
 
         // נתונים לדוגמה (לפיתוח)
@@ -367,35 +506,40 @@
                     name: "יהודה כהן",
                     note: "מתלבט אם לתרום 180 או 250 לחודש",
                     hasDonated: false,
-                    donationAmount: 0
+                    donationAmount: 0,
+                    statusKenes: null
                 },
                 {
                     id: 2,
                     name: "שלמה חיים לוי",
                     note: "",
                     hasDonated: false,
-                    donationAmount: 0
+                    donationAmount: 0,
+                    statusKenes: 1
                 },
                 {
                     id: 3,
                     name: "דוד רוזן",
                     note: "מאוד רציני לגשת אליו ראשון",
                     hasDonated: true,
-                    donationAmount: 500
+                    donationAmount: 500,
+                    statusKenes: 2
                 },
                 {
                     id: 4,
                     name: "רפאל שמידט",
                     note: "",
                     hasDonated: true,
-                    donationAmount: 1200
+                    donationAmount: 1200,
+                    statusKenes: 3
                 },
                 {
                     id: 5,
                     name: "אברהם גולדברג",
                     note: "כבר חודשים מחכה לזכות לתרום",
                     hasDonated: false,
-                    donationAmount: 0
+                    donationAmount: 0,
+                    statusKenes: 3
                 }
             ];
             displayDonors();
@@ -403,8 +547,12 @@
 
         // הצגת רשימת התורמים
         function displayDonors() {
-            var availableDonors = donorsList.filter(function (donor) { return !donor.hasDonated; });
-            var donatedDonors = donorsList.filter(function (donor) { return donor.hasDonated; });
+            var availableDonors = donorsList.filter(function (donor) {
+                return !donor.hasDonated && matchesSearch(donor);
+            });
+            var donatedDonors = donorsList.filter(function (donor) {
+                return donor.hasDonated && matchesSearch(donor);
+            });
 
             var html = '';
 
@@ -417,12 +565,31 @@
             html += '<div style="text-align: right; background-color: white; border-radius: 5px; margin: 10px auto; width: 98%; max-width: 500px; padding: 15px 10px 20px; box-sizing: border-box;">';
 
             // כותרת תורמים זמינים
-            html += '<div style="text-align: center; font-size: 22px; font-weight: bold; color: #ff6a00; margin: 20px 0;">תורמים זמינים</div>';
+            var viewModeText = viewMode === 'my' ? 'התורמים שלי' : 'כל התורמים';
+            html += '<div style="text-align: center; font-size: 22px; font-weight: bold; color: #2B3A63; margin: 5px 0;">תורמים</div>';
+
+            // טוגל בוטון לבחירת סוג התצוגה ואינפוט חיפוש
+            html += '<div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0; gap: 10px;">';
+
+            // אינפוט חיפוש בצד ימין
+            html += '<div style="flex: 1; max-width: 200px; position: relative;">';
+            html += '<input type="text" id="donorSearch" placeholder="חיפוש תורם..." oninput="filterDonors()" onkeyup="filterDonors()" onpaste="setTimeout(filterDonors, 10)" style="width: 100%; padding: 8px 30px 8px 12px; border: 1px solid #ddd; border-radius: 20px; font-size: 14px; text-align: right; background: #f9f9f9; outline: none; transition: all 0.3s; box-sizing: border-box;" onfocus="this.style.borderColor=\'#2B3A63\'; this.style.background=\'white\';" onblur="this.style.borderColor=\'#ddd\'; this.style.background=\'#f9f9f9\';">';
+            html += '<button onclick="clearSearch()" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); border: none; background: none; color: #999; cursor: pointer; font-size: 16px; padding: 0; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;" title="נקה חיפוש"><i class="fa fa-times"></i></button>';
+            html += '</div>';
+
+            // טוגל בוטון בצד שמאל
+            html += '<div class="toggle-container">';
+            html += '<button id="viewMyDonors" class="toggle-button" onclick="toggleViewMode(\'my\')" style="color: ' + (viewMode === 'my' ? 'white' : '#666') + '; background: ' + (viewMode === 'my' ? '#2B3A63' : 'transparent') + ';">התורמים שלי</button>';
+            html += '<button id="viewAllDonors" class="toggle-button" onclick="toggleViewMode(\'all\')" style="color: ' + (viewMode === 'all' ? 'white' : '#666') + '; background: ' + (viewMode === 'all' ? '#2B3A63' : 'transparent') + ';">כל התורמים</button>';
+            html += '</div>';
+
+            html += '</div>';
+
 
             // תורמים זמינים
             html += '<div id="AvailableDonorsList">';
             if (availableDonors.length === 0) {
-                html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:20px 0;">אין תורמים זמינים</div>';
+                html += '<div style="text-align:center; color:#2B3A63; font-size:15px; padding:20px 0;">אין תורמים זמינים</div>';
             } else {
                 for (var i = 0; i < availableDonors.length; i++) {
                     html += renderDonorRow(availableDonors[i], false);
@@ -440,7 +607,7 @@
             // תורמים שכבר תרמו
             html += '<div id="DonatedDonorsList">';
             if (donatedDonors.length === 0) {
-                html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין תורמים שתרמו</div>';
+                html += '<div style="text-align:center; color:#2B3A63; font-size:15px; padding:10px 0;">אין תורמים שתרמו</div>';
             } else {
                 for (var j = 0; j < donatedDonors.length; j++) {
                     html += renderDonorRow(donatedDonors[j], true);
@@ -488,9 +655,16 @@
 
             $("#DonorsListContainer").html(html);
 
-            // הוספת אירועי לחיצה רק לתורמים זמינים
-            $("#AvailableDonorsList .donor-row").off("click").on("click", function () {
-                var donorId = parseInt($(this).data('donor-id'));
+            // שמירת מונח החיפוש אחרי רענון התצוגה
+            if (searchTerm) {
+                $("#donorSearch").val(searchTerm);
+                // אם יש מונח חיפוש, הפעל את הסינון
+                filterDonorsDisplay();
+            }
+
+            // הוספת אירועי לחיצה רק לתורמים זמינים - רק על האזור של המידע
+            $("#AvailableDonorsList .donor-row .donor-info").off("click").on("click", function () {
+                var donorId = parseInt($(this).parent().data('donor-id'));
                 var donor = donorsList.find(function (d) { return d.id === donorId; });
                 if (donor && !donor.hasDonated) {
                     openDonationForm(donor);
@@ -508,16 +682,47 @@
             var html = '';
             var additionalClass = isDonated ? ' donated' : '';
             var rowStyle = '';
-            var amountContent = '';
+            var actionContent = '';
 
             if (isDonated) {
                 // תורם שכבר תרם - רקע רגיל עם סכום
                 rowStyle = '';
-                amountContent = '<div class="donor-amount donated" style="background: #9e9e9e;">₪' + donor.donationAmount + '</div>';
+                actionContent = '<div class="donor-amount donated" style="background: #9e9e9e;">₪' + donor.donationAmount + '</div>';
             } else {
-                // תורם זמין - רקע כחול בהיר ללא תוכן בצד
-                rowStyle = 'background-color: #f0f8ff; border-color: #b3d9ff;';
-                amountContent = '';
+                // תורם זמין - רקע כחול בהיר
+                rowStyle = 'background-color: #e3f2fd; border-color: #2B3A63;';
+
+                // בדיקת סטטוס כנס
+                var statusKenes = donor.statusKenes;
+                if (statusKenes === 2) {
+                    // הגיע לכנס
+                    actionContent = '<div class="status-display status-arrived">' +
+                        '<div style="display: flex; flex-direction: column; align-items: center;">' +
+                        '<i class="fa fa-check" style="font-size: 10px; margin-bottom: 1px;"></i>' +
+                        '<span>הגיע</span>' +
+                        '</div>' +
+                        '</div>';
+                } else if (statusKenes === 3) {
+                    // לא הגיע לכנס
+                    actionContent = '<div class="status-display status-not-arrived">' +
+                        '<div style="display: flex; flex-direction: column; align-items: center;">' +
+                        '<i class="fa fa-times" style="font-size: 10px; margin-bottom: 1px;"></i>' +
+                        '<span>לא הגיע</span>' +
+                        '</div>' +
+                        '</div>';
+                } else {
+                    // statusKenes הוא null או 1 - הצג לחצנים
+                    actionContent = '<div class="action-buttons">' +
+                        '<button class="action-button not-available" onclick="updateDonorStatus(' + donor.id + ', \'not_available\', event)" title="לא מגיע">' +
+                        '<i class="fa fa-times"></i>' +
+                        '<span>לא מגיע</span>' +
+                        '</button>' +
+                        '<button class="action-button available" onclick="updateDonorStatus(' + donor.id + ', \'available\', event)" title="מגיע">' +
+                        '<i class="fa fa-check"></i>' +
+                        '<span>מגיע</span>' +
+                        '</button>' +
+                        '</div>';
+                }
             }
 
             html += '<div class="donor-row' + additionalClass + '" data-donor-id="' + donor.id + '" style="' + rowStyle + '">';
@@ -527,7 +732,7 @@
                 html += '<div class="donor-note">' + donor.note + '</div>';
             }
             html += '</div>';
-            html += amountContent;
+            html += actionContent;
             html += '</div>';
             return html;
         }
@@ -693,7 +898,6 @@
 
             // בניית השדות - כעת הכפתור כבר קיים ב-HTML
             buildFieldsFromArray(paymentFieldsArray, "#PaymentForm");
-            AddCreditCardHtml(undefined, 'CreditCardDiv');
         }
 
         // שליחת התרומה
@@ -815,6 +1019,198 @@
             $('html, body').animate({ scrollTop: $(element).position().top - 200 }, 'slow');
         }
 
+        // פונקציה להחלפת מצב התצוגה
+        function toggleViewMode(mode) {
+            viewMode = mode;
+
+            // הצגת הודעה למשתמש על המצב החדש
+            var modeText = mode === 'my' ? 'התורמים שלי' : 'כל התורמים';
+            console.log('מחליף למצב: ' + modeText);
+
+            loadDonors(); // רענון הנתונים עם המצב החדש
+        }
+
+        // פונקציה לסינון התורמים לפי חיפוש - ללא רענון HTML
+        function filterDonors() {
+            var currentSearchTerm = $("#donorSearch").val().toLowerCase();
+            searchTerm = currentSearchTerm;
+
+            // סינון בלי לבנות מחדש את כל ה-HTML
+            filterDonorsDisplay();
+        }
+
+        // פונקציה לסינון התצוגה ללא בניית HTML מחדש
+        function filterDonorsDisplay() {
+            // סינון תורמים זמינים
+            var availableCount = 0;
+            $("#AvailableDonorsList .donor-row").each(function () {
+                var donorId = parseInt($(this).data('donor-id'));
+                var donor = donorsList.find(function (d) { return d.id === donorId; });
+
+                if (donor && matchesSearch(donor)) {
+                    $(this).show();
+                    availableCount++;
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            // סינון תורמים שתרמו
+            var donatedCount = 0;
+            $("#DonatedDonorsList .donor-row").each(function () {
+                var donorId = parseInt($(this).data('donor-id'));
+                var donor = donorsList.find(function (d) { return d.id === donorId; });
+
+                if (donor && matchesSearch(donor)) {
+                    $(this).show();
+                    donatedCount++;
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            // עדכון הודעות "אין תוצאות"
+            updateNoResultsMessages(availableCount, donatedCount);
+        }
+
+        // פונקציה לעדכון הודעות "אין תוצאות"
+        function updateNoResultsMessages(availableCount, donatedCount) {
+            // הודעה לתורמים זמינים
+            var availableMsg = $("#AvailableDonorsList .no-results-msg");
+            if (availableCount === 0) {
+                if (availableMsg.length === 0) {
+                    var msgText = searchTerm ?
+                        'לא נמצאו תורמים זמינים המתאימים לחיפוש' :
+                        'אין תורמים זמינים';
+                    $("#AvailableDonorsList").append('<div class="no-results-msg" style="text-align:center; color:#2B3A63; font-size:15px; padding:20px 0;">' + msgText + '</div>');
+                }
+            } else {
+                availableMsg.remove();
+            }
+
+            // הודעה לתורמים שתרמו
+            var donatedMsg = $("#DonatedDonorsList .no-results-msg");
+            if (donatedCount === 0) {
+                if (donatedMsg.length === 0) {
+                    var msgText = searchTerm ?
+                        'לא נמצאו תורמים שתרמו המתאימים לחיפוש' :
+                        'אין תורמים שתרמו';
+                    $("#DonatedDonorsList").append('<div class="no-results-msg" style="text-align:center; color:#2B3A63; font-size:15px; padding:10px 0;">' + msgText + '</div>');
+                }
+            } else {
+                donatedMsg.remove();
+            }
+        }
+
+        // פונקציה לניקוי החיפוש
+        function clearSearch() {
+            $("#donorSearch").val('');
+            searchTerm = '';
+
+            // הצגת כל התורמים
+            $("#AvailableDonorsList .donor-row").show();
+            $("#DonatedDonorsList .donor-row").show();
+
+            // הסרת הודעות "אין תוצאות"
+            $(".no-results-msg").remove();
+
+            // הפוקוס נשאר באינפוט
+            $("#donorSearch").focus();
+        }
+
+        // פונקציה לבדיקה אם תורם עונה על קריטריון החיפוש
+        function matchesSearch(donor) {
+            if (!searchTerm) return true; // אם אין חיפוש, הצג הכל
+
+            var name = (donor.name || '').toLowerCase();
+            var note = (donor.note || '').toLowerCase();
+
+            return name.includes(searchTerm) || note.includes(searchTerm);
+        }
+
+        // פונקציה לעדכון סטטוס תורם
+        function updateDonorStatus(donorId, status, event) {
+            // מניעת פעולת לחיצה על השורה
+            event.stopPropagation();
+
+            var donor = donorsList.find(function (d) { return d.id === donorId; });
+            if (!donor) {
+                MySwal("שגיאה: תורם לא נמצא");
+                return;
+            }
+
+            var statusText = status === 'available' ? 'מגיע' : 'לא מגיע';
+            var confirmMessage = 'האם אתה בטוח שברצונך לסמן את ' + donor.name + ' כ"' + statusText + '"?';
+
+            swal({
+                title: "אישור פעולה",
+                text: confirmMessage,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "כן, אני בטוח",
+                cancelButtonText: "ביטול",
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
+            }, function () {
+                // שליחה לשרת
+                $.ajax({
+                    url: "https://your-server.com/api/donor-status", // להחליף לכתובת השרת שלך
+                    method: "POST",
+                    data: JSON.stringify({
+                        donorId: donorId,
+                        status: status,
+                        timestamp: new Date().toISOString()
+                    }),
+                    contentType: "application/json",
+                    timeout: 30000
+                }).success(function (response) {
+                    if (response.status === 'success') {
+                        // עדכון הסטטוס המקומי
+                        if (status === 'available') {
+                            donor.statusKenes = 2; // הגיע לכנס
+                        } else if (status === 'not_available') {
+                            donor.statusKenes = 3; // לא הגיע לכנס
+                        }
+
+                        swal({
+                            title: "הפעולה בוצעה בהצלחה!",
+                            text: donor.name + ' סומן כ"' + statusText + '"',
+                            type: "success",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+
+                        // רענון הנתונים
+                        setTimeout(function () {
+                            loadDonors();
+                        }, 1000);
+                    } else {
+                        swal("שגיאה!", "שגיאה בעדכון הסטטוס: " + response.message, "error");
+                    }
+                }).error(function () {
+                    // למטרות פיתוח - עדכון הסטטוס המקומי גם במקרה של שגיאה
+                    if (status === 'available') {
+                        donor.statusKenes = 2; // הגיע לכנס
+                    } else if (status === 'not_available') {
+                        donor.statusKenes = 3; // לא הגיע לכנס
+                    }
+
+                    swal({
+                        title: "הפעולה בוצעה בהצלחה!",
+                        text: donor.name + ' סומן כ"' + statusText + '" (מצב פיתוח)',
+                        type: "success",
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    // רענון הנתונים
+                    setTimeout(function () {
+                        loadDonors();
+                    }, 1000);
+                });
+            });
+        }
+
         // אתחול כשהעמוד נטען
         $(document).ready(function () {
             loadDonors();
@@ -822,7 +1218,7 @@
     </script>
 </head>
 
-<body dir="rtl" style="background-color: #eee;-webkit-user-select: none;">
+<body dir="rtl" style="background-color: #eee; -webkit-user-select: none; user-select: none;">
 
     <!-- כפתור חזרה -->
     <button class="back-button" onclick="backToDonors()">
