@@ -576,7 +576,7 @@
         var searchTerm = ''; // מונח החיפוש הנוכחי
         var currentScreenMode = 1; // 1 = מסך רגיל, 2 = מסך קריאה
         var is_pos = undefined;
-        var PosNedarim = {};
+        var PosNedarimData = {};
         var MasofId = null;
         var urlAshrai = "";
         var urlMasav = "";
@@ -591,7 +591,7 @@
                 url: "https://us-central1-hatrama-k.cloudfunctions.net/posApi/donors", // להחליף לכתובת השרת שלך
                 method: "POST",
                 data: JSON.stringify({
-                    posNedarim: PosNedarim,
+                    posNedarim: PosNedarimData,
                     masofId: MasofId,
                     viewMode: viewMode,
                 }),
@@ -1049,7 +1049,7 @@
                 url: "https://us-central1-hatrama-k.cloudfunctions.net/posApi/mark-as-read", // להחליף לכתובת השרת שלך
                 method: "POST",
                 data: JSON.stringify({
-                    posNedarim: PosNedarim,
+                    posNedarim: PosNedarimData,
                     masofId: MasofId,
                     donorId: donorId
                 }),
@@ -1655,7 +1655,7 @@
                     url: "https://us-central1-hatrama-k.cloudfunctions.net/posApi/statusKenes", // להחליף לכתובת השרת שלך
                     method: "POST",
                     data: JSON.stringify({
-                        posNedarim: PosNedarim,
+                        posNedarim: PosNedarimData,
                         masofId: MasofId,
                         donorId: donorId,
                         status: status
@@ -1909,7 +1909,7 @@
             try {
                 var Json = JSON.parse(PosNedarim.GetDevicesStatus());
                 is_pos = true;
-                PosNedarim = Json;
+                PosNedarimData = Json;
             } catch (err) {
                 is_pos = false;
             }
