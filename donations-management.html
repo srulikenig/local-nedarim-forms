@@ -445,12 +445,123 @@
             height: 40px;
             cursor: pointer;
             font-size: 18px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             transition: background-color 0.2s;
         }
 
         #IframeScreen .close-iframe-btn:hover {
             background: #ff5252;
+        }
+
+        /* סגנונות ללחצני תשלום */
+        .payment-buttons {
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+            min-width: 120px;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 10;
+        }
+
+        .payment-buttons.visible {
+            transform: translateX(0);
+        }
+
+        .payment-button {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 8px;
+            color: white;
+            font-weight: bold;
+            padding: 2px;
+            border: none;
+            outline: none;
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+            min-width: 40px;
+            height: 100%;
+        }
+
+        .payment-button:last-child {
+            border-right: none;
+        }
+
+        .payment-button.credit {
+            background: #4caf50;
+        }
+
+        .payment-button.credit:hover {
+            background: #45a049;
+        }
+
+        .payment-button.bank {
+            background: #2196f3;
+        }
+
+        .payment-button.bank:hover {
+            background: #1976d2;
+        }
+
+        .payment-button.cash {
+            background: #ff9800;
+        }
+
+        .payment-button.cash:hover {
+            background: #f57c00;
+        }
+
+        .payment-button i {
+            font-size: 14px;
+            margin-bottom: 1px;
+        }
+
+        .payment-button span {
+            font-size: 7px;
+            line-height: 1;
+        }
+
+        /* הסתרת אלמנטים בעת הצגת לחצני תשלום */
+        .donor-row.expanded .donor-info {
+            flex: 0.66;
+        }
+
+        .donor-row.expanded .action-buttons,
+        .donor-row.expanded .status-display {
+            display: none;
+        }
+
+        /* וידוא שלחצני הפעולה מוצגים כרגיל */
+        .donor-row .action-buttons,
+        .donor-row .status-display {
+            display: flex;
+        }
+
+        .donor-row {
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* סגנונות למסך קריאה */
+        .reading-donor-row {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .reading-donor-row:not([style*="cursor: not-allowed"]):hover {
+            transform: translateX(-5px);
+            box-shadow: 0 2px 8px rgba(43, 58, 99, 0.2);
+        }
+
+        .reading-donor-row[style*="cursor: not-allowed"]:hover {
+            transform: none;
+            box-shadow: none;
         }
     </style>
 
@@ -463,42 +574,50 @@
         var messagesList = [];
         var viewMode = 'my'; // 'my' = התורמים שלי, 'all' = כל התורמים
         var searchTerm = ''; // מונח החיפוש הנוכחי
+        var currentScreenMode = 1; // 1 = מסך רגיל, 2 = מסך קריאה
         var is_pos = undefined;
         var PosNedarim = {};
+        var MasofId = null;
+        var urlAshrai = "";
+        var urlMasav = "";
 
-        try {
-            var Json = JSON.parse(PosNedarim.GetDevicesStatus());
-            is_pos = true;
-        } catch (err) {
-            is_pos = false;
-        }
+
 
         // טעינת רשימת תורמים מהשרת
         function loadDonors() {
             showLoading(); // הצגת לאודינג
-            var MasofId = GetURLParameter("MasofId");
+
             $.ajax({
                 url: "https://us-central1-hatrama-k.cloudfunctions.net/posApi/donors", // להחליף לכתובת השרת שלך
                 method: "POST",
-                data: {
+                data: JSON.stringify({
                     posNedarim: PosNedarim,
-                    viewMode: viewMode, // שליחת מצב התצוגה לשרת
-                    masofId: MasofId // שליחת מזהה המכשיר
-
-                },
+                    masofId: MasofId,
+                    viewMode: viewMode,
+                }),
                 timeout: 16000,
-                headers: {
-                    "Content-Type": "application/json"
-                }
+                contentType: "application/json"
+                // headers: {
+                //     "Content-Type": "application/json"
+                // }
             }).success(function (response) {
                 hideLoading(); // הסתרת לאודינג
                 if (response.status === 'success') {
-                    donorsList = response.data.donors || response.data;
-                    deviceHolderName = response.data.deviceHolderName || "";
+                    donorsList = response.data;
+                    deviceHolderName = response.deviceHolderName || "";
                     messagesList = response.data.messages || [];
-                    displayDonors();
+
+                    urlAshrai = response.project.urlAshrai || "";
+                    urlMasav = response.project.urlMasav || "";
+
+                    currentScreenMode = response.screenMode || 1;
+                    if (currentScreenMode === 2) {
+                        displayReadingMode();
+                    } else {
+                        displayDonors();
+                    }
                 } else if (response.statusCode == 2) {
-                    MySwal("שגיאה בקבלת נתונים: " + response.message);
+                    // MySwal("שגיאה בקבלת נתונים: " + response.message);
                     displayDeviceError(response.masofId)
                 } else {
                     MySwal("שגיאה בקבלת נתונים: " + response.message);
@@ -593,6 +712,7 @@
         // נתונים לדוגמה (לפיתוח)
         function loadSampleData() {
             deviceHolderName = "יוסי כהן";
+            currentScreenMode = 2; // הגדרת מסך קריאה לבדיקה
             messagesList = [
                 { type: 'info', text: 'מתרים יקר! זכור, עניי השכונה זקוקים לעזרתך' },
                 { type: 'info', text: 'לבעיות טכניות פנו למספר: 03-1234567' }
@@ -603,16 +723,19 @@
                     name: "יהודה כהן",
                     note: "מתלבט אם לתרום 180 או 250 לחודש",
                     hasDonated: false,
-                    donationAmount: 0,
-                    statusKenes: null
+                    donationAmount: 180,
+                    phones: "0501234567 | 029999999",
+                    statusKenes: null,
+                    hasBeenRead: false
                 },
                 {
                     id: 2,
                     name: "שלמה חיים לוי",
                     note: "",
                     hasDonated: false,
-                    donationAmount: 0,
-                    statusKenes: 1
+                    donationAmount: 500,
+                    statusKenes: 1,
+                    hasBeenRead: true
                 },
                 {
                     id: 3,
@@ -620,7 +743,8 @@
                     note: "מאוד רציני לגשת אליו ראשון",
                     hasDonated: true,
                     donationAmount: 500,
-                    statusKenes: 2
+                    statusKenes: 2,
+                    hasBeenRead: true
                 },
                 {
                     id: 4,
@@ -628,27 +752,35 @@
                     note: "",
                     hasDonated: true,
                     donationAmount: 1200,
-                    statusKenes: 3
+                    statusKenes: 3,
+                    hasBeenRead: false
                 },
                 {
                     id: 5,
                     name: "אברהם גולדברג",
                     note: "כבר חודשים מחכה לזכות לתרום",
                     hasDonated: false,
-                    donationAmount: 0,
-                    statusKenes: 3
+                    donationAmount: 250,
+                    statusKenes: 3,
+                    hasBeenRead: false
                 }
             ];
-            displayDonors();
+            
+            // קריאה לפונקציה המתאימה בהתאם למצב המסך
+            if (currentScreenMode === 2) {
+                displayReadingMode();
+            } else {
+                displayDonors();
+            }
         }
 
         // הצגת רשימת התורמים
         function displayDonors() {
             var availableDonors = donorsList.filter(function (donor) {
-                return !donor.hasDonated && matchesSearch(donor);
+                return !donor.hasDonated;
             });
             var donatedDonors = donorsList.filter(function (donor) {
-                return donor.hasDonated && matchesSearch(donor);
+                return donor.hasDonated;
             });
 
             var html = '';
@@ -759,19 +891,253 @@
                 filterDonorsDisplay();
             }
 
-            // הוספת אירועי לחיצה רק לתורמים זמינים - רק על האזור של המידע
-            $("#AvailableDonorsList .donor-row .donor-info").off("click").on("click", function () {
-                var donorId = parseInt($(this).parent().data('donor-id'));
-                var donor = donorsList.find(function (d) { return d.id === donorId; });
-                if (donor && !donor.hasDonated) {
-                    openDonationForm(donor);
-                }
-            });
+            // הוספת אירועי לחיצה רק לתורמים זמינים כבר מטופלת בפונקציה toggleDonorExpansion
         }
 
         // הצגת הודעות מהשרת (לא בשימוש - ההודעות מוצגות ב-displayDonors)
         function displayMessages() {
             // פונקציה זו לא בשימוש - ההודעות מוצגות ישירות ב-displayDonors
+        }
+
+        // הצגת מסך קריאה
+        function displayReadingMode() {
+            var html = '';
+
+            // הצגת שם המחזיק במכשיר - אלמנט נפרד מחוץ לדיב הראשי
+            if (deviceHolderName) {
+                html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #2B3A63; margin: 10px auto 10px; padding: 10px; background-color: #f8f9fa; border-radius: 5px; border: 1px solid #dee2e6; width: 98%; max-width: 500px; box-sizing: border-box;">קורא: ' + deviceHolderName + '</div>';
+            }
+
+            // תחילת הדיב הראשי הלבן
+            html += '<div style="text-align: right; background-color: white; border-radius: 5px; margin: 10px auto; width: 98%; max-width: 500px; padding: 15px 10px 20px; box-sizing: border-box;">';
+
+            // כותרת מסך קריאה
+            // html += '<div style="text-align: center; font-size: 22px; font-weight: bold; color: #2B3A63; margin: 5px 0;">רשימת קריאה</div>';
+
+            // אינפוט חיפוש
+            html += '<div style="margin: 15px 0; position: relative; max-width: 300px; margin-left: auto; margin-right: auto;">';
+            html += '<input type="text" id="donorSearch" placeholder="חיפוש תורם..." oninput="filterReadingDonors()" onkeyup="filterReadingDonors()" onpaste="setTimeout(filterReadingDonors, 10)" style="width: 100%; padding: 8px 30px 8px 12px; border: 1px solid #ddd; border-radius: 20px; font-size: 14px; text-align: right; background: #f9f9f9; outline: none; transition: all 0.3s; box-sizing: border-box;" onfocus="this.style.borderColor=\'#2B3A63\'; this.style.background=\'white\';" onblur="this.style.borderColor=\'#ddd\'; this.style.background=\'#f9f9f9\';">';
+            html += '<button onclick="clearReadingSearch()" style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); border: none; background: none; color: #999; cursor: pointer; font-size: 16px; padding: 0; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;" title="נקה חיפוש"><i class="fa fa-times"></i></button>';
+            html += '</div>';
+
+            // רשימת תורמים
+            html += '<div id="ReadingDonorsList">';
+            if (donorsList.length === 0) {
+                html += '<div style="text-align:center; color:#2B3A63; font-size:15px; padding:20px 0;">אין תורמים ברשימה</div>';
+            } else {
+                for (var i = 0; i < donorsList.length; i++) {
+                    html += renderReadingDonorRow(donorsList[i]);
+                }
+            }
+            html += '</div>';
+
+            // הצגת הודעות ישירות באלמנט
+            if (messagesList && messagesList.length > 0) {
+                html += '<div style="margin: 25px 0px 10px; padding: 15px;  border: 1px solid #bee5eb; border-radius: 5px;">';
+                html += '<div style="font-weight: bold; color: #0c5460; margin-bottom: 10px; text-align: center;">הודעות חשובות</div>';
+                for (var k = 0; k < messagesList.length; k++) {
+                    var message = messagesList[k];
+                    var messageClass = '';
+                    var iconClass = '';
+
+                    switch (message.type) {
+                        case 'error':
+                            messageClass = 'color: #dc3545; background-color: #f8d7da; border-color: #f5c6cb;';
+                            iconClass = 'fa-exclamation-triangle';
+                            break;
+                        case 'warning':
+                            messageClass = 'color: #856404; background-color: #fff3cd; border-color: #ffeaa7;';
+                            iconClass = 'fa-exclamation-circle';
+                            break;
+                        case 'success':
+                            messageClass = 'color: #155724; background-color: #d4edda; border-color: #c3e6cb;';
+                            iconClass = 'fa-check-circle';
+                            break;
+                        default:
+                            messageClass = 'color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb;';
+                            iconClass = 'fa-info-circle';
+                            break;
+                    }
+
+                    html += '<div style="margin: 5px 0; padding: 10px; border: 1px solid; border-radius: 5px; ' + messageClass + '">';
+                    html += '<i class="fa ' + iconClass + '" style="margin-left: 8px;"></i>';
+                    html += message.text;
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+
+            html += '</div>';
+
+            $("#DonorsListContainer").html(html);
+
+            // שמירת מונח החיפוש אחרי רענון התצוגה
+            if (searchTerm) {
+                $("#donorSearch").val(searchTerm);
+                // אם יש מונח חיפוש, הפעל את הסינון
+                filterReadingDonorsDisplay();
+            }
+        }
+
+        // יצירת שורת תורם במסך קריאה
+        function renderReadingDonorRow(donor) {
+            var html = '';
+            var isRead = donor.hasBeenRead || false; // נניח שיש שדה hasBeenRead בנתונים
+            var rowStyle = '';
+            var clickHandler = '';
+            
+            if (isRead) {
+                // תורם שכבר נקרא - מצב disabled
+                rowStyle = 'background-color: #f5f5f5; color: #999; border: 1px solid #ddd; opacity: 0.6; cursor: not-allowed;';
+                clickHandler = '';
+            } else {
+                // תורם שעדיין לא נקרא - מודגש
+                rowStyle = 'background-color: #e3f2fd; border: 2px solid #2B3A63; font-weight: bold; cursor: pointer;';
+                clickHandler = ' onclick="markDonorAsRead(\'' + donor.id + '\')"';
+            }
+
+            html += '<div class="reading-donor-row" data-donor-id="' + donor.id + '" style="display: flex; align-items: center; padding: 12px; margin: 8px 0; border-radius: 5px; transition: all 0.2s; ' + rowStyle + '"' + clickHandler + '>';
+            
+            // אייקון סטטוס
+            html += '<div style="margin-left: 15px; font-size: 16px;">';
+            if (isRead) {
+                html += '<i class="fa fa-check-circle" style="color: #4caf50;"></i>';
+            } else {
+                html += '<i class="fa fa-circle" style="color: #2B3A63;"></i>';
+            }
+            html += '</div>';
+            
+            // פרטי התורם
+            html += '<div style="flex: 1;">';
+            html += '<div style="font-size: 20px; margin-bottom: 3px;">' + (donor.name || '') + '</div>';
+            // if (donor.phones) {
+            //     html += '<div style="font-size: 12px; color: #666; margin-bottom: 2px;">טלפון: ' + donor.phones + '</div>';
+            // }
+            // if (donor.note) {
+            //     html += '<div style="font-size: 13px; color: #666;">' + donor.note + '</div>';
+            // }
+            html += '</div>';
+            
+            // הצגת סכום התרומה אם קיים
+            if (donor.donationAmount && donor.donationAmount > 0) {
+                var amountColor = isRead ? '#888' : '#2B3A63';
+                var amountWeight = isRead ? 'normal' : 'bold';
+                html += '<div style="margin-right: 15px; padding-right: 15px; border-right: 2px solid ' + amountColor + '; color: ' + amountColor + '; font-weight: ' + amountWeight + '; font-size: 30px; text-align: center; min-width: 50px;">';
+                html += '₪' + donor.donationAmount;
+                html += '</div>';
+            }
+            
+            html += '</div>';
+            
+            return html;
+        }
+
+        // סימון תורם כנקרא
+        function markDonorAsRead(donorId) {
+            var donor = donorsList.find(function (d) { return d.id === donorId; });
+            if (!donor || donor.hasBeenRead) {
+                return; // אם התורם לא נמצא או כבר נקרא, לא עושים כלום
+            }
+
+            // הצגת loading באופן ויזואלי על השורה
+            var donorRow = $('[data-donor-id="' + donorId + '"]');
+            var originalHtml = donorRow.html();
+            donorRow.html('<div style="padding: 12px; text-align: center;"><i class="fa fa-spinner fa-spin"></i> מעדכן...</div>');
+
+            // שליחה לשרת
+            $.ajax({
+                url: "https://us-central1-hatrama-k.cloudfunctions.net/posApi/mark-as-read", // להחליף לכתובת השרת שלך
+                method: "POST",
+                data: JSON.stringify({
+                    posNedarim: PosNedarim,
+                    masofId: MasofId,
+                    donorId: donorId
+                }),
+                contentType: "application/json",
+                timeout: 30000
+            }).success(function (response) {
+                if (response.status === 'success') {
+                    // עדכון הסטטוס המקומי
+                    donor.hasBeenRead = true;
+                    
+                    // עדכון התצוגה
+                    donorRow.replaceWith(renderReadingDonorRow(donor));
+                } else {
+                    // שגיאה - החזרת התצוגה המקורית והצגת הודעת שגיאה
+                    donorRow.html(originalHtml);
+                    MySwal("שגיאה בעדכון הסטטוס: " + response.message);
+                }
+            }).error(function () {
+                // שגיאה - החזרת התצוגה המקורית והצגת הודעת שגיאה
+                donorRow.html(originalHtml);
+                MySwal("שגיאה בעדכון הסטטוס - בעיה בתקשורת");
+            });
+        }
+
+        // פונקציה לסינון התורמים במסך קריאה
+        function filterReadingDonors() {
+            var currentSearchTerm = $("#donorSearch").val().toLowerCase().trim();
+            searchTerm = currentSearchTerm;
+
+            // סינון בלי לבנות מחדש את כל ה-HTML
+            filterReadingDonorsDisplay();
+        }
+
+        // פונקציה לסינון התצוגה במסך קריאה ללא בניית HTML מחדש
+        function filterReadingDonorsDisplay() {
+            var visibleCount = 0;
+            $("#ReadingDonorsList .reading-donor-row").each(function () {
+                var donorId = $(this).data('donor-id');
+                var donor = donorsList.find(function (d) { return d.id === donorId; });
+
+                if (donor && matchesReadingSearch(donor)) {
+                    $(this).show();
+                    visibleCount++;
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            // עדכון הודעת "אין תוצאות"
+            var noResultsMsg = $("#ReadingDonorsList .no-results-msg");
+            if (visibleCount === 0) {
+                if (noResultsMsg.length === 0) {
+                    var msgText = searchTerm ?
+                        'לא נמצאו תורמים המתאימים לחיפוש' :
+                        'אין תורמים ברשימה';
+                    $("#ReadingDonorsList").append('<div class="no-results-msg" style="text-align:center; color:#2B3A63; font-size:15px; padding:20px 0;">' + msgText + '</div>');
+                }
+            } else {
+                noResultsMsg.remove();
+            }
+        }
+
+        // פונקציה לניקוי החיפוש במסך קריאה
+        function clearReadingSearch() {
+            $("#donorSearch").val('');
+            searchTerm = '';
+
+            // הצגת כל התורמים
+            $("#ReadingDonorsList .reading-donor-row").show();
+
+            // הסרת הודעות "אין תוצאות"
+            $(".no-results-msg").remove();
+
+            // הפוקוס נשאר באינפוט
+            $("#donorSearch").focus();
+        }
+
+        // פונקציה לבדיקה אם תורם עונה על קריטריון החיפוש במסך קריאה
+        function matchesReadingSearch(donor) {
+            if (!searchTerm) return true; // אם אין חיפוש, הצג הכל
+
+            var name = (donor.name || '').toLowerCase();
+            var note = (donor.note || '').toLowerCase();
+            var phones = (donor.phones || '').toLowerCase();
+
+            var matches = name.includes(searchTerm) || note.includes(searchTerm) || phones.includes(searchTerm);
+
+            return matches;
         }
 
         // יצירת שורת תורם
@@ -780,6 +1146,7 @@
             var additionalClass = isDonated ? ' donated' : '';
             var rowStyle = '';
             var actionContent = '';
+            var paymentButtonsContent = '';
 
             if (isDonated) {
                 // תורם שכבר תרם - רקע רגיל עם סכום
@@ -788,6 +1155,22 @@
             } else {
                 // תורם זמין - רקע כחול בהיר
                 rowStyle = 'background-color: #e3f2fd; border-color: #2B3A63;';
+
+                // לחצני תשלום (מוסתרים בהתחלה) - רק לתורמים זמינים
+                paymentButtonsContent = '<div class="payment-buttons" id="payment-buttons-' + donor.id + '">' +
+                    '<button class="payment-button credit" onclick="handlePayment(\'' + donor.id + '\', \'credit\', event)" title="אשראי">' +
+                    '<i class="fa fa-credit-card"></i>' +
+                    '<span>אשראי</span>' +
+                    '</button>' +
+                    '<button class="payment-button bank" onclick="handlePayment(\'' + donor.id + '\', \'bank\', event)" title="בנקאי">' +
+                    '<i class="fa fa-university"></i>' +
+                    '<span>בנקאי</span>' +
+                    '</button>' +
+                    '<button class="payment-button cash" onclick="handlePayment(\'' + donor.id + '\', \'cash\', event)" title="מזומן">' +
+                    '<i class="fa fa-money-bill"></i>' +
+                    '<span>מזומן</span>' +
+                    '</button>' +
+                    '</div>';
 
                 // בדיקת סטטוס כנס
                 var statusKenes = donor.statusKenes;
@@ -810,26 +1193,35 @@
                 } else {
                     // statusKenes הוא null או 1 - הצג לחצנים
                     actionContent = '<div class="action-buttons">' +
-                        '<button class="action-button not-available" onclick="updateDonorStatus(' + donor.id + ', \'not_available\', event)" title="לא מגיע">' +
+                        '<button class="action-button not-available" onclick="updateDonorStatus(\'' + donor.id + '\', 3, event)" title="לא מגיע">' +
                         '<i class="fa fa-times"></i>' +
                         '<span>לא מגיע</span>' +
                         '</button>' +
-                        '<button class="action-button available" onclick="updateDonorStatus(' + donor.id + ', \'available\', event)" title="מגיע">' +
+                        '<button class="action-button available" onclick="updateDonorStatus(\'' + donor.id + '\', 2, event)" title="מגיע">' +
                         '<i class="fa fa-check"></i>' +
-                        '<span>מגיע</span>' +
+                        '<span>הגיע</span>' +
                         '</button>' +
                         '</div>';
                 }
             }
 
-            html += '<div class="donor-row' + additionalClass + '" data-donor-id="' + donor.id + '" style="' + rowStyle + '">';
+            // בניית שורת תורם עם onclick רק לתורמים זמינים
+            var onclickAttr = (!isDonated) ? ' onclick="toggleDonorExpansion(\'' + donor.id + '\', event)"' : '';
+            html += '<div class="donor-row' + additionalClass + '" data-donor-id="' + donor.id + '" style="' + rowStyle + '"' + onclickAttr + '>';
             html += '<div class="donor-info">';
             html += '<div class="donor-name">' + (donor.name || '') + '</div>';
+            if (donor.phones) {
+                html += '<div style="font-size: 12px; color: #999; margin-top: 1px;">טלפון: ' + donor.phones + '</div>';
+            }
             if (donor.note) {
                 html += '<div class="donor-note">' + donor.note + '</div>';
             }
             html += '</div>';
             html += actionContent;
+            // הוספת לחצני תשלום רק לתורמים זמינים
+            if (!isDonated) {
+                html += paymentButtonsContent;
+            }
             html += '</div>';
             return html;
         }
@@ -860,7 +1252,7 @@
             $("#PaymentForm").html('');
             $("#SubmitDiv").show();
             $("#WaitDiv").hide();
-            
+
             // איפוס ה-iframe
             $("#MainIframe").attr("src", "");
         }
@@ -1129,14 +1521,13 @@
 
             // הצגת הודעה למשתמש על המצב החדש
             var modeText = mode === 'my' ? 'התורמים שלי' : 'כל התורמים';
-            console.log('מחליף למצב: ' + modeText);
 
             loadDonors(); // רענון הנתונים עם המצב החדש
         }
 
         // פונקציה לסינון התורמים לפי חיפוש - ללא רענון HTML
         function filterDonors() {
-            var currentSearchTerm = $("#donorSearch").val().toLowerCase();
+            var currentSearchTerm = $("#donorSearch").val().toLowerCase().trim();
             searchTerm = currentSearchTerm;
 
             // סינון בלי לבנות מחדש את כל ה-HTML
@@ -1148,7 +1539,7 @@
             // סינון תורמים זמינים
             var availableCount = 0;
             $("#AvailableDonorsList .donor-row").each(function () {
-                var donorId = parseInt($(this).data('donor-id'));
+                var donorId = $(this).data('donor-id');
                 var donor = donorsList.find(function (d) { return d.id === donorId; });
 
                 if (donor && matchesSearch(donor)) {
@@ -1162,7 +1553,7 @@
             // סינון תורמים שתרמו
             var donatedCount = 0;
             $("#DonatedDonorsList .donor-row").each(function () {
-                var donorId = parseInt($(this).data('donor-id'));
+                var donorId = $(this).data('donor-id');
                 var donor = donorsList.find(function (d) { return d.id === donorId; });
 
                 if (donor && matchesSearch(donor)) {
@@ -1228,8 +1619,11 @@
 
             var name = (donor.name || '').toLowerCase();
             var note = (donor.note || '').toLowerCase();
+            var phones = (donor.phones || '').toLowerCase();
 
-            return name.includes(searchTerm) || note.includes(searchTerm);
+            var matches = name.includes(searchTerm) || note.includes(searchTerm) || phones.includes(searchTerm);
+
+            return matches;
         }
 
         // פונקציה לעדכון סטטוס תורם
@@ -1243,7 +1637,7 @@
                 return;
             }
 
-            var statusText = status === 'available' ? 'מגיע' : 'לא מגיע';
+            var statusText = status === 2 ? 'מגיע' : 'לא מגיע';
             var confirmMessage = 'האם אתה בטוח שברצונך לסמן את ' + donor.name + ' כ"' + statusText + '"?';
 
             swal({
@@ -1260,22 +1654,16 @@
                 $.ajax({
                     url: "https://us-central1-hatrama-k.cloudfunctions.net/posApi/statusKenes", // להחליף לכתובת השרת שלך
                     method: "POST",
-                    data: {
+                    data: JSON.stringify({
+                        posNedarim: PosNedarim,
+                        masofId: MasofId,
                         donorId: donorId,
-                        status: status,
-                        timestamp: new Date().toISOString()
-                    },
+                        status: status
+                    }),
                     contentType: "application/json",
                     timeout: 30000
                 }).success(function (response) {
                     if (response.status === 'success') {
-                        // עדכון הסטטוס המקומי
-                        if (status === 'available') {
-                            donor.statusKenes = 2; // הגיע לכנס
-                        } else if (status === 'not_available') {
-                            donor.statusKenes = 3; // לא הגיע לכנס
-                        }
-
                         swal({
                             title: "הפעולה בוצעה בהצלחה!",
                             text: donor.name + ' סומן כ"' + statusText + '"',
@@ -1292,27 +1680,90 @@
                         swal("שגיאה!", "שגיאה בעדכון הסטטוס: " + response.message, "error");
                     }
                 }).error(function () {
-                    // למטרות פיתוח - עדכון הסטטוס המקומי גם במקרה של שגיאה
-                    if (status === 'available') {
-                        donor.statusKenes = 2; // הגיע לכנס
-                    } else if (status === 'not_available') {
-                        donor.statusKenes = 3; // לא הגיע לכנס
-                    }
-
-                    swal({
-                        title: "הפעולה בוצעה בהצלחה!",
-                        text: donor.name + ' סומן כ"' + statusText + '" (מצב פיתוח)',
-                        type: "success",
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-
-                    // רענון הנתונים
-                    setTimeout(function () {
-                        loadDonors();
-                    }, 1000);
+                    swal("שגיאה!", "שגיאה בעדכון הסטטוס", "error");
                 });
             });
+        }
+
+        // פונקציה להרחבת שורת תורם
+        function toggleDonorExpansion(donorId, event) {
+            // בדיקה אם הלחיצה היא על לחצן פעולה או תשלום
+            if (event.target.closest('.action-button') ||
+                event.target.closest('.status-display') ||
+                event.target.closest('.payment-button')) {
+                return;
+            }
+
+            var donor = donorsList.find(function (d) { return d.id === donorId; });
+            if (!donor || donor.hasDonated) {
+                return; // לא מאפשרים הרחבה לתורמים שכבר תרמו
+            }
+
+            var donorRow = $('[data-donor-id="' + donorId + '"]');
+            var paymentButtons = $('#payment-buttons-' + donorId);
+
+            if (donorRow.hasClass('expanded')) {
+                // כבר מורחב - חזרה למצב רגיל
+                donorRow.removeClass('expanded');
+                paymentButtons.removeClass('visible');
+            } else {
+                // סגירת כל השורות האחרות
+                $('.donor-row').removeClass('expanded');
+                $('.payment-buttons').removeClass('visible');
+
+                // הרחבת השורה הנוכחית
+                donorRow.addClass('expanded');
+                setTimeout(function () {
+                    paymentButtons.addClass('visible');
+                }, 50); // עיכוב קטן כדי שהאנימציה תעבוד חלק
+            }
+        }
+
+        // פונקציה לטיפול בתשלום
+        function handlePayment(donorId, paymentType, event) {
+            // מניעת פעולת לחיצה על השורה
+            event.stopPropagation();
+
+            var donor = donorsList.find(function (d) { return d.id === donorId; });
+            if (!donor) {
+                MySwal("שגיאה: תורם לא נמצא");
+                return;
+            }
+            var zheut = '';
+            if (donor.zheut) {
+                zheut = 'zeout=' + donor.zheut;
+            }
+
+            var paymentText = '';
+            switch (paymentType) {
+                case 'credit':
+                    var url = urlAshrai;
+                    if (url.indexOf('?') > -1) {
+                        url += '&' + zheut;
+                    } else {
+                        url += '?' + zheut;
+                    }
+                    openIframeWithUrl(url);
+                    return;
+                    break;
+                case 'bank':
+                    var url = urlMasav;
+                    if (url.indexOf('?') > -1) {
+                        url += '&' + zheut;
+                    } else {
+                        url += '?' + zheut;
+                    }
+                    openIframeWithUrl(url);
+                    return;
+                    break;
+                case 'cash':
+                    paymentText = 'מזומן';
+                    MySwal("לתרומה במזומן גש לעמדת החפ\"ק");
+                    return;
+                    break;
+            }
+
+
         }
 
         function ReloadPOS() {
@@ -1325,36 +1776,152 @@
         }
 
         // פונקציות לטיפול ב-iframe
-        
+
 
         function openIframeWithUrl(url) {
             // הגדרת ה-URL ב-iframe
             $("#MainIframe").attr("src", url);
-            
+
             // הסתרת מסכים אחרים והצגת מסך ה-iframe
             $("#DonorsScreen").hide();
             $("#DonationScreen").hide();
             $("#IframeScreen").show();
             $(".back-button").hide();
+
+            // התחלת מעקב אחר שינוי URL
+            // startUrlMonitoring();
         }
 
         function closeIframe() {
             // הסתרת מסך ה-iframe והצגת מסך התורמים
             $("#IframeScreen").hide();
             $("#DonorsScreen").show();
-            
+
             // איפוס ה-iframe
             $("#MainIframe").attr("src", "");
+
+            // הפסקת מעקב
+            // stopUrlMonitoring();
+            loadDonors(); // רענון הרשימה
+        }
+
+        // משתנה למעקב אחר ה-URL
+        var urlMonitoringInterval;
+        var lastIframeUrl = "";
+
+        // התחלת מעקב אחר שינוי URL
+        function startUrlMonitoring() {
+            // הפסקת מעקב קיים אם יש
+            stopUrlMonitoring();
+
+            console.log('התחלת מעקב אחר שינוי URL...');
+
+            // שמירת ה-URL ההתחלתי
+            lastIframeUrl = $("#MainIframe").attr("src") || "";
+
+            // התחלת מעקב חדש - בדיקה כל שנייה
+            urlMonitoringInterval = setInterval(checkUrlChange, 1000);
+        }
+
+        // הפסקת מעקב
+        function stopUrlMonitoring() {
+            if (urlMonitoringInterval) {
+                clearInterval(urlMonitoringInterval);
+                urlMonitoringInterval = null;
+                console.log('הפסקת מעקב אחר URL');
+            }
+        }
+
+        // בדיקת שינוי URL
+        function checkUrlChange() {
+            try {
+                var iframe = document.getElementById('MainIframe');
+                if (!iframe) {
+                    console.log('iframe לא זמין');
+                    return;
+                }
+
+                var currentUrl = "";
+
+                try {
+                    // ניסיון לקרוא את ה-URL הנוכחי
+                    currentUrl = iframe.contentWindow.location.href;
+                } catch (crossOriginError) {
+                    // במקרה של cross-origin, ננסה לקבל את ה-URL מה-src attribute
+                    currentUrl = iframe.src || "";
+                }
+
+                console.log('URL נוכחי:', currentUrl);
+                console.log('URL קודם:', lastIframeUrl);
+
+                // בדיקה אם ה-URL השתנה לכתובת ריקה
+                if (currentUrl === "https://matara.pro/nedarimplus/logo.png" && lastIframeUrl !== "") {
+                    console.log('זוהה שינוי ל-URL ריק - תשלום הצליח!');
+                    handlePaymentSuccess();
+                    return;
+                }
+
+                // בדיקה אם ה-URL השתנה לכתובת "about:blank"
+                if (currentUrl === "about:blank" && lastIframeUrl !== "" && lastIframeUrl !== "about:blank") {
+                    console.log('זוהה שינוי ל-about:blank - תשלום הצליח!');
+                    handlePaymentSuccess();
+                    return;
+                }
+
+                // עדכון ה-URL האחרון
+                lastIframeUrl = currentUrl;
+
+            } catch (e) {
+                console.log('שגיאה בבדיקת URL:', e.message);
+            }
+        }
+
+        // טיפול בהצלחת תשלום
+        function handlePaymentSuccess() {
+            console.log('תשלום בוצע בהצלחה!');
+            stopUrlMonitoring();
+            closeIframe();
+
+            // עדכון התורם כמי שתרם (אם יש תורם נבחר)
+            if (selectedDonor) {
+                selectedDonor.hasDonated = true;
+                selectedDonor.donationAmount = "הושלם";
+            }
+
+            swal({
+                type: "success",
+                title: "התשלום בוצע בהצלחה!",
+                text: "התרומה נקלטה במערכת",
+                showConfirmButton: true,
+                confirmButtonText: "חזרה לרשימה",
+                allowOutsideClick: false
+            }, function () {
+                loadDonors(); // רענון הרשימה
+            });
         }
 
         // אתחול כשהעמוד נטען
         $(document).ready(function () {
+
+            MasofId = GetURLParameter("MasofId");
+
+
+            try {
+                var Json = JSON.parse(PosNedarim.GetDevicesStatus());
+                is_pos = true;
+                PosNedarim = Json;
+            } catch (err) {
+                is_pos = false;
+            }
+
             loadDonors();
+
         });
     </script>
 </head>
 
-<body onresize="FixedWaitingStyle()" dir="rtl" style="background-color: #eee; -webkit-user-select: none; user-select: none;">
+<body onresize="FixedWaitingStyle()" dir="rtl"
+    style="background-color: #eee; -webkit-user-select: none; user-select: none;">
 
     <!-- אלמנט לאודינג -->
     <div id="FixedWaiting"
@@ -1382,11 +1949,6 @@
         <div id="DonorsListContainer">
             <!-- הרשימה תיבנה כאן באמצעות JavaScript -->
         </div>
-        
-        <!-- לחצן לפתיחת iframe -->
-        <div style="text-align: center; margin: 20px;">
-            <input class="Bt" type="button" value="iframe" onclick="openIframeWithUrl('https://nedar.im/TBIj')" style="background-color: #4db6ac; border-color: #4db6ac;" />
-        </div>
     </div>
 
     <!-- מסך iframe -->
@@ -1396,9 +1958,10 @@
             <button class="close-iframe-btn" onclick="closeIframe()" title="סגור">
                 <i class="fa fa-times"></i>
             </button>
-            
+
             <!-- iframe -->
-            <iframe id="MainIframe" src="" style="width: 100%; height: 100%; border: none; background: white;" frameborder="0" allowfullscreen></iframe>
+            <iframe id="MainIframe" src="" style="width: 100%; height: 100%; border: none; background: white;"
+                frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 
