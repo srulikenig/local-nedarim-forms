@@ -420,6 +420,38 @@
             display: inline-flex;
             box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
+        /* סטיילים למסך iframe */
+        #IframeScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        #IframeScreen .close-iframe-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            transition: background-color 0.2s;
+        }
+
+        #IframeScreen .close-iframe-btn:hover {
+            background: #ff5252;
+        }
     </style>
 
     <script type="text/javascript">
@@ -431,66 +463,131 @@
         var messagesList = [];
         var viewMode = 'my'; // 'my' = התורמים שלי, 'all' = כל התורמים
         var searchTerm = ''; // מונח החיפוש הנוכחי
+        var is_pos = undefined;
+        var PosNedarim = {};
+
+        try {
+            var Json = JSON.parse(PosNedarim.GetDevicesStatus());
+            is_pos = true;
+        } catch (err) {
+            is_pos = false;
+        }
 
         // טעינת רשימת תורמים מהשרת
         function loadDonors() {
+            showLoading(); // הצגת לאודינג
+            var MasofId = GetURLParameter("MasofId");
             $.ajax({
-                url: "https://your-server.com/api/donors", // להחליף לכתובת השרת שלך
-                method: "GET",
+                url: "https://us-central1-hatrama-k.cloudfunctions.net/posApi/donors", // להחליף לכתובת השרת שלך
+                method: "POST",
                 data: {
-                    viewMode: viewMode // שליחת מצב התצוגה לשרת
+                    posNedarim: PosNedarim,
+                    viewMode: viewMode, // שליחת מצב התצוגה לשרת
+                    masofId: MasofId // שליחת מזהה המכשיר
+
                 },
                 timeout: 16000,
                 headers: {
                     "Content-Type": "application/json"
                 }
             }).success(function (response) {
+                hideLoading(); // הסתרת לאודינג
                 if (response.status === 'success') {
                     donorsList = response.data.donors || response.data;
                     deviceHolderName = response.data.deviceHolderName || "";
                     messagesList = response.data.messages || [];
                     displayDonors();
+                } else if (response.statusCode == 2) {
+                    MySwal("שגיאה בקבלת נתונים: " + response.message);
+                    displayDeviceError(response.masofId)
                 } else {
                     MySwal("שגיאה בקבלת נתונים: " + response.message);
                 }
             }).error(function () {
+                hideLoading(); // הסתרת לאודינג גם במקרה של שגיאה
+                // MySwal("שגיאה בקבלת נתונים: " + response.message);
+                // displayGeneralError("שגיאה בטעינת הנתונים")
                 // הצגת הודעת שגיאה במקום נתוני דמו
-                displayDeviceError();
-                
+                // displayDeviceError();
+
                 // נתונים לדוגמה למקרה של פיתוח - כרגע מוסתר
-                // loadSampleData();
+                loadSampleData();
             });
         }
 
         // הצגת הודעת שגיאה כשהמכשיר לא מוגדר
-        function displayDeviceError() {
-            var deviceId = "123"; // מספר מכשיר לדוגמה - יש לקבל מהשרת או מהמערכת
-            
+        function displayDeviceError(deviceId) {
+            var deviceId = deviceId || "XXX"; // מספר מכשיר לדוגמה - יש לקבל מהשרת או מהמערכת
+
             var errorHtml = '<div style="display: flex; align-items: center; justify-content: center; min-height: 70vh; padding: 20px; box-sizing: border-box;">';
             errorHtml += '<div style="text-align: center; background-color: white; border-radius: 10px; padding: 40px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 400px; width: 100%; box-sizing: border-box;">';
-            
+
             // אייקון שגיאה
             errorHtml += '<div style="margin-bottom: 20px;">';
             errorHtml += '<i class="fa fa-exclamation-triangle" style="font-size: 60px; color: #ff6b6b; margin-bottom: 10px;"></i>';
             errorHtml += '</div>';
-            
+
             // הודעת שגיאה
             errorHtml += '<div style="color: #2B3A63; font-size: 20px; font-weight: bold; margin-bottom: 15px; line-height: 1.4;">מספר מכשיר לא מוגדר</div>';
             errorHtml += '<div style="color: #666; font-size: 16px; margin-bottom: 20px; line-height: 1.4;">להגדרה פנה לאחראי</div>';
-            
+
             // מספר מכשיר
             errorHtml += '<div style="background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; padding: 15px; margin-bottom: 25px;">';
             errorHtml += '<div style="color: #495057; font-size: 14px; margin-bottom: 5px;">מספר מכשיר:</div>';
             errorHtml += '<div style="color: #2B3A63; font-size: 18px; font-weight: bold; font-family: monospace;">' + deviceId + '</div>';
             errorHtml += '</div>';
-            
+
             // כפתור לטעינת נתוני דמו (למצב פיתוח)
             // errorHtml += '<button onclick="loadSampleData()" style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; margin-top: 10px; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor=\'#5a6268\'" onmouseout="this.style.backgroundColor=\'#6c757d\'">טעינת נתוני דמו</button>';
-            
+
             errorHtml += '</div>';
             errorHtml += '</div>';
-            
+
             $("#DonorsListContainer").html(errorHtml);
+        }
+
+        // הצגת הודעת שגיאה כללית עם לחצן רענון
+        function displayGeneralError(errorMessage, subMessage) {
+            var errorMessage = errorMessage || "אירעה שגיאה בטעינת הנתונים";
+            var subMessage = subMessage || "אנא נסה שוב";
+
+            var errorHtml = '<div style="display: flex; align-items: center; justify-content: center; min-height: 70vh; padding: 20px; box-sizing: border-box;">';
+            errorHtml += '<div style="text-align: center; background-color: white; border-radius: 10px; padding: 40px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 400px; width: 100%; box-sizing: border-box;">';
+
+            // אייקון שגיאה
+            errorHtml += '<div style="margin-bottom: 20px;">';
+            errorHtml += '<i class="fa fa-exclamation-circle" style="font-size: 60px; color: #ff6b6b; margin-bottom: 10px;"></i>';
+            errorHtml += '</div>';
+
+            // הודעת שגיאה
+            errorHtml += '<div style="color: #2B3A63; font-size: 20px; font-weight: bold; margin-bottom: 15px; line-height: 1.4;">' + errorMessage + '</div>';
+            errorHtml += '<div style="color: #666; font-size: 16px; margin-bottom: 25px; line-height: 1.4;">' + subMessage + '</div>';
+
+            // כפתור רענון
+            errorHtml += '<button onclick="ReloadPOS()" style="background-color: #2B3A63; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background-color 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onmouseover="this.style.backgroundColor=\'#1e2a4a\'" onmouseout="this.style.backgroundColor=\'#2B3A63\'">רענן עמוד</button>';
+
+            errorHtml += '</div>';
+            errorHtml += '</div>';
+
+            $("#DonorsListContainer").html(errorHtml);
+        }
+
+        // פונקציות לטיפול בלאודינג
+        // השימוש: showLoading() להצגת לאודינג, hideLoading() להסתרת לאודינג
+        function showLoading() {
+            $("#FixedWaiting").show();
+            FixedWaitingStyle();
+        }
+
+        function hideLoading() {
+            $("#FixedWaiting").hide();
+        }
+
+        function FixedWaitingStyle() {
+            if ($('#FixedWaiting').length) {
+                $('#FixedWaiting img').css('top', (($(window).height()) / 2) - ($('#FixedWaiting img').height() / 2));
+                $('#FixedWaiting img').css('left', (($('#FixedWaiting').width()) / 2) - ($('#FixedWaiting img').width() / 2));
+            }
         }
 
         // נתונים לדוגמה (לפיתוח)
@@ -755,6 +852,7 @@
         function backToDonors() {
             selectedDonor = null;
             $("#DonationScreen").hide();
+            $("#IframeScreen").hide(); // גם סגירת iframe אם פתוח
             $(".back-button").hide();
             $("#DonorsScreen").show();
 
@@ -762,6 +860,9 @@
             $("#PaymentForm").html('');
             $("#SubmitDiv").show();
             $("#WaitDiv").hide();
+            
+            // איפוס ה-iframe
+            $("#MainIframe").attr("src", "");
         }
 
         // בניית שדות תשלום מתוך מערך
@@ -904,6 +1005,9 @@
         function submitDonation() {
             MySwal("אין אפשרות לתרום, הטופס בפיתוח");
             return;
+
+            // אפשר להשתמש בלאודינג הגלובלי: showLoading() במקום הקוד הזה
+            // showLoading(); 
 
             if (!selectedDonor) {
                 MySwal("שגיאה: לא נבחר תורם");
@@ -1154,13 +1258,13 @@
             }, function () {
                 // שליחה לשרת
                 $.ajax({
-                    url: "https://your-server.com/api/donor-status", // להחליף לכתובת השרת שלך
+                    url: "https://us-central1-hatrama-k.cloudfunctions.net/posApi/statusKenes", // להחליף לכתובת השרת שלך
                     method: "POST",
-                    data: JSON.stringify({
+                    data: {
                         donorId: donorId,
                         status: status,
                         timestamp: new Date().toISOString()
-                    }),
+                    },
                     contentType: "application/json",
                     timeout: 30000
                 }).success(function (response) {
@@ -1211,6 +1315,38 @@
             });
         }
 
+        function ReloadPOS() {
+            if (is_pos == true) {
+                PosNedarim.Reload()
+            }
+            else {
+                history.go(0)
+            }
+        }
+
+        // פונקציות לטיפול ב-iframe
+        
+
+        function openIframeWithUrl(url) {
+            // הגדרת ה-URL ב-iframe
+            $("#MainIframe").attr("src", url);
+            
+            // הסתרת מסכים אחרים והצגת מסך ה-iframe
+            $("#DonorsScreen").hide();
+            $("#DonationScreen").hide();
+            $("#IframeScreen").show();
+            $(".back-button").hide();
+        }
+
+        function closeIframe() {
+            // הסתרת מסך ה-iframe והצגת מסך התורמים
+            $("#IframeScreen").hide();
+            $("#DonorsScreen").show();
+            
+            // איפוס ה-iframe
+            $("#MainIframe").attr("src", "");
+        }
+
         // אתחול כשהעמוד נטען
         $(document).ready(function () {
             loadDonors();
@@ -1218,7 +1354,14 @@
     </script>
 </head>
 
-<body dir="rtl" style="background-color: #eee; -webkit-user-select: none; user-select: none;">
+<body onresize="FixedWaitingStyle()" dir="rtl" style="background-color: #eee; -webkit-user-select: none; user-select: none;">
+
+    <!-- אלמנט לאודינג -->
+    <div id="FixedWaiting"
+        style="width: 100%; height: 100vh; top: 0; left: 0; position: fixed; z-index: 101; background: rgba(66 ,66 ,66 ,0.47);display:none;">
+        <img style="position: absolute; background: white; border-radius: 20%; top: 423px; left: 267px; width: 75px; height: 75px;"
+            src="waitnew.gif" alt="waiting" />
+    </div>
 
     <!-- כפתור חזרה -->
     <button class="back-button" onclick="backToDonors()">
@@ -1229,7 +1372,7 @@
     <div style="text-align: right;border-radius: 5px;width: 98%;padding: 15px 10px 5px;max-width: 500px;margin: auto;box-sizing: border-box;"
         id="Logo">
         <div style="text-align: center;">
-            <img style="border: 0px solid #f1f1f1; border-radius: 7px; height: 140px;"
+            <img onclick="ReloadPOS()" style="border: 0px solid #f1f1f1; border-radius: 7px; height: 140px;"
                 src="https://images.matara.pro/ClientsImages/7003974.jpg" alt="נדרים פלוס" />
         </div>
     </div>
@@ -1238,6 +1381,24 @@
     <div id="DonorsScreen">
         <div id="DonorsListContainer">
             <!-- הרשימה תיבנה כאן באמצעות JavaScript -->
+        </div>
+        
+        <!-- לחצן לפתיחת iframe -->
+        <div style="text-align: center; margin: 20px;">
+            <input class="Bt" type="button" value="iframe" onclick="openIframeWithUrl('https://nedar.im/TBIj')" style="background-color: #4db6ac; border-color: #4db6ac;" />
+        </div>
+    </div>
+
+    <!-- מסך iframe -->
+    <div id="IframeScreen" style="display: none;">
+        <div style="position: relative; width: 100%; height: 100vh; background: #eee;">
+            <!-- כפתור סגירה -->
+            <button class="close-iframe-btn" onclick="closeIframe()" title="סגור">
+                <i class="fa fa-times"></i>
+            </button>
+            
+            <!-- iframe -->
+            <iframe id="MainIframe" src="" style="width: 100%; height: 100%; border: none; background: white;" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 
