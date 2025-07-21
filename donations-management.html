@@ -580,6 +580,7 @@
         var MasofId = null;
         var urlAshrai = "";
         var urlMasav = "";
+        var backgroundUpdateInterval = null; // מזהה הטיימר לעדכון ברקע
 
 
 
@@ -613,8 +614,12 @@
                     currentScreenMode = response.screenMode || 1;
                     if (currentScreenMode === 2) {
                         displayReadingMode();
+                        // התחלת עדכון ברקע עבור מסך קריאה
+                        startBackgroundUpdate();
                     } else {
                         displayDonors();
+                        // עצירת עדכון ברקע אם פועל
+                        stopBackgroundUpdate();
                     }
                 } else if (response.statusCode == 2) {
                     // MySwal("שגיאה בקבלת נתונים: " + response.message);
@@ -689,6 +694,78 @@
             errorHtml += '</div>';
 
             $("#DonorsListContainer").html(errorHtml);
+        }
+
+        // פונקציות לעדכון ברקע עבור מסך קריאה
+        function startBackgroundUpdate() {
+            // עצירת עדכון קיים אם יש
+            stopBackgroundUpdate();
+            
+            console.log('התחלת עדכון ברקע למסך קריאה...');
+            
+            // התחלת עדכון כל 5 שניות
+            backgroundUpdateInterval = setInterval(function() {
+                loadDonorsInBackground();
+            }, 5000);
+        }
+
+        function stopBackgroundUpdate() {
+            if (backgroundUpdateInterval) {
+                clearInterval(backgroundUpdateInterval);
+                backgroundUpdateInterval = null;
+                console.log('עדכון ברקע הופסק');
+            }
+        }
+
+        // טעינת תורמים ברקע (ללא לואדר)
+        function loadDonorsInBackground() {
+            $.ajax({
+                url: "https://us-central1-hatrama-k.cloudfunctions.net/posApi/donors",
+                method: "POST",
+                data: JSON.stringify({
+                    posNedarim: PosNedarimData,
+                    masofId: MasofId,
+                    viewMode: viewMode,
+                }),
+                timeout: 16000,
+                contentType: "application/json"
+            }).success(function (response) {
+                if (response.status === 'success') {
+                    var oldDonorsList = donorsList;
+                    donorsList = response.data;
+                    deviceHolderName = response.deviceHolderName || "";
+                    messagesList = response.data.messages || [];
+
+                    urlAshrai = response.project.urlAshrai || "";
+                    urlMasav = response.project.urlMasav || "";
+
+                    // בדיקה אם המצב עדיין מסך קריאה
+                    var newScreenMode = response.screenMode || 1;
+                    if (newScreenMode !== currentScreenMode) {
+                        currentScreenMode = newScreenMode;
+                        if (currentScreenMode === 2) {
+                            displayReadingMode();
+                        } else {
+                            displayDonors();
+                            stopBackgroundUpdate(); // עצירת עדכון ברקע אם עברנו למסך רגיל
+                        }
+                    } else if (currentScreenMode === 2) {
+                        // עדכון התצוגה רק אם יש שינויים בנתונים
+                        if (JSON.stringify(oldDonorsList) !== JSON.stringify(donorsList)) {
+                            console.log('עדכון נתונים במסך קריאה');
+                            displayReadingMode();
+                        }
+                    }
+                } else if (response.statusCode == 2) {
+                    // אם יש שגיאת מכשיר, עצור עדכון ברקע והצג שגיאה
+                    stopBackgroundUpdate();
+                    displayDeviceError(response.masofId);
+                }
+                // לא מציגים שגיאות אחרות בעדכון ברקע כדי לא להפריע למשתמש
+            }).error(function () {
+                // לא מציגים שגיאות בעדכון ברקע
+                console.log('שגיאה בעדכון ברקע - ממשיכים עם הנתונים הקיימים');
+            });
         }
 
         // פונקציות לטיפול בלאודינג
@@ -769,8 +846,12 @@
             // קריאה לפונקציה המתאימה בהתאם למצב המסך
             if (currentScreenMode === 2) {
                 displayReadingMode();
+                // התחלת עדכון ברקע עבור מסך קריאה
+                startBackgroundUpdate();
             } else {
                 displayDonors();
+                // עצירת עדכון ברקע אם פועל
+                stopBackgroundUpdate();
             }
         }
 
@@ -1248,6 +1329,9 @@
             $(".back-button").hide();
             $("#DonorsScreen").show();
 
+            // עצירת עדכון ברקע
+            stopBackgroundUpdate();
+
             // איפוס הטופס
             $("#PaymentForm").html('');
             $("#SubmitDiv").show();
@@ -1518,6 +1602,9 @@
         // פונקציה להחלפת מצב התצוגה
         function toggleViewMode(mode) {
             viewMode = mode;
+
+            // עצירת עדכון ברקע לפני טעינה מחדש
+            stopBackgroundUpdate();
 
             // הצגת הודעה למשתמש על המצב החדש
             var modeText = mode === 'my' ? 'התורמים שלי' : 'כל התורמים';
@@ -1796,6 +1883,9 @@
             // הסתרת מסך ה-iframe והצגת מסך התורמים
             $("#IframeScreen").hide();
             $("#DonorsScreen").show();
+
+            // עצירת עדכון ברקע
+            stopBackgroundUpdate();
 
             // איפוס ה-iframe
             $("#MainIframe").attr("src", "");
