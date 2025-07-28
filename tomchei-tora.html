@@ -354,7 +354,7 @@
                 , { "Type": "Koteret", "Text": "כתובת" }
                 , { "ElementId": "city", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field10", "Br": false, "Send": true }
                 , { "ElementId": "street", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": true, "DbName": "Field11", "Br": false, "Send": true }
-                , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": false, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
+                // , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": false, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
                 , { "ElementId": "building", "MaxLength": 10, "Width": 20, "fieldName": "בניין", "Type": "Text", "Mandatory": false, "DbName": "Field13", "Br": false, "Send": true }
                 , { "ElementId": "apartment", "MaxLength": 10, "Width": 20, "fieldName": "דירה", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
 
@@ -618,7 +618,7 @@
             // הגדרת שדות תלויים
             setupConditionalFields();
 
-            // הגדרת שדה השכונות התלוי בעיר
+            // הגדרת שדה השכונות התלוי בעיר - יתבצע אחרי יצירת ה-HTML
             setupNeighborhoodField();
 
 
@@ -3061,45 +3061,51 @@
 
         // פונקציה להגדרת שדה השכונות התלוי בעיר
         function setupNeighborhoodField() {
-            // הסתרת שדה השכונות בהתחלה
-            $("#shchunaDiv").hide();
-
-            // מאזין לשינוי בשדה העיר - עם כל הסוגי האירועים הרלוונטיים
-            $("#city").on('input change keyup blur', function() {
-                var selectedCity = $(this).val().trim();
+            // מאזין לשינוי בשדה העיר - עם setTimeout לוודא שהערך עודכן
+            $("#city").on('change input', function () {
+                console.log("City field changed, updating neighborhoods...");
+                var $cityField = $(this);
                 var $shchunaSelect = $("#shchuna");
                 var $shchunaDiv = $("#shchunaDiv");
                 
-                console.log("City changed to:", selectedCity);
-                
-                // בדיקה אם יש אופציות שכונות לעיר הנבחרת
-                if (neighborhoodOptions[selectedCity] && neighborhoodOptions[selectedCity].length > 0) {
-                    console.log("Found neighborhoods for", selectedCity);
+                // השהיה קצרה כדי לוודא שהערך עודכן במידה ויש עיכוב
+                setTimeout(function () {
+                    var selectedCity = $cityField.val().trim();
                     
-                    // מילוי הסלקט עם אופציות השכונות
-                    $shchunaSelect.empty();
-                    $shchunaSelect.append('<option value="">בחר שכונה</option>');
+                    console.log("City changed to:", selectedCity);
                     
-                    for (var i = 0; i < neighborhoodOptions[selectedCity].length; i++) {
-                        var neighborhood = neighborhoodOptions[selectedCity][i];
-                        $shchunaSelect.append('<option value="' + neighborhood + '">' + neighborhood + '</option>');
+                    // בדיקה אם יש אופציות שכונות לעיר הנבחרת
+                    if (neighborhoodOptions[selectedCity] && neighborhoodOptions[selectedCity].length > 0) {
+                        console.log("Found neighborhoods for", selectedCity);
+                        
+                        // מילוי הסלקט עם אופציות השכונות
+                        $shchunaSelect.empty();
+                        $shchunaSelect.append('<option value="">בחר שכונה</option>');
+                        
+                        for (var i = 0; i < neighborhoodOptions[selectedCity].length; i++) {
+                            var neighborhood = neighborhoodOptions[selectedCity][i];
+                            $shchunaSelect.append('<option value="' + neighborhood + '">' + neighborhood + '</option>');
+                        }
+                        
+                        // הצגת שדה השכונות עם שינוי הסגנון
+                        $shchunaDiv.css('display', 'inline-block');
+                    } else {
+                        console.log("No neighborhoods found for", selectedCity);
+                        // הסתרת שדה השכונות ואיפוס הערך
+                        $shchunaDiv.css('display', 'none');
+                        $shchunaSelect.val("");
                     }
-                    
-                    // הצגת שדה השכונות
-                    $shchunaDiv.show();
-                } else {
-                    console.log("No neighborhoods found for", selectedCity);
-                    // הסתרת שדה השכונות ואיפוס הערך
-                    $shchunaDiv.hide();
-                    $shchunaSelect.val("");
-                }
+                }, 50); // השהיה של 50 מילישניות
             });
 
             // גם בדיקה ראשונית אם כבר יש ערך בשדה העיר
-            if ($("#city").val()) {
-                $("#city").trigger('change');
-            }
+            setTimeout(function () {
+                if ($("#city").val()) {
+                    $("#city").trigger('change');
+                }
+            }, 100);
         }
+
     </script>
 
 
