@@ -354,7 +354,7 @@
                 , { "Type": "Koteret", "Text": "כתובת" }
                 , { "ElementId": "city", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field10", "Br": false, "Send": true }
                 , { "ElementId": "street", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": true, "DbName": "Field11", "Br": false, "Send": true }
-                // , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": false, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
+                , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": false, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
                 , { "ElementId": "building", "MaxLength": 10, "Width": 20, "fieldName": "בניין", "Type": "Text", "Mandatory": false, "DbName": "Field13", "Br": false, "Send": true }
                 , { "ElementId": "apartment", "MaxLength": 10, "Width": 20, "fieldName": "דירה", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
 
@@ -647,6 +647,12 @@
                 Auto_Focus_After_City_Selection: true,
                 list_Citys: []
             })
+
+            // הגדרת פונקציית callback עבור בחירת עיר - תופעל אוטומטית כשבוחרים עיר מהפופאפ
+            window["FunctionAfetrSelectCity"] = function () {
+                // הפעלת עדכון השכונות אחרי בחירת עיר
+                $("#city").trigger('change');
+            };
 
 
             $('#IshurDakotDiv').hide();
@@ -2312,6 +2318,20 @@
                         id="ZeoutCheckSaveBt" value="אישור" onclick="Stage1()">
                 </div>
             </div>
+            <div
+                style="text-align: center; margin: 20px auto; padding: 15px; background: linear-gradient(135deg, #f0f8ff, #e6f3ff); border: 2px solid #4a90e2; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 90%; font-family: Arial, sans-serif;">
+                <div
+                    style="display: inline-block; background-color: #4a90e2; color: white; padding: 8px 16px; border-radius: 20px; margin-bottom: 10px; font-size: 14px; font-weight: bold;">
+                    זקוקים לעזרה?
+                </div>
+                <p style="margin: 10px 0; color: #2c3e50; font-size: 16px; line-height: 1.5; font-weight: 500;">
+                    לכל בעיה ברישום ניתן לפנות למייל
+                    <span style="color: #4a90e2; font-weight: bold; text-decoration: underline;">XXX</span>
+                    <br />
+                    או בהודעה לגבאי במערכת נדרים פלוס
+                </p>
+
+            </div>
 
             <div style="text-align:center;margin:10px;color:#808080;display:none" id="ZeoutCheckWait">
                 <img src="waitnew.gif" style="width:50px;"><br><span id="ZeoutCheckWaitText">נא להמתין...</span>
@@ -2529,6 +2549,8 @@
                         }
                     }
                 }
+
+                $("#city").trigger('change');
 
                 // בכל מקרה ממשיכים לטופס
                 // שמירת הערכים בשדות המתאימים
@@ -3067,26 +3089,26 @@
                 var $cityField = $(this);
                 var $shchunaSelect = $("#shchuna");
                 var $shchunaDiv = $("#shchunaDiv");
-                
+
                 // השהיה קצרה כדי לוודא שהערך עודכן במידה ויש עיכוב
                 setTimeout(function () {
                     var selectedCity = $cityField.val().trim();
-                    
+
                     console.log("City changed to:", selectedCity);
-                    
+
                     // בדיקה אם יש אופציות שכונות לעיר הנבחרת
                     if (neighborhoodOptions[selectedCity] && neighborhoodOptions[selectedCity].length > 0) {
                         console.log("Found neighborhoods for", selectedCity);
-                        
+
                         // מילוי הסלקט עם אופציות השכונות
                         $shchunaSelect.empty();
                         $shchunaSelect.append('<option value="">בחר שכונה</option>');
-                        
+
                         for (var i = 0; i < neighborhoodOptions[selectedCity].length; i++) {
                             var neighborhood = neighborhoodOptions[selectedCity][i];
                             $shchunaSelect.append('<option value="' + neighborhood + '">' + neighborhood + '</option>');
                         }
-                        
+
                         // הצגת שדה השכונות עם שינוי הסגנון
                         $shchunaDiv.css('display', 'inline-block');
                     } else {
