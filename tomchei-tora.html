@@ -354,7 +354,7 @@
                 , { "Type": "Koteret", "Text": "כתובת" }
                 , { "ElementId": "city", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field10", "Br": false, "Send": true }
                 , { "ElementId": "street", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": true, "DbName": "Field11", "Br": false, "Send": true }
-                , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": false, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
+                , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": true, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
                 , { "ElementId": "building", "MaxLength": 10, "Width": 20, "fieldName": "בניין", "Type": "Text", "Mandatory": false, "DbName": "Field13", "Br": false, "Send": true }
                 , { "ElementId": "apartment", "MaxLength": 10, "Width": 20, "fieldName": "דירה", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
 
@@ -367,7 +367,7 @@
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "Type": "Koteret", "Text": "פרטי מוסד" }
-                , { "ElementId": "isAvrechKollel", "fieldName": "לומד במוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
+                , { "ElementId": "isAvrechKollel", "fieldName": "לומד בכוללים שע\"י מוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
                 , { "ElementId": "kolel", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field16", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
                 , { "Type": "Margin", "Height": "25" }
 
@@ -390,12 +390,18 @@
 
                 , { "Type": "Margin", "Height": "25" }
 
-                , { "ElementId": "isInTzevet", "fieldName": "איש צוות בעטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field21", "Width": 70, "Br": false, "Send": true }
+                , { "ElementId": "isInTzevet", "fieldName": "צוות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field21", "Width": 70, "Br": false, "Send": true }
                 , { "ElementId": "tzevetInMosad", "MaxLength": 50, "Width": 50, "fieldName": "עובד במוסד", "Type": "Select", "Mandatory": false, "DbName": "Field22", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
 
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "ElementId": "note", "MaxLength": 700, "Width": 90, "fieldName": "הערות", "Type": "textarea", "Rows": 3, "Mandatory": false, "DbName": "Field23", "Br": false, "Send": true }
+
+                , { "Type": "Margin", "Height": "25" }
+
+                , { "ElementId": "noCommitment", "fieldName": "אין במילוי טופס זה משום התחייבות של ארגון תומכי תורה לספק שום שירות או תמורה", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field27", "Width": 90, "Send": true }
+
+                , { "ElementId": "approveMarketing", "fieldName": "בעת מילוי הטופס הינכם מאשרים קבלת דיוור וכן הודעות טלפוניות הן מתומכי תורה והן ממוסדות עטרת שלמה", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field28", "Width": 90, "Send": true }
 
 
 
@@ -2366,7 +2372,8 @@
                 </div>
                 <p style="margin: 10px 0; color: #2c3e50; font-size: 16px; line-height: 1.5; font-weight: 500;">
                     לכל בעיה ברישום ניתן לפנות למייל
-                    <span style="color: #4a90e2; font-weight: bold; text-decoration: underline;">ttnp9686@gmail.com</span>
+                    <span
+                        style="color: #4a90e2; font-weight: bold; text-decoration: underline;">ttnp9686@gmail.com</span>
                     <br />
                     או בהודעה לגבאי במערכת נדרים פלוס
                 </p>
@@ -2423,7 +2430,58 @@
             <!-- מידע נוסף -->
             <div
                 style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0; color: #7f8c8d; font-size: 13px;">
-                הטופס יישלח לבדיקת זכאות פרטנית.
+                לאחר מילוי טופס הפניה, הטופס ישלח לבדיקה פרטנית, ותוכלו לבדוק את סטטוס האישור שלכם בכניסה לטופס.
+                <br />
+                זמן הבדיקה הוא כ-14 ימי עסקים.
+            </div>
+        </div>
+
+        <div id="Status4Div"
+            style="display: none; background: linear-gradient(135deg, #fff5f5, #ffe6e6); border: 2px solid #e74c3c; border-radius: 12px; margin: 20px auto; padding: 20px; max-width: 90%; width: 400px; text-align: center; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.15); font-family: Arial, sans-serif;">
+
+            <!-- אייקון וכותרת -->
+            <div
+                style="display: inline-block; background-color: #e74c3c; color: white; padding: 10px 20px; border-radius: 25px; margin-bottom: 15px; font-size: 16px; font-weight: bold;">
+                ⚠️ פנייתכם לא אושרה
+            </div>
+
+            <!-- הודעה ראשית -->
+            <div style="color: #2c3e50; font-size: 18px; font-weight: bold; margin-bottom: 15px; line-height: 1.4;">
+                המכירה המוזלת מיועדת למשפחות הרשומות בלבד.
+            </div>
+
+            <!-- פירוט -->
+            <div style="color: #34495e; font-size: 16px; margin-bottom: 20px; line-height: 1.5;">
+                פנייתכם לא אושרה. ייתכן שהפרטים שהזנתם אינם תואמים את הנתונים במערכת.
+            </div>
+
+            <!-- הודעת עזרה -->
+            <div
+                style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 12px; margin-bottom: 20px; color: #856404; font-size: 14px;">
+                חושבים שזה טעות? תוכלו למלא שוב טופס פניה שיעבור לבדיקת המערכת.
+            </div>
+
+            <!-- כפתורי פעולה -->
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button type="button"
+                    style="background-color: #3498db; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; min-width: 140px; transition: background-color 0.3s;"
+                    onmouseover="this.style.backgroundColor='#2980b9'" onclick="goToForm()">
+                    טופס פניה
+                </button>
+
+                <button type="button" onclick="exitFromForm()"
+                    style="background-color: #95a5a6; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; min-width: 140px; transition: background-color 0.3s;"
+                    onmouseover="this.style.backgroundColor='#7f8c8d'">
+                    יציאה
+                </button>
+            </div>
+
+            <!-- מידע נוסף -->
+            <div
+                style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0; color: #7f8c8d; font-size: 13px;">
+                לאחר מילוי טופס הפניה, הטופס ישלח לבדיקה פרטנית, ותוכלו לבדוק את סטטוס האישור שלכם בכניסה לטופס.
+                <br />
+                זמן הבדיקה הוא כ-14 ימי עסקים.
             </div>
         </div>
 
@@ -2441,14 +2499,28 @@
         <div id="AllMainForm" style="display:none;">
 
             <div id="alertStatus1"
-                style="text-align: center; margin: 20px auto; padding: 15px; background: linear-gradient(135deg, #f0f8ff, #e6f3ff); border: 2px solid #4a90e2; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 90%; font-family: Arial, sans-serif; display: none;">
-                <div
-                    style="display: inline-block; background-color: #4a90e2; color: white; padding: 8px 16px; border-radius: 20px; margin-bottom: 10px; font-size: 14px; font-weight: bold;">
-                    שימו לב!
-                </div>
+                style="text-align: center; margin: 20px auto; padding: 15px; background: linear-gradient(135deg, #fff8e1, #ffecb3); border: 2px solid #ff9800; border-radius: 12px; box-shadow: 0 4px 8px rgba(255,152,0,0.1); max-width: 90%; font-family: Arial, sans-serif; display: none;">
                 <p style="margin: 10px 0; color: #2c3e50; font-size: 16px; line-height: 1.5; font-weight: 500;">
                     פנייתכם בטיפול ועדיין לא אושרה
                 </p>
+            </div>
+            <div id="alertStatus2"
+                style="text-align: center; margin: 20px auto; padding: 15px; background: linear-gradient(135deg, #f0fff4, #e8f5e8); border: 2px solid #4caf50; border-radius: 12px; box-shadow: 0 4px 8px rgba(76,175,80,0.1); max-width: 90%; font-family: Arial, sans-serif; display: none;">
+                <p style="margin: 10px 0; color: #2c3e50; font-size: 16px; line-height: 1.5; font-weight: 500;">
+                    פנייתכם אושרה.
+                </p>
+            </div>
+            <div id="alert"
+                style="text-align: center; margin: 20px auto; padding: 15px; background: linear-gradient(135deg, #f0f8ff, #e6f3ff); border: 2px solid #4a90e2; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 90%; font-family: Arial, sans-serif;">
+                <ul
+                    style="text-align: right; margin: 0; padding-right: 20px; color: #2c3e50; font-size: 14px; line-height: 1.6;">
+                    <li>חשוב מאד למלא את כל הפרטים במדויק, פרטים אלו ישמשו את המערכת לצורך הערכות למכירות וכן לשליחת
+                        עדכונים.</li>
+                    <li>המערכת פועלת בצורה אוטומטית ומילוי פרטים שגויים עלול לגרום לעוגמת נפש עבורכם ואף למחיקה אוטומטית
+                        מהמערכת.</li>
+                    <li>מכיוון שיתכנו עדיפויות שונות וכן מכיוון שהמערכת אוטומטית ומסונכרנת עם פרטי התלמידים במוסדות, ע"כ
+                        יש למלאות את הפרטים של כלל הזכאים ממשפחתכם כולל כמה ילדים מאותו מוסד.</li>
+                </ul>
 
             </div>
             <div id="EditNote" style="text-align:center;font-size:18px;color:indianred;font-weight:bold;display:none;">
@@ -2672,12 +2744,16 @@
                 $("#ZeoutCheck").hide();
                 $("#ZeoutCheckWait").hide();
 
-                if (JsonData.family && JsonData.family.status && JsonData.family.status != 0) {
+                if (JsonData.family && JsonData.family.status && JsonData.family.status != 0 && JsonData.family.status != 4) {
                     $("#ZeoutCheckSave").show();
                     $("#AllMainForm").show();
                     if (JsonData.family.status == 1) {
                         $("#alertStatus1").show();
+                    } if (JsonData.family.status == 2) {
+                        $("#alertStatus2").show();
                     }
+                } else if (JsonData.family && JsonData.family.status == 4) {
+                    $("#Status4Div").show(); // הצגת מסך הכניסה
                 } else {
                     $("#NotRegisteredDiv").show(); // הצגת מסך הכניסה
                 }
