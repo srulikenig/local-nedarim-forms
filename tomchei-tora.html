@@ -2675,6 +2675,9 @@
                 if (JsonData.family && JsonData.family.status && JsonData.family.status != 0) {
                     $("#ZeoutCheckSave").show();
                     $("#AllMainForm").show();
+                    if (JsonData.family.status == 1) {
+                        $("#alertStatus1").show();
+                    }
                 } else {
                     $("#NotRegisteredDiv").show(); // הצגת מסך הכניסה
                 }
