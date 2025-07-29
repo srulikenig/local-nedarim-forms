@@ -348,7 +348,7 @@
                 , { "ElementId": "phone", "MaxLength": 11, "Width": 40, "fieldName": "טלפון", "Type": "Tel", "Mandatory": true, "DbName": "Field5", "Br": false, "Send": true }
                 , { "ElementId": "mobile", "MaxLength": 11, "Width": 40, "fieldName": "פלאפון", "Type": "Tel", "Mandatory": true, "DbName": "Field6", "Br": false, "Send": true }
                 , { "ElementId": "mobile2", "MaxLength": 11, "Width": 40, "fieldName": "פלאפון נוסף", "Type": "Tel", "Mandatory": false, "DbName": "Field7", "Br": false, "Send": true }
-                , { "ElementId": "email", "MaxLength": 50, "Width": 60, "fieldName": "אימייל", "Type": "Text", "Mandatory": false, "DbName": "Field8", "Br": false, "Send": true }
+                , { "ElementId": "email", "MaxLength": 50, "Width": 60, "fieldName": "אימייל", "Type": "Text", "Mandatory": true, "DbName": "Field8", "Br": false, "Send": true }
                 , { "ElementId": "email2", "MaxLength": 50, "Width": 60, "fieldName": "אימייל נוסף", "Type": "Text", "Mandatory": false, "DbName": "Field9", "Br": false, "Send": true }
 
                 , { "Type": "Koteret", "Text": "כתובת" }
@@ -357,6 +357,12 @@
                 , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": false, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
                 , { "ElementId": "building", "MaxLength": 10, "Width": 20, "fieldName": "בניין", "Type": "Text", "Mandatory": false, "DbName": "Field13", "Br": false, "Send": true }
                 , { "ElementId": "apartment", "MaxLength": 10, "Width": 20, "fieldName": "דירה", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
+
+                , { "Type": "Koteret", "Text": "פרטי ילדים" }
+                , { "ElementId": "childrenAtHome", "MaxLength": 2, "Width": 25, "fieldName": "ילדים בבית", "Type": "Tel", "Mandatory": false, "DbName": "Field24", "Br": false, "Send": true }
+                , { "ElementId": "childrenMarried", "MaxLength": 2, "Width": 25, "fieldName": "ילדים נשואים", "Type": "Tel", "Mandatory": false, "DbName": "Field25", "Br": false, "Send": true }
+                , { "ElementId": "childrenTotal", "MaxLength": 2, "Width": 25, "fieldName": "סה\"כ", "Type": "Tel", "Mandatory": false, "DbName": "Field26", "Br": false, "Send": true }
+
 
                 , { "Type": "Margin", "Height": "25" }
 
@@ -390,6 +396,7 @@
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "ElementId": "note", "MaxLength": 700, "Width": 90, "fieldName": "הערות", "Type": "textarea", "Rows": 3, "Mandatory": false, "DbName": "Field23", "Br": false, "Send": true }
+
 
 
 
@@ -606,6 +613,10 @@
 
             AutoFillMail("email")
             AutoFillMail("email2")
+
+            // הגדרת חישוב אוטומטי של סה"כ ילדים
+            setupChildrenCalculation();
+
             // אתחול קבוצות שדות דינמיות
             initializeGroupFields();
 
@@ -1160,6 +1171,29 @@
 
         }
 
+        // פונקציה להגדרת חישוב אוטומטי של סה"כ ילדים
+        function setupChildrenCalculation() {
+            // הגדרת שדה הסה"כ כ-disabled
+            $("#childrenTotal").prop('disabled', true);
+
+            // הוספת מאזיני אירועים לשדות ילדים בבית וילדים נשואים
+            $("#childrenAtHome, #childrenMarried").on('input', function () {
+                calculateChildrenTotal();
+            });
+
+            // חישוב ראשוני
+            calculateChildrenTotal();
+        }
+
+        // פונקציה לחישוב סה"כ ילדים
+        function calculateChildrenTotal() {
+            var childrenAtHome = parseInt($("#childrenAtHome").val()) || 0;
+            var childrenMarried = parseInt($("#childrenMarried").val()) || 0;
+            var total = childrenAtHome + childrenMarried;
+
+            $("#childrenTotal").val(total > 0 ? total : '');
+        }
+
 
 
 
@@ -1443,7 +1477,10 @@
                 'Field20': 'children',
                 'Field21': 'isInTzevet',
                 'Field22': 'tzevetInMosad',
-                'Field23': 'note'
+                'Field23': 'note',
+                'Field24': 'childrenAtHome',
+                'Field25': 'childrenMarried',
+                'Field26': 'childrenTotal'
             };
 
             // יצירת אובייקט JSON לשרת הראשון
@@ -2275,7 +2312,7 @@
 
         <!-- מסך כניסה -->
         <div id="ZeoutCheck"
-            style="border-radius: 7px; margin-top: 20px; padding: 13px; width: 330px; margin: 30px auto;">
+            style="border-radius: 7px; margin-top: 20px; padding: 13px; width: 330px; margin: 30px auto; display: none;">
             <div id="Zihuy1" style="vertical-align:top;text-align: center;margin: auto;">
                 <label for="Zihuy1" class="fieldName" style=""><span id="Span_Zihuy1"
                         style="color:indianred;"></span></label><br>
@@ -2338,6 +2375,57 @@
 
             <div style="height:200px"></div>
         </div>
+        <div id="NewFamilyDiv"
+            style="border-radius: 7px; margin-top: 20px; padding: 13px; width: 330px; margin: 30px auto;">
+        </div>
+
+        <!-- הודעת משפחה לא רשומה -->
+        <div id="NotRegisteredDiv"
+            style="display: none; background: linear-gradient(135deg, #fff5f5, #ffe6e6); border: 2px solid #e74c3c; border-radius: 12px; margin: 20px auto; padding: 20px; max-width: 90%; width: 400px; text-align: center; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.15); font-family: Arial, sans-serif;">
+
+            <!-- אייקון וכותרת -->
+            <div
+                style="display: inline-block; background-color: #e74c3c; color: white; padding: 10px 20px; border-radius: 25px; margin-bottom: 15px; font-size: 16px; font-weight: bold;">
+                ⚠️ מספר זהות לא רשום
+            </div>
+
+            <!-- הודעה ראשית -->
+            <div style="color: #2c3e50; font-size: 18px; font-weight: bold; margin-bottom: 15px; line-height: 1.4;">
+                המכירה המוזלת מיועדת למשפחות הרשומות בלבד.
+            </div>
+
+            <!-- פירוט -->
+            <div style="color: #34495e; font-size: 16px; margin-bottom: 20px; line-height: 1.5;">
+                מספר הזהות שהזנתם אינו רשום במערכת.
+            </div>
+
+            <!-- הודעת עזרה -->
+            <div
+                style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 12px; margin-bottom: 20px; color: #856404; font-size: 14px;">
+                חושבים שזה טעות? תוכלו למלא טופס פניה שיעבור לבדיקת המערכת.
+            </div>
+
+            <!-- כפתורי פעולה -->
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button type="button"
+                    style="background-color: #3498db; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; min-width: 140px; transition: background-color 0.3s;"
+                    onmouseover="this.style.backgroundColor='#2980b9'" onclick="goToForm()">
+                    טופס פניה
+                </button>
+
+                <button type="button" onclick="exitFromForm()"
+                    style="background-color: #95a5a6; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; min-width: 140px; transition: background-color 0.3s;"
+                    onmouseover="this.style.backgroundColor='#7f8c8d'">
+                    יציאה
+                </button>
+            </div>
+
+            <!-- מידע נוסף -->
+            <div
+                style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0; color: #7f8c8d; font-size: 13px;">
+                הטופס יישלח לבדיקת זכאות פרטנית.
+            </div>
+        </div>
 
         <div id="NoteClose"
             style="color: indianred; font-size: 20px; width: 370px; margin-left: auto; margin-right: auto; border: 2px solid indianred; border-radius: 7px; margin-top: 70px; padding: 13px; text-align: center; font-weight: bold; margin-bottom: 200px; max-width: 90%; padding: 20px; display: none">
@@ -2352,6 +2440,17 @@
 
         <div id="AllMainForm" style="display:none;">
 
+            <div id="alertStatus1"
+                style="text-align: center; margin: 20px auto; padding: 15px; background: linear-gradient(135deg, #f0f8ff, #e6f3ff); border: 2px solid #4a90e2; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 90%; font-family: Arial, sans-serif; display: none;">
+                <div
+                    style="display: inline-block; background-color: #4a90e2; color: white; padding: 8px 16px; border-radius: 20px; margin-bottom: 10px; font-size: 14px; font-weight: bold;">
+                    שימו לב!
+                </div>
+                <p style="margin: 10px 0; color: #2c3e50; font-size: 16px; line-height: 1.5; font-weight: 500;">
+                    פנייתכם בטיפול ועדיין לא אושרה
+                </p>
+
+            </div>
             <div id="EditNote" style="text-align:center;font-size:18px;color:indianred;font-weight:bold;display:none;">
                 <span style="font-size:24px;">שים לב!</span><br /> טופס זה במצב עריכה.<br /> בעת שליחת הטופס, הנתונים
                 שתזינו יחליפו את הקודמים.
@@ -2572,8 +2671,13 @@
                 // הסתרת מסך הכניסה והצגת הטופס
                 $("#ZeoutCheck").hide();
                 $("#ZeoutCheckWait").hide();
-                $("#ZeoutCheckSave").show();
-                $("#AllMainForm").show();
+
+                if (JsonData.family && JsonData.family.status && JsonData.family.status != 0) {
+                    $("#ZeoutCheckSave").show();
+                    $("#AllMainForm").show();
+                } else {
+                    $("#NotRegisteredDiv").show(); // הצגת מסך הכניסה
+                }
             }).error(function () {
                 // טיפול בשגיאה
                 $("#ZeoutCheckSave").show();
@@ -2840,6 +2944,21 @@
                 childList: true,
                 subtree: true
             });
+        }
+
+        const exitFromForm = () => {
+            if (MasofId !== '') {
+                parent.GoToMenu("Tafrit");
+                parent.closeIFrame()
+            } else {
+                $('html, body').scrollTop(0); location.reload();
+            }
+
+        }
+        const goToForm = () => {
+            $("#NotRegisteredDiv").hide();
+            $("#ZeoutCheckSave").show();
+            $("#AllMainForm").show();
         }
 
         // פונקציית LoginSwal לטיפול בהודעות שגיאה במסך הכניסה
