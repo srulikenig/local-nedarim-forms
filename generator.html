@@ -860,15 +860,12 @@
 
             var exportData = {
                 FormElements: formBuilderElements,
-                TofesId: "Generated_" + Date.now(),
-                Version: "2.0",
-                FormTitle: $('#formTitle').val() || 'מחולל הטפסים',
-                RequireLogin: $('#requireLogin').is(':checked'),
-                RequireSignature: $('#requireSignature').is(':checked'),
-                AllowChanges: Json.AllowChanges,
+                TofesId: "0",
+                Version: "",
+                AllowChanges: false,
                 NeedSign: $('#requireSignature').is(':checked'),
                 PreData: false,
-                MosadId: "Generated",
+                MosadId: "0",
                 MainLogo: "",
                 MainTitle: $('#formTitle').val() || 'מחולל הטפסים',
                 SpecialCheck: "",
@@ -920,6 +917,7 @@
                 MainLogo: "",
                 MainTitle: $('#formTitle').val() || 'מחולל הטפסים',
                 SpecialCheck: "",
+                DeveloperNotes: $('#developerNotes').val() || ""
             };
 
             // הצגת ה-JSON בחלון popup
