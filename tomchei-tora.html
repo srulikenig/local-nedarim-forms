@@ -357,6 +357,7 @@
                 , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": true, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
                 , { "ElementId": "building", "MaxLength": 10, "Width": 20, "fieldName": "בניין", "Type": "Text", "Mandatory": false, "DbName": "Field13", "Br": false, "Send": true }
                 , { "ElementId": "apartment", "MaxLength": 10, "Width": 20, "fieldName": "דירה", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
+                , { "ElementId": "entrance", "MaxLength": 10, "Width": 20, "fieldName": "כניסה", "Type": "Select", "Mandatory": false, "DbName": "Field29", "Br": false, "Send": true, "SelectVal": "בחר כניסה,א,ב,ג,ד,ה" }
 
                 , { "Type": "Koteret", "Text": "פרטי ילדים" }
                 , { "ElementId": "childrenAtHome", "MaxLength": 2, "Width": 25, "fieldName": "ילדים בבית", "Type": "Tel", "Mandatory": false, "DbName": "Field24", "Br": false, "Send": true }
@@ -369,6 +370,10 @@
                 , { "Type": "Koteret", "Text": "פרטי מוסד" }
                 , { "ElementId": "isAvrechKollel", "fieldName": "לומד בכוללים שע\"י מוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
                 , { "ElementId": "kolel", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field16", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
+                , { "ElementId": "kolelType", "MaxLength": 50, "Width": 90, "fieldName": "סוג הלימוד", "Type": "Radio", "Mandatory": true, "DbName": "Field30", "Br": false, "Send": true, "RadioBt": [
+                    { "Text": "יום שלם" },
+                    { "Text": "חצי יום" }
+                ] }
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "ElementId": "isBogerYG", "fieldName": "בוגר ישיבה גדולה - עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field17", "Width": 70, "Br": false, "Send": true }
@@ -1312,6 +1317,27 @@
                 return false;
             }
 
+            // בדיקת שדות תלויים
+            var conditionalValidation = validateConditionalFields();
+            if (!conditionalValidation.valid) {
+                swal({
+                    type: "error",
+                    title: conditionalValidation.message,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                }, function () {
+                    if (conditionalValidation.fieldId) {
+                        $('#' + conditionalValidation.fieldId).focus();
+                        ScrollUp('#' + conditionalValidation.fieldId);
+                    }
+                    setTimeout(function () {
+                        $("#SaveDiv").show();
+                        $("#WaitDiv").hide();
+                    }, 100);
+                });
+                return false;
+            }
+
 
             //שליחה לשרת ראשון
 
@@ -1486,7 +1512,11 @@
                 'Field23': 'note',
                 'Field24': 'childrenAtHome',
                 'Field25': 'childrenMarried',
-                'Field26': 'childrenTotal'
+                'Field26': 'childrenTotal',
+                'Field27': 'noCommitment',
+                'Field28': 'approveMarketing',
+                'Field29': 'entrance',
+                'Field30': 'kolelType'
             };
 
             // יצירת אובייקט JSON לשרת הראשון
@@ -2272,6 +2302,23 @@
 
             return { valid: true };
         }
+
+        // פונקציה לאימות שדות תלויים
+        function validateConditionalFields() {
+            // בדיקה שאם מסמנים "לומד בכוללים", חובה לבחור "סוג הלימוד"
+            if ($("#isAvrechKollel").is(':checked')) {
+                var kolelTypeSelected = $('input[name=kolelType]:checked').val();
+                if (!kolelTypeSelected) {
+                    return {
+                        valid: false,
+                        message: 'חובה לבחור סוג הלימוד כאשר מסמנים "לומד בכוללים"',
+                        fieldId: 'kolelType_Radio0'
+                    };
+                }
+            }
+
+            return { valid: true };
+        }
     </script>
 </head>
 
@@ -3037,6 +3084,7 @@
         }
         const goToForm = () => {
             $("#NotRegisteredDiv").hide();
+            $("#Status4Div").hide();
             $("#ZeoutCheckSave").show();
             $("#AllMainForm").show();
         }
@@ -3062,6 +3110,7 @@
         function setupConditionalFields() {
             // הסתרת שדות תלויים בתחילה
             $("#kolelDiv").hide();
+            $("#kolelTypeDiv").hide();
             $("#YGMachzorDiv").hide();
             $("#childrenContainer").hide();
             $("#tzevetInMosadDiv").hide();
@@ -3070,9 +3119,13 @@
             $("#isAvrechKollel").change(function () {
                 if ($(this).is(':checked')) {
                     $("#kolelDiv").show();
+                    $("#kolelTypeDiv").show();
                 } else {
                     $("#kolelDiv").hide();
+                    $("#kolelTypeDiv").hide();
                     $("#kolel").val(""); // איפוס הערך
+                    // איפוס הרדיו בוטונים
+                    $('input[name=kolelType]').prop('checked', false);
                 }
             });
 
@@ -3137,6 +3190,7 @@
             // בדיקה והפעלת טריגרים לצ'קבוקסים שמסומנים
             if ($("#isAvrechKollel").is(':checked')) {
                 $("#kolelDiv").show();
+                $("#kolelTypeDiv").show();
             }
 
             if ($("#isBogerYG").is(':checked')) {
