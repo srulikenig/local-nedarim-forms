@@ -370,10 +370,12 @@
                 , { "Type": "Koteret", "Text": "פרטי מוסד" }
                 , { "ElementId": "isAvrechKollel", "fieldName": "לומד בכוללים שע\"י מוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
                 , { "ElementId": "kolel", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field16", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
-                , { "ElementId": "kolelType", "MaxLength": 50, "Width": 90, "fieldName": "סוג הלימוד", "Type": "Radio", "Mandatory": true, "DbName": "Field30", "Br": false, "Send": true, "RadioBt": [
-                    { "Text": "יום שלם" },
-                    { "Text": "חצי יום" }
-                ] }
+                , {
+                    "ElementId": "kolelType", "MaxLength": 50, "Width": 90, "fieldName": "סוג הלימוד", "Type": "Radio", "Mandatory": true, "DbName": "Field30", "Br": false, "Send": true, "RadioBt": [
+                        { "Text": "יום שלם" },
+                        { "Text": "חצי יום" }
+                    ]
+                }
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "ElementId": "isBogerYG", "fieldName": "בוגר ישיבה גדולה - עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field17", "Width": 70, "Br": false, "Send": true }
@@ -389,7 +391,8 @@
                         { "ElementId": "childBirthDate", "MaxLength": 10, "Width": 30, "fieldName": "תאריך לידה לועזי", "fieldNameShow": "תאריך לידה לועזי<br/>בתבנית: 25/05/1990", "Type": "Tel", "Mandatory": true, "Date": true },
                         { "ElementId": "childMosadType", "Width": 30, "fieldName": "מוסד", "Type": "Select", "Mandatory": false, "Br": true, "Send": true, "SelectVal": "בחר מוסד" },
                         { "ElementId": "childMosad", "Width": 30, "fieldName": "סניף", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר סניף" },
-                        { "ElementId": "childClass", "Width": 30, "fieldName": "כיתה/שיעור", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר כיתה/שיעור" }
+                        { "ElementId": "childClass", "Width": 30, "fieldName": "כיתה/שיעור", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר כיתה/שיעור" },
+                        { "Type": "Div", "Text": "שימו לב למלא לפי שנה\"ל תשפ\"ו", "Width": 90, "Style": "text-align: center; color: #ff6a00; font-size: 14px; margin-top: 10px; font-weight: bold; padding: 5px; border-top: 1px solid #f7bb4d; margin: 10px 20px;", "ElementId": "divChildrenNote", "fieldName": "divChildrenNote" }
                     ]
                 }
 
@@ -627,6 +630,9 @@
 
             // הגדרת חישוב אוטומטי של סה"כ ילדים
             setupChildrenCalculation();
+
+            // הגדרת התראה לקבוצת הילדים
+            setupChildrenNotice();
 
             // אתחול קבוצות שדות דינמיות
             initializeGroupFields();
@@ -1118,6 +1124,9 @@
 
                 // הפעלת טריגרים לשדות תלויים אחרי טעינת הנתונים
                 triggerConditionalFieldsAfterDataLoad();
+
+                // הפעלת התראה לקבוצת הילדים אם הצ'קבוקס מסומן
+                toggleChildrenNotice();
             }).error(function () {
 
                 var BtTex = 'חזרה לנדרים פלוס'
@@ -1194,6 +1203,32 @@
 
             // חישוב ראשוני
             calculateChildrenTotal();
+        }
+
+        // פונקציה להוספת התראה לקבוצת הילדים
+        function setupChildrenNotice() {
+            $("#isChildInAteret").on('change', function () {
+                toggleChildrenNotice();
+            });
+        }
+
+        // פונקציה להפעלת/ביטול ההתראה לפי מצב הצ'קבוקס
+        function toggleChildrenNotice() {
+            var childrenContainer = $("#childrenContainer");
+            var noticeId = "childrenNotice";
+            
+            if ($("#isChildInAteret").is(':checked')) {
+                // אם הצ'קבוקס מסומן ועדיין לא קיימת ההתראה
+                if ($("#" + noticeId).length === 0) {
+                    var noticeHtml = '<div id="' + noticeId + '" style="background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center; font-weight: bold; font-size: 16px;">שימו לב בחירת כיתת הלימוד הינה לפי שנה"ל תשפ"ו</div>';
+                    
+                    // הוספת ההתראה אחרי כותרת הקבוצה ולפני השורות
+                    childrenContainer.find('.group-header').after(noticeHtml);
+                }
+            } else {
+                // אם הצ'קבוקס לא מסומן - הסרת ההתראה
+                $("#" + noticeId).remove();
+            }
         }
 
         // פונקציה לחישוב סה"כ ילדים
