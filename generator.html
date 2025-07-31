@@ -505,11 +505,6 @@
                 '</div>';
 
             $('#fieldsList').append(fieldHtml);
-
-            // הוספת event listener לשדה החדש
-            $('#' + fieldId + '_type').on('change', function () {
-                setTimeout(generatePreview, 100);
-            });
         }
 
         // פונקציה להסרת שדה
@@ -553,6 +548,7 @@
 
             if (fieldType === '') {
                 optionsDiv.hide();
+                setTimeout(generatePreview, 50);
                 return;
             }
 
@@ -734,11 +730,147 @@
             }
 
             optionsDiv.html(optionsHtml).show();
+            
+            // עדכון מיידי של התצוגה המקדימה
+            setTimeout(generatePreview, 10);
+        }
 
-            // הוספת event listeners לעדכון אוטומטי
-            optionsDiv.find('input, textarea, select').on('input change', function () {
-                setTimeout(generatePreview, 100); // עיכוב קטן למען הביצועים
+        // פונקציה ליצירת תצוגה מקדימה עם ערך חדש
+        function generatePreviewWithNewValue(fieldId, newValue) {
+            console.log('generatePreviewWithNewValue called for:', fieldId, 'with value:', newValue);
+            
+            // עדכון כותרת הטופס
+            var formTitle = $('#formTitle').val() || 'מחולל הטפסים';
+            Json.MainTitle = formTitle;
+            $('#MainTitle').html(formTitle);
+
+            // עדכון הגדרות נוספות
+            Json.NeedSign = $('#requireSignature').is(':checked');
+            Json.AllowChanges = !$('#requireNedarimLogin').is(':checked');
+
+            // ריענון המערך לפני יצירת התצוגה
+            formBuilderElements = [];
+            var elementId = 1;
+
+            $('#fieldsList > div').each(function () {
+                var currentFieldId = $(this).attr('id');
+                if (!currentFieldId) return;
+
+                var fieldType = $('#' + currentFieldId + '_type').val();
+                if (!fieldType) return;
+
+                if (fieldType === 'List') {
+                    var listItems;
+                    if (fieldId === currentFieldId + '_listItems') {
+                        listItems = newValue;
+                    } else {
+                        listItems = $('#' + currentFieldId + '_listItems').val() || 'פריט 1\nפריט 2\nפריט 3';
+                    }
+                    var itemsArray = listItems.split('\n');
+                    var startNumber = parseInt($('#' + currentFieldId + '_startNumber').val()) || 1;
+
+                    for (var i = 0; i < itemsArray.length; i++) {
+                        if (itemsArray[i].trim() !== '') {
+                            var listElement = {
+                                Type: 'List',
+                                Text: itemsArray[i].trim(),
+                                Number: startNumber + i
+                            };
+                            formBuilderElements.push(listElement);
+                        }
+                    }
+                } else {
+                    var element = { Type: fieldType };
+
+                    if (fieldType === 'Koteret') {
+                        element.Text = $('#' + currentFieldId + '_text').val() || 'כותרת חדשה';
+                    } else if (fieldType === 'Hr') {
+                        element.MarginTop = parseInt($('#' + currentFieldId + '_marginTop').val()) || 10;
+                        element.MarginBottom = parseInt($('#' + currentFieldId + '_marginBottom').val()) || 10;
+                    } else if (fieldType === 'Text' || fieldType === 'Tel') {
+                        element.ElementId = 'Field' + elementId;
+                        element.fieldName = $('#' + currentFieldId + '_fieldName').val() || 'שדה חדש';
+                        element.MaxLength = parseInt($('#' + currentFieldId + '_maxLength').val()) || (fieldType === 'Tel' ? 15 : 50);
+                        element.Width = parseInt($('#' + currentFieldId + '_width').val()) || 40;
+                        element.Mandatory = $('#' + currentFieldId + '_mandatory').is(':checked');
+                        element.DbName = 'Field' + elementId;
+                        elementId++;
+                    } else if (fieldType === 'textarea') {
+                        element.ElementId = 'Field' + elementId;
+                        element.fieldName = $('#' + currentFieldId + '_fieldName').val() || 'שדה טקסט ארוך';
+                        element.Rows = parseInt($('#' + currentFieldId + '_rows').val()) || 3;
+                        element.Width = parseInt($('#' + currentFieldId + '_width').val()) || 80;
+                        element.MaxLength = parseInt($('#' + currentFieldId + '_maxLength').val()) || 500;
+                        element.Mandatory = $('#' + currentFieldId + '_mandatory').is(':checked');
+                        element.DbName = 'Field' + elementId;
+                        elementId++;
+                    } else if (fieldType === 'Select') {
+                        element.ElementId = 'Field' + elementId;
+                        element.fieldName = $('#' + currentFieldId + '_fieldName').val() || 'תפריט נפתח';
+                        element.Width = parseInt($('#' + currentFieldId + '_width').val()) || 40;
+                        element.Mandatory = $('#' + currentFieldId + '_mandatory').is(':checked');
+                        element.DbName = 'Field' + elementId;
+
+                        var optionsText;
+                        if (fieldId === currentFieldId + '_options') {
+                            optionsText = newValue;
+                        } else {
+                            optionsText = $('#' + currentFieldId + '_options').val() || 'אופציה 1\nאופציה 2\nאופציה 3';
+                        }
+                        console.log('Select field:', currentFieldId, 'Options text:', optionsText); // debug
+                        // ניקוי שורות ריקות ורווחים מיותרים
+                        var cleanOptions = optionsText.split('\n').filter(function(option) {
+                            return option.trim() !== '';
+                        }).map(function(option) {
+                            return option.trim();
+                        });
+                        element.SelectVal = cleanOptions.join(',');
+                        console.log('Select final value:', element.SelectVal); // debug
+                        elementId++;
+                    } else if (fieldType === 'CheckBox') {
+                        element.ElementId = 'Field' + elementId;
+                        element.fieldName = $('#' + currentFieldId + '_fieldName').val() || 'צ\'קבוקס חדש';
+                        element.Width = parseInt($('#' + currentFieldId + '_width').val()) || 40;
+                        element.Mandatory = $('#' + currentFieldId + '_mandatory').is(':checked');
+                        element.DbName = 'Field' + elementId;
+                        elementId++;
+                    } else if (fieldType === 'Radio') {
+                        element.ElementId = 'Field' + elementId;
+                        element.fieldName = $('#' + currentFieldId + '_fieldName').val() || 'רדיו חדש';
+                        element.Width = parseInt($('#' + currentFieldId + '_width').val()) || 40;
+                        element.Mandatory = $('#' + currentFieldId + '_mandatory').is(':checked');
+                        element.DbName = 'Field' + elementId;
+                        element.RadioType = 'Radio2'; // ברירת מחדל להצגה בשורה אחת
+
+                        var optionsText;
+                        if (fieldId === currentFieldId + '_options') {
+                            optionsText = newValue;
+                        } else {
+                            optionsText = $('#' + currentFieldId + '_options').val() || 'אופציה 1\nאופציה 2\nאופציה 3';
+                        }
+                        console.log('Radio field:', currentFieldId, 'Options text:', optionsText); // debug
+                        var optionsArray = optionsText.split('\n');
+                        element.RadioBt = [];
+                        for (var i = 0; i < optionsArray.length; i++) {
+                            // בדיקה שהשורה לא ריקה ולא רק רווחים
+                            if (optionsArray[i].trim() !== '') {
+                                element.RadioBt.push({ Text: optionsArray[i].trim() });
+                            }
+                        }
+                        console.log('Radio final RadioBt:', element.RadioBt); // debug
+                        elementId++;
+                    }
+
+                    formBuilderElements.push(element);
+                }
             });
+
+            if (formBuilderElements.length === 0) {
+                $('#MainForm').html('<div style="text-align:center;color:#999;padding:20px;">לא נוספו שדות עדיין</div>');
+                return;
+            }
+
+            CreateFormElements(formBuilderElements, 'MainForm');
         }
 
         // פונקציה ליצירת תצוגה מקדימה
@@ -811,7 +943,15 @@
                         element.DbName = 'Field' + elementId;
 
                         var optionsText = $('#' + fieldId + '_options').val() || 'אופציה 1\nאופציה 2\nאופציה 3';
-                        element.SelectVal = optionsText.split('\n').join(',');
+                        console.log('Select field:', fieldId, 'Options text:', optionsText); // debug
+                        // ניקוי שורות ריקות ורווחים מיותרים
+                        var cleanOptions = optionsText.split('\n').filter(function(option) {
+                            return option.trim() !== '';
+                        }).map(function(option) {
+                            return option.trim();
+                        });
+                        element.SelectVal = cleanOptions.join(',');
+                        console.log('Select final value:', element.SelectVal); // debug
                         elementId++;
                     } else if (fieldType === 'CheckBox') {
                         element.ElementId = 'Field' + elementId;
@@ -829,13 +969,16 @@
                         element.RadioType = 'Radio2'; // ברירת מחדל להצגה בשורה אחת
 
                         var optionsText = $('#' + fieldId + '_options').val() || 'אופציה 1\nאופציה 2\nאופציה 3';
+                        console.log('Radio field:', fieldId, 'Options text:', optionsText); // debug
                         var optionsArray = optionsText.split('\n');
                         element.RadioBt = [];
                         for (var i = 0; i < optionsArray.length; i++) {
+                            // בדיקה שהשורה לא ריקה ולא רק רווחים
                             if (optionsArray[i].trim() !== '') {
                                 element.RadioBt.push({ Text: optionsArray[i].trim() });
                             }
                         }
+                        console.log('Radio final RadioBt:', element.RadioBt); // debug
                         elementId++;
                     }
 
@@ -876,16 +1019,17 @@
             $.ajax({
                 url: "https://script.google.com/macros/s/AKfycbxC6AM89xarrOF7WyDTMiQZJcml0yLnKe0EBUuXP6N_XG6gOX7wAQ3Of8NCw1k9c2ma/exec", // כתובת השרת
                 type: "POST",
-                data: JSON.stringify(exportData),
-                contentType: "application/json",
+                data: { payload: JSON.stringify(exportData) }, // שלח כשדה בשם payload
+
+                // contentType: "application/json",
                 success: function (response) {
                     // הסתרת הלואדר
                     $("#FixedWaiting").hide();
                     var BtTex = 'חזרה לנדרים פלוס'
                     if (MasofId == '') BtTex = 'אישור'
                     swal({
-                        title: "שגיאה בקבלת נתונים. בדוק תקשורת",
-                        type: "error",
+                        title: "הטופס נשלח בהצלחה",
+                        type: "success",
                         showCancelButton: false,
                         confirmButtonText: BtTex,
                         closeOnConfirm: true,
@@ -977,7 +1121,25 @@
 
             // הוספת event listeners להגדרות כלליות
             $('#formTitle, #requireLogin, #requireSignature, #developerNotes').on('input change', function () {
-                setTimeout(generatePreview, 100);
+                setTimeout(generatePreview, 50);
+            });
+
+            // הוספת event delegation גלובלי יחיד לכל השדות
+            $(document).on('input change keyup paste', '#fieldsList input, #fieldsList textarea, #fieldsList select', function() {
+                console.log('Event triggered on:', $(this).attr('id'), 'Value:', $(this).val()); // debug
+                // תגובה מהירה יותר לשדות אופציות
+                var isOptionsField = $(this).attr('id') && ($(this).attr('id').endsWith('_options') || $(this).attr('id').endsWith('_listItems'));
+                var delay = isOptionsField ? 10 : 50;
+                
+                // עבור שדות אופציות, נעביר את הערך החדש ישירות
+                if (isOptionsField) {
+                    var currentElement = $(this);
+                    setTimeout(function() {
+                        generatePreviewWithNewValue(currentElement.attr('id'), currentElement.val());
+                    }, delay);
+                } else {
+                    setTimeout(generatePreview, delay);
+                }
             });
 
             $("#WaitDiv2").hide()
