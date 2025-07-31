@@ -307,15 +307,15 @@
             //, { "Type": "Div", "ElementId": "Span123", "Text": "", "Style": "margin-top:20px;margin-right:-20px" }
             , { "Type": "Div", "Text": "אברך יקר! <br />ברוך הבא למערכת רישום לכולל שע\"י ישיבת<br/> \"עטרת שלמה\"", "Style": "text-align:center;color:cadetblue;font-family: assistant,Arial;font-size:22px;font-weight: bold;width: 92%;margin-right: auto;margin-left: auto;" }
             // , { "Type": "Hr" }
-            , { "Type": "Hr" }
-            , { "ElementId": "NoteSnif", "fieldName": "אני מאשר כי התחלתי כבר ללמוד בפועל בכולל.", "fieldNameShow": "אני מאשר כי התחלתי כבר ללמוד בפועל בכולל.<br/><b style='color:#c52c1a'>אם טרם התחלת ללמוד בפועל בכולל אנא אל תמלא את הטופס כעת</b>", "Style": "font - weight: 100;", "Type": "CheckBox", "Mandatory": true, "Br": false, "DbName": "Field8", }
-            , { "Type": "Hr" }
             , { "Type": "DivOpen", "ElementId": "SnifContainer", "Style": "display: flex; align-items: flex-end; flex-wrap: wrap;", "Text": "" }
-            , { "ElementId": "Snif1", "MaxLength": 50, "Width": 30, "fieldName": "סניף", "Type": "Text", "Mandatory": true, "DbName": "Field1", "Br": false }
+            , { "ElementId": "Snif1", "MaxLength": 50, "Width": 25, "fieldName": "סניף", "Type": "Text", "Mandatory": true, "DbName": "Field1", "Br": false }
             , { "ElementId": "IsMoveSnif", "Width": 20, "fieldName": "בקשת מעבר סניף", "Type": "CheckBox", "Mandatory": false, "Br": false, "DbName": "Field83" }
-            , { "ElementId": "SnifMove", "MaxLength": 50, "Width": 30, "fieldName": "מעבר לסניף", "Type": "Text", "Mandatory": false, "DbName": "Field84", "Br": true }
+            , { "ElementId": "SnifMove", "MaxLength": 50, "Width": 25, "fieldName": "מעבר לסניף", "Type": "Text", "Mandatory": false, "DbName": "Field84", "Br": true }
             , { "Type": "DivClose" }
-            
+
+            // , { "Type": "Hr", "MarginTop": "10" }
+            , { "ElementId": "NoteSnif", "fieldName": "אני מאשר כי התחלתי כבר ללמוד בפועל בכולל.", "fieldNameShow": "אני מאשר כי התחלתי כבר ללמוד בפועל בכולל.<br/><b style='color:#c52c1a'>אם טרם התחלת ללמוד בפועל בכולל אנא אל תמלא את הטופס כעת</b>", "Style": "font - weight: 100;", "Type": "CheckBox", "Mandatory": true, "Br": false, "DbName": "Field8", }
+            , { "Type": "Hr", "MarginBottom": "15" }
 
 
 
@@ -1438,6 +1438,30 @@
             $("#Tel2").val(avrechData.pelephone);
             $("#Tel3").val(avrechData.pelephone2);
             $("#Tel4").val(avrechData.wifePelephone);
+
+            // בדיקה אם אחד מהטלפונים זהה לטלפון מהמסך הראשון ולהפוך אותו ללא זמין
+            if (typeof TelTxt !== 'undefined' && TelTxt !== '') {
+                var loginPhone = TelTxt.replace(/-/g, '').replace(/\s/g, ''); // מנקה רווחים ומקפים
+                
+                // בדיקה לכל שדה טלפון
+                if (avrechData.telephone && avrechData.telephone.replace(/-/g, '').replace(/\s/g, '') === loginPhone) {
+                    $("#Tel1").prop('disabled', true);
+                    $("#Tel1").css('background-color', '#f0f0f0');
+                }
+                if (avrechData.pelephone && avrechData.pelephone.replace(/-/g, '').replace(/\s/g, '') === loginPhone) {
+                    $("#Tel2").prop('disabled', true);
+                    $("#Tel2").css('background-color', '#f0f0f0');
+                }
+                if (avrechData.pelephone2 && avrechData.pelephone2.replace(/-/g, '').replace(/\s/g, '') === loginPhone) {
+                    $("#Tel3").prop('disabled', true);
+                    $("#Tel3").css('background-color', '#f0f0f0');
+                }
+                if (avrechData.wifePelephone && avrechData.wifePelephone.replace(/-/g, '').replace(/\s/g, '') === loginPhone) {
+                    $("#Tel4").prop('disabled', true);
+                    $("#Tel4").css('background-color', '#f0f0f0');
+                }
+            }
+            
             $("#Mail").val(avrechData.email);
 
             if (avrechData.snifLimud) {
@@ -3018,6 +3042,23 @@
                 id="ZeoutCheckWait"><img src="waitnew.gif" style="width:50px;"><br><span id="ZeoutCheckWaitText">נא
                     להמתין...</span></div>
             <div style="height:200px"></div>
+
+
+            <div
+                style="text-align: center; margin: 20px auto; padding: 15px; background: linear-gradient(135deg, #f0f8ff, #e6f3ff); border: 2px solid #4a90e2; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 90%; font-family: Arial, sans-serif;">
+                <div
+                    style="display: inline-block; background-color: #4a90e2; color: white; padding: 8px 16px; border-radius: 20px; margin-bottom: 10px; font-size: 14px; font-weight: bold;">
+                    זקוקים לעזרה?
+                </div>
+                <p style="margin: 10px 0; color: #2c3e50; font-size: 16px; line-height: 1.5; font-weight: 500;">
+                    לכל בעיה ברישום "בלבד" ניתן לפנות למייל
+                    <span
+                        style="color: #4a90e2; font-weight: bold; text-decoration: underline;">kolelim@asi.org.il</span>
+                    <br />
+                    או בהודעה לגבאי במערכת נדרים פלוס
+                </p>
+
+            </div>
         </div>
 
 
