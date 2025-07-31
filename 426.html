@@ -306,8 +306,16 @@
 
             //, { "Type": "Div", "ElementId": "Span123", "Text": "", "Style": "margin-top:20px;margin-right:-20px" }
             , { "Type": "Div", "Text": "אברך יקר! <br />ברוך הבא למערכת רישום לכולל שע\"י ישיבת<br/> \"עטרת שלמה\"", "Style": "text-align:center;color:cadetblue;font-family: assistant,Arial;font-size:22px;font-weight: bold;width: 92%;margin-right: auto;margin-left: auto;" }
-            , { "ElementId": "Snif1", "MaxLength": 50, "Width": 40, "fieldName": "סניף", "Type": "Text", "Mandatory": true, "DbName": "Field1", "Br": true }
+            // , { "Type": "Hr" }
+            , { "Type": "Hr" }
             , { "ElementId": "NoteSnif", "fieldName": "אני מאשר כי התחלתי כבר ללמוד בפועל בכולל.", "fieldNameShow": "אני מאשר כי התחלתי כבר ללמוד בפועל בכולל.<br/><b style='color:#c52c1a'>אם טרם התחלת ללמוד בפועל בכולל אנא אל תמלא את הטופס כעת</b>", "Style": "font - weight: 100;", "Type": "CheckBox", "Mandatory": true, "Br": false, "DbName": "Field8", }
+            , { "Type": "Hr" }
+            , { "Type": "DivOpen", "ElementId": "SnifContainer", "Style": "display: flex; align-items: flex-end; flex-wrap: wrap;", "Text": "" }
+            , { "ElementId": "Snif1", "MaxLength": 50, "Width": 30, "fieldName": "סניף", "Type": "Text", "Mandatory": true, "DbName": "Field1", "Br": false }
+            , { "ElementId": "IsMoveSnif", "Width": 20, "fieldName": "בקשת מעבר סניף", "Type": "CheckBox", "Mandatory": false, "Br": false, "DbName": "Field83" }
+            , { "ElementId": "SnifMove", "MaxLength": 50, "Width": 30, "fieldName": "מעבר לסניף", "Type": "Text", "Mandatory": false, "DbName": "Field84", "Br": true }
+            , { "Type": "DivClose" }
+            
 
 
 
@@ -763,7 +771,6 @@
 
         var formStatus = 0;
         var elemetsArr = [];
-        var selectedSnifId = "";
 
 
         var Json = {
@@ -946,11 +953,27 @@
 
             });
 
+            // מעבר סניף - בחירה ממודל
+            $("#SnifMove").focus(function () {
+                $('#SnifMoveChoose').show()
+                $("#SnifMove").blur()
+            });
+
             for (var i = 0; i < Snifim.length; i++) {
                 $("#SnifimTable").append('<tr><td id="NatsigTb' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center">' + Snifim[i].name + '</div></td></tr>');
                 (function (i) {
                     $("#NatsigTb" + i).click(function () {
                         SetSnif(Snifim[i].name, Snifim[i].id);
+                    });
+                })(i);
+            }
+
+            // בניית טבלת סניפים עבור מעבר סניף
+            for (var i = 0; i < Snifim.length; i++) {
+                $("#SnifimMoveTable").append('<tr><td id="NatsigMoveTb' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center">' + Snifim[i].name + '</div></td></tr>');
+                (function (i) {
+                    $("#NatsigMoveTb" + i).click(function () {
+                        SetSnifMove(Snifim[i].name, Snifim[i].id);
                     });
                 })(i);
             }
@@ -994,6 +1017,17 @@
                     }
                 });
 
+                // הצגה מותנית של שדה מעבר סניף
+                $('#SnifMoveDiv').hide();
+                $('#IsMoveSnif').change(function () {
+                    $('#SnifMoveDiv').hide();
+                    $('#SnifMove').val('');
+                    selectedSnifMoveId = '';
+                    if ($("#IsMoveSnif").is(":checked") == true) {
+                        $('#SnifMoveDiv').show();
+                    }
+                });
+
 
                 AutoFillMail("Mail")
 
@@ -1032,7 +1066,7 @@
                 $("#BoxBank").hide()
                 $("#TashlumAmount_CCDiv").hide()
                 $("#PercentDiv").hide()
-                $("#NoteSnifDiv").hide()
+                // $("#NoteSnifDiv").hide()
                 $("#IshurDiv").hide()
                 $("#Ishur2Div").hide()
 
@@ -1413,6 +1447,20 @@
                     selectedSnifId = avrechData.snifLimud;
                     $('#Snif1').prop('disabled', true);
                     $("#Snif1").blur()
+                }
+            }
+
+            // שדות מעבר סניף
+            if (avrechData.isMoveSnif == true) {
+                $('#IsMoveSnif').prop('checked', true).trigger('change');
+                if (avrechData.snifToMove) {
+                    const findSnifMove = Snifim.find(snif => snif.id == avrechData.snifToMove);
+                    if (findSnifMove) {
+                        $("#SnifMove").val(findSnifMove.name);
+                        selectedSnifMoveId = avrechData.snifToMove;
+                        $('#SnifMove').prop('disabled', true);
+                        $("#SnifMove").blur()
+                    }
                 }
             }
 
@@ -1808,6 +1856,8 @@
         var Demo = ''
         var ColorList = '';
         var ListCount = 1;
+        var selectedSnifId = "";
+        var selectedSnifMoveId = ""; // משתנה לשמירת ID של סניף המעבר
 
         var CurrentYG = 1;
         var CurrentK = 1;
@@ -1911,9 +1961,12 @@
 
             // TODO: test mode
             // initialForm({
-            //     statusRishum: 3,
+            //     statusRishum: 1,
             //     snifim: [
             //         { name: "אופקים", id: 1 },
+            //         { name: "בני ברק", id: 2 },
+            //         { name: "ירושלים", id: 3 },
+            //         { name: "אלעד", id: 4 },
             //     ]
             // });
             // initialFormInputValues({
@@ -1926,6 +1979,8 @@
             //         isEzrachutZara: true,
             //         zihuy: "123456789",
             //         cuntryEzrachut: "ישראל",
+            //         isMoveSnif: true,
+            //         snifMoveId: 2,
             //         isIshurLimudOnDarkon: false,
             //         withoutIshurLimudApprove: true,
             //         birthDate: "01/01/2020",
@@ -2233,9 +2288,21 @@
             // } else {
             //     $('#DivOpen2').hide();
             // }
-            $("#NoteSnifDiv").show()
+            // $("#NoteSnifDiv").show()
 
             CloseNatsig()
+        }
+
+        // פונקציות עבור מעבר סניף
+        function CloseSnifMove() {
+            $('#SnifMoveChoose').hide();
+            setTimeout(function () { ScrollUp($('#SnifMove')) }, 100);
+        }
+
+        function SetSnifMove(SnifName, id) {
+            selectedSnifMoveId = id;
+            $("#SnifMove").val(SnifName)
+            CloseSnifMove()
         }
 
 
@@ -2472,6 +2539,27 @@
 
 
 
+                // בדיקה מיוחדת לשדה מעבר סניף - Mandatory רק אם הצ'קבוקס מסומן
+                if (JsonElement.ElementId == "SnifMove") {
+                    if ($("#IsMoveSnif").is(":checked") && ElementValue == '' && ElementVisible == true) {
+                        swal({
+                            type: "error",
+                            title: "חובה למלא " + JsonElement.fieldName,
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                        }, function () {
+                            $('#' + JsonElement.ElementId).focus()
+                            $('#' + JsonElement.ElementId).select();
+                            ScrollUp('#' + JsonElement.ElementId)
+                            setTimeout(function () {
+                                $("#SaveDiv").show()
+                                $("#WaitDiv").hide()
+                            }, 100);
+                        });
+                        return false;
+                    }
+                }
+
                 if (JsonElement.Mandatory == true && ElementValue == '' && ElementVisible == true) {
                     swal({
                         type: "error",
@@ -2623,7 +2711,6 @@
                 phone: $("#TelCheckText").val(),
                 code: $("#CodeCheckText").val(),
                 snifLimud: selectedSnifId,
-
             };
             if ($('input[name=Citizen]:checked').val() == "ישראל") {
                 objToSend.isEzrachutZara = false;
@@ -2632,7 +2719,8 @@
             }
 
             if (formStatus == 1) {
-
+                objToSend.isMoveSnif = $("#IsMoveSnif").is(":checked") ? true : false;
+                objToSend.snifToMove = selectedSnifMoveId || "";
                 objToSend.isIshurLimudOnDarkon = $('input[name=ChutzQ]:checked').val() == "כן";
                 objToSend.withoutIshurLimudApprove = $("#NoteDarcon").is(":checked") ? true : false
                 objToSend.birthDate = $("#BDE").val() || "";
@@ -3111,6 +3199,21 @@
                 <div class="Koteret" style="margin-bottom:30px;padding:0px;text-align:center">בחר סניף:</div>
                 <!---------------------->
                 <table id="SnifimTable" style="text-align:center;width:95%;font-size:medium;background-color:white">
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- מודל בחירת סניף למעבר -->
+    <div id="SnifMoveChoose" class="modal" onclick='if(event.target == this) CloseSnifMove()'>
+        <div class="modal-content" style="max-width:600px;margin: 5px auto;">
+            <div style="-webkit-user-select: none; position: absolute"> <img
+                    style="cursor: pointer; width: 25px; height: auto; margin-top: 10px; margin-right: 10px"
+                    src="closebt.png" onclick="CloseSnifMove()" /></div>
+            <div style="text-align:center">
+                <div class="Koteret" style="margin-bottom:30px;padding:0px;text-align:center">בחר סניף מעבר:</div>
+                <!---------------------->
+                <table id="SnifimMoveTable" style="text-align:center;width:95%;font-size:medium;background-color:white">
                 </table>
             </div>
         </div>
