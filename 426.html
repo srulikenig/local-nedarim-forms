@@ -1453,11 +1453,11 @@
             // שדות מעבר סניף
             if (avrechData.isMoveSnif == true) {
                 $('#IsMoveSnif').prop('checked', true).trigger('change');
-                if (avrechData.snifMove) {
-                    const findSnifMove = Snifim.find(snif => snif.id == avrechData.snifMove);
+                if (avrechData.snifToMove) {
+                    const findSnifMove = Snifim.find(snif => snif.id == avrechData.snifToMove);
                     if (findSnifMove) {
                         $("#SnifMove").val(findSnifMove.name);
-                        selectedSnifMoveId = avrechData.snifMove;
+                        selectedSnifMoveId = avrechData.snifToMove;
                         $('#SnifMove').prop('disabled', true);
                         $("#SnifMove").blur()
                     }
@@ -2720,7 +2720,7 @@
 
             if (formStatus == 1) {
                 objToSend.isMoveSnif = $("#IsMoveSnif").is(":checked") ? true : false;
-                objToSend.snifMoveId = selectedSnifMoveId || "";
+                objToSend.snifToMove = selectedSnifMoveId || "";
                 objToSend.isIshurLimudOnDarkon = $('input[name=ChutzQ]:checked').val() == "כן";
                 objToSend.withoutIshurLimudApprove = $("#NoteDarcon").is(":checked") ? true : false
                 objToSend.birthDate = $("#BDE").val() || "";
