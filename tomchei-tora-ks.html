@@ -1,0 +1,2943 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="he-IL" translate="no">
+
+<head>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="robots" content="noindex" />
+
+    <link rel="preload" as="image" href="waitnew.gif">
+    <link href="https://fonts.googleapis.com/css?family=Assistant:400,600,700&display=swap&subset=hebrew"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="Files/signature-pad.css" />
+    <link rel="stylesheet" type="text/css" href="Files/sweetalert.css?0" />
+
+    <script src="Files/sweetalert.min.js"></script>
+    <script type="text/javascript" src="Files/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="Files/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="Files/CreditCardReader.js"></script>
+
+
+    <title>טופס - נדרים פלוס</title>
+
+    <style>
+        * {
+            font-family: 'Assistant', Arial, sans-serif;
+        }
+
+        @media screen and (max-width: 400px) {
+            .DivTelText {
+                width: 80% !important
+            }
+        }
+
+        @media screen and (max-width: 500px) {
+            #MainForm {
+                margin-right: 0px !important
+            }
+        }
+
+        .TextBox {
+            -webkit-appearance: none;
+            font-size: large;
+            color: #3f475e;
+            text-align: right;
+            padding: 6px;
+            border-color: #f7bb4d;
+            border-style: solid;
+            border-width: 0px 0px 2px 0px;
+            margin: 5px 5px;
+            background-color: #FFFFFB;
+            -webkit-box-sizing: border-box
+        }
+
+        .RadioBtLbl {
+            border-style: solid;
+            border-color: #f7bb4d;
+            border-width: 0px 0px 2px 0px;
+            margin: 0px 10px;
+            background-color: #FFFFFB;
+            padding: 10px 2px 10px 10px;
+            border-radius: 2px;
+            -webkit-user-select: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+
+        .SelectValLbl {
+            border-style: solid;
+            width: 90%;
+            text-align-last: center;
+            border-color: #f7bb4d;
+            border-width: 0px 0px 2px 0px;
+            font-size: large;
+            color: #3f475e;
+            margin: 0px 5px;
+            background-color: #FFFFFB;
+            padding: 7px 2px 10px 10px;
+            border-radius: 2px;
+            -webkit-user-select: none;
+            cursor: pointer;
+            display: inline-block;
+            outline: none;
+        }
+
+        .Koteret {
+            font-size: 22px;
+            color: #ff6a00;
+            font-weight: bold;
+            text-align: right;
+            padding-right: 27px;
+            width: 90%;
+            margin-top: 27px;
+            margin-bottom: 10px;
+            -webkit-user-select: none;
+        }
+
+
+        li {
+            text-align: right;
+            padding: 0px 0px 0px 25px;
+            font-size: 17px;
+            -webkit-user-select: none;
+        }
+
+        .checkbox {
+            text-align: right;
+            color: #2B3A63;
+            padding: 0px 0px 0px 25px;
+            font-size: 17px;
+        }
+
+
+
+        textarea:focus,
+        input[type=text]:focus,
+        input[type=tel]:focus {
+            outline: none;
+            border-width: 0px 0px 2px 0px;
+            border-color: #38c232
+        }
+
+        .Bt {
+            -webkit-appearance: none;
+            font-size: large;
+            color: white;
+            background-color: #38c232;
+            text-align: center;
+            padding: 12px 24px 12px 24px;
+            border-color: #fff;
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.5);
+            -webkit-overflow-scrolling: touch;
+        }
+
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            color: #808080;
+            -webkit-box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.75);
+            background-color: white;
+            max-width: 500px;
+            min-width: 200px;
+            min-height: 250px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        td {
+            color: #296c8d;
+            font-size: 20px;
+            border: 1px solid #d7cece;
+            padding-left: 5px;
+            padding-right: 5px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        th {
+            min-height: 500px;
+            border: 1px solid #d7cece;
+            color: #2B3A63;
+            font-family: assistant, Arial;
+        }
+
+        .bordered td,
+        .bordered th {
+            border-left: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            padding: 5px;
+        }
+
+        .TableLightFont {
+            font-weight: lighter;
+            font-size: 14px;
+        }
+
+
+        table {
+            border-collapse: collapse;
+            border: 1px solid #d7cece;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .TableKoteret {
+            text-align: center;
+            padding-right: 20px;
+            /*background-color: aliceblue;*/
+            font-size: 25px;
+            color: steelblue;
+            /*lightslategrey*/
+            font-weight: normal;
+        }
+
+        .fieldName {
+            display: inline-block;
+            text-align: right;
+            width: 100%;
+            font-size: medium;
+            margin-right: 5px;
+            color: #808080;
+            -webkit-user-select: none;
+            margin-right: 10px
+        }
+
+        /* עיצוב קבוצות שדות */
+        .group-fields-container {
+            margin: 20px;
+            border: 2px solid #f7bb4d;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #fafafa;
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .group-title {
+            font-size: 20px;
+            color: #ff6a00;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .group-add-button {
+            background-color: #38c232;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 3px;
+            color: white;
+            cursor: pointer;
+            font-family: Assistant, Arial;
+            font-size: 14px;
+        }
+
+        .group-add-button:hover {
+            background-color: #2da428;
+        }
+
+        .group-row {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 30px 0 15px 0;
+            border-radius: 5px;
+            background-color: white;
+            transition: box-shadow 0.2s;
+            position: relative;
+            min-height: 60px;
+        }
+
+        .group-row:hover {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .group-row-number {
+            background-color: #f7bb4d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 14px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 1;
+        }
+
+        .group-remove-button {
+            background-color: #ff6a00;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            color: white;
+            cursor: pointer;
+            font-family: Assistant, Arial;
+            font-size: 12px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .group-remove-button:hover {
+            background-color: #e55a00;
+        }
+
+        .group-row textarea,
+        .group-row input[type="text"],
+        .group-row input[type="tel"],
+        .group-row select {
+            margin-top: 5px;
+        }
+
+        .group-buttons {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .group-buttons .Bt {
+            margin: 0 5px;
+            min-width: 120px;
+        }
+    </style>
+    <script>
+
+        var Json = {
+            "FormElements": [
+
+                { "Type": "Koteret", "Text": "פרטים אישיים" }
+                , { "ElementId": "zehut", "MaxLength": 9, "Width": 40, "fieldName": "תעודת זהות", "Type": "Tel", "Mandatory": true, "DbName": "Field1", "Br": true, "Send": true }
+                , { "ElementId": "firstName", "MaxLength": 50, "Width": 40, "Bold": false, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true, "DbName": "Field2", "Style": "", "Br": false, "Send": true }
+                , { "ElementId": "lastName", "MaxLength": 50, "Width": 40, "fieldName": "שם משפחה", "Type": "Text", "Mandatory": true, "DbName": "Field3", "Br": false, "Send": true }
+                , { "ElementId": "birthDate", "MaxLength": 10, "Width": 40, "fieldName": "תאריך לידה", "fieldNameShow": "תאריך לידה<br/>בתבנית: 25/05/1990", "Type": "Tel", "Mandatory": true, "DbName": "Field4", "Br": false, "Date": true, "Send": true }
+
+                , { "Type": "Koteret", "Text": "פרטי קשר" }
+                , { "ElementId": "phone", "MaxLength": 11, "Width": 40, "fieldName": "טלפון", "Type": "Tel", "Mandatory": true, "DbName": "Field5", "Br": false, "Send": true }
+                , { "ElementId": "mobile", "MaxLength": 11, "Width": 40, "fieldName": "פלאפון", "Type": "Tel", "Mandatory": true, "DbName": "Field6", "Br": false, "Send": true }
+                , { "ElementId": "mobile2", "MaxLength": 11, "Width": 40, "fieldName": "פלאפון נוסף", "Type": "Tel", "Mandatory": false, "DbName": "Field7", "Br": false, "Send": true }
+                , { "ElementId": "email", "MaxLength": 50, "Width": 60, "fieldName": "אימייל", "Type": "Text", "Mandatory": true, "DbName": "Field8", "Br": false, "Send": true }
+                , { "ElementId": "email2", "MaxLength": 50, "Width": 60, "fieldName": "אימייל נוסף", "Type": "Text", "Mandatory": false, "DbName": "Field9", "Br": false, "Send": true }
+
+                , { "Type": "Koteret", "Text": "כתובת" }
+                , { "Type": "Div","ElementId": "OnlyKS", "Text":"<div style='background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center; font-weight: bold; font-size: 16px; width: 50%;'>הרישום הינו לתושב הגר במודיעין עילית בלבד.</div>" }
+                , { "ElementId": "city", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field10", "Br": false, "Send": true }
+                , { "ElementId": "street", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": true, "DbName": "Field11", "Br": false, "Send": true }
+                , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": true, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
+                , { "ElementId": "building", "MaxLength": 10, "Width": 20, "fieldName": "בניין", "Type": "Text", "Mandatory": false, "DbName": "Field13", "Br": false, "Send": true }
+                , { "ElementId": "apartment", "MaxLength": 10, "Width": 20, "fieldName": "דירה", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
+                , { "ElementId": "entrance", "MaxLength": 10, "Width": 20, "fieldName": "כניסה", "Type": "Select", "Mandatory": false, "DbName": "Field29", "Br": false, "Send": true, "SelectVal": "בחר כניסה,א,ב,ג,ד,ה" }
+
+                , { "Type": "Koteret", "Text": "פרטי ילדים" }
+                , { "ElementId": "childrenAtHome", "MaxLength": 2, "Width": 25, "fieldName": "ילדים בבית", "Type": "Tel", "Mandatory": false, "DbName": "Field24", "Br": false, "Send": true }
+                , { "ElementId": "childrenMarried", "MaxLength": 2, "Width": 25, "fieldName": "ילדים נשואים", "Type": "Tel", "Mandatory": false, "DbName": "Field25", "Br": false, "Send": true }
+                , { "ElementId": "childrenTotal", "MaxLength": 2, "Width": 25, "fieldName": "סה\"כ", "Type": "Tel", "Mandatory": false, "DbName": "Field26", "Br": false, "Send": true }
+
+
+                , { "ElementId": "note", "MaxLength": 700, "Width": 90, "fieldName": "הערות", "Type": "textarea", "Rows": 3, "Mandatory": false, "DbName": "Field23", "Br": false, "Send": true }
+
+                , { "Type": "Margin", "Height": "25" }
+
+                , { "ElementId": "noCommitment", "fieldName": "אין במילוי טופס זה משום התחייבות של ארגון תומכי תורה לספק שום שירות או תמורה", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field27", "Width": 90, "Send": true }
+
+                , { "ElementId": "approveMarketing", "fieldName": "בעת מילוי הטופס הינכם מאשרים קבלת דיוור וכן הודעות טלפוניות הן מתומכי תורה והן ממוסדות עטרת שלמה", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field28", "Width": 90, "Send": true }
+
+
+
+
+            ],
+            "TofesId": "2302",//
+            "Version": "3",
+            "AllowChanges": false,
+            "NeedSign": false,
+            "PreData": false,
+            "MosadId": "7014477", //0
+            "MainLogo": "", // Files/Pic/000_logo.jpg
+            "MainTitle": "טופס רישום לתומכי תורה - תושבי קרית ספר",
+            "SpecialCheck": "Phone:Field5;Date:Field4" //Phone:Field; Date:Field; MasavPayment "CreditCardPayment" //Zeout:Field; //Mail:Field8; //CreditCardToken:Max //CheckDouble: //Bank:Field90,Field91,Field92 //CopyMail: //Tokef:Field8
+
+        }
+
+
+        var MasofId = ''
+        var ClientId = '';
+        var Zeout = '';
+        var OldTofesId = '';
+        var Demo = ''
+        var SignData = ''
+
+
+        var CheckElementId = [];
+        var CheckDbName = [];
+        var CheckDBFree = [];
+
+        // הגדרות קבוצות שדות דינמיות
+        var GroupFieldsConfig = {};
+
+        var MainForm = '';
+        $(document).ready(function () {
+            $.ajaxSetup({ cache: false });
+
+
+
+            if (Json.MainLogo !== '') { $("#MainLogo").attr('src', Json.MainLogo); } else { $("#MainLogo").attr('src', 'https://images.matara.pro/ClientsImages/' + Json.MosadId + '.jpg?1'); }
+            $("#MainTitle").html(Json.MainTitle);
+
+            //AddClientLogin("1");
+
+            if (GetURLParameter("Demo") == '1') Demo = "&Demo=1";
+            MasofId = GetURLParameter("MasofId");
+            ClientId = GetURLParameter("ClientId");
+            Zeout = GetURLParameter("Zeout");
+
+            if (GetURLParameter("Admin") == '1') $("#AdminBt").show();
+            if (MasofId !== '') {
+                $("#BackToNedarim").show();
+                //$("#NoteClose").show();
+                //$("#WaitDiv2").hide();
+                //return false;
+            }
+
+
+            if (Json.NeedSign == true) $("#SignAlert").show();
+
+
+            for (var Element in Json.FormElements) {
+                var JsonElement = Json.FormElements[Element]
+                var Style = ""
+                if (JsonElement.Style) Style = JsonElement.Style
+                if (JsonElement.Type == "Koteret") {
+                    MainForm += '<div class="Koteret" style="' + Style + '">' + JsonElement.Text + '</div>'
+                } else {
+                    var dir = "rtl"
+                    var Bold = ""
+                    if (JsonElement.Bold == true) Bold = "font-weight:bold"
+                    if (JsonElement.Type == 'Tel') dir = "ltr"
+                    var FieldName = JsonElement.fieldName
+                    if (JsonElement.fieldNameShow !== undefined) FieldName = JsonElement.fieldNameShow
+                    var Lbl = '<label for="' + JsonElement.ElementId + '" class="fieldName" style="' + Bold + ';' + Style + '">' + ((JsonElement.Mandatory == true) ? '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;">*</span>' : '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;display:none">*</span>') + FieldName + '</label><br>'
+                    if (JsonElement.LblHide == true) Lbl = ''
+                    if (JsonElement.Type == "Select") {
+                        var DivData = '<div id="' + JsonElement.ElementId + 'Div"  style="width:' + JsonElement.Width + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:10px;margin-right:20px;margin-bottom: 4px;' + Style + '">' + Lbl + '<select class="SelectValLbl"  id="' + JsonElement.ElementId + '">'
+                        for (i = 0; i < JsonElement.SelectVal.split(",").length; i++) {
+                            DivData += '<option value="' + JsonElement.SelectVal.split(",")[i].replace(/"/g, '&quot;') + '"> ' + JsonElement.SelectVal.split(",")[i] + '</option>'
+                        }
+                        DivData += '</select></div>'
+                        MainForm += DivData
+                    }
+                    else if (JsonElement.Type == "Margin") {
+                        MainForm += '<div style="height:' + JsonElement.Height + 'px"></div>'
+                    }
+                    else if (JsonElement.Type == "Hr") {
+                        MainForm += '<hr style="margin-right:20%;margin-left:20%;margin-top:' + JsonElement.MarginTop + 'px;margin-bottom:' + JsonElement.MarginBottom + 'px;' + Style + '" > '
+                    }
+                    else if (JsonElement.Type == "IndexNumber") {
+                        var SpanId = ""
+                        if (JsonElement.ElementId !== undefined) SpanId = "id='" + JsonElement.ElementId + "'"
+                        MainForm += (JsonElement.BeforeBr == true ? "<br id='" + JsonElement.ElementId + "Br' />" : '') + '<span ' + SpanId + ' style="-webkit-user-select: none;margin-top:15px;font-weight:bold;font-size:large;display:inline-block;color:#2B3A63;font-family:Assistant;background-color:cadetblue ;padding:3px 6px;color:white;font-weight:normal;border-radius:2px;margin-left: -10px;vertical-align: top;">' + JsonElement.Text + '</span>'
+                    } else if (JsonElement.Type == "Div") {
+                        MainForm += '<div  id="' + JsonElement.ElementId + '" style="' + Style + ';' + Bold + '">' + JsonElement.Text + '</div>'
+                    }
+                    else if (JsonElement.Type == "DivOpen") {
+                        MainForm += '<div  id="' + JsonElement.ElementId + '" style="' + Style + ';' + Bold + '">' + JsonElement.Text
+                    }
+                    else if (JsonElement.Type == "DivClose") {
+                        MainForm += '</div>'
+                    }
+                    else if (JsonElement.Type == "List") {
+                        MainForm += '<ol start=' + JsonElement.Number + ' style="-webkit-user-select:none;text-align:right;font-weight: bold;color: #2B3A63;' + (!JsonElement.Number ? 'list-style-type: disc;' : '') + ';' + Style + '"><li>' + JsonElement.Text + '</li></ol>'
+                    }
+                    else if (JsonElement.Type == "CheckBox") {
+
+
+                        var FieldName = JsonElement.fieldName
+                        if (JsonElement.fieldNameShow !== undefined) FieldName = JsonElement.fieldNameShow
+                        MainForm += '<div id="' + JsonElement.ElementId + 'Div" class="checkbox" style="-webkit-user-select:none;width:' + JsonElement.Width + '%;display:inline-block;vertical-align:top;text-align:right;margin:10px 20px 10px 0px;' + Style + ';' + Bold + '"><label for="' + JsonElement.ElementId + '"><input type="CheckBox" dir="' + dir + '" id="' + JsonElement.ElementId + '"/>' + ((JsonElement.Mandatory == true) ? '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;">*</span>' : '<span id="Span_' + JsonElement.ElementId + '" style="color:indianred;display:none">*</span>') + '<span id="' + JsonElement.ElementId + '_Txt" style="cursor: pointer; width: 90%; display: inline-block; vertical-align: top;padding-right: 3px;">' + FieldName + '</span></label></div>'
+                    }
+                    else if (JsonElement.Type == "textarea") {
+                        MainForm += '<div id="' + JsonElement.ElementId + 'Div" style="resize:none;width:' + JsonElement.Width + '%;display:inline-block;vertical-align:top;text-align:right;margin-top:10px;margin-right:20px;' + Style + '">' + Lbl + '<textarea class="TextBox"  rows="' + JsonElement.Rows + '" dir="' + dir + '" autocomplete="off" type="' + JsonElement.Type + '" style="width:90%;resize:none;" maxlength="' + JsonElement.MaxLength + '" id="' + JsonElement.ElementId + '" onfocus="ScrollUp(this)"/></div>'
+                    }
+                    else if (JsonElement.Type == "Text" || JsonElement.Type == "Tel") {
+
+                        var OnInput = ""
+
+
+                        if (JsonElement.ElementId == "TizkoretTime") {
+                            MainForm += '<div class="DivTelText" id="' + JsonElement.ElementId + 'Div" style="width:' + JsonElement.Width + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:10px;margin-right:20px;">' + Lbl + '<input class="TextBox" dir="' + dir + '" autocomplete="off" type="time" style="width:90%" maxlength="' + JsonElement.MaxLength + '" id="' + JsonElement.ElementId + '" onfocus="ScrollUp(this)" ' + OnInput + '/></div>'
+
+                        } else {
+                            if (JsonElement.Type == "Tel") OnInput = 'oninput="OnlyNumber(this.id)"'
+                            MainForm += '<div class="DivTelText" id="' + JsonElement.ElementId + 'Div" style="width:' + JsonElement.Width + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:10px;margin-right:20px;">' + Lbl + '<input class="TextBox" dir="' + dir + '" autocomplete="off" type="' + JsonElement.Type + '" style="width:90%" maxlength="' + JsonElement.MaxLength + '" id="' + JsonElement.ElementId + '" onfocus="ScrollUp(this)" ' + OnInput + '/></div>'
+
+                        }
+
+
+                    } else if (JsonElement.Type == "Radio") {
+                        var Br = ""
+                        if (JsonElement.br == true) Br = "<br/>"
+                        var DivData = '<div id="' + JsonElement.ElementId + '" style="width:' + JsonElement.Width + '%;display:inline-block;vertical-align:top;text-align:right;margin: 15px 20px 10px;' + Style + '">' + Lbl
+                        for (i = 0; i < JsonElement.RadioBt.length; i++) {
+                            var Show = JsonElement.RadioBt[i].Text
+                            if (JsonElement.RadioBt[i].Show !== undefined) { Show = JsonElement.RadioBt[i].Show }
+                            DivData += '<div id="' + JsonElement.ElementId + '_RadioLbl' + i + '" style="display:inline-block"><label class="RadioBtLbl" for="' + JsonElement.ElementId + '_Radio' + i + '" style="' + Style + ';' + (JsonElement.RadioBt[i].Bold == true ? 'font-weight:bold' : '') + '"><input id="' + JsonElement.ElementId + '_Radio' + i + '" type="radio" name="' + JsonElement.ElementId + '" value="' + JsonElement.RadioBt[i].Text.replace(/"/g, '&quot;') + '"> <span id="' + JsonElement.ElementId + '_RadioLblShow' + i + '">' + Show + '</span></label></div>' + Br
+                        }
+                        DivData += '</div>'
+                        MainForm += DivData
+                    } else if (JsonElement.Type == "GroupFields") {
+                        // יצירת קבוצת שדות שחוזרים על עצמם
+                        var GroupHtml = '<div id="' + JsonElement.ElementId + 'Container" class="group-fields-container">';
+
+                        // כותרת הקבוצה עם כפתור הוספה
+                        GroupHtml += '<div class="group-header">';
+                        GroupHtml += '<div class="group-title">';
+                        GroupHtml += ((JsonElement.Mandatory == true) ? '<span style="color:indianred;">*</span>' : '') + JsonElement.fieldName;
+                        GroupHtml += '</div>';
+                        GroupHtml += '<button type="button" id="' + JsonElement.ElementId + 'AddBtn" class="group-add-button" onclick="addGroupRow(\'' + JsonElement.ElementId + '\')">';
+                        GroupHtml += 'הוסף תלמיד</button>';
+                        GroupHtml += '</div>';
+
+                        // מיכל לשורות הקבוצה
+                        GroupHtml += '<div id="' + JsonElement.ElementId + 'Rows"></div>';
+
+                        GroupHtml += '</div>';
+                        MainForm += GroupHtml;
+
+                        // שמירת הגדרות הקבוצה במשתנה גלובלי
+                        GroupFieldsConfig[JsonElement.ElementId] = {
+                            fields: JsonElement.Fields,
+                            maxRows: JsonElement.MaxRows || 10,
+                            defaultRows: JsonElement.DefaultRows || 1,
+                            currentRows: 0,
+                            dbName: JsonElement.DbName,
+                            mandatory: JsonElement.Mandatory
+                        };
+                    }
+                    if (JsonElement.Br == true) MainForm += '<br/>';
+
+
+
+                    // בדיקות
+                    if (JsonElement.DbName !== undefined) {
+                        if (CheckDbName.indexOf(JsonElement.DbName) > -1) { alert("נמצא כפילות DbName ב: " + JsonElement.DbName) }
+                        if (JsonElement.DbName.substring(0, 5) != "Field") { alert("לא תקין DbName: " + JsonElement.DbName) }
+                        if (JsonElement.DbName.indexOf("Max") > -1) {
+                            if ($.isNumeric(JsonElement.DbName.split('Field')[1].split('Max')[0]) == false || JsonElement.DbName.split('Field')[1].split('Max')[1] != "") { alert("לא תקין DbName: " + JsonElement.DbName) }
+                            if (JsonElement.DbName.split('Field')[1].split('Max')[0] < 1 || JsonElement.DbName.split('Field')[1].split('Max')[0] > 10) { alert("נמצא חריגה  DbNameMax: " + JsonElement.DbName) }
+                        }
+                        else if ($.isNumeric(JsonElement.DbName.split('Field')[1]) == false) { alert("לא תקין DbName: " + JsonElement.DbName) }
+                        if (parseInt(JsonElement.DbName.split("Field")[1]) > 99) { alert("נמצא חריגה DbName ב: " + JsonElement.DbName) }
+                        CheckDbName.push(JsonElement.DbName)
+                    }
+
+                    if (JsonElement.ElementId !== undefined) {
+                        if (CheckElementId.indexOf(JsonElement.ElementId) > -1) { alert("נמצא כפילות ElementId ב: " + JsonElement.ElementId) }
+                        CheckElementId.push(JsonElement.ElementId);
+                    }
+
+                    if (JsonElement.ElementId == "CreditCard" || JsonElement.ElementId == "CardExpiration") {
+                        if ((Json.SpecialCheck.indexOf("CreditCardPayment") < 0) && (Json.SpecialCheck.indexOf("CreditCardToken") < 0)) { alert("לא קיימת שליחת אשראי.") }
+                        if (JsonElement.DbName && JsonElement.ElementId == "CreditCard" && (Json.SpecialCheck.indexOf("CreditCardToken:" + JsonElement.DbName) < 0)) { alert("כרטיס אשראי נשלח ללא CreditCardToken") }
+                    }
+
+                    // בדיקות נוספות לקבוצות שדות
+                    if (JsonElement.Type == "GroupFields") {
+                        if (!JsonElement.Fields || !Array.isArray(JsonElement.Fields)) {
+                            alert("שדה GroupFields חייב להכיל מערך Fields: " + JsonElement.ElementId);
+                        }
+                        for (var fieldIndex = 0; fieldIndex < JsonElement.Fields.length; fieldIndex++) {
+                            var subField = JsonElement.Fields[fieldIndex];
+                            if (!subField.ElementId || !subField.fieldName || !subField.Type) {
+                                alert("שדה בתוך GroupFields חסר נתונים חובה: " + JsonElement.ElementId);
+                            }
+                        }
+                    }
+                }
+            }
+
+            $("#MainForm").html(MainForm);
+
+            AutoFillMail("email")
+            AutoFillMail("email2")
+
+            // הגדרת חישוב אוטומטי של סה"כ ילדים
+            setupChildrenCalculation();
+
+
+
+            // אתחול קבוצות שדות דינמיות
+            initializeGroupFields();
+
+
+
+            // הגדרת שדה השכונות התלוי בעיר - יתבצע אחרי יצירת ה-HTML
+            setupNeighborhoodField();
+
+
+            if (Json.AllowChanges == true && ClientId !== '' && Zeout !== '') {
+                console.log("GetOldTofesData")
+                GetOldTofesData();
+            }
+            // AutoFillMail("Mail");
+
+
+            $("#TizkoretTimeDiv").hide()
+            $("#tizkoretType").hide()
+            $("#SourceDiv").hide()
+
+            if (GetURLParameter("p") !== '') {
+                $("#Source").val(GetURLParameter("p"))
+            }
+
+            $("#TizkoretTime").val('')
+
+
+
+            listCityGetAllCity({
+                CityId: '#city',
+                StreetId: '#street',
+                Auto_Focus_After_City_Selection: true,
+                list_Citys: []
+            })
+
+            // הגדרת פונקציית callback עבור בחירת עיר - תופעל אוטומטית כשבוחרים עיר מהפופאפ
+            window["FunctionAfetrSelectCity"] = function () {
+                // הפעלת עדכון השכונות אחרי בחירת עיר
+                $("#city").trigger('change');
+            };
+
+
+            $('#IshurDakotDiv').hide();
+
+            $("#Dakot").on('input', function () {
+                var Total = 0;
+                if ($.isNumeric($("#Dakot").val())) {
+                    Total = +$("#Dakot").val();
+                }
+
+                if (Total > 0) {
+                    if (Total > 60) {
+                        Total = 60;
+                        $("#Dakot").val(60)
+                    }
+
+                    $('#IshurDakotDiv').show();
+                    $('#DakotTxt').html(Total);
+                } else {
+                    $('#IshurDakotDiv').hide();
+                    $('#IshurDakot').prop('checked', false);
+                }
+
+            });
+
+
+
+            // טיפול בעיצוב תאריך לידה
+            $("#birthDate").on('input', function () {
+                var TempDate = $(this).val().replace(/\//g, "");
+                if ($.isNumeric(TempDate)) {
+                    if (TempDate.length >= 4) {
+                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2, 2) + "/" + TempDate.substr(4);
+                    } else if (TempDate.length >= 2) {
+                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2);
+                    }
+                    $(this).val(TempDate);
+                }
+            });
+
+
+
+            //ISRAEL - העברתי להערה כדי להימנע מבדיקת גירסה
+            // Check_Tofes_Version("AllMainForm")
+            $("#WaitDiv2").hide();
+            $("#ZeoutCheck").show(); // הצגת מסך הכניסה
+            $("#AllMainForm").hide(); // הסתרת הטופס הראשי
+            //---
+
+            // טיפול בפורמט תאריך לידה במסך הכניסה
+            $("#PassCheckText").attr("dir", "ltr");
+            $('#PassCheckText').keyup(function () {
+                var newInput = document.getElementById("PassCheckText");
+                newInput.addEventListener('keydown', function (e) {
+                    if (e.which !== 8) {
+                        var numChars = e.target.value.length;
+                        if (numChars === 2 || numChars === 5) {
+                            var thisVal = e.target.value;
+                            thisVal += '/';
+                            e.target.value = thisVal;
+                        }
+                    }
+                });
+            });
+
+            // טיפול בשינוי בין ת.ז. לדרכון
+            $('input[name=Zihuy1]').change(function () {
+                var selectedValue = $('input[name=Zihuy1]:checked').val();
+                if (selectedValue == "chutz") {
+                    $("#ZeoutCheckKoteret").text("מספר דרכון:");
+                    $("#ZeoutCheckTextDiv").hide();
+                    $("#DarkonCheckTextDiv").show();
+                    $("#ZeoutCheckText").val("");
+                    $("#DarkonCheckText").focus();
+                } else {
+                    $("#ZeoutCheckKoteret").text("תעודת זהות:");
+                    $("#DarkonCheckTextDiv").hide();
+                    $("#ZeoutCheckTextDiv").show();
+                    $("#DarkonCheckText").val("");
+                    $("#ZeoutCheckText").focus();
+                }
+            });
+        });
+
+
+        // משתנה גלובלי לשמירת נתוני המשפחה מהשרת
+        var GlobalFamilyData = null;
+
+        // משתנה גלובלי לשמירת אופציות הסלקטים מהשרת
+        var GlobalSelectOptions = null;
+
+
+
+        // פונקציות עזר לעבודה עם value/label
+        function getLabelByValue(selectType, value) {
+            var options = selectOptions[selectType];
+            if (!options) return value;
+
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].value === value) {
+                    return options[i].label;
+                }
+            }
+            return value;
+        }
+
+        function getValueByLabel(selectType, label) {
+            var options = selectOptions[selectType];
+            if (!options) return label;
+
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].label === label) {
+                    return options[i].value;
+                }
+            }
+            return label;
+        }
+
+        // פונקציות עזר לילדים
+        function getChildInstitutionLabelByValue(value) {
+            for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
+                if (selectOptions.childInstitutions[i].value === value) {
+                    return selectOptions.childInstitutions[i].label;
+                }
+            }
+            return value;
+        }
+
+        function getChildBranchLabelByValue(institutionValue, branchValue) {
+            for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
+                if (selectOptions.childInstitutions[i].value === institutionValue) {
+                    var branches = selectOptions.childInstitutions[i].branches;
+                    for (var j = 0; j < branches.length; j++) {
+                        if (branches[j].value === branchValue) {
+                            return branches[j].label;
+                        }
+                    }
+                }
+            }
+            return branchValue;
+        }
+
+        function getChildClassLabelByValue(institutionValue, classValue) {
+            for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
+                if (selectOptions.childInstitutions[i].value === institutionValue) {
+                    var classes = selectOptions.childInstitutions[i].classes;
+                    for (var j = 0; j < classes.length; j++) {
+                        if (classes[j].value === classValue) {
+                            return classes[j].label;
+                        }
+                    }
+                }
+            }
+            return classValue;
+        }
+
+        // הוסרה פונקציית GetNum - לא נדרשת עוד
+
+        // משתנה גלובלי לאחסון אופציות הסלקטים שמגיעות מהשרת
+        var GlobalSelectOptions = {};
+
+        // מערך אופציות הסלקטים הראשי
+        var selectOptions = {
+            kolelim: [],
+            YGMachzorim: [],
+            tzevetInMosad: [],
+            childInstitutions: []
+        }
+
+        // אופציות שכונות לפי עיר
+        var neighborhoodOptions = {
+            "ירושלים": [
+                "בית וגן – רמת שרת",
+                "קריית יובל",
+                "קריית משה – גבעת שאול",
+                "הר נוף",
+                "גילה",
+                "מרכז העיר (גאולה/רוממה/בר אילן/גוש 80 והסיבה)",
+                "נחלאות – רחביה – שערי חסד",
+                "רמת שלמה",
+                "רמות",
+                "נווה יעקב",
+                "רמת אשכול – סנהדריה – מעלות דפנה",
+                "פסגת זאב",
+                "הגבעה הצרפתית",
+                "העיר העתיקה",
+                "מאה שערים – בית ישראל"
+            ],
+            "מודיעין עילית": [
+                "ברכפלד",
+                "ק\"ס צפונית",
+                "ק\"ס דרומית",
+                "נאות הפסגה – גן הדסים",
+                "חפציבה – גרין פארק"
+            ],
+            "בית שמש": [
+                "הקריה והסביבה",
+                "רמת אברהם",
+                "רמה א'",
+                "רמה ב'",
+                "רמה ג' 1",
+                "רמה ג' 2",
+                "רמה ד' 1",
+                "רמה ד' 2",
+                "רמה ד' 3",
+                "רמה ד' 4",
+                "רמה ה' 1",
+                "רמה ה' 2"
+            ],
+            "בני ברק": [
+                "סוקולוב – הרב שך",
+                "ויז'ניץ – קהילות יעקב",
+                "גבעת רקח",
+                "נווה אחיעזר",
+                "זכרון מאיר",
+                "שיכון ג'",
+                "שיכון ה'",
+                "רמת אלחנן",
+                "רמת אהרן",
+                "מערב בני ברק",
+                "פרדס כץ",
+                "קריית הרצוג"
+            ]
+        };
+
+
+
+        function GetOldTofesData() {
+
+            if (Json.AllowChanges !== true) {
+                GetPreData();
+                return false;
+            }
+
+            if (parent.ClientJson) {
+                ClientJson = parent.ClientJson;
+            }
+
+            $("#AllMainForm").hide();
+            $("#WaitDiv2").show()
+            $.ajax({
+                url: "Manage.aspx?Action=GetOldTofesData&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId,
+                data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID),
+                type: 'POST',
+                context: Text,
+                timeout: 60000,
+            }).success(function (JsonData) {
+                $("#WaitDiv2").hide()
+                $("#AllMainForm").show();
+
+                if (JsonData.Status == 'Error' && JsonData.Message == 'NOT FOUND') {
+                    return false;
+                }
+
+                OldTofesId = JsonData.ID;
+                $("#EditNote").show();
+
+                for (var Element in Json.FormElements) {
+                    var JsonElement = Json.FormElements[Element]
+                    if (JsonElement.DbName !== undefined) {
+
+                        if (JsonElement.Type == 'CheckBox') {
+                            if (JsonData[JsonElement.DbName] == "מסומן") { $("#" + JsonElement.ElementId).prop('checked', true); }
+                        } else if (JsonElement.Type == 'Radio') {
+                            for (i = 0; i < JsonElement.RadioBt.length; i++) {
+                                if (JsonElement.RadioBt[i].Text == JsonData[JsonElement.DbName]) { $("#" + JsonElement.ElementId + '_Radio' + i).prop('checked', 'checked') }
+                            }
+                        } else if (JsonElement.Type == 'GroupFields') {
+                            // טעינת נתונים לקבוצת שדות
+                            if (JsonData[JsonElement.DbName] && JsonData[JsonElement.DbName] !== 'null') {
+                                setGroupFieldsData(JsonElement.ElementId, JsonData[JsonElement.DbName]);
+                            }
+                        } else {
+                            $("#" + JsonElement.ElementId).val(JsonData[JsonElement.DbName])
+                        }
+
+                    }
+
+                }
+                Calculate();
+
+                // הפעלת טריגרים לשדות תלויים אחרי טעינת הנתונים
+                triggerConditionalFieldsAfterDataLoad();
+
+                // הפעלת התראה לקבוצת הילדים אם הצ'קבוקס מסומן
+                toggleChildrenNotice();
+            }).error(function () {
+
+                var BtTex = 'חזרה לנדרים פלוס'
+                if (MasofId == '') BtTex = 'אישור'
+                swal({
+                    title: "שגיאה בקבלת נתונים. בדוק תקשורת",
+                    type: "error",
+                    showCancelButton: false,
+                    confirmButtonText: BtTex,
+                    closeOnConfirm: true,
+                    allowOutsideClick: false,
+                }, function (isConfirm) {
+                    if (MasofId !== '') { parent.GoToMenu("Tafrit"); parent.closeIFrame() } else { $('html, body').scrollTop(0); location.reload(); }
+                });
+
+            });
+        }
+
+        function ParsePreData(data) {
+            if (data.Message == 'NOT FOUND') {
+                //EAlertConfirm("מספר הזהות לא נמצא במערכת")
+                //$("#AllMainForm").html('<div style="font-size: 19px;text-align: center;color: indianred; font-weight: bold;font-family: Assistant;margin-top: 50px;margin-bottom: 150px;"><span style="font-size:24px"></span>מספר הזהות לא נמצא במערכת</div>');
+                $('#ZeoutCheck').hide();
+                $('#AllMainForm').show();
+            } else {
+                var PreDataJson = data.Message.split("ǂ");
+                $('#Family').val(PreDataJson[1])
+
+                $('#ZeoutCheck').hide();
+                $('#AllMainForm').show();
+
+            }
+
+            //var num = 1;
+            //for (var Element in Json.FormElements) {
+            //    var JsonElement = Json.FormElements[Element]
+
+            //    if (JsonElement.Type == "Margin" || JsonElement.Type == "List" || JsonElement.Type == "Koteret") { continue; }
+            //    if (JsonElement.ElementId == undefined || JsonElement.DbName == undefined) { continue; }
+
+            //    console.log(num + " | " + JsonElement.ElementId + " | " + JsonElement.fieldName)
+
+            //    num++
+            //}
+
+        }
+
+
+
+
+
+
+        function UpdateClick() {
+            if (MasofId !== '') parent.UpdateClick()
+        }
+
+
+
+
+        function Calculate() {
+
+
+        }
+
+        // פונקציה להגדרת חישוב אוטומטי של סה"כ ילדים
+        function setupChildrenCalculation() {
+            // הגדרת שדה הסה"כ כ-disabled
+            $("#childrenTotal").prop('disabled', true);
+
+            // הוספת מאזיני אירועים לשדות ילדים בבית וילדים נשואים
+            $("#childrenAtHome, #childrenMarried").on('input', function () {
+                calculateChildrenTotal();
+            });
+
+            // חישוב ראשוני
+            calculateChildrenTotal();
+        }
+
+        // פונקציה להוספת התראה לקבוצת הילדים
+        function setupChildrenNotice() {
+            $("#isChildInAteret").on('change', function () {
+                toggleChildrenNotice();
+            });
+        }
+
+        // פונקציה להפעלת/ביטול ההתראה לפי מצב הצ'קבוקס
+        function toggleChildrenNotice() {
+            var childrenContainer = $("#childrenContainer");
+            var noticeId = "childrenNotice";
+
+            if ($("#isChildInAteret").is(':checked')) {
+                // אם הצ'קבוקס מסומן ועדיין לא קיימת ההתראה
+                if ($("#" + noticeId).length === 0) {
+                    var noticeHtml = '<div id="' + noticeId + '" style="background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center; font-weight: bold; font-size: 16px;">שימו לב בחירת כיתת הלימוד הינה לפי שנה"ל תשפ"ו</div>';
+
+                    // הוספת ההתראה אחרי כותרת הקבוצה ולפני השורות
+                    childrenContainer.find('.group-header').after(noticeHtml);
+                }
+            } else {
+                // אם הצ'קבוקס לא מסומן - הסרת ההתראה
+                $("#" + noticeId).remove();
+            }
+        }
+
+        // פונקציה לחישוב סה"כ ילדים
+        function calculateChildrenTotal() {
+            var childrenAtHome = parseInt($("#childrenAtHome").val()) || 0;
+            var childrenMarried = parseInt($("#childrenMarried").val()) || 0;
+            var total = childrenAtHome + childrenMarried;
+
+            $("#childrenTotal").val(total > 0 ? total : '');
+        }
+
+
+
+
+
+
+        function SendData() {
+
+            // בדיקה אם זהו דמו
+            if (GetURLParameter("Demo") == "1") {
+                alert("זהו טופס לדוגמה. לא ניתן לבצע שליחה.");
+                return false;
+            }
+
+            $("#SaveDiv").hide()
+            $("#WaitDiv").show()
+
+            // בדיקת תקינות אימיילים
+            if ($("#email").val() !== "") {
+                if (Validate_Email($("#email").val()) == false) {
+                    MySwal("אימייל לא תקין", "email"); return false;
+                }
+            }
+
+            if ($("#email2").val() !== "") {
+                if (Validate_Email($("#email2").val()) == false) {
+                    MySwal("אימייל נוסף לא תקין", "email2"); return false;
+                }
+            }
+
+            // בדיקת תקינות טלפונים
+            if ($("#phone").val() !== "") {
+                var phoneValue = $("#phone").val().replace(/-/g, "");
+                if ($.isNumeric(phoneValue) == false || phoneValue.length < 9 || phoneValue.length > 10) {
+                    MySwal("מספר טלפון לא תקין (9-10 ספרות)", "phone"); return false;
+                }
+            }
+
+            if ($("#mobile").val() !== "") {
+                var mobileValue = $("#mobile").val().replace(/-/g, "");
+                if ($.isNumeric(mobileValue) == false || mobileValue.length < 9 || mobileValue.length > 10) {
+                    MySwal("מספר פלאפון לא תקין (9-10 ספרות)", "mobile"); return false;
+                }
+            }
+
+            if ($("#mobile2").val() !== "") {
+                var mobile2Value = $("#mobile2").val().replace(/-/g, "");
+                if ($.isNumeric(mobile2Value) == false || mobile2Value.length < 9 || mobile2Value.length > 10) {
+                    MySwal("מספר פלאפון נוסף לא תקין (9-10 ספרות)", "mobile2"); return false;
+                }
+            }
+
+            // בדיקת שלמות נתוני ילדים
+            var childrenValidation = validateChildrenData();
+            if (!childrenValidation.valid) {
+                swal({
+                    type: "error",
+                    title: childrenValidation.message,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                }, function () {
+                    if (childrenValidation.fieldId) {
+                        $('#' + childrenValidation.fieldId).focus();
+                        $('#' + childrenValidation.fieldId).select();
+                        ScrollUp('#' + childrenValidation.fieldId);
+                    }
+                    setTimeout(function () {
+                        $("#SaveDiv").show();
+                        $("#WaitDiv").hide();
+                    }, 100);
+                });
+                return false;
+            }
+
+            // בדיקת תקינות סלקטים - לא ניתן לשמור עם "בחר מוסד"
+            var selectValidation = validateSelectFields();
+            if (!selectValidation.valid) {
+                swal({
+                    type: "error",
+                    title: selectValidation.message,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                }, function () {
+                    if (selectValidation.fieldId) {
+                        $('#' + selectValidation.fieldId).focus();
+                        $('#' + selectValidation.fieldId).select();
+                        ScrollUp('#' + selectValidation.fieldId);
+                    }
+                    setTimeout(function () {
+                        $("#SaveDiv").show();
+                        $("#WaitDiv").hide();
+                    }, 100);
+                });
+                return false;
+            }
+
+            // בדיקה שלפחות אחד מארבעת הצ'קבוקסים מסומן
+            var checkboxValidation = validateMainCheckboxes();
+            if (!checkboxValidation.valid) {
+                swal({
+                    type: "error",
+                    title: checkboxValidation.message,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                }, function () {
+                    setTimeout(function () {
+                        $("#SaveDiv").show();
+                        $("#WaitDiv").hide();
+                    }, 100);
+                });
+                return false;
+            }
+
+            // בדיקת שדות תלויים
+            var conditionalValidation = validateConditionalFields();
+            if (!conditionalValidation.valid) {
+                swal({
+                    type: "error",
+                    title: conditionalValidation.message,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                }, function () {
+                    if (conditionalValidation.fieldId) {
+                        $('#' + conditionalValidation.fieldId).focus();
+                        ScrollUp('#' + conditionalValidation.fieldId);
+                    }
+                    setTimeout(function () {
+                        $("#SaveDiv").show();
+                        $("#WaitDiv").hide();
+                    }, 100);
+                });
+                return false;
+            }
+
+
+            //שליחה לשרת ראשון
+
+
+
+            var PostData = ''
+            for (var Element in Json.FormElements) {
+                var JsonElement = Json.FormElements[Element]
+                if (JsonElement.Type == "Margin" || JsonElement.Type == "List" || JsonElement.Type == "Koteret") { continue; }
+                if (JsonElement.ElementId == undefined) { continue; }
+
+                var ElementValue
+                var ElementVisible = true
+                var ErrorTitle = "חובה למלא ";
+
+                if (JsonElement.Type == "Radio") {
+                    ElementValue = $('input[name=' + JsonElement.ElementId + ']:checked').val();
+                    if (ElementValue == undefined) { ElementValue = '' };
+                    if (IsVisible(JsonElement.ElementId) == false) { continue; }
+                } else if (JsonElement.Type == "CheckBox") {
+                    ErrorTitle = "חובה לסמן "
+                    ElementValue = ($("#" + JsonElement.ElementId).is(":checked") ? "מסומן" : "")
+                    if (IsVisible(JsonElement.ElementId) == false) { continue; }
+                } else if (JsonElement.Type == "Select") {
+                    ElementValue = $("#" + JsonElement.ElementId + " option:selected").val()
+                    if (ElementValue == undefined) { ElementValue = '' };
+                    if (IsVisible(JsonElement.ElementId) == false) { continue; }
+                } else if (JsonElement.Type == "GroupFields") {
+                    // טיפול בקבוצות שדות
+                    var validation = validateGroupFields(JsonElement.ElementId);
+                    if (!validation.valid) {
+                        swal({
+                            type: "error",
+                            title: validation.message,
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                        }, function () {
+                            $('#' + validation.fieldId).focus();
+                            $('#' + validation.fieldId).select();
+                            ScrollUp('#' + validation.fieldId);
+                            setTimeout(function () {
+                                $("#SaveDiv").show();
+                                $("#WaitDiv").hide();
+                            }, 100);
+                        });
+                        return false;
+                    }
+                    ElementValue = getGroupFieldsData(JsonElement.ElementId);
+                    ElementVisible = true;
+                } else {
+                    ElementValue = $("#" + JsonElement.ElementId).val().trim()
+                    ElementVisible = IsVisible(JsonElement.ElementId)
+                    if (Json.AllowChanges == false && ((ElementVisible == false || (ElementValue == '' && JsonElement.Mandatory == false)) && JsonElement.Send !== true)) { continue; };
+                };
+
+                //
+
+                if (JsonElement.Mandatory == true && ElementValue == '' && ElementVisible == true) {
+                    swal({
+                        type: "error",
+                        title: ErrorTitle + JsonElement.fieldName,
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                    }, function () {
+                        $('#' + JsonElement.ElementId).focus()
+                        $('#' + JsonElement.ElementId).select();
+                        ScrollUp('#' + JsonElement.ElementId)
+                        setTimeout(function () {
+                            $("#SaveDiv").show()
+                            $("#WaitDiv").hide()
+                        }, 100);
+                    });
+                    return false;
+                }
+
+                if (JsonElement.Type == 'Tel' && ElementValue !== '' && $.isNumeric(ElementValue.replace(/-/g, "")) == false && $.isNumeric(ElementValue.replace(/\//g, "")) == false) {
+                    swal({
+                        type: "error",
+                        title: "בשדה " + JsonElement.fieldName + " יש להזין ספרות בלבד",
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                    }, function () {
+                        $('#' + JsonElement.ElementId).focus()
+                        $('#' + JsonElement.ElementId).select();
+
+                        setTimeout(function () {
+                            $("#SaveDiv").show()
+                            $("#WaitDiv").hide()
+                        }, 100);
+                    });
+                    return false;
+                }
+                if (JsonElement.MinLenght !== undefined && ElementValue !== '' && ElementValue.length < JsonElement.MinLenght) {
+                    swal({
+                        type: "error",
+                        title: "בשדה " + JsonElement.fieldName + " יש להזין לפחות " + JsonElement.MinLenght + " תווים",
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                    }, function () {
+                        $('#' + JsonElement.ElementId).focus()
+                        $('#' + JsonElement.ElementId).select();
+                        setTimeout(function () {
+                            $("#SaveDiv").show()
+                            $("#WaitDiv").hide()
+                        }, 100);
+                    });
+                    return false;
+                }
+
+                if (JsonElement.DbName == undefined) { continue; }
+
+                if (JsonElement.ElementId == "TizkoretTime" || JsonElement.ElementId == "Note" || JsonElement.ElementId == "Mail") {
+                    if (ElementValue == '') {
+                        ElementValue = "null";
+                    }
+                }
+
+
+
+                PostData = PostData + "&" + JsonElement.DbName + "=" + encodeURIComponent(htmlEncode(ElementValue)) + "&" + JsonElement.DbName + "_Name=" + encodeURIComponent(JsonElement.fieldName.replace(/<b>/g, '').replace(/<\/b>/g, ''))
+
+
+
+
+            }
+            PostData = PostData.substring(1, PostData.length)
+
+
+
+
+
+            //var Names = {
+            //    1: { fam: "בדיקה" },
+            //    2: { fam: "של" },
+            //    3: { fam: "מערך" }
+            //}
+
+            if (Json.NeedSign == true) {
+                if (SignData == "") { $('#SignPad').show(); return false; }
+                PostData += "&SignData=" + encodeURIComponent(SignData)
+            }
+
+            // שליחה לשרת ראשון
+            sendToFirstServer(PostData);
+        }
+
+        function sendToFirstServer(PostData) {
+            // מיפוי השדות מ-Field לשמות טבעיים
+            var fieldMapping = {
+                'Field1': 'zehut',
+                'Field2': 'firstName',
+                'Field3': 'lastName',
+                'Field4': 'birthDate',
+                'Field5': 'phone',
+                'Field6': 'mobile',
+                'Field7': 'mobile2',
+                'Field8': 'email',
+                'Field9': 'email2',
+                'Field10': 'city',
+                'Field11': 'street',
+                'Field12': 'shchuna',
+                'Field13': 'building',
+                'Field14': 'apartment',
+                'Field15': 'isAvrechKollel',
+                'Field16': 'kolel',
+                'Field17': 'isBogerYG',
+                'Field18': 'YGMachzor',
+                'Field19': 'isChildInAteret',
+                'Field20': 'children',
+                'Field21': 'isInTzevet',
+                'Field22': 'tzevetInMosad',
+                'Field23': 'note',
+                'Field24': 'childrenAtHome',
+                'Field25': 'childrenMarried',
+                'Field26': 'childrenTotal',
+                'Field27': 'noCommitment',
+                'Field28': 'approveMarketing',
+                'Field29': 'entrance',
+                'Field30': 'kolelType'
+            };
+
+            // יצירת אובייקט JSON לשרת הראשון
+            var stage1Data = {};
+
+            // המרת PostData לאובייקט עם מיפוי השדות
+            var dataParams = PostData.split('&');
+            for (var i = 0; i < dataParams.length; i++) {
+                var param = dataParams[i].split('=');
+                if (param.length === 2) {
+                    var key = decodeURIComponent(param[0]);
+                    var value = decodeURIComponent(param[1]);
+
+                    // רק שדות שמתחילים ב-Field ולא _Name
+                    if (key.startsWith('Field') && !key.endsWith('_Name')) {
+                        var mappedKey = fieldMapping[key];
+                        if (mappedKey) {
+                            // טיפול מיוחד בשדות boolean
+                            if (mappedKey === 'isAvrechKollel' || mappedKey === 'isBogerYG' ||
+                                mappedKey === 'isChildInAteret' || mappedKey === 'isInTzevet') {
+                                stage1Data[mappedKey] = (value === 'מסומן');
+                            }
+                            // טיפול מיוחד בנתוני ילדים - המרה מ-JSON לאובייקט
+                            else if (mappedKey === 'children') {
+                                if (value && value !== 'null' && value !== '[]') {
+                                    try {
+                                        stage1Data[mappedKey] = JSON.parse(value);
+                                    } catch (e) {
+                                        console.log('Error parsing children data:', e);
+                                        stage1Data[mappedKey] = [];
+                                    }
+                                } else {
+                                    stage1Data[mappedKey] = [];
+                                }
+                            }
+                            // טיפול מיוחד בסלקטים - שליחת value במקום label
+                            else if (mappedKey === 'kolel' || mappedKey === 'YGMachzor' || mappedKey === 'tzevetInMosad') {
+                                // הערך כבר value (לא label) כי הסלקטים שלנו עכשיו מחזירים value
+                                stage1Data[mappedKey] = (value === 'null' || value === '') ? null : value;
+                            }
+                            // שדות רגילים
+                            else {
+                                stage1Data[mappedKey] = (value === 'null' || value === '') ? null : value;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $.ajax({
+                url: "https://us-central1-tomchei-tora.cloudfunctions.net/nedarimForm-saveFamily",
+                type: "POST",
+                data: JSON.stringify(stage1Data),
+                contentType: "application/json; charset=utf-8",
+                timeout: 30000,
+            }).success(function (response) {
+
+                // המשך לשרת שני
+                sendToSecondServer(PostData);
+
+            }).error(function (xhr, status, error) {
+                $("#SaveDiv").show();
+                $("#WaitDiv").hide();
+
+                var errorMessage = "שגיאה בשליחה";
+
+                try {
+                    if (xhr.responseText) {
+                        errorMessage = xhr.responseText;
+                    }
+                } catch (e) {
+                    console.log("Error parsing server response:", e);
+                }
+
+                swal({
+                    type: "error",
+                    title: errorMessage,
+                    showConfirmButton: true,
+                    allowOutsideClick: false,
+                }, function () {
+                    // לא עושה כלום, רק סוגר את החלונית
+                });
+            });
+        }
+
+        function sendToSecondServer(originalPostData) {
+
+            //----TEST MODE
+
+            var BtTex = 'חזרה לנדרים פלוס'
+            if (MasofId == '') BtTex = 'אישור'
+            swal({
+                title: "הטופס נשלח בהצלחה",
+                html: true,
+                type: "success",
+                showCancelButton: false,
+                confirmButtonText: BtTex,
+                closeOnConfirm: true,
+                allowOutsideClick: false,
+            }, function (isConfirm) {
+                if (MasofId !== '') { parent.GoToMenu("Tafrit"); parent.closeIFrame() } else { $('html, body').scrollTop(0); location.reload(); }
+            });
+            return;
+            //----TEST MODE
+            // עיבוד והמרת values ל-labels לשרת השני
+            var processedPostData = originalPostData;
+
+            // המרת סלקטים מ-value ל-label לשרת השני
+            // המרת kolel
+            var kolelRegex = /Field15=([^&]*)/;
+            var kolelMatch = processedPostData.match(kolelRegex);
+            if (kolelMatch && kolelMatch[1]) {
+                var kolelValue = decodeURIComponent(kolelMatch[1]);
+                var kolelLabel = getLabelByValue('kolelim', kolelValue);
+                processedPostData = processedPostData.replace(kolelRegex, "Field15=" + encodeURIComponent(kolelLabel));
+            }
+
+            // המרת YGMachzor
+            var ygRegex = /Field17=([^&]*)/;
+            var ygMatch = processedPostData.match(ygRegex);
+            if (ygMatch && ygMatch[1]) {
+                var ygValue = decodeURIComponent(ygMatch[1]);
+                var ygLabel = getLabelByValue('YGMachzorim', ygValue);
+                processedPostData = processedPostData.replace(ygRegex, "Field17=" + encodeURIComponent(ygLabel));
+            }
+
+            // המרת tzevetInMosad
+            var tzevetRegex = /Field21=([^&]*)/;
+            var tzevetMatch = processedPostData.match(tzevetRegex);
+            if (tzevetMatch && tzevetMatch[1]) {
+                var tzevetValue = decodeURIComponent(tzevetMatch[1]);
+                var tzevetLabel = getLabelByValue('tzevetInMosad', tzevetValue);
+                processedPostData = processedPostData.replace(tzevetRegex, "Field21=" + encodeURIComponent(tzevetLabel));
+            }
+
+            // חיפוש ועיבוד שדה הילדים (Field19) - המרת values ל-labels
+            var field19Regex = /Field19=([^&]*)/;
+            var match = processedPostData.match(field19Regex);
+
+            if (match && match[1]) {
+                try {
+                    var encodedValue = match[1];
+                    var decodedValue = decodeURIComponent(encodedValue);
+                    var childrenData = JSON.parse(decodedValue);
+
+                    var tableFormat = "";
+
+                    // הוספת כותרת
+                    tableFormat = "תאריך לידה | סוג מוסד | מוסד | כיתה\n";
+
+                    for (var j = 0; j < childrenData.length; j++) {
+                        var child = childrenData[j];
+                        var row = [];
+
+                        // יצירת שורה עם המרת values ל-labels
+                        if (child.childBirthDate) row.push(child.childBirthDate);
+                        if (child.childMosadType) {
+                            var institutionLabel = getChildInstitutionLabelByValue(child.childMosadType);
+                            row.push(institutionLabel);
+                        }
+                        if (child.childMosad) {
+                            var branchLabel = getChildBranchLabelByValue(child.childMosadType, child.childMosad);
+                            row.push(branchLabel);
+                        }
+                        if (child.childClass) {
+                            var classLabel = getChildClassLabelByValue(child.childMosadType, child.childClass);
+                            row.push(classLabel);
+                        }
+
+                        // חיבור הערכים עם מפריד
+                        if (row.length > 0) {
+                            tableFormat += row.join(" | ") + "\n";
+                        }
+                    }
+
+                    // החלפת הערך המקורי בפורמט החדש
+                    var newEncodedValue = encodeURIComponent(tableFormat);
+                    processedPostData = processedPostData.replace(field19Regex, "Field19=" + newEncodedValue);
+
+                } catch (e) {
+                    console.log('Error processing children data for second server:', e);
+                    // אם יש שגיאה, נשאיר את הנתונים המקוריים
+                }
+            }
+
+            $.ajax({
+                url: "Manage.aspx?Action=AddData&AjaxId=" + $.now() + "&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&Version=" + Json.Version + "&MasofId=" + MasofId + "&ClientId=" + ClientId + "&OldTofesId=" + OldTofesId + "&SpecialCheck=" + encodeURIComponent(Json.SpecialCheck) + "&MainTitle=" + encodeURIComponent(htmlEncode(Json.MainTitle)),
+                context: Text,
+                timeout: 32000,
+                type: "POST",
+                data: processedPostData,
+            }).success(function (JsonData) {
+                $("#WaitDiv").hide();
+
+                if (JsonData.Status !== 'OK') {
+                    if (JsonData.Message == 'הטופס לא מעודכן, יש לרענן את הדף.') {
+                        swal({
+                            type: "error",
+                            title: JsonData.Message,
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            confirmButtonText: 'רענן את הדף'
+                        }, function () {
+                            $('html, body').scrollTop(0); location.reload();
+                        });
+                        return false;
+                    }
+
+                    if (JsonData.Status !== undefined) {
+                        var FiledId
+                        for (var Element in Json.FormElements) {
+                            var JsonElement = Json.FormElements[Element]
+                            if (JsonElement.Koteret == undefined) { if (JsonElement.DbName == JsonData.FieldId) FiledId = JsonElement.ElementId }
+                        }
+
+                        swal({
+                            type: "error",
+                            title: JsonData.Message,
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                        }, function () {
+                            $('#' + FiledId).focus()
+                            $('#' + FiledId).select();
+                            setTimeout(function () {
+                                $("#SaveDiv").show()
+                                $("#WaitDiv").hide()
+                            }, 100);
+                        });
+                        return false;
+                    } else {
+                        $("#AllMainForm").html('<div style="font-size: 19px;text-align: center;color: indianred; font-weight: bold;font-family: Assistant;margin-top: 40px;margin-bottom: 50px;"><span style="font-size:24px">שגיאה כללית. יש ליצור קשר עם מוקד שירות לקוחות<br /></div>');
+                        EAlertConfirm("שגיאה כללית. יש ליצור קשר עם מוקד שירות לקוחות")
+                        $("#WaitDiv").hide()
+                    }
+                } else {
+                    var BtTex = 'חזרה לנדרים פלוס'
+                    if (MasofId == '') BtTex = 'אישור'
+                    swal({
+                        title: "הטופס נשלח בהצלחה",
+                        html: true,
+                        type: "success",
+                        showCancelButton: false,
+                        confirmButtonText: BtTex,
+                        closeOnConfirm: true,
+                        allowOutsideClick: false,
+                    }, function (isConfirm) {
+                        if (MasofId !== '') { parent.GoToMenu("Tafrit"); parent.closeIFrame() } else { $('html, body').scrollTop(0); location.reload(); }
+                    });
+                }
+
+            }).error(function () {
+                $("#WaitDiv").hide();
+                EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+                $("#SaveDiv").show()
+            });
+        }
+
+        // פונקציות לניהול קבוצות שדות דינמיות
+        function initializeGroupFields() {
+            // אתחול קבוצות השדות לפי ההגדרות
+            for (var groupId in GroupFieldsConfig) {
+                var config = GroupFieldsConfig[groupId];
+                // יצירת השורות הראשוניות
+                for (var i = 0; i < config.defaultRows; i++) {
+                    addGroupRow(groupId);
+                }
+            }
+        }
+
+        function createFormElement(JsonElement, elementId, isGroupField) {
+            isGroupField = isGroupField || false;
+            var Style = JsonElement.Style || "";
+            var dir = "rtl";
+            var Bold = "";
+
+            if (JsonElement.Bold == true) Bold = "font-weight:bold";
+            if (JsonElement.Type == 'Tel') dir = "ltr";
+
+            var FieldName = JsonElement.fieldName;
+            if (JsonElement.fieldNameShow !== undefined) FieldName = JsonElement.fieldNameShow;
+
+            var Lbl = '<label for="' + elementId + '" class="fieldName" style="' + Bold + ';' + Style + '">' +
+                ((JsonElement.Mandatory == true) ? '<span style="color:indianred;">*</span>' : '') +
+                FieldName + '</label><br>';
+
+            if (JsonElement.LblHide == true) Lbl = '';
+
+            // הגדרת margin-top מופחתת עבור שדות בתוך GroupFields
+            var marginTop = isGroupField ? "5px" : "10px";
+            var marginRight = isGroupField ? "10px" : "20px";
+
+            var elementHtml = '';
+
+            if (JsonElement.Type == "Select") {
+                elementHtml = '<div style="width:' + (JsonElement.Width || 40) + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:' + marginTop + ';margin-right:' + marginRight + ';margin-bottom: 4px;' + Style + '">' + Lbl + '<select class="SelectValLbl" id="' + elementId + '" onfocus="ScrollUp(this)">';
+
+                // יצירת אפשרויות ברירת מחדל אם SelectVal לא מוגדר או ריק
+                var selectOptions = JsonElement.SelectVal || "בחר אפשרות";
+                var optionsArray = selectOptions.split(",");
+
+                for (var i = 0; i < optionsArray.length; i++) {
+                    elementHtml += '<option value="' + optionsArray[i].replace(/"/g, '&quot;') + '"> ' + optionsArray[i] + '</option>';
+                }
+                elementHtml += '</select></div>';
+            }
+            else if (JsonElement.Type == "CheckBox") {
+                var checkboxMargin = isGroupField ? "5px 10px 5px 0px" : "10px 20px 10px 0px";
+                elementHtml = '<div class="checkbox" style="-webkit-user-select:none;width:' + (JsonElement.Width || 40) + '%;display:inline-block;vertical-align:top;text-align:right;margin:' + checkboxMargin + ';' + Style + ';' + Bold + '"><label for="' + elementId + '"><input type="CheckBox" dir="' + dir + '" id="' + elementId + '" onfocus="ScrollUp(this)"/>' + ((JsonElement.Mandatory == true) ? '<span style="color:indianred;">*</span>' : '') + '<span style="cursor: pointer; width: 90%; display: inline-block; vertical-align: top;padding-right: 3px;">' + FieldName + '</span></label></div>';
+            }
+            else if (JsonElement.Type == "textarea") {
+                elementHtml = '<div style="resize:none;width:' + (JsonElement.Width || 40) + '%;display:inline-block;vertical-align:top;text-align:right;margin-top:' + marginTop + ';margin-right:' + marginRight + ';' + Style + '">' + Lbl + '<textarea class="TextBox" rows="' + (JsonElement.Rows || 3) + '" dir="' + dir + '" autocomplete="off" style="width:90%;resize:none;" maxlength="' + (JsonElement.MaxLength || 500) + '" id="' + elementId + '" onfocus="ScrollUp(this)"></textarea></div>';
+            }
+            else if (JsonElement.Type == "Text" || JsonElement.Type == "Tel") {
+                var OnInput = "";
+                var inputType = JsonElement.Type;
+
+                if (JsonElement.ElementId == "TizkoretTime") {
+                    inputType = "time";
+                } else if (JsonElement.Type == "Tel") {
+                    if (JsonElement.Date == true) {
+                        // טיפול בשדות תאריך
+                        OnInput = 'oninput="var TempDate = $(this).val().replace(/\\//g, \'\'); if ($.isNumeric(TempDate)) { if (TempDate.length >= 4) { TempDate = TempDate.substr(0, 2) + \'/\' + TempDate.substr(2, 2) + \'/\' + TempDate.substr(4); } else if (TempDate.length >= 2) { TempDate = TempDate.substr(0, 2) + \'/\' + TempDate.substr(2); } $(this).val(TempDate); }"';
+                    } else {
+                        OnInput = 'oninput="OnlyNumber(this.id)"';
+                    }
+                }
+
+                elementHtml = '<div style="width:' + (JsonElement.Width || 40) + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:' + marginTop + ';margin-right:' + marginRight + ';">' + Lbl + '<input class="TextBox" dir="' + dir + '" autocomplete="off" type="' + inputType + '" style="width:90%" maxlength="' + (JsonElement.MaxLength || 50) + '" id="' + elementId + '" onfocus="ScrollUp(this)" ' + OnInput + '/></div>';
+            }
+            else if (JsonElement.Type == "Radio") {
+                var Br = "";
+                if (JsonElement.br == true) Br = "<br/>";
+                var radioMargin = isGroupField ? "5px 10px 5px" : "15px 20px 10px";
+                elementHtml = '<div style="width:' + (JsonElement.Width || 40) + '%;display:inline-block;vertical-align:top;text-align:right;margin: ' + radioMargin + ';' + Style + '">' + Lbl;
+                for (var i = 0; i < JsonElement.RadioBt.length; i++) {
+                    var Show = JsonElement.RadioBt[i].Text;
+                    if (JsonElement.RadioBt[i].Show !== undefined) { Show = JsonElement.RadioBt[i].Show; }
+                    elementHtml += '<div style="display:inline-block"><label class="RadioBtLbl" for="' + elementId + '_Radio' + i + '" style="' + Style + ';' + (JsonElement.RadioBt[i].Bold == true ? 'font-weight:bold' : '') + '"><input id="' + elementId + '_Radio' + i + '" type="radio" name="' + elementId + '" value="' + JsonElement.RadioBt[i].Text.replace(/"/g, '&quot;') + '" onfocus="ScrollUp(this)"> <span>' + Show + '</span></label></div>' + Br;
+                }
+                elementHtml += '</div>';
+            }
+
+            return elementHtml;
+        }
+
+        function addGroupRow(groupId) {
+            var config = GroupFieldsConfig[groupId];
+            if (config.currentRows >= config.maxRows) {
+                alert('הגעת למספר המקסימלי של שורות (' + config.maxRows + ')');
+                return;
+            }
+
+            var rowIndex = config.currentRows;
+            var rowHtml = '<div id="' + groupId + '_Row' + rowIndex + '" class="group-row">';
+
+            // מספר השורה בפינה הימנית העליונה
+            rowHtml += '<div class="group-row-number">' + (rowIndex + 1) + '</div>';
+
+            // כפתור הסרה בפינה השמאלית העליונה
+            rowHtml += '<button type="button" class="group-remove-button" onclick="removeSpecificGroupRow(\'' + groupId + '\', ' + rowIndex + ')">הסר</button>';
+
+            // יצירת השדות עבור השורה
+            rowHtml += '<div style="margin-top: 30px;">';
+
+            for (var fieldIndex = 0; fieldIndex < config.fields.length; fieldIndex++) {
+                var field = config.fields[fieldIndex];
+                var fieldId = groupId + '_' + field.ElementId + '_' + rowIndex;
+                rowHtml += createFormElement(field, fieldId, true);
+            }
+
+            rowHtml += '</div>'; // סגירת div של השדות
+            rowHtml += '</div>'; // סגירת div של השורה
+
+            $('#' + groupId + 'Rows').append(rowHtml);
+            config.currentRows++;
+
+            // הוספת event listeners לסלקטים החדשים של ילדים
+            if (groupId === 'children') {
+                setupChildRowEventListeners(rowIndex);
+            }
+
+            // עדכון כפתורי ההסרה
+            updateRemoveButtons(groupId);
+
+            // הסתרת כפתור הוספה אם הגיעו למקסימום
+            if (config.currentRows >= config.maxRows) {
+                $('#' + groupId + 'AddBtn').hide();
+            }
+        }
+
+        function removeGroupRow(groupId) {
+            var config = GroupFieldsConfig[groupId];
+            if (config.currentRows <= 1) {
+                alert('חייבת להישאר לפחות שורה אחת');
+                return;
+            }
+
+            var lastRowIndex = config.currentRows - 1;
+            $('#' + groupId + '_Row' + lastRowIndex).remove();
+            config.currentRows--;
+        }
+
+        function removeSpecificGroupRow(groupId, rowIndex) {
+            var config = GroupFieldsConfig[groupId];
+            if (config.currentRows <= 1) {
+                alert('חייבת להישאר לפחות שורה אחת');
+                return;
+            }
+
+            // הסרת השורה הספציפית
+            $('#' + groupId + '_Row' + rowIndex).remove();
+            config.currentRows--;
+
+            // עדכון מספרי השורות והאינדקסים
+            for (var i = rowIndex + 1; i < config.currentRows + 1; i++) {
+                var oldRowId = groupId + '_Row' + i;
+                var newRowId = groupId + '_Row' + (i - 1);
+                var $row = $('#' + oldRowId);
+
+                if ($row.length > 0) {
+                    // עדכון מזהה השורה
+                    $row.attr('id', newRowId);
+
+                    // עדכון מספר השורה
+                    $row.find('.group-row-number').text(i);
+
+                    // עדכון כפתור ההסרה
+                    $row.find('button[onclick*="removeSpecificGroupRow"]').attr('onclick', 'removeSpecificGroupRow(\'' + groupId + '\', ' + (i - 1) + ')');
+
+                    // עדכון מזהי השדות
+                    for (var fieldIndex = 0; fieldIndex < config.fields.length; fieldIndex++) {
+                        var field = config.fields[fieldIndex];
+                        var oldFieldId = groupId + '_' + field.ElementId + '_' + i;
+                        var newFieldId = groupId + '_' + field.ElementId + '_' + (i - 1);
+
+                        var $field = $('#' + oldFieldId);
+                        if ($field.length > 0) {
+                            $field.attr('id', newFieldId);
+                            $field.siblings('label').attr('for', newFieldId);
+                        }
+                    }
+                }
+            }
+
+            // עדכון כפתורי ההסרה
+            updateRemoveButtons(groupId);
+
+            // הצגת כפתור הוספה אם ירד מתחת למקסימום
+            if (config.currentRows < config.maxRows) {
+                $('#' + groupId + 'AddBtn').show();
+            }
+        }
+
+        function updateRemoveButtons(groupId) {
+            var config = GroupFieldsConfig[groupId];
+
+            // אם יש רק שורה אחת, הסתר את כפתורי ההסרה
+            if (config.currentRows <= 1) {
+                $('#' + groupId + 'Rows .group-remove-button').hide();
+            } else {
+                $('#' + groupId + 'Rows .group-remove-button').show();
+            }
+        }
+
+        function getGroupFieldsData(groupId) {
+            var config = GroupFieldsConfig[groupId];
+            var data = [];
+
+            // אם זה קבוצת ילדים והצ'קבוקס לא מסומן, החזר מערך ריק
+            if (groupId === 'children' && !$("#isChildInAteret").is(':checked')) {
+                return JSON.stringify([]);
+            }
+
+            for (var rowIndex = 0; rowIndex < config.currentRows; rowIndex++) {
+                var rowData = {};
+                var hasNonEmptyData = false;
+
+                for (var fieldIndex = 0; fieldIndex < config.fields.length; fieldIndex++) {
+                    var field = config.fields[fieldIndex];
+                    var fieldId = groupId + '_' + field.ElementId + '_' + rowIndex;
+                    var value = $('#' + fieldId).val() || '';
+                    rowData[field.ElementId] = value;
+
+                    // בדוק אם יש נתונים משמעותיים (לא ברירת מחדל)
+                    if (value && value.trim() !== '' &&
+                        value !== 'בחר מוסד' &&
+                        value !== 'בחר סניף' &&
+                        value !== 'בחר כיתה/שיעור') {
+                        hasNonEmptyData = true;
+                    }
+                }
+
+                // רק אם יש נתונים משמעותיים, הוסף את השורה
+                if (hasNonEmptyData) {
+                    data.push(rowData);
+                }
+            }
+
+            return JSON.stringify(data);
+        }
+
+        function validateGroupFields(groupId) {
+            var config = GroupFieldsConfig[groupId];
+
+            // בדיקה מיוחדת עבור קבוצת ילדים - אם הצ'קבוקס לא מסומן, אין צורך בבדיקה
+            if (groupId === 'children' && !$("#isChildInAteret").is(':checked')) {
+                return { valid: true };
+            }
+
+            // בדיקה אם הקבוצה חובה ואין שורות
+            if (config.mandatory && config.currentRows === 0) {
+                return { valid: false, message: 'חובה למלא לפחות שורה אחת', fieldId: groupId + '_' + config.fields[0].ElementId + '_0' };
+            }
+
+            // בדיקת שדות חובה בכל שורה
+            for (var rowIndex = 0; rowIndex < config.currentRows; rowIndex++) {
+                for (var fieldIndex = 0; fieldIndex < config.fields.length; fieldIndex++) {
+                    var field = config.fields[fieldIndex];
+                    if (field.Mandatory) {
+                        var fieldId = groupId + '_' + field.ElementId + '_' + rowIndex;
+                        var value = $('#' + fieldId).val() || '';
+                        if (value.trim() === '') {
+                            return {
+                                valid: false,
+                                message: 'חובה למלא ' + field.fieldName + ' בשורה ' + (rowIndex + 1),
+                                fieldId: fieldId
+                            };
+                        }
+
+                        // בדיקת מספרים עבור שדות Tel
+                        if (field.Type === 'Tel' && value !== '' && !$.isNumeric(value.replace(/-/g, "").replace(/\//g, ""))) {
+                            return {
+                                valid: false,
+                                message: 'בשדה ' + field.fieldName + ' בשורה ' + (rowIndex + 1) + ' יש להזין ספרות בלבד',
+                                fieldId: fieldId
+                            };
+                        }
+                    }
+                }
+            }
+
+            return { valid: true };
+        }
+
+        function setGroupFieldsData(groupId, jsonData) {
+            var config = GroupFieldsConfig[groupId];
+            try {
+                var data = JSON.parse(jsonData);
+
+                // מחיקת שורות קיימות
+                $('#' + groupId + 'Rows').empty();
+                config.currentRows = 0;
+
+                // יצירת שורות לפי הנתונים
+                for (var rowIndex = 0; rowIndex < data.length; rowIndex++) {
+                    addGroupRow(groupId);
+                    var rowData = data[rowIndex];
+
+                    // מילוי הנתונים
+                    for (var fieldIndex = 0; fieldIndex < config.fields.length; fieldIndex++) {
+                        var field = config.fields[fieldIndex];
+                        var fieldId = groupId + '_' + field.ElementId + '_' + rowIndex;
+                        var value = rowData[field.ElementId] || '';
+                        $('#' + fieldId).val(value);
+                    }
+                }
+            } catch (e) {
+                console.log('Error parsing group fields data:', e);
+            }
+        }
+
+        // פונקציה לבדיקת שלמות נתוני ילדים
+        function validateChildrenData() {
+            // בדיקה אם הצ'קבוקס של ילדים מסומן
+            if (!$("#isChildInAteret").is(':checked')) {
+                return { valid: true }; // אם הצ'קבוקס לא מסומן, אין צורך בבדיקה
+            }
+
+            var config = GroupFieldsConfig['children'];
+            if (!config) {
+                return { valid: true }; // אם אין קונפיגורציה, אין מה לבדוק
+            }
+
+            // בדיקת כל שורת ילד
+            for (var rowIndex = 0; rowIndex < config.currentRows; rowIndex++) {
+                var hasAnyData = false;
+                var missingFields = [];
+
+                // בדיקה אם יש נתונים כלשהם בשורה
+                for (var fieldIndex = 0; fieldIndex < config.fields.length; fieldIndex++) {
+                    var field = config.fields[fieldIndex];
+                    var fieldId = 'children_' + field.ElementId + '_' + rowIndex;
+                    var value = $('#' + fieldId).val() || '';
+
+                    if (value.trim() !== '' && value !== '') {
+                        hasAnyData = true;
+                    }
+                }
+
+                // אם יש נתונים בשורה, בדוק שכל השדות החובה מלאים
+                if (hasAnyData) {
+                    for (var fieldIndex = 0; fieldIndex < config.fields.length; fieldIndex++) {
+                        var field = config.fields[fieldIndex];
+                        var fieldId = 'children_' + field.ElementId + '_' + rowIndex;
+                        var value = $('#' + fieldId).val() || '';
+
+                        // בדיקת שדות חובה
+                        if (field.Mandatory || field.ElementId === 'childName' || field.ElementId === 'childZehut' || field.ElementId === 'childBirthDate') {
+                            if (value.trim() === '' || value === '') {
+                                return {
+                                    valid: false,
+                                    message: 'חובה למלא את שדה "' + field.fieldName + '" עבור ילד מספר ' + (rowIndex + 1),
+                                    fieldId: fieldId
+                                };
+                            }
+                        }
+
+                        // בדיקות ספציפיות לסוגי שדות
+                        // הוסרה בדיקת תקינות ת.ז. לילדים לפי בקשה
+
+                        if (field.ElementId === 'childBirthDate' && value.trim() !== '') {
+                            if (value.length !== 10 || value.split('/').length !== 3) {
+                                return {
+                                    valid: false,
+                                    message: 'תאריך לידה לא תקין עבור ילד מספר ' + (rowIndex + 1) + ' (פורמט: DD/MM/YYYY)',
+                                    fieldId: fieldId
+                                };
+                            }
+                            var dateParts = value.split('/');
+                            var day = parseInt(dateParts[0]);
+                            var month = parseInt(dateParts[1]);
+                            var year = parseInt(dateParts[2]);
+
+                            if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1900 || year > 2030) {
+                                return {
+                                    valid: false,
+                                    message: 'תאריך לידה לא תקין עבור ילד מספר ' + (rowIndex + 1),
+                                    fieldId: fieldId
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+
+            return { valid: true };
+        }
+
+        // פונקציה להצגת הודעות שגיאה עם התמקדות בשדה
+        function MySwal(message, fieldId) {
+            swal({
+                type: "error",
+                title: message,
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            }, function () {
+                if (fieldId) {
+                    $('#' + fieldId).focus();
+                    $('#' + fieldId).select();
+                    ScrollUp('#' + fieldId);
+                }
+                setTimeout(function () {
+                    $("#SaveDiv").show();
+                    $("#WaitDiv").hide();
+                }, 100);
+            });
+        }
+
+        // פונקציה לבדיקת תקינות אימייל
+        function Validate_Email(email) {
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailPattern.test(email);
+        }
+
+        // פונקציה לבדיקת תקינות סלקטים
+        function validateSelectFields() {
+            // בדיקת סלקט קולל - אם צ'קבוקס מסומן וסלקט לא נבחר
+            if ($("#isAvrechKollel").is(':checked')) {
+                var kolelValue = $("#kolel").val();
+                if (!kolelValue || kolelValue === "") {
+                    return {
+                        valid: false,
+                        message: 'יש לבחור מוסד מהרשימה',
+                        fieldId: 'kolel'
+                    };
+                }
+            }
+
+            // בדיקת סלקט מחזור ישיבה גדולה - אם צ'קבוקס מסומן וסלקט לא נבחר
+            if ($("#isBogerYG").is(':checked')) {
+                var machzorValue = $("#YGMachzor").val();
+                if (!machzorValue || machzorValue === "") {
+                    return {
+                        valid: false,
+                        message: 'יש לבחור מחזור מהרשימה',
+                        fieldId: 'YGMachzor'
+                    };
+                }
+            }
+
+            // בדיקת סלקט צוות - אם צ'קבוקס מסומן וסלקט לא נבחר
+            if ($("#isInTzevet").is(':checked')) {
+                var tzevetValue = $("#tzevetInMosad").val();
+                if (!tzevetValue || tzevetValue === "") {
+                    return {
+                        valid: false,
+                        message: 'יש לבחור מוסד מהרשימה',
+                        fieldId: 'tzevetInMosad'
+                    };
+                }
+            }
+
+            // בדיקת סלקטים של ילדים - אם צ'קבוקס ילדים מסומן
+            if ($("#isChildInAteret").is(':checked')) {
+                var config = GroupFieldsConfig['children'];
+                if (config) {
+                    for (var rowIndex = 0; rowIndex < config.currentRows; rowIndex++) {
+                        var hasAnyData = false;
+
+                        // בדיקה אם יש נתונים כלשהם בשורה
+                        for (var fieldIndex = 0; fieldIndex < config.fields.length; fieldIndex++) {
+                            var field = config.fields[fieldIndex];
+                            var fieldId = 'children_' + field.ElementId + '_' + rowIndex;
+                            var value = $('#' + fieldId).val() || '';
+
+                            if (value.trim() !== '' && value !== '') {
+                                hasAnyData = true;
+                                break;
+                            }
+                        }
+
+                        // אם יש נתונים בשורה, בדוק את הסלקטים
+                        if (hasAnyData) {
+                            var mosadValue = $('#children_childMosadType_' + rowIndex).val();
+                            var snifValue = $('#children_childMosad_' + rowIndex).val();
+                            var classValue = $('#children_childClass_' + rowIndex).val();
+
+                            if (!mosadValue || mosadValue === "") {
+                                return {
+                                    valid: false,
+                                    message: 'יש לבחור מוסד עבור ילד מספר ' + (rowIndex + 1),
+                                    fieldId: 'children_childMosadType_' + rowIndex
+                                };
+                            }
+
+                            if (!snifValue || snifValue === "") {
+                                return {
+                                    valid: false,
+                                    message: 'יש לבחור סניף עבור ילד מספר ' + (rowIndex + 1),
+                                    fieldId: 'children_childMosad_' + rowIndex
+                                };
+                            }
+
+                            if (!classValue || classValue === "") {
+                                return {
+                                    valid: false,
+                                    message: 'יש לבחור כיתה/שיעור עבור ילד מספר ' + (rowIndex + 1),
+                                    fieldId: 'children_childClass_' + rowIndex
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+
+            return { valid: true };
+        }
+
+        // פונקציה לבדיקה שלפחות אחד מארבעת הצ'קבוקסים הראשיים מסומן
+        function validateMainCheckboxes() {
+            var isAvrechKollelChecked = $("#isAvrechKollel").is(':checked');
+            var isBogerYGChecked = $("#isBogerYG").is(':checked');
+            var isChildInAteretChecked = $("#isChildInAteret").is(':checked');
+            var isInTzevetChecked = $("#isInTzevet").is(':checked');
+
+            // בדיקה שלפחות אחד מהם מסומן
+            if (!isAvrechKollelChecked && !isBogerYGChecked && !isChildInAteretChecked && !isInTzevetChecked) {
+                return {
+                    valid: false,
+                    message: 'חובה לסמן לפחות אחת מהאפשרויות: לומד במוסדות עטרת שלמה / בוגר ישיבה גדולה / הורה לילדים במוסדות עטרת שלמה / איש צוות בעטרת שלמה'
+                };
+            }
+
+            return { valid: true };
+        }
+
+        // פונקציה לאימות שדות תלויים
+        function validateConditionalFields() {
+            // בדיקה שאם מסמנים "לומד בכוללים", חובה לבחור "סוג הלימוד"
+            if ($("#isAvrechKollel").is(':checked')) {
+                var kolelTypeSelected = $('input[name=kolelType]:checked').val();
+                if (!kolelTypeSelected) {
+                    return {
+                        valid: false,
+                        message: 'חובה לבחור סוג הלימוד כאשר מסמנים "לומד בכוללים"',
+                        fieldId: 'kolelType_Radio0'
+                    };
+                }
+            }
+
+            return { valid: true };
+        }
+    </script>
+</head>
+
+<body dir="rtl" style="background-color: #eee;-webkit-user-select: none;" onscroll="UpdateClick()"
+    oninput="UpdateClick()">
+
+
+    <!--כפתורים עליונים-->
+    <div id="BackToNedarim" style="text-align:center;margin-top:10px;display:none"> <input class="Bt"
+            style="background-color:#ff6a00;display:inline-block;min-width:40%;padding:8px" type="button"
+            value="חזרה לנדרים פלוס" id="BackToNedarimBottom" onclick="if (MasofId !== '') parent.closeIFrame()" />
+    </div>
+    <div id="AdminBt" style="text-align:center;margin-top:10px;display:none">
+        <input class="Bt" style="background-color:#006400;display:inline-block;min-width:20%;padding:8px;cursor:pointer"
+            type="button" value="ייצוא לאקסל" onclick="GetExcel()" />
+        <input class="Bt"
+            style="background-color:indianred;display:inline-block;min-width:20%;padding:8px;cursor:pointer"
+            type="button" value="איפוס המאגר" onclick="ResetForm()" />
+        <div style="width:50%;font-size:0px;max-width:300px;margin-right:auto;margin-left:auto">
+            <!--מצב טופס-->
+            <div
+                style="margin-top:10px;margin-bottom:5px;padding:3px 0px;background-color:white; border-radius:5px;width:100%;text-align:center;margin-right:auto;margin-left:auto;font-size:small;color:#2B3A63;font-weight:bold">
+                מצב טופס:</div>
+            <input class="Bt"
+                style="background-color:#38C232;display:inline-block;width:48%;margin-left:2%;padding:8px;cursor:pointer"
+                type="button" value="פעיל" onclick="EnableForm('True')" />
+            <input class="Bt"
+                style="background-color:#e60a00;display:inline-block;width:48%;margin-right:2%;padding:8px;cursor:pointer"
+                type="button" value="לא פעיל" onclick="EnableForm('False')" />
+        </div>
+    </div>
+    <!--כל הטופס-->
+    <div
+        style="text-align:right;background-color:white;border-radius:10px;margin-top:10px;width:92%;margin-left:auto;margin-right:auto;padding-bottom:20px;padding-top:20px;max-width:600px">
+        <div style="text-align:center;min-height:158px;font-size:0px"><img id="MainLogo"
+                style="max-height: 180px; max-width: 100%; border-radius: 0px;"
+                src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" /></div>
+        <div style="text-align:center;margin:20px;color:#2B3A63;">
+            <h2 id="MainTitle"> </h2>
+        </div>
+        <hr style="margin-right:20%;margin-left:20%" />
+        <div style="text-align:center;margin:40px;color:#808080;" id="WaitDiv2"><img src="waitnew.gif"
+                style="width:50px;" /><br />נא להמתין. בודק אם קיימים נתונים...</div>
+
+        <!-- מסך כניסה -->
+        <div id="ZeoutCheck"
+            style="border-radius: 7px; margin-top: 20px; padding: 13px; width: 330px; margin: 30px auto; display: none;">
+            <div id="Zihuy1" style="vertical-align:top;text-align: center;margin: auto;">
+                <label for="Zihuy1" class="fieldName" style=""><span id="Span_Zihuy1"
+                        style="color:indianred;"></span></label><br>
+                <div id="Zihuy1_RadioLbl0" style="display:inline-block">
+                    <label class="RadioBtLbl" for="Zihuy1_Radio0" style="border:none">
+                        <input id="Zihuy1_Radio0" type="radio" name="Zihuy1" value="israel" checked>
+                        <span id="Zihuy1_RadioLblShow0">ת.ז.</span>
+                    </label>
+                </div>
+                <div id="Zihuy1_RadioLbl1" style="display:inline-block">
+                    <label class="RadioBtLbl" for="Zihuy1_Radio1" style="border:none">
+                        <input id="Zihuy1_Radio1" type="radio" name="Zihuy1" value="chutz">
+                        <span id="Zihuy1_RadioLblShow1">דרכון</span>
+                    </label>
+                </div>
+            </div>
+
+            <div style="margin: 10px 0px; color: #285f7b; font-size: 16px; text-align: center; margin-bottom: 10px"
+                id="ZeoutCheckKoteret">
+                תעודת זהות:</div>
+            <div style="text-align:center" id="ZeoutCheckTextDiv">
+                <input id="ZeoutCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off" maxlength="9"
+                    style="width: 80%; text-align: center; font-size: x-large; font-weight: bold">
+            </div>
+            <div style="text-align:center;display:none" id="DarkonCheckTextDiv">
+                <input id="DarkonCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off" maxlength="11"
+                    style="width: 80%; text-align: center; font-size: x-large; font-weight: bold">
+            </div>
+
+            <div style="margin: 10px 0px; color: #285f7b; font-size: 16px; text-align: center; margin-bottom: 0px"
+                id="PassCheckKoteret1">תאריך לידה:<br />(לדוג' 01/01/2021)</div>
+            <div style="text-align:center;margin-bottom: 30px;" id="PassCheckTextDiv">
+                <input id="PassCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off" maxlength="10"
+                    style="width:80%; text-align:center;font-size:x-large;font-weight:bold">
+            </div>
+
+            <div style="text-align: center;">
+                <div style="text-align:center;margin:10px;display: inline-block;" id="ZeoutCheckSave">
+                    <input class="Bt" style="margin:0px;background-color: cadetblue;" type="button"
+                        id="ZeoutCheckSaveBt" value="אישור" onclick="Stage1()">
+                </div>
+            </div>
+            <div style="text-align:center;margin:10px;color:#808080;display:none" id="ZeoutCheckWait">
+                <img src="waitnew.gif" style="width:50px;"><br><span id="ZeoutCheckWaitText">נא להמתין...</span>
+            </div>
+            <div
+                style="text-align: center; margin: 20px auto; padding: 15px; background: linear-gradient(135deg, #f0f8ff, #e6f3ff); border: 2px solid #4a90e2; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 90%; font-family: Arial, sans-serif;">
+                <div
+                    style="display: inline-block; background-color: #4a90e2; color: white; padding: 8px 16px; border-radius: 20px; margin-bottom: 10px; font-size: 14px; font-weight: bold;">
+                    זקוקים לעזרה?
+                </div>
+                <p style="margin: 10px 0; color: #2c3e50; font-size: 16px; line-height: 1.5; font-weight: 500;">
+                    לכל בעיה ברישום "בלבד" ניתן לפנות למייל
+                    <span
+                        style="color: #4a90e2; font-weight: bold; text-decoration: underline;">ttnp9686@gmail.com</span>
+                    <br />
+                    או בהודעה לגבאי במערכת נדרים פלוס
+                </p>
+
+            </div>
+
+            <div style="height:200px"></div>
+        </div>
+        <div id="NewFamilyDiv"
+            style="border-radius: 7px; margin-top: 20px; padding: 13px; width: 330px; margin: 30px auto;">
+        </div>
+
+        <!-- הודעת משפחה לא רשומה -->
+        <div id="NotRegisteredDiv"
+            style="display: none; background: linear-gradient(135deg, #fff5f5, #ffe6e6); border: 2px solid #e74c3c; border-radius: 12px; margin: 20px auto; padding: 20px; max-width: 90%; width: 400px; text-align: center; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.15); font-family: Arial, sans-serif;">
+
+            <!-- אייקון וכותרת -->
+            <div
+                style="display: inline-block; background-color: #e74c3c; color: white; padding: 10px 20px; border-radius: 25px; margin-bottom: 15px; font-size: 16px; font-weight: bold;">
+                ⚠️ מספר זהות לא רשום
+            </div>
+
+            <!-- הודעה ראשית -->
+            <div style="color: #2c3e50; font-size: 18px; font-weight: bold; margin-bottom: 15px; line-height: 1.4;">
+                המכירה המוזלת מיועדת למשפחות הרשומות בלבד.
+            </div>
+
+            <!-- פירוט -->
+            <div style="color: #34495e; font-size: 16px; margin-bottom: 20px; line-height: 1.5;">
+                מספר הזהות שהזנתם אינו רשום במערכת.
+            </div>
+
+            <!-- הודעת עזרה -->
+            <div
+                style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 12px; margin-bottom: 20px; color: #856404; font-size: 14px;">
+                חושבים שזה טעות? תוכלו למלא טופס פניה שיעבור לבדיקת המערכת.
+            </div>
+
+            <!-- כפתורי פעולה -->
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button type="button"
+                    style="background-color: #3498db; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; min-width: 140px; transition: background-color 0.3s;"
+                    onmouseover="this.style.backgroundColor='#2980b9'" onclick="goToForm()">
+                    טופס פניה
+                </button>
+
+                <button type="button" onclick="exitFromForm()"
+                    style="background-color: #95a5a6; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; min-width: 140px; transition: background-color 0.3s;"
+                    onmouseover="this.style.backgroundColor='#7f8c8d'">
+                    יציאה
+                </button>
+            </div>
+
+            <!-- מידע נוסף -->
+            <div
+                style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0; color: #7f8c8d; font-size: 13px;">
+                לאחר מילוי טופס הפניה, הטופס ישלח לבדיקה פרטנית, ותוכלו לבדוק את סטטוס האישור שלכם בכניסה לטופס.
+                <br />
+                זמן הבדיקה הוא כ-14 ימי עסקים.
+            </div>
+        </div>
+
+        <div id="Status4Div"
+            style="display: none; background: linear-gradient(135deg, #fff5f5, #ffe6e6); border: 2px solid #e74c3c; border-radius: 12px; margin: 20px auto; padding: 20px; max-width: 90%; width: 400px; text-align: center; box-shadow: 0 4px 12px rgba(231, 76, 60, 0.15); font-family: Arial, sans-serif;">
+
+            <!-- אייקון וכותרת -->
+            <div
+                style="display: inline-block; background-color: #e74c3c; color: white; padding: 10px 20px; border-radius: 25px; margin-bottom: 15px; font-size: 16px; font-weight: bold;">
+                ⚠️ פנייתכם לא אושרה
+            </div>
+
+            <!-- הודעה ראשית -->
+            <div style="color: #2c3e50; font-size: 18px; font-weight: bold; margin-bottom: 15px; line-height: 1.4;">
+                המכירה המוזלת מיועדת למשפחות הרשומות בלבד.
+            </div>
+
+            <!-- פירוט -->
+            <div style="color: #34495e; font-size: 16px; margin-bottom: 20px; line-height: 1.5;">
+                פנייתכם לא אושרה. ייתכן שהפרטים שהזנתם אינם תואמים את הנתונים במערכת.
+            </div>
+
+            <!-- הודעת עזרה -->
+            <div
+                style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 12px; margin-bottom: 20px; color: #856404; font-size: 14px;">
+                חושבים שזה טעות? תוכלו למלא שוב טופס פניה שיעבור לבדיקת המערכת.
+            </div>
+
+            <!-- כפתורי פעולה -->
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button type="button"
+                    style="background-color: #3498db; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; min-width: 140px; transition: background-color 0.3s;"
+                    onmouseover="this.style.backgroundColor='#2980b9'" onclick="goToForm()">
+                    טופס פניה
+                </button>
+
+                <button type="button" onclick="exitFromForm()"
+                    style="background-color: #95a5a6; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; min-width: 140px; transition: background-color 0.3s;"
+                    onmouseover="this.style.backgroundColor='#7f8c8d'">
+                    יציאה
+                </button>
+            </div>
+
+            <!-- מידע נוסף -->
+            <div
+                style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0; color: #7f8c8d; font-size: 13px;">
+                לאחר מילוי טופס הפניה, הטופס ישלח לבדיקה פרטנית, ותוכלו לבדוק את סטטוס האישור שלכם בכניסה לטופס.
+                <br />
+                זמן הבדיקה הוא כ-14 ימי עסקים.
+            </div>
+        </div>
+
+        <div id="NoteClose"
+            style="color: indianred; font-size: 20px; width: 370px; margin-left: auto; margin-right: auto; border: 2px solid indianred; border-radius: 7px; margin-top: 70px; padding: 13px; text-align: center; font-weight: bold; margin-bottom: 200px; max-width: 90%; padding: 20px; display: none">
+            <div style="font-size: 23px;margin-bottom: 7px;">שימו לב!</div>
+            <div>לא ניתן לגשת לטופס זה מעמדות נדרים.</div>
+        </div>
+
+
+        <!--<div style="text-align:center;min-height:158px;font-size:0px"><img id="HomeImage" style="width:98%;border-radius:10px;" src="Files/Pic/2302_Pic.jpg" /></div>-->
+
+
+
+        <div id="AllMainForm" style="display:none;">
+
+            <div id="alertStatus1"
+                style="text-align: center; margin: 20px auto; padding: 15px; background: linear-gradient(135deg, #fff8e1, #ffecb3); border: 2px solid #ff9800; border-radius: 12px; box-shadow: 0 4px 8px rgba(255,152,0,0.1); max-width: 90%; font-family: Arial, sans-serif; display: none;">
+                <p style="margin: 10px 0; color: #2c3e50; font-size: 16px; line-height: 1.5; font-weight: 500;">
+                    פנייתכם בטיפול ועדיין לא אושרה
+                </p>
+            </div>
+            <div id="alertStatus2"
+                style="text-align: center; margin: 20px auto; padding: 15px; background: linear-gradient(135deg, #f0fff4, #e8f5e8); border: 2px solid #4caf50; border-radius: 12px; box-shadow: 0 4px 8px rgba(76,175,80,0.1); max-width: 90%; font-family: Arial, sans-serif; display: none;">
+                <p style="margin: 10px 0; color: #2c3e50; font-size: 16px; line-height: 1.5; font-weight: 500;">
+                    פנייתכם אושרה.
+                </p>
+            </div>
+            <div id="alert"
+                style="text-align: center; margin: 20px auto; padding: 15px; background: linear-gradient(135deg, #f0f8ff, #e6f3ff); border: 2px solid #4a90e2; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 90%; font-family: Arial, sans-serif;">
+                <ul
+                    style="text-align: right; margin: 0; padding-right: 20px; color: #2c3e50; font-size: 14px; line-height: 1.6;">
+                    <li>חשוב מאד למלא את כל הפרטים במדויק, פרטים אלו ישמשו את המערכת לצורך הערכות למכירות וכן לשליחת
+                        עדכונים.</li>
+                    <li>המערכת פועלת בצורה אוטומטית ומילוי פרטים שגויים עלול לגרום לעוגמת נפש עבורכם ואף למחיקה אוטומטית
+                        מהמערכת.</li>
+
+                </ul>
+
+            </div>
+            <div id="EditNote" style="text-align:center;font-size:18px;color:indianred;font-weight:bold;display:none;">
+                <span style="font-size:24px;">שים לב!</span><br /> טופס זה במצב עריכה.<br /> בעת שליחת הטופס, הנתונים
+                שתזינו יחליפו את הקודמים.
+            </div>
+
+
+
+            <div id="MainForm" style="margin-right:20px;margin-top:30px; "></div>
+
+
+            <div id="SignDiv"
+                style="display:none;width:200px;border:1px solid #b9b6b6;border-radius:5px;cursor:pointer;margin: 30px auto 0px  auto;padding:5px;font-size:small;color:#808080">
+                חתימה:
+                <img id="SignPreview" style="width:100%;height:120px;display:block" onclick="$('#SignPad').show()"
+                    src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=' />
+            </div>
+
+            <div style="text-align:center;margin:40px" id="SaveDiv"><span id="SignAlert"
+                    style="font-size:small;color:#808080;display:none">לפני שליחת הטופס יפתח חלון לחתימה
+                    דיגיטלית</span><br /><input class="Bt" type="button" value="שלח טופס" onclick="SendData()" /></div>
+            <!-- br before span -->
+            <div style="text-align:center;margin:40px;color:#808080;display:none" id="WaitDiv"><img src="waitnew.gif"
+                    style="width:50px;" /><br />שומר נתונים</div> <!--נא להמתין. מבצע הזמנה...-->
+
+
+            <div style="height:200px"></div>
+
+
+        </div>
+    </div>
+
+    <div id="SignPad" class="modal">
+        <div class="modal-content" style="max-width:600px;width:97%;padding:0px;margin: 100px auto;">
+            <div id="MasavSignDiv" dir="rtl" style="text-align:center"></div>
+            <div style="margin:15px;font-weight:bold;font-size:medium;color:cadetblue">נא לחתום כעת על המסך.</div>
+            <canvas id="CanvasSign"
+                style="display: block; border: 2px solid cadetblue; border-radius: 5px; margin-right: auto; margin-left: auto"
+                width="500" height="300"></canvas>
+            <div style="padding:20px"><input type="button" class="Bt" value="איפוס חתימה"
+                    style="background-color:#b9b6b6;"
+                    onclick="signaturePad.clear(); SignData = ''; $('#SignPreview').attr('src', 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=')" /><input
+                    type="button" class="Bt" value="אישור"
+                    onclick="    $('#SignDiv').show(); $('#SignPad').hide(); if (signaturePad.isEmpty() == false) { SignData = signaturePad.toDataURL(); $('#SignPreview').attr('src', SignData); SendData() } else { $('#SignDiv').hide(); SignCancel() }" /><input
+                    type="button" class="Bt" value="ביטול" style="background-color:#fc8253"
+                    onclick="    SignCancel()" /></div>
+        </div>
+    </div>
+    </div>
+
+
+
+    <div id="SecurityLogo"
+        style="text-align:center;width:98%; max-width:400px;margin-left:auto;margin-right:auto;user-select:none"><img
+            src="Files/Pic/Security.PNG" style="width:70%" /></div>
+
+
+    <div id="FooterLogo"
+        style="text-decoration:none;padding:20px;padding-top:5px;padding-bottom:5px;margin-bottom:20px;color:gray;width: 200px;border-radius:5px;opacity:0.7;margin-left : auto; margin-right: auto;text-align:center;font-size:75%;">
+        <img src="nedarim.png" /><br />מופעל באמצעות<br /><strong>נדרים פלוס מבית מטרה הפקות</strong><br />לשיווק
+        ותמיכה: 03-7630543<br />
+    </div>
+
+    <script src="Files/signature_pad.js"></script>
+    <script src="Files/app.js"></script>
+    <script type="text/javascript" src="Files/FormsFunction.js"></script>
+
+    <script>
+        // עקיפת פונקציית ScrollUp מ-FormsFunction.js
+        function ScrollUp(Input, Top) {
+            if ($(Input).html() == undefined) return false;
+            if (Top == undefined) Top = 200;
+
+            setTimeout(function () {
+                try {
+                    var offset = $(Input).offset();
+                    if (offset && offset.top) {
+                        var targetScrollTop = offset.top - Top;
+                        if (targetScrollTop < 0) {
+                            targetScrollTop = 0;
+                        }
+                        $('html, body').animate({ scrollTop: targetScrollTop }, 'slow');
+                    } else {
+                        var position = $(Input).position();
+                        if (position && position.top) {
+                            var targetScrollTop = position.top - Top;
+                            if (targetScrollTop < 0) {
+                                targetScrollTop = 0;
+                            }
+                            $('html, body').animate({ scrollTop: targetScrollTop }, 'slow');
+                        }
+                    }
+                } catch (e) {
+                    // שקט, ממשיכים הלאה
+                }
+            }, 50);
+        }
+
+        // פונקציית מסך כניסה
+        function Stage1() {
+            $("#ZeoutCheckSave").hide();
+            $("#ZeoutCheckWait").show();
+
+            var Zihuy1 = $('input[name=Zihuy1]:checked').val();
+            var ZeoutTxt;
+
+            if (Zihuy1 == "chutz") {
+                ZeoutTxt = $("#DarkonCheckText").val();
+            } else {
+                ZeoutTxt = $("#ZeoutCheckText").val();
+            }
+
+            var KidDate = $("#PassCheckText").val();
+
+            // בדיקת מספר זהות/דרכון
+            if (ZeoutTxt == "") {
+                if (Zihuy1 == "chutz") {
+                    LoginSwal("נא להקליד מספר דרכון", "DarkonCheckText");
+                } else {
+                    LoginSwal("נא להקיש מספר זהות", "ZeoutCheckText");
+                }
+                return false;
+            }
+
+            // בדיקות ספציפיות לתעודת זהות ישראלית
+            if (Zihuy1 == "israel") {
+                if ($.isNumeric(ZeoutTxt) == false) {
+                    LoginSwal("נא להקיש מספר זהות בספרות בלבד, ללא סימנים", "ZeoutCheckText");
+                    return false;
+                }
+                if (ZeoutTxt.length != 9) {
+                    LoginSwal("מספר זהות לא תקין", "ZeoutCheckText");
+                    return false;
+                }
+            }
+            // עבור דרכון - רק בדיקה שהשדה לא ריק (כבר בדקנו למעלה)
+
+            // בדיקת תאריך לידה
+            if (KidDate.length !== 10) {
+                LoginSwal("נא להזין תאריך לידה תקין", "PassCheckText");
+                return false;
+            }
+            if (+KidDate.split("/")[0] < 1 || +KidDate.split("/")[0] > 31) {
+                LoginSwal("נא להזין תאריך לידה תקין", "PassCheckText");
+                return false;
+            }
+            if (+KidDate.split("/")[1] < 1 || +KidDate.split("/")[1] > 12) {
+                LoginSwal("נא להזין תאריך לידה תקין", "PassCheckText");
+                return false;
+            }
+
+
+            $.ajax({
+                url: "https://us-central1-tomchei-tora.cloudfunctions.net/nedarimForm-getFamily?method=1&zehut=" + encodeURIComponent(ZeoutTxt) + "&ezrachut=" + encodeURIComponent(Zihuy1) + "&birthDate=" + encodeURIComponent(KidDate),
+                data: "",
+                type: 'GET',
+                timeout: 60000,
+            }).success(function (JsonData) {
+                // שמירת נתוני המשפחה במשתנה הגלובלי
+                GlobalFamilyData = JsonData;
+
+                // מילוי האינפוטים לפי הנתונים שהתקבלו מהשרת
+                if (JsonData && typeof JsonData === 'object') {
+                    if (JsonData.status != "success") {
+                        // אם הסטטוס לא הצליח, הצג הודעת שגיאה
+                        MySwal("שגיאה: " + JsonData.message, "ZeoutCheckText");
+                        // טיפול בשגיאה
+                        $("#ZeoutCheckSave").show();
+                        $("#ZeoutCheckWait").hide();
+                        return;
+                    }
+                    // עדכון אופציות הסלקטים אם קיימות
+
+
+                    // מילוי שדות המשפחה
+                    if (JsonData.family && typeof JsonData.family === 'object') {
+                        for (var fieldName in JsonData.family) {
+                            var $field = $('#' + fieldName);
+                            if ($field.length > 0) {
+                                var fieldValue = JsonData.family[fieldName];
+
+                                // טיפול בסוגי שדות שונים
+                                if ($field.is('select')) {
+                                    $field.val(fieldValue);
+                                } else if ($field.is('input[type="checkbox"]')) {
+                                    $field.prop('checked', fieldValue === true || fieldValue === 'true' || fieldValue === 1 || fieldValue === '1');
+                                } else if ($field.is('input[type="radio"]')) {
+                                    $('input[name="' + fieldName + '"][value="' + fieldValue + '"]').prop('checked', true);
+                                } else if ($field.is('input') || $field.is('textarea')) {
+                                    $field.val(fieldValue);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $("#city").val('מודיעין עילית').attr('disabled', 'disabled'); // הגדרת עיר ברירת מחדל
+                $("#city").trigger('change');
+
+                // בכל מקרה ממשיכים לטופס
+                // שמירת הערכים בשדות המתאימים
+                $("#zehut").val(ZeoutTxt).attr('disabled', 'disabled');
+                $("#birthDate").val(KidDate).attr('disabled', 'disabled');
+
+
+                // הגדרת הסתרה/הצגה של שדות תלויים
+                setupConditionalFields();
+
+                // הפעלה ידנית של טריגרים לצ'קבוקסים שנטענו עם נתונים
+                triggerConditionalFieldsAfterDataLoad();
+
+                // הסתרת מסך הכניסה והצגת הטופס
+                $("#ZeoutCheck").hide();
+                $("#ZeoutCheckWait").hide();
+
+                if (JsonData.family) {
+                    $("#ZeoutCheckSave").show();
+                    $("#AllMainForm").show();
+                }
+
+            }).error(function () {
+                // טיפול בשגיאה
+                $("#ZeoutCheckSave").show();
+                $("#ZeoutCheckWait").hide();
+            });
+
+        }
+
+        const exitFromForm = () => {
+            if (MasofId !== '') {
+                parent.GoToMenu("Tafrit");
+                parent.closeIFrame()
+            } else {
+                $('html, body').scrollTop(0); location.reload();
+            }
+
+        }
+        const goToForm = () => {
+            $("#NotRegisteredDiv").hide();
+            $("#Status4Div").hide();
+            $("#ZeoutCheckSave").show();
+            $("#AllMainForm").show();
+        }
+
+        // פונקציית LoginSwal לטיפול בהודעות שגיאה במסך הכניסה
+        function LoginSwal(message, fieldId) {
+            $("#ZeoutCheckWait").hide();
+            $("#ZeoutCheckSave").show();
+
+            swal({
+                title: "שגיאה",
+                text: message,
+                type: "error",
+                confirmButtonText: "אישור"
+            }, function () {
+                if (fieldId) {
+                    $("#" + fieldId).focus();
+                }
+            });
+        }
+
+        // פונקציה להגדרת שדות תלויים
+        function setupConditionalFields() {
+            // הסתרת שדות תלויים בתחילה
+            $("#kolelDiv").hide();
+            $("#kolelTypeDiv").hide();
+            $("#YGMachzorDiv").hide();
+            $("#childrenContainer").hide();
+            $("#tzevetInMosadDiv").hide();
+
+            // הוספת מאזינים לצ'קבוקסים
+            $("#isAvrechKollel").change(function () {
+                if ($(this).is(':checked')) {
+                    $("#kolelDiv").show();
+                    $("#kolelTypeDiv").show();
+                } else {
+                    $("#kolelDiv").hide();
+                    $("#kolelTypeDiv").hide();
+                    $("#kolel").val(""); // איפוס הערך
+                    // איפוס הרדיו בוטונים
+                    $('input[name=kolelType]').prop('checked', false);
+                }
+            });
+
+            $("#isBogerYG").change(function () {
+                if ($(this).is(':checked')) {
+                    $("#YGMachzorDiv").show();
+                } else {
+                    $("#YGMachzorDiv").hide();
+                    $("#YGMachzor").val(""); // איפוס הערך
+                }
+            });
+
+            $("#isChildInAteret").change(function () {
+                if ($(this).is(':checked')) {
+                    $("#childrenContainer").show();
+
+                    // הוספת שורת ילד ראשונה רק אם אין שורות קיימות
+                    var config = GroupFieldsConfig['children'];
+                    if (config && config.currentRows === 0) {
+                        addGroupRow('children');
+                    }
+
+                    // וידוא שהסלקטים מאותחלים כראוי אחרי הצגת הקונטיינר
+                    setTimeout(function () {
+
+                        // ראשית נוודא שיש לנו את האופציות מהשרת
+                        initializeChildrenSelects();
+
+                        // אתחול השורות הקיימות
+                        var config = GroupFieldsConfig['children'];
+
+                        if (config && config.currentRows > 0) {
+                            for (var i = 0; i < config.currentRows; i++) {
+                                setupChildRowEventListeners(i);
+                            }
+                        } else {
+
+                        }
+                    }, 200);
+                } else {
+                    $("#childrenContainer").hide();
+                    // איפוס נתוני הילדים כשמבטלים את הצ'קבוקס
+                    $('#children' + 'Rows').empty();
+                    if (GroupFieldsConfig['children']) {
+                        GroupFieldsConfig['children'].currentRows = 0;
+                    }
+                }
+            });
+
+            $("#isInTzevet").change(function () {
+                if ($(this).is(':checked')) {
+                    $("#tzevetInMosadDiv").show();
+                } else {
+                    $("#tzevetInMosadDiv").hide();
+                    $("#tzevetInMosad").val(""); // איפוס הערך
+                }
+            });
+        }
+
+        // פונקציה להפעלת טריגרים של שדות תלויים אחרי טעינת נתונים
+        function triggerConditionalFieldsAfterDataLoad() {
+            // בדיקה והפעלת טריגרים לצ'קבוקסים שמסומנים
+            if ($("#isAvrechKollel").is(':checked')) {
+                $("#kolelDiv").show();
+                $("#kolelTypeDiv").show();
+            }
+
+            if ($("#isBogerYG").is(':checked')) {
+                $("#YGMachzorDiv").show();
+            }
+
+            if ($("#isChildInAteret").is(':checked')) {
+                $("#childrenContainer").show();
+
+                // אתחול הסלקטים לשורות הקיימות
+                setTimeout(function () {
+                    initializeChildrenSelects();
+
+                    var config = GroupFieldsConfig['children'];
+                    if (config) {
+                        for (var i = 0; i < config.currentRows; i++) {
+                            setupChildRowEventListeners(i);
+                        }
+                    }
+
+                    // טעינת נתוני הילדים אם יש
+                    if (GlobalFamilyData && GlobalFamilyData.family && GlobalFamilyData.family.children) {
+                        loadChildrenDataAfterContainerShow();
+                    }
+                }, 200);
+            }
+
+            if ($("#isInTzevet").is(':checked')) {
+                $("#tzevetInMosadDiv").show();
+            }
+        }
+
+        // פונקציה לטעינת נתוני ילדים אחרי שהקונטיינר נראה
+        function loadChildrenDataAfterContainerShow() {
+            if (!GlobalFamilyData || !GlobalFamilyData.family || !GlobalFamilyData.family.children) {
+                return;
+            }
+
+            var childrenData = GlobalFamilyData.family.children;
+
+            // מחיקת שורות קיימות
+            $('#' + 'children' + 'Rows').empty();
+            if (GroupFieldsConfig && GroupFieldsConfig['children']) {
+                GroupFieldsConfig['children'].currentRows = 0;
+            }
+
+            // יצירת שורות חדשות לכל ילד
+            for (var childIndex = 0; childIndex < childrenData.length; childIndex++) {
+                addGroupRow('children');
+                var childData = childrenData[childIndex];
+
+                // מילוי נתוני הילד
+                for (var fieldName in childData) {
+                    var fieldId = 'children_' + fieldName + '_' + childIndex;
+                    var $field = $('#' + fieldId);
+
+                    if ($field.length > 0) {
+                        $field.val(childData[fieldName]);
+
+                        // אם זה סלקט של מוסד, יש להפעיל את האירוע שלו
+                        if (fieldName === 'childMosadType') {
+                            // שימוש ב-closure נכון
+                            (function (currentIndex, currentChildData) {
+                                setTimeout(function () {
+                                    updateChildBranches('children_childMosadType_' + currentIndex);
+
+                                    // טעינת ערכי סניף וכיתה לאחר עדכון האופציות
+                                    setTimeout(function () {
+                                        if (currentChildData.childMosad) {
+                                            $('#children_childMosad_' + currentIndex).val(currentChildData.childMosad);
+                                        }
+                                        if (currentChildData.childClass) {
+                                            $('#children_childClass_' + currentIndex).val(currentChildData.childClass);
+                                        }
+                                    }, 100);
+                                }, 200 + (currentIndex * 50)); // מרווח נוסף לכל ילד
+                            })(childIndex, childData);
+                        }
+                    } else {
+                        console.log("Field not found: " + fieldId);
+                    }
+                }
+            }
+        }
+
+        // פונקציה להגדרת event listeners עבור שורת ילד חדשה
+        function setupChildRowEventListeners(rowIndex) {
+            var institutionSelectId = 'children_childMosadType_' + rowIndex;
+            var branchSelectId = 'children_childMosad_' + rowIndex;
+            var classSelectId = 'children_childClass_' + rowIndex;
+
+            // וידוא שהסלקט קיים לפני האתחול
+            var $institutionSelect = $('#' + institutionSelectId);
+
+            if ($institutionSelect.length === 0) {
+                return; // אם הסלקט לא קיים, צא מהפונקציה
+            }
+
+            // מילוי אופציות מוסדות מתוך selectOptions
+            var institutionOptions = [{ value: "", label: "בחר מוסד" }];
+            for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
+                institutionOptions.push({
+                    value: selectOptions.childInstitutions[i].value,
+                    label: selectOptions.childInstitutions[i].label
+                });
+            }
+
+            // עדכון הסלקט עם האופציות
+            $institutionSelect.empty();
+            institutionOptions.forEach(function (option) {
+                $institutionSelect.append('<option value="' + option.value + '">' + option.label + '</option>');
+            });
+
+
+            // הסתרת סלקט סניפים וכיתות בהתחלה
+            $('#' + branchSelectId).parent().hide();
+            $('#' + classSelectId).parent().hide();
+
+            // event listener לבחירת מוסד
+            $('#' + institutionSelectId).off('change').on('change', function () {
+                updateChildBranches(institutionSelectId);
+            });
+
+            // event listener לבחירת סניף
+            $('#' + branchSelectId).off('change').on('change', function () {
+                updateChildClasses(branchSelectId);
+            });
+
+            // הוספת פורמט תאריך לשדה תאריך לידה
+            var birthDateId = 'children_childBirthDate_' + rowIndex;
+            $('#' + birthDateId).off('input').on('input', function () {
+                var TempDate = $(this).val().replace(/\//g, "");
+                if ($.isNumeric(TempDate)) {
+                    if (TempDate.length >= 4) {
+                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2, 2) + "/" + TempDate.substr(4);
+                    } else if (TempDate.length >= 2) {
+                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2);
+                    }
+                    $(this).val(TempDate);
+                }
+            });
+        }
+
+        // פונקציה להגדרת שדה השכונות התלוי בעיר
+        function setupNeighborhoodField() {
+            // מאזין לשינוי בשדה העיר - עם setTimeout לוודא שהערך עודכן
+            $("#city").on('change input', function () {
+                console.log("City field changed, updating neighborhoods...");
+                var $cityField = $(this);
+                var $shchunaSelect = $("#shchuna");
+                var $shchunaDiv = $("#shchunaDiv");
+
+                // השהיה קצרה כדי לוודא שהערך עודכן במידה ויש עיכוב
+                setTimeout(function () {
+                    var selectedCity = $cityField.val().trim();
+
+                    console.log("City changed to:", selectedCity);
+
+                    // בדיקה אם יש אופציות שכונות לעיר הנבחרת
+                    if (neighborhoodOptions[selectedCity] && neighborhoodOptions[selectedCity].length > 0) {
+                        console.log("Found neighborhoods for", selectedCity);
+
+                        // מילוי הסלקט עם אופציות השכונות
+                        $shchunaSelect.empty();
+                        $shchunaSelect.append('<option value="">בחר שכונה</option>');
+
+                        for (var i = 0; i < neighborhoodOptions[selectedCity].length; i++) {
+                            var neighborhood = neighborhoodOptions[selectedCity][i];
+                            $shchunaSelect.append('<option value="' + neighborhood + '">' + neighborhood + '</option>');
+                        }
+
+                        // הצגת שדה השכונות עם שינוי הסגנון
+                        $shchunaDiv.css('display', 'inline-block');
+                    } else {
+                        console.log("No neighborhoods found for", selectedCity);
+                        // הסתרת שדה השכונות ואיפוס הערך
+                        $shchunaDiv.css('display', 'none');
+                        $shchunaSelect.val("");
+                    }
+                }, 50); // השהיה של 50 מילישניות
+            });
+
+            // גם בדיקה ראשונית אם כבר יש ערך בשדה העיר
+            setTimeout(function () {
+                if ($("#city").val()) {
+                    $("#city").trigger('change');
+                }
+            }, 100);
+        }
+
+    </script>
+
+
+
+</body>
+
+</html>
