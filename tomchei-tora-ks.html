@@ -822,7 +822,8 @@
                 CityId: '#city',
                 StreetId: '#street',
                 Auto_Focus_After_City_Selection: true,
-                list_Citys: []
+                list_Citys: [],
+                CityDefault: "מודיעין עילית"  // קביעת מודיעין עילית כברירת מחדל
             })
 
             // הגדרת פונקציית callback עבור בחירת עיר - תופעל אוטומטית כשבוחרים עיר מהפופאפ
@@ -837,6 +838,27 @@
                 $('#KehilaSearch').focus();
                 FillKehilaTable(''); // הצגת כל הקהילות בתחילה
             })
+
+            // פונקציה לוודא Cityid לעיר קיימת
+            function ensureCityIdExists() {
+                var $cityField = $("#city");
+                var cityName = $cityField.val().trim();
+                
+                if (cityName && !$cityField.attr('Cityid') && window.ListCityGlobal) {
+                    var cityMatch = window.ListCityGlobal.find(function(city) {
+                        return city.name === cityName;
+                    });
+                    if (cityMatch) {
+                        $cityField.attr('Cityid', cityMatch.Cityid);
+                        console.log('Initial City ID set for', cityName, ':', cityMatch.Cityid);
+                    }
+                }
+            }
+
+            // הפעלת הפונקציה לאחר שרשימת הערים נטענת
+            setTimeout(function() {
+                ensureCityIdExists();
+            }, 500);
 
             $("#KehilaSearch").on('input', function () {
                 FillKehilaTable($('#KehilaSearch').val())
