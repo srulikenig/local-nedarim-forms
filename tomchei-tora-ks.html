@@ -54,6 +54,16 @@
             -webkit-box-sizing: border-box
         }
 
+        /* סגנון מיוחד לשדה קהילה - מציין שניתן ללחוץ */
+        #kehila {
+            cursor: pointer;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23666" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: left 10px center;
+            background-size: 12px;
+            padding-left: 25px;
+        }
+
         .RadioBtLbl {
             border-style: solid;
             border-color: #f7bb4d;
@@ -343,6 +353,7 @@
                 , { "ElementId": "firstName", "MaxLength": 50, "Width": 40, "Bold": false, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true, "DbName": "Field2", "Style": "", "Br": false, "Send": true }
                 , { "ElementId": "lastName", "MaxLength": 50, "Width": 40, "fieldName": "שם משפחה", "Type": "Text", "Mandatory": true, "DbName": "Field3", "Br": false, "Send": true }
                 , { "ElementId": "birthDate", "MaxLength": 10, "Width": 40, "fieldName": "תאריך לידה", "fieldNameShow": "תאריך לידה<br/>בתבנית: 25/05/1990", "Type": "Tel", "Mandatory": true, "DbName": "Field4", "Br": false, "Date": true, "Send": true }
+                , { "ElementId": "kehila", "MaxLength": 80, "Width": 40, "fieldName": "קהילה", "Type": "Text", "Mandatory": true, "DbName": "Field50", "Br": false, "Send": true }
 
                 , { "Type": "Koteret", "Text": "פרטי קשר" }
                 , { "ElementId": "phone", "MaxLength": 11, "Width": 40, "fieldName": "טלפון", "Type": "Tel", "Mandatory": true, "DbName": "Field5", "Br": false, "Send": true }
@@ -358,7 +369,7 @@
                 , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": true, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
                 , { "ElementId": "building", "MaxLength": 10, "Width": 20, "fieldName": "בניין", "Type": "Text", "Mandatory": false, "DbName": "Field13", "Br": false, "Send": true }
                 , { "ElementId": "apartment", "MaxLength": 10, "Width": 20, "fieldName": "דירה", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
-                , { "ElementId": "entrance", "MaxLength": 10, "Width": 20, "fieldName": "כניסה", "Type": "Select", "Mandatory": false, "DbName": "Field29", "Br": false, "Send": true, "SelectVal": "בחר כניסה,א,ב,ג,ד,ה" }
+                // , { "ElementId": "entrance", "MaxLength": 10, "Width": 20, "fieldName": "כניסה", "Type": "Select", "Mandatory": false, "DbName": "Field29", "Br": false, "Send": true, "SelectVal": "בחר כניסה,א,ב,ג,ד,ה" }
 
                 , { "Type": "Koteret", "Text": "פרטי ילדים" }
                 , { "ElementId": "childrenAtHome", "MaxLength": 2, "Width": 25, "fieldName": "ילדים בבית", "Type": "Tel", "Mandatory": false, "DbName": "Field24", "Br": false, "Send": true }
@@ -385,7 +396,7 @@
             "PreData": false,
             "MosadId": "7014477", //0
             "MainLogo": "", // Files/Pic/000_logo.jpg
-            "MainTitle": "טופס רישום לתומכי תורה - תושבי קרית ספר",
+            "MainTitle": "טופס רישום לתושבי מודיעין עילית",
             "SpecialCheck": "Phone:Field5;Date:Field4" //Phone:Field; Date:Field; MasavPayment "CreditCardPayment" //Zeout:Field; //Mail:Field8; //CreditCardToken:Max //CheckDouble: //Bank:Field90,Field91,Field92 //CopyMail: //Tokef:Field8
 
         }
@@ -398,6 +409,158 @@
         var Demo = ''
         var SignData = ''
 
+        // מערך קהילות
+        var kehilaArr = [
+            "אבי עזרי - עטרת יוסף",
+            "אביר יעקב",
+            "אהל יוסף מאיר (חפץ חיים)",
+            "אהל יעקב",
+            "אהל ישראל",
+            "אהל מנחם",
+            "זכור לאברהם (אהל תורה)",
+            "אהל דב",
+            "אהלי ספר",
+            "אורחות תורה",
+            "אחדות ישראל",
+            "בית המדרש קהילת החסידים",
+            "רמון יהודה שע\"י קהילת אנשי",
+            "בית אבא",
+            "בית אהרון (ברסלב)",
+            "בית אליהו",
+            "בית יצחק",
+            "בית המדרש המרכזי",
+            "בית תפילה",
+            "בית זכריה",
+            "בן איש חי",
+            "ברית יצחק",
+            "ברכת התורה",
+            "אהל יוסף (דרומה לשעבר)",
+            "היכל יצחק",
+            "היכל שלום (תימנים)",
+            "זכרון דוד",
+            "זכרון מאיר",
+            "זכרון משה",
+            "חניכי הישיבות (הרב ברזל)",
+            "חניכי הישיבות גבעה דרומית (הרב דומב)",
+            "חניכי הישיבות חיי אברהם",
+            "יוצאי חברון",
+            "יוצאי חדרה",
+            "יחל ישראל",
+            "שיר ושבחה",
+            "מאור חיים",
+            "מנין אברכים ג\"ד",
+            "נאות שמחה",
+            "מרומי שדה",
+            "משובב נתיבות",
+            "משכן אהרון (פוניבז' ג\"ד)",
+            "נרות זכריה",
+            "סלבודקא",
+            "עץ חיים",
+            "פונוביז'",
+            "פעולת צדיק",
+            "צרפתים מש\"ח",
+            "קהילות יעקב",
+            "קהילת אשכנז",
+            "קול יעקב",
+            "קול תורה",
+            "קהילת משך חכמה",
+            "קהילת קצות החושן",
+            "תפארת משה-קארלין סטאלין",
+            "קהילת חובת הלבבות",
+            "שאגת אריה",
+            "שיח יצחק",
+            "תורה ותפילה",
+            "חזון דוד",
+            "מאור ישראל",
+            "בית ישראל",
+            "עטרת שלמה",
+            "נצח ישראל",
+            "זכרון נחום",
+            "היכל הגרי\"ש",
+            "שפתי חיים",
+            "מסילת ישרים",
+            "אור אליהו",
+            "בית דוד ושלמה",
+            "הגר\"א",
+            "שירה חדשה",
+            "עטרת חיים",
+            "אברכי כנסת הגדולה",
+            "רינה ותפילה",
+            "נפש החיים (הרב קלופט)",
+            "זכרון שמואל",
+            "אהל תורה",
+            "אור יוסף",
+            "היכל התורה",
+            "קרעטשניף",
+            "אור יחזקאל",
+            "אלכסנדר",
+            "בוהוש",
+            "ביאלא",
+            "לומדי תורה",
+            "ברסלב",
+            "קהילת שדרות יחזקאל",
+            "תפארת ברדוגו",
+            "ויז'ניץ - אמרי חיים",
+            "חזו\"א - היכל מרדכי",
+            "חניכי הישיבות - רשב\"י",
+            "חניכי הישיבות הגר\"מ ברכה",
+            "חסדי אבות",
+            "ירוסלב",
+            "ישועת דוד - דרכי איש",
+            "מודז'יץ",
+            "אהבת תורה",
+            "קהילת ר\"ע",
+            "משכן התורה",
+            "מתמידים",
+            "נפש החיים",
+            "סדיגורא",
+            "חדוות יעקב",
+            "פינסק קרלין",
+            "פרושים",
+            "היכל שמואל אהרן - צאנז",
+            "קהילת בני הישיבות",
+            "קהילת שערי תפילה",
+            "קרלין",
+            "שבט הלוי",
+            "חניכי הישיבות שיח יצחק",
+            "שתילי זיתים - שאמי",
+            "תוצאות חיים",
+            "מנין אברכים שע\"י ישיבת הר\"ן",
+            "אמשינוב",
+            "לקח טוב",
+            "אונגוואר",
+            "באיאן",
+            "בני הישיבות גרין פארק",
+            "בני תורה ספרדים חפציבה",
+            "המרכזי חפציבה",
+            "זכרון גבריאל",
+            "חסד לאברהם - חניכי הישיבות",
+            "יוצאי תימן",
+            "ישועות משה - ויזניץ",
+            "קהילות החסידים",
+            "קרית אביעזרי",
+            "קהילת חזו\"א",
+            "אהל אברהם ארחות תורה",
+            "אהל רחל",
+            "תפילת חנה - ברסלב",
+            "קהל עדת ירושלים - מתמידים",
+            "ברכת חיים שלום - רחמסטריוקן",
+            "בית אהרן וישראל דחסידי קרלין סטולין",
+            "היכל הגרי\"מ",
+            "המרכזי נאות הפסגה",
+            "אהל אסתר",
+            "עטרת שלום (תימני)",
+            "קהל חסידים",
+            "פתחי שערים",
+            "קהילת נתיבות שלום",
+            "היכל נפתלי",
+            "חניכי כנסת הגדולה",
+            "המרכזי נאות עילית",
+            "קהילת הרמב\"ם",
+            "איילת השחר",
+            "בית המדרש \"בית יוסף ספרא\"",
+            "קהילת רשב\"א"
+        ].sort((a, b) => a.localeCompare(b, 'he', { sensitivity: 'base' }));
 
         var CheckElementId = [];
         var CheckDbName = [];
@@ -405,6 +568,36 @@
 
         // הגדרות קבוצות שדות דינמיות
         var GroupFieldsConfig = {};
+
+        // פונקציות עבור מודל בחירת קהילה
+        function FillKehilaTable(Search) {
+            $("#KehilaTable").html('')
+            var KeyWord = Search.split(' ')
+            var Counter = 0
+            for (var i = 0; i < kehilaArr.length; i++) {
+                var Exist = true
+                for (var j = 0; j < KeyWord.length; j++) {
+                    if (kehilaArr[i].indexOf(KeyWord[j]) < 0) { Exist = false }
+                }
+                if (kehilaArr[i] == Search) { Exist = true }
+                if (Exist == true || Search == '') {
+                    Counter += 1
+                    $("#KehilaTable").append('<tr><td id="Kehila' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center;font-size: 20px;color: #710d0d;">' + kehilaArr[i] + '</div></td></tr>');
+                    (function (i) {
+                        $("#Kehila" + i).click(function () {
+                            $("#kehila").val(kehilaArr[i]);
+                            CloseKehila()
+                        });
+                    })(i);
+                };
+            }
+            $('#KehilaCounter').html(Counter)
+        }
+
+        function CloseKehila() {
+            $("#KehilaChoose").hide();
+            setTimeout(function () { ScrollUp($("#kehila")) }, 100);
+        }
 
         var MainForm = '';
         $(document).ready(function () {
@@ -636,6 +829,17 @@
                 // הפעלת עדכון השכונות אחרי בחירת עיר
                 $("#city").trigger('change');
             };
+
+            // הגדרת מודל בחירת קהילה
+            $("#kehila").focus(function () {
+                $('#KehilaChoose').show()
+                $('#KehilaSearch').focus();
+                FillKehilaTable(''); // הצגת כל הקהילות בתחילה
+            })
+
+            $("#KehilaSearch").on('input', function () {
+                FillKehilaTable($('#KehilaSearch').val())
+            });
 
 
             $('#IshurDakotDiv').hide();
@@ -2937,6 +3141,24 @@
         }
 
     </script>
+
+    <!-- מודל בחירת קהילה -->
+    <div id="KehilaChoose" class="modal" onclick='if (event.target == this) CloseKehila()'>
+        <div class="modal-content" style="max-width:400px;margin: 5px auto;">
+            <div style="-webkit-user-select: none; position: absolute"> <img
+                    style="cursor: pointer; width: 25px; height: auto; margin-top: 10px; margin-right: 10px"
+                    src="closebt.png" onclick="CloseKehila()" /></div>
+            <div style="text-align:center">
+                <div class="Koteret" style="margin-bottom:30px;padding:0px;text-align:center;display: inline-block;">בחר
+                    קהילה:</div>
+                <input id="KehilaSearch" class="TextBox" style="text-align:center" type="text"
+                    placeholder="הזן קהילה" />
+                <div style="padding: 5px 0 13px;">סה"כ תוצאות: <span id="KehilaCounter"></span></div>
+                <table id="KehilaTable" style="text-align:center;width:95%;font-size:medium;background-color:white">
+                </table>
+            </div>
+        </div>
+    </div>
 
 
 
