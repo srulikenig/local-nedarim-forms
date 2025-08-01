@@ -422,7 +422,7 @@
             "PreData": false,
             "MosadId": "7014477", //0
             "MainLogo": "", // Files/Pic/000_logo.jpg
-            "MainTitle": "טופס רישום לתומכי תורה",
+            "MainTitle": "טופס עדכון פרטים לתלמידי מוסדות עטרת שלמה",
             "SpecialCheck": "Phone:Field5;Date:Field4" //Phone:Field; Date:Field; MasavPayment "CreditCardPayment" //Zeout:Field; //Mail:Field8; //CreditCardToken:Max //CheckDouble: //Bank:Field90,Field91,Field92 //CopyMail: //Tokef:Field8
 
         }
@@ -1216,12 +1216,12 @@
         function toggleChildrenNotice() {
             var childrenContainer = $("#childrenContainer");
             var noticeId = "childrenNotice";
-            
+
             if ($("#isChildInAteret").is(':checked')) {
                 // אם הצ'קבוקס מסומן ועדיין לא קיימת ההתראה
                 if ($("#" + noticeId).length === 0) {
                     var noticeHtml = '<div id="' + noticeId + '" style="background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center; font-weight: bold; font-size: 16px;">שימו לב בחירת כיתת הלימוד הינה לפי שנה"ל תשפ"ו</div>';
-                    
+
                     // הוספת ההתראה אחרי כותרת הקבוצה ולפני השורות
                     childrenContainer.find('.group-header').after(noticeHtml);
                 }
