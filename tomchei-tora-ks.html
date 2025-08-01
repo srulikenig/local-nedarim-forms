@@ -352,7 +352,7 @@
                 , { "ElementId": "email2", "MaxLength": 50, "Width": 60, "fieldName": "אימייל נוסף", "Type": "Text", "Mandatory": false, "DbName": "Field9", "Br": false, "Send": true }
 
                 , { "Type": "Koteret", "Text": "כתובת" }
-                , { "Type": "Div","ElementId": "OnlyKS", "Text":"<div style='background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center; font-weight: bold; font-size: 16px; width: 50%;'>הרישום הינו לתושב הגר במודיעין עילית בלבד.</div>" }
+                , { "Type": "Div", "ElementId": "OnlyKS", "Text": "<div style='background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center; font-weight: bold; font-size: 16px; width: 50%;'>הרישום הינו לתושב הגר במודיעין עילית בלבד.</div>" }
                 , { "ElementId": "city", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field10", "Br": false, "Send": true }
                 , { "ElementId": "street", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": true, "DbName": "Field11", "Br": false, "Send": true }
                 , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": true, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
@@ -1350,7 +1350,9 @@
             };
 
             // יצירת אובייקט JSON לשרת הראשון
-            var stage1Data = {};
+            var stage1Data = {
+                isKs: true
+            };
 
             // המרת PostData לאובייקט עם מיפוי השדות
             var dataParams = PostData.split('&');
@@ -2551,7 +2553,7 @@
 
 
             $.ajax({
-                url: "https://us-central1-tomchei-tora.cloudfunctions.net/nedarimForm-getFamily?method=1&zehut=" + encodeURIComponent(ZeoutTxt) + "&ezrachut=" + encodeURIComponent(Zihuy1) + "&birthDate=" + encodeURIComponent(KidDate),
+                url: "https://us-central1-tomchei-tora.cloudfunctions.net/nedarimForm-getFamily?isKs=true&method=1&zehut=" + encodeURIComponent(ZeoutTxt) + "&ezrachut=" + encodeURIComponent(Zihuy1) + "&birthDate=" + encodeURIComponent(KidDate),
                 data: "",
                 type: 'GET',
                 timeout: 60000,
