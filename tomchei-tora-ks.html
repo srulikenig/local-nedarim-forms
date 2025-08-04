@@ -54,6 +54,16 @@
             -webkit-box-sizing: border-box
         }
 
+        /* סגנון מיוחד לשדה קהילה - מציין שניתן ללחוץ */
+        #kehila {
+            cursor: pointer;
+            /* background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23666" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>'); */
+            background-repeat: no-repeat;
+            background-position: left 10px center;
+            background-size: 12px;
+            padding-left: 25px;
+        }
+
         .RadioBtLbl {
             border-style: solid;
             border-color: #f7bb4d;
@@ -343,6 +353,7 @@
                 , { "ElementId": "firstName", "MaxLength": 50, "Width": 40, "Bold": false, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true, "DbName": "Field2", "Style": "", "Br": false, "Send": true }
                 , { "ElementId": "lastName", "MaxLength": 50, "Width": 40, "fieldName": "שם משפחה", "Type": "Text", "Mandatory": true, "DbName": "Field3", "Br": false, "Send": true }
                 , { "ElementId": "birthDate", "MaxLength": 10, "Width": 40, "fieldName": "תאריך לידה", "fieldNameShow": "תאריך לידה<br/>בתבנית: 25/05/1990", "Type": "Tel", "Mandatory": true, "DbName": "Field4", "Br": false, "Date": true, "Send": true }
+                , { "ElementId": "kehila", "MaxLength": 80, "Width": 40, "fieldName": "קהילה", "Type": "Text", "Mandatory": true, "DbName": "Field50", "Br": false, "Send": true }
 
                 , { "Type": "Koteret", "Text": "פרטי קשר" }
                 , { "ElementId": "phone", "MaxLength": 11, "Width": 40, "fieldName": "טלפון", "Type": "Tel", "Mandatory": true, "DbName": "Field5", "Br": false, "Send": true }
@@ -352,58 +363,19 @@
                 , { "ElementId": "email2", "MaxLength": 50, "Width": 60, "fieldName": "אימייל נוסף", "Type": "Text", "Mandatory": false, "DbName": "Field9", "Br": false, "Send": true }
 
                 , { "Type": "Koteret", "Text": "כתובת" }
+                , { "Type": "Div", "ElementId": "OnlyKS", "Text": "<div style='background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; margin: 3% 0; border-radius: 5px; text-align: center; font-weight: bold; font-size: 16px; width: 93%;'>הרישום הינו לתושב הגר במודיעין עילית בלבד.</div>" }
                 , { "ElementId": "city", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field10", "Br": false, "Send": true }
                 , { "ElementId": "street", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": true, "DbName": "Field11", "Br": false, "Send": true }
                 , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": true, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
                 , { "ElementId": "building", "MaxLength": 10, "Width": 20, "fieldName": "בניין", "Type": "Text", "Mandatory": false, "DbName": "Field13", "Br": false, "Send": true }
                 , { "ElementId": "apartment", "MaxLength": 10, "Width": 20, "fieldName": "דירה", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
-                , { "ElementId": "entrance", "MaxLength": 10, "Width": 20, "fieldName": "כניסה", "Type": "Select", "Mandatory": false, "DbName": "Field29", "Br": false, "Send": true, "SelectVal": "בחר כניסה,א,ב,ג,ד,ה" }
+                // , { "ElementId": "entrance", "MaxLength": 10, "Width": 20, "fieldName": "כניסה", "Type": "Select", "Mandatory": false, "DbName": "Field29", "Br": false, "Send": true, "SelectVal": "בחר כניסה,א,ב,ג,ד,ה" }
 
                 , { "Type": "Koteret", "Text": "פרטי ילדים" }
                 , { "ElementId": "childrenAtHome", "MaxLength": 2, "Width": 25, "fieldName": "ילדים בבית", "Type": "Tel", "Mandatory": false, "DbName": "Field24", "Br": false, "Send": true }
                 , { "ElementId": "childrenMarried", "MaxLength": 2, "Width": 25, "fieldName": "ילדים נשואים", "Type": "Tel", "Mandatory": false, "DbName": "Field25", "Br": false, "Send": true }
                 , { "ElementId": "childrenTotal", "MaxLength": 2, "Width": 25, "fieldName": "סה\"כ", "Type": "Tel", "Mandatory": false, "DbName": "Field26", "Br": false, "Send": true }
 
-
-                , { "Type": "Margin", "Height": "25" }
-
-                , { "Type": "Koteret", "Text": "פרטי מוסד" }
-                , { "ElementId": "isAvrechKollel", "fieldName": "לומד בכוללים שע\"י מוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
-                , { "ElementId": "kolel", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field16", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
-                , {
-                    "ElementId": "kolelType", "MaxLength": 50, "Width": 90, "fieldName": "סוג הלימוד", "Type": "Radio", "Mandatory": true, "DbName": "Field30", "Br": false, "Send": true, "RadioBt": [
-                        { "Text": "יום שלם" },
-                        { "Text": "חצי יום" }
-                    ]
-                }
-                , { "Type": "Div", "ElementId": "kolelAlert", "Text": "<div style='background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; margin: 3% 0; border-radius: 5px; text-align: center; font-size: 12px; width: 93%;'>במידה והנך לומד בשני כוללים שונים, שע\"י מוסדות עטרת שלמה יש לציין את הכולל בוקר ולבחור במסגרת יום שלם.</div>" }
-
-                , { "Type": "Margin", "Height": "25" }
-
-                , { "ElementId": "isBogerYG", "fieldName": "בוגר ישיבה גדולה - עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field17", "Width": 70, "Br": false, "Send": true }
-                , { "ElementId": "YGMachzor", "MaxLength": 50, "Width": 50, "fieldName": "בחר מחזור", "Type": "Select", "Mandatory": false, "DbName": "Field18", "Br": false, "Send": true, "SelectVal": "בחר מחזור,קיבוץ,מחזור א,מחזור ב,מחזור ג,מחזור ד,מחזור ה,מחזור ו,מחזור ז,מחזור ח,מחזור ט,מחזור י" }
-                , { "Type": "Margin", "Height": "25" }
-
-                , { "ElementId": "isChildInAteret", "fieldName": "הורה לילדים במוסדות עטרת שלמה?", "Type": "CheckBox", "Mandatory": false, "DbName": "Field19", "Width": 70, "Br": false, "Send": true }
-
-                , {
-                    "Type": "GroupFields", "ElementId": "children", "fieldName": "פרטי ילדים", "DbName": "Field20", "MaxRows": 10, "DefaultRows": 0, "Mandatory": false, "Send": true, "Fields": [
-                        { "ElementId": "childName", "MaxLength": 50, "Width": 30, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true },
-                        { "ElementId": "childZehut", "MaxLength": 9, "Width": 30, "fieldName": "מספר זהות", "Type": "Tel", "Mandatory": true },
-                        { "ElementId": "childBirthDate", "MaxLength": 10, "Width": 30, "fieldName": "תאריך לידה לועזי", "fieldNameShow": "תאריך לידה לועזי<br/>בתבנית: 25/05/1990", "Type": "Tel", "Mandatory": true, "Date": true },
-                        { "ElementId": "childMosadType", "Width": 30, "fieldName": "מוסד", "Type": "Select", "Mandatory": false, "Br": true, "Send": true, "SelectVal": "בחר מוסד" },
-                        { "ElementId": "childMosad", "Width": 30, "fieldName": "סניף", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר סניף" },
-                        { "ElementId": "childClass", "Width": 30, "fieldName": "כיתה/שיעור", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר כיתה/שיעור" },
-                        { "Type": "Div", "Text": "שימו לב למלא לפי שנה\"ל תשפ\"ו", "Width": 90, "Style": "text-align: center; color: #ff6a00; font-size: 14px; margin-top: 10px; font-weight: bold; padding: 5px; border-top: 1px solid #f7bb4d; margin: 10px 20px;", "ElementId": "divChildrenNote", "fieldName": "divChildrenNote" }
-                    ]
-                }
-
-                , { "Type": "Margin", "Height": "25" }
-
-                , { "ElementId": "isInTzevet", "fieldName": "צוות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field21", "Width": 70, "Br": false, "Send": true }
-                , { "ElementId": "tzevetInMosad", "MaxLength": 50, "Width": 50, "fieldName": "עובד במוסד", "Type": "Select", "Mandatory": false, "DbName": "Field22", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
-
-                , { "Type": "Margin", "Height": "25" }
 
                 , { "ElementId": "note", "MaxLength": 700, "Width": 90, "fieldName": "הערות", "Type": "textarea", "Rows": 3, "Mandatory": false, "DbName": "Field23", "Br": false, "Send": true }
 
@@ -417,15 +389,15 @@
 
 
             ],
-            "TofesId": "3672",
+            "TofesId": "2302",//
             "Version": "3",
             "AllowChanges": false,
             "NeedSign": false,
             "PreData": false,
             "MosadId": "7014477", //0
             "MainLogo": "", // Files/Pic/000_logo.jpg
-            "MainTitle": "טופס עדכון פרטים לתלמידי מוסדות עטרת שלמה",
-            "SpecialCheck": "Phone:Field5,Field6,Field7;Date:Field4" //Phone:Field; Date:Field; MasavPayment "CreditCardPayment" //Zeout:Field; //Mail:Field8; //CreditCardToken:Max //CheckDouble: //Bank:Field90,Field91,Field92 //CopyMail: //Tokef:Field8
+            "MainTitle": "טופס רישום לתושבי מודיעין עילית",
+            "SpecialCheck": "Phone:Field5;Date:Field4" //Phone:Field; Date:Field; MasavPayment "CreditCardPayment" //Zeout:Field; //Mail:Field8; //CreditCardToken:Max //CheckDouble: //Bank:Field90,Field91,Field92 //CopyMail: //Tokef:Field8
 
         }
 
@@ -437,6 +409,158 @@
         var Demo = ''
         var SignData = ''
 
+        // מערך קהילות
+        var kehilaArr = [
+            "אבי עזרי - עטרת יוסף",
+            "אביר יעקב",
+            "אהל יוסף מאיר (חפץ חיים)",
+            "אהל יעקב",
+            "אהל ישראל",
+            "אהל מנחם",
+            "זכור לאברהם (אהל תורה)",
+            "אהל דב",
+            "אהלי ספר",
+            "אורחות תורה",
+            "אחדות ישראל",
+            "בית המדרש קהילת החסידים",
+            "רמון יהודה שע\"י קהילת אנשי",
+            "בית אבא",
+            "בית אהרון (ברסלב)",
+            "בית אליהו",
+            "בית יצחק",
+            "בית המדרש המרכזי",
+            "בית תפילה",
+            "בית זכריה",
+            "בן איש חי",
+            "ברית יצחק",
+            "ברכת התורה",
+            "אהל יוסף (דרומה לשעבר)",
+            "היכל יצחק",
+            "היכל שלום (תימנים)",
+            "זכרון דוד",
+            "זכרון מאיר",
+            "זכרון משה",
+            "חניכי הישיבות (הרב ברזל)",
+            "חניכי הישיבות גבעה דרומית (הרב דומב)",
+            "חניכי הישיבות חיי אברהם",
+            "יוצאי חברון",
+            "יוצאי חדרה",
+            "יחל ישראל",
+            "שיר ושבחה",
+            "מאור חיים",
+            "מנין אברכים ג\"ד",
+            "נאות שמחה",
+            "מרומי שדה",
+            "משובב נתיבות",
+            "משכן אהרון (פוניבז' ג\"ד)",
+            "נרות זכריה",
+            "סלבודקא",
+            "עץ חיים",
+            "פונוביז'",
+            "פעולת צדיק",
+            "צרפתים מש\"ח",
+            "קהילות יעקב",
+            "קהילת אשכנז",
+            "קול יעקב",
+            "קול תורה",
+            "קהילת משך חכמה",
+            "קהילת קצות החושן",
+            "תפארת משה-קארלין סטאלין",
+            "קהילת חובת הלבבות",
+            "שאגת אריה",
+            "שיח יצחק",
+            "תורה ותפילה",
+            "חזון דוד",
+            "מאור ישראל",
+            "בית ישראל",
+            "עטרת שלמה",
+            "נצח ישראל",
+            "זכרון נחום",
+            "היכל הגרי\"ש",
+            "שפתי חיים",
+            "מסילת ישרים",
+            "אור אליהו",
+            "בית דוד ושלמה",
+            "הגר\"א",
+            "שירה חדשה",
+            "עטרת חיים",
+            "אברכי כנסת הגדולה",
+            "רינה ותפילה",
+            "נפש החיים (הרב קלופט)",
+            "זכרון שמואל",
+            "אהל תורה",
+            "אור יוסף",
+            "היכל התורה",
+            "קרעטשניף",
+            "אור יחזקאל",
+            "אלכסנדר",
+            "בוהוש",
+            "ביאלא",
+            "לומדי תורה",
+            "ברסלב",
+            "קהילת שדרות יחזקאל",
+            "תפארת ברדוגו",
+            "ויז'ניץ - אמרי חיים",
+            "חזו\"א - היכל מרדכי",
+            "חניכי הישיבות - רשב\"י",
+            "חניכי הישיבות הגר\"מ ברכה",
+            "חסדי אבות",
+            "ירוסלב",
+            "ישועת דוד - דרכי איש",
+            "מודז'יץ",
+            "אהבת תורה",
+            "קהילת ר\"ע",
+            "משכן התורה",
+            "מתמידים",
+            "נפש החיים",
+            "סדיגורא",
+            "חדוות יעקב",
+            "פינסק קרלין",
+            "פרושים",
+            "היכל שמואל אהרן - צאנז",
+            "קהילת בני הישיבות",
+            "קהילת שערי תפילה",
+            "קרלין",
+            "שבט הלוי",
+            "חניכי הישיבות שיח יצחק",
+            "שתילי זיתים - שאמי",
+            "תוצאות חיים",
+            "מנין אברכים שע\"י ישיבת הר\"ן",
+            "אמשינוב",
+            "לקח טוב",
+            "אונגוואר",
+            "באיאן",
+            "בני הישיבות גרין פארק",
+            "בני תורה ספרדים חפציבה",
+            "המרכזי חפציבה",
+            "זכרון גבריאל",
+            "חסד לאברהם - חניכי הישיבות",
+            "יוצאי תימן",
+            "ישועות משה - ויזניץ",
+            "קהילות החסידים",
+            "קרית אביעזרי",
+            "קהילת חזו\"א",
+            "אהל אברהם ארחות תורה",
+            "אהל רחל",
+            "תפילת חנה - ברסלב",
+            "קהל עדת ירושלים - מתמידים",
+            "ברכת חיים שלום - רחמסטריוקן",
+            "בית אהרן וישראל דחסידי קרלין סטולין",
+            "היכל הגרי\"מ",
+            "המרכזי נאות הפסגה",
+            "אהל אסתר",
+            "עטרת שלום (תימני)",
+            "קהל חסידים",
+            "פתחי שערים",
+            "קהילת נתיבות שלום",
+            "היכל נפתלי",
+            "חניכי כנסת הגדולה",
+            "המרכזי נאות עילית",
+            "קהילת הרמב\"ם",
+            "איילת השחר",
+            "בית המדרש \"בית יוסף ספרא\"",
+            "קהילת רשב\"א"
+        ].sort((a, b) => a.localeCompare(b, 'he', { sensitivity: 'base' }));
 
         var CheckElementId = [];
         var CheckDbName = [];
@@ -444,6 +568,37 @@
 
         // הגדרות קבוצות שדות דינמיות
         var GroupFieldsConfig = {};
+
+        // פונקציות עבור מודל בחירת קהילה
+        function FillKehilaTable(Search) {
+            $("#KehilaTable").html('')
+            var KeyWord = Search.split(' ')
+            var Counter = 0
+            for (var i = 0; i < kehilaArr.length; i++) {
+                var Exist = true
+                for (var j = 0; j < KeyWord.length; j++) {
+                    if (kehilaArr[i].indexOf(KeyWord[j]) < 0) { Exist = false }
+                }
+                if (kehilaArr[i] == Search) { Exist = true }
+                if (Exist == true || Search == '') {
+                    Counter += 1
+                    $("#KehilaTable").append('<tr><td id="Kehila' + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center;font-size: 20px;color: #710d0d;">' + kehilaArr[i] + '</div></td></tr>');
+                    (function (i) {
+                        $("#Kehila" + i).click(function () {
+                            $("#kehila").val(kehilaArr[i]);
+                            CloseKehila()
+                        });
+                    })(i);
+                };
+            }
+            $('#KehilaCounter').html(Counter)
+        }
+
+        function CloseKehila() {
+            $("#KehilaChoose").hide();
+            $("#KehilaSearch").val(''); // איפוס שדה החיפוש
+            setTimeout(function () { ScrollUp($("#kehila")) }, 100);
+        }
 
         var MainForm = '';
         $(document).ready(function () {
@@ -633,20 +788,12 @@
             // הגדרת חישוב אוטומטי של סה"כ ילדים
             setupChildrenCalculation();
 
-            // הגדרת התראה לקבוצת הילדים
-            setupChildrenNotice();
+
 
             // אתחול קבוצות שדות דינמיות
             initializeGroupFields();
 
-            // הגדרת אופציות לסלקטים
-            setupSelectOptions();
 
-            // הגדרת מעקב אחר שדות חדשים בקבוצות
-            setupGroupFieldsWatcher();
-
-            // הגדרת שדות תלויים
-            setupConditionalFields();
 
             // הגדרת שדה השכונות התלוי בעיר - יתבצע אחרי יצירת ה-HTML
             setupNeighborhoodField();
@@ -675,7 +822,8 @@
                 CityId: '#city',
                 StreetId: '#street',
                 Auto_Focus_After_City_Selection: true,
-                list_Citys: []
+                list_Citys: [],
+                CityDefault: "מודיעין עילית"  // קביעת מודיעין עילית כברירת מחדל
             })
 
             // הגדרת פונקציית callback עבור בחירת עיר - תופעל אוטומטית כשבוחרים עיר מהפופאפ
@@ -683,6 +831,38 @@
                 // הפעלת עדכון השכונות אחרי בחירת עיר
                 $("#city").trigger('change');
             };
+
+            // הגדרת מודל בחירת קהילה
+            $("#kehila").focus(function () {
+                $('#KehilaChoose').show()
+                $('#KehilaSearch').focus();
+                FillKehilaTable(''); // הצגת כל הקהילות בתחילה
+            })
+
+            // פונקציה לוודא Cityid לעיר קיימת
+            function ensureCityIdExists() {
+                var $cityField = $("#city");
+                var cityName = $cityField.val().trim();
+                
+                if (cityName && !$cityField.attr('Cityid') && window.ListCityGlobal) {
+                    var cityMatch = window.ListCityGlobal.find(function(city) {
+                        return city.name === cityName;
+                    });
+                    if (cityMatch) {
+                        $cityField.attr('Cityid', cityMatch.Cityid);
+                        console.log('Initial City ID set for', cityName, ':', cityMatch.Cityid);
+                    }
+                }
+            }
+
+            // הפעלת הפונקציה לאחר שרשימת הערים נטענת
+            setTimeout(function() {
+                ensureCityIdExists();
+            }, 500);
+
+            $("#KehilaSearch").on('input', function () {
+                FillKehilaTable($('#KehilaSearch').val())
+            });
 
 
             $('#IshurDakotDiv').hide();
@@ -767,7 +947,7 @@
             });
 
             // הגדרת קלט רק מספרים לשדה הדרכון
-            $('#DarkonCheckText').on('input', function () {
+            $('#DarkonCheckText').on('input', function() {
                 var value = $(this).val();
                 // הסרת כל מה שלא ספרות
                 var numbersOnly = value.replace(/[^0-9]/g, '');
@@ -775,7 +955,7 @@
             });
 
             // הגדרת קלט רק מספרים לשדה תעודת זהות
-            $('#ZeoutCheckText').on('input', function () {
+            $('#ZeoutCheckText').on('input', function() {
                 var value = $(this).val();
                 // הסרת כל מה שלא ספרות
                 var numbersOnly = value.replace(/[^0-9]/g, '');
@@ -784,111 +964,8 @@
         });
 
 
-
-
-
-        // משתנים גלובליים למערכי נתונים דינמיים
-        var GlobalArrays = {
-            SnifimList: ["אופקים ", "אחיסמך ", "אלעד ", "בית מאיר ", "בית שמש רמבש א ", "בית שמש רמבש ד ", "ביתר עילת ", "בני ברק ", "חריש ", "ירוחם ", "ירושלים עגערט ", "ירושלים עיון הדף ", "ירושלים ליבו חפץ ", "ירושלים נווה יעקב ", "מודיעין עילית ", "פתח תקווה ", "קרית הישיבה "],
-            CitiesList: ["תל אביב", "ירושלים", "חיפה", "באר שבע", "פתח תקווה"],
-            KitotList: ["כיתה א", "כיתה ב", "כיתה ג", "כיתה ד"],
-            // ניתן להוסיף עוד מערכים כאן...
-        };
-
         // משתנה גלובלי לשמירת נתוני המשפחה מהשרת
         var GlobalFamilyData = null;
-
-        // משתנה גלובלי לשמירת אופציות הסלקטים מהשרת
-        var GlobalSelectOptions = null;
-
-        // פונקציה לעדכון מערכים דינמית
-        function updateGlobalArray(arrayName, newArray) {
-            GlobalArrays[arrayName] = newArray;
-        }
-
-        // פונקציה להוספת פריטים למערך
-        function addToGlobalArray(arrayName, item) {
-            if (!GlobalArrays[arrayName]) {
-                GlobalArrays[arrayName] = [];
-            }
-            GlobalArrays[arrayName].push(item);
-        }
-
-        // פונקציות עזר לעבודה עם value/label
-        function getLabelByValue(selectType, value) {
-            var options = selectOptions[selectType];
-            if (!options) return value;
-
-            for (var i = 0; i < options.length; i++) {
-                if (options[i].value === value) {
-                    return options[i].label;
-                }
-            }
-            return value;
-        }
-
-        function getValueByLabel(selectType, label) {
-            var options = selectOptions[selectType];
-            if (!options) return label;
-
-            for (var i = 0; i < options.length; i++) {
-                if (options[i].label === label) {
-                    return options[i].value;
-                }
-            }
-            return label;
-        }
-
-        // פונקציות עזר לילדים
-        function getChildInstitutionLabelByValue(value) {
-            for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
-                if (selectOptions.childInstitutions[i].value === value) {
-                    return selectOptions.childInstitutions[i].label;
-                }
-            }
-            return value;
-        }
-
-        function getChildBranchLabelByValue(institutionValue, branchValue) {
-            for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
-                if (selectOptions.childInstitutions[i].value === institutionValue) {
-                    var branches = selectOptions.childInstitutions[i].branches;
-                    for (var j = 0; j < branches.length; j++) {
-                        if (branches[j].value === branchValue) {
-                            return branches[j].label;
-                        }
-                    }
-                }
-            }
-            return branchValue;
-        }
-
-        function getChildClassLabelByValue(institutionValue, classValue) {
-            for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
-                if (selectOptions.childInstitutions[i].value === institutionValue) {
-                    var classes = selectOptions.childInstitutions[i].classes;
-                    for (var j = 0; j < classes.length; j++) {
-                        if (classes[j].value === classValue) {
-                            return classes[j].label;
-                        }
-                    }
-                }
-            }
-            return classValue;
-        }
-
-        // הוסרה פונקציית GetNum - לא נדרשת עוד
-
-        // משתנה גלובלי לאחסון אופציות הסלקטים שמגיעות מהשרת
-        var GlobalSelectOptions = {};
-
-        // מערך אופציות הסלקטים הראשי
-        var selectOptions = {
-            kolelim: [],
-            YGMachzorim: [],
-            tzevetInMosad: [],
-            childInstitutions: []
-        }
 
         // אופציות שכונות לפי עיר
         var neighborhoodOptions = {
@@ -945,146 +1022,8 @@
                 "קריית הרצוג"
             ]
         };
-        //     // סלקטים רגילים - עם value ו-label
-        //     kolelim: [
-        //         { value: "", label: "בחר מוסד" },
-        //         { value: "01", label: "אופקים " },
-        //         { value: "02", label: "אחיסמך " },
-        //         { value: "03", label: "אלעד " },
-        //         { value: "04", label: "בית מאיר " },
-        //         { value: "05", label: "בית שמש רמבש א " },
-        //         { value: "06", label: "בית שמש רמבש ד " },
-        //         { value: "07", label: "ביתר עילת " },
-        //         { value: "08", label: "בני ברק " },
-        //         { value: "09", label: "חריש " },
-        //         { value: "10", label: "ירוחם " },
-        //         { value: "11", label: "ירושלים עגערט " },
-        //         { value: "12", label: "ירושלים עיון הדף " },
-        //         { value: "13", label: "ירושלים ליבו חפץ " },
-        //         { value: "14", label: "ירושלים נווה יעקב " },
-        //         { value: "15", label: "מודיעין עילית " },
-        //         { value: "16", label: "פתח תקווה " },
-        //         { value: "17", label: "קרית הישיבה " }
-        //     ],
 
-        //     // מחזורים לבוגר ישיבה גדולה
-        //     YGMachzorim: [
-        //         { value: "", label: "בחר מחזור" },
-        //         { value: "kibbutz", label: "קיבוץ" },
-        //         { value: "machzor_a", label: "מחזור א" },
-        //         { value: "machzor_b", label: "מחזור ב" },
-        //         { value: "machzor_c", label: "מחזור ג" },
-        //         { value: "machzor_d", label: "מחזור ד" },
-        //         { value: "machzor_e", label: "מחזור ה" },
-        //         { value: "machzor_f", label: "מחזור ו" },
-        //         { value: "machzor_g", label: "מחזור ז" },
-        //         { value: "machzor_h", label: "מחזור ח" },
-        //         { value: "machzor_i", label: "מחזור ט" },
-        //         { value: "machzor_j", label: "מחזור י" }
-        //     ],
 
-        //     // צוותי עבודה
-        //     tzevetInMosad: [
-        //         { value: "", label: "בחר מוסד" },
-        //         { value: "yeshiva_ktana", label: "ישיבה קטנה" },
-        //         { value: "yeshiva_gdola", label: "ישיבה גדולה" },
-        //         { value: "talmud_torah_bs", label: "תלמוד תורה בית שמש" },
-        //         { value: "talmud_torah_jm", label: "תלמוד תורה ירושלים" },
-        //         { value: "tomchei_torah", label: "תומכי תורה" }
-        //     ],
-
-        //     // מוסדות ילדים - מבנה חדש עם סניפים וכיתות נפרדים ועם value/label
-        //     childInstitutions: [
-        //         {
-        //             "value": "talmud_torah",
-        //             "label": "תלמוד תורה",
-        //             "branches": [
-        //                 { "value": "bs_a", "label": "בית שמש א" },
-        //                 { "value": "bs_b", "label": "בית שמש ב" },
-        //                 { "value": "jerusalem", "label": "ירושלים" }
-        //             ],
-        //             "classes": [
-        //                 { "value": "class_a", "label": "כיתה א" },
-        //                 { "value": "class_b", "label": "כיתה ב" },
-        //                 { "value": "class_c", "label": "כיתה ג" },
-        //                 { "value": "class_d", "label": "כיתה ד" },
-        //                 { "value": "class_e", "label": "כיתה ה" },
-        //                 { "value": "class_f", "label": "כיתה ו" }
-        //             ]
-        //         },
-        //         {
-        //             "value": "yeshiva_ktana",
-        //             "label": "ישיבה קטנה",
-        //             "branches": [
-        //                 { "value": "bs", "label": "בית שמש" },
-        //                 { "value": "jerusalem", "label": "ירושלים" },
-        //                 { "value": "modiin", "label": "מודיעין עילית" }
-        //             ],
-        //             "classes": [
-        //                 { "value": "class_9", "label": "כיתה ט" },
-        //                 { "value": "class_10", "label": "כיתה י" },
-        //                 { "value": "class_11", "label": "כיתה יא" },
-        //                 { "value": "class_12", "label": "כיתה יב" }
-        //             ]
-        //         },
-        //         {
-        //             "value": "yeshiva_gdola",
-        //             "label": "ישיבה גדולה",
-        //             "branches": [
-        //                 { "value": "bs", "label": "בית שמש" },
-        //                 { "value": "jerusalem", "label": "ירושלים" },
-        //                 { "value": "kiryat_yeshiva", "label": "קרית הישיבה" }
-        //             ],
-        //             "classes": [
-        //                 { "value": "shiur_a", "label": "שיעור א" },
-        //                 { "value": "shiur_b", "label": "שיעור ב" },
-        //                 { "value": "shiur_c", "label": "שיעור ג" },
-        //                 { "value": "shiur_d", "label": "שיעור ד" },
-        //                 { "value": "shiur_e", "label": "שיעור ה" }
-        //             ]
-        //         },
-        //         {
-        //             "value": "gan_yeladim",
-        //             "label": "גן ילדים",
-        //             "branches": [
-        //                 { "value": "bs_a", "label": "בית שמש א" },
-        //                 { "value": "bs_b", "label": "בית שמש ב" },
-        //                 { "value": "jerusalem", "label": "ירושלים" }
-        //             ],
-        //             "classes": [
-        //                 { "value": "gan_a", "label": "גן א" },
-        //                 { "value": "gan_b", "label": "גן ב" },
-        //                 { "value": "gan_c", "label": "גן ג" },
-        //                 { "value": "gan_d", "label": "גן ד" }
-        //             ]
-        //         }
-        //     ]
-        // };
-
-        // פונקציה לקבלת נתוני אופציות מהשרת ועדכון כל הסלקטים
-        function updateSelectOptionsFromServer(serverData) {
-            // עדכון המשתנה הגלובלי עם הנתונים מהשרת
-            if (serverData && serverData.selectOptions) {
-                GlobalSelectOptions = serverData.selectOptions;
-
-                // עדכון המערך המקומי עם הנתונים מהשרת
-                if (serverData.selectOptions.childInstitutions) {
-                    selectOptions.childInstitutions = serverData.selectOptions.childInstitutions;
-                }
-                if (serverData.selectOptions.kolelim) {
-                    selectOptions.kolelim = serverData.selectOptions.kolelim;
-                }
-                if (serverData.selectOptions.YGMachzorim) {
-                    selectOptions.YGMachzorim = serverData.selectOptions.YGMachzorim;
-                }
-                if (serverData.selectOptions.tzevetInMosad) {
-                    selectOptions.tzevetInMosad = serverData.selectOptions.tzevetInMosad;
-                }
-
-                // עדכון כל הסלקטים הקיימים עם הנתונים החדשים
-                updateAllSelectsWithNewOptions();
-            }
-        }
 
         function GetOldTofesData() {
 
@@ -1538,7 +1477,7 @@
         }
 
         function sendToFirstServer(PostData) {
-            // מיפוי השדות מ-Field לשמות טבעיים
+            // מיפוי השדות מ-Field לשמות טבעיים - מתואם עם השדות שמוגדרים בפועל ב-JSON
             var fieldMapping = {
                 'Field1': 'zehut',
                 'Field2': 'firstName',
@@ -1554,26 +1493,19 @@
                 'Field12': 'shchuna',
                 'Field13': 'building',
                 'Field14': 'apartment',
-                'Field15': 'isAvrechKollel',
-                'Field16': 'kolel',
-                'Field17': 'isBogerYG',
-                'Field18': 'YGMachzor',
-                'Field19': 'isChildInAteret',
-                'Field20': 'children',
-                'Field21': 'isInTzevet',
-                'Field22': 'tzevetInMosad',
                 'Field23': 'note',
                 'Field24': 'childrenAtHome',
                 'Field25': 'childrenMarried',
                 'Field26': 'childrenTotal',
                 'Field27': 'noCommitment',
                 'Field28': 'approveMarketing',
-                'Field29': 'entrance',
-                'Field30': 'kolelType'
+                'Field50': 'kehila'
             };
 
             // יצירת אובייקט JSON לשרת הראשון
-            var stage1Data = {};
+            var stage1Data = {
+                isKs: true
+            };
 
             // המרת PostData לאובייקט עם מיפוי השדות
             var dataParams = PostData.split('&');
@@ -1587,28 +1519,9 @@
                     if (key.startsWith('Field') && !key.endsWith('_Name')) {
                         var mappedKey = fieldMapping[key];
                         if (mappedKey) {
-                            // טיפול מיוחד בשדות boolean
-                            if (mappedKey === 'isAvrechKollel' || mappedKey === 'isBogerYG' ||
-                                mappedKey === 'isChildInAteret' || mappedKey === 'isInTzevet') {
+                            // טיפול מיוחד בשדות checkbox
+                            if (mappedKey === 'noCommitment' || mappedKey === 'approveMarketing') {
                                 stage1Data[mappedKey] = (value === 'מסומן');
-                            }
-                            // טיפול מיוחד בנתוני ילדים - המרה מ-JSON לאובייקט
-                            else if (mappedKey === 'children') {
-                                if (value && value !== 'null' && value !== '[]') {
-                                    try {
-                                        stage1Data[mappedKey] = JSON.parse(value);
-                                    } catch (e) {
-                                        console.log('Error parsing children data:', e);
-                                        stage1Data[mappedKey] = [];
-                                    }
-                                } else {
-                                    stage1Data[mappedKey] = [];
-                                }
-                            }
-                            // טיפול מיוחד בסלקטים - שליחת value במקום label
-                            else if (mappedKey === 'kolel' || mappedKey === 'YGMachzor' || mappedKey === 'tzevetInMosad') {
-                                // הערך כבר value (לא label) כי הסלקטים שלנו עכשיו מחזירים value
-                                stage1Data[mappedKey] = (value === 'null' || value === '') ? null : value;
                             }
                             // שדות רגילים
                             else {
@@ -1674,86 +1587,9 @@
             });
             return;
             //----TEST MODE
-            // עיבוד והמרת values ל-labels לשרת השני
+            
+            // שליחה לשרת השני עם הנתונים המקוריים - רק השדות שקיימים בפועל
             var processedPostData = originalPostData;
-
-            // המרת סלקטים מ-value ל-label לשרת השני
-            // המרת kolel
-            var kolelRegex = /Field15=([^&]*)/;
-            var kolelMatch = processedPostData.match(kolelRegex);
-            if (kolelMatch && kolelMatch[1]) {
-                var kolelValue = decodeURIComponent(kolelMatch[1]);
-                var kolelLabel = getLabelByValue('kolelim', kolelValue);
-                processedPostData = processedPostData.replace(kolelRegex, "Field15=" + encodeURIComponent(kolelLabel));
-            }
-
-            // המרת YGMachzor
-            var ygRegex = /Field17=([^&]*)/;
-            var ygMatch = processedPostData.match(ygRegex);
-            if (ygMatch && ygMatch[1]) {
-                var ygValue = decodeURIComponent(ygMatch[1]);
-                var ygLabel = getLabelByValue('YGMachzorim', ygValue);
-                processedPostData = processedPostData.replace(ygRegex, "Field17=" + encodeURIComponent(ygLabel));
-            }
-
-            // המרת tzevetInMosad
-            var tzevetRegex = /Field21=([^&]*)/;
-            var tzevetMatch = processedPostData.match(tzevetRegex);
-            if (tzevetMatch && tzevetMatch[1]) {
-                var tzevetValue = decodeURIComponent(tzevetMatch[1]);
-                var tzevetLabel = getLabelByValue('tzevetInMosad', tzevetValue);
-                processedPostData = processedPostData.replace(tzevetRegex, "Field21=" + encodeURIComponent(tzevetLabel));
-            }
-
-            // חיפוש ועיבוד שדה הילדים (Field19) - המרת values ל-labels
-            var field19Regex = /Field19=([^&]*)/;
-            var match = processedPostData.match(field19Regex);
-
-            if (match && match[1]) {
-                try {
-                    var encodedValue = match[1];
-                    var decodedValue = decodeURIComponent(encodedValue);
-                    var childrenData = JSON.parse(decodedValue);
-
-                    var tableFormat = "";
-
-                    // הוספת כותרת
-                    tableFormat = "תאריך לידה | סוג מוסד | מוסד | כיתה\n";
-
-                    for (var j = 0; j < childrenData.length; j++) {
-                        var child = childrenData[j];
-                        var row = [];
-
-                        // יצירת שורה עם המרת values ל-labels
-                        if (child.childBirthDate) row.push(child.childBirthDate);
-                        if (child.childMosadType) {
-                            var institutionLabel = getChildInstitutionLabelByValue(child.childMosadType);
-                            row.push(institutionLabel);
-                        }
-                        if (child.childMosad) {
-                            var branchLabel = getChildBranchLabelByValue(child.childMosadType, child.childMosad);
-                            row.push(branchLabel);
-                        }
-                        if (child.childClass) {
-                            var classLabel = getChildClassLabelByValue(child.childMosadType, child.childClass);
-                            row.push(classLabel);
-                        }
-
-                        // חיבור הערכים עם מפריד
-                        if (row.length > 0) {
-                            tableFormat += row.join(" | ") + "\n";
-                        }
-                    }
-
-                    // החלפת הערך המקורי בפורמט החדש
-                    var newEncodedValue = encodeURIComponent(tableFormat);
-                    processedPostData = processedPostData.replace(field19Regex, "Field19=" + newEncodedValue);
-
-                } catch (e) {
-                    console.log('Error processing children data for second server:', e);
-                    // אם יש שגיאה, נשאיר את הנתונים המקוריים
-                }
-            }
 
             $.ajax({
                 url: "Manage.aspx?Action=AddData&AjaxId=" + $.now() + "&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&Version=" + Json.Version + "&MasofId=" + MasofId + "&ClientId=" + ClientId + "&OldTofesId=" + OldTofesId + "&SpecialCheck=" + encodeURIComponent(Json.SpecialCheck) + "&MainTitle=" + encodeURIComponent(htmlEncode(Json.MainTitle)),
@@ -2141,80 +1977,9 @@
             }
         }
 
-        // פונקציה לבדיקת שלמות נתוני ילדים
+        // פונקציה לבדיקת שלמות נתוני ילדים - לא נדרשת יותר
         function validateChildrenData() {
-            // בדיקה אם הצ'קבוקס של ילדים מסומן
-            if (!$("#isChildInAteret").is(':checked')) {
-                return { valid: true }; // אם הצ'קבוקס לא מסומן, אין צורך בבדיקה
-            }
-
-            var config = GroupFieldsConfig['children'];
-            if (!config) {
-                return { valid: true }; // אם אין קונפיגורציה, אין מה לבדוק
-            }
-
-            // בדיקת כל שורת ילד
-            for (var rowIndex = 0; rowIndex < config.currentRows; rowIndex++) {
-                var hasAnyData = false;
-                var missingFields = [];
-
-                // בדיקה אם יש נתונים כלשהם בשורה
-                for (var fieldIndex = 0; fieldIndex < config.fields.length; fieldIndex++) {
-                    var field = config.fields[fieldIndex];
-                    var fieldId = 'children_' + field.ElementId + '_' + rowIndex;
-                    var value = $('#' + fieldId).val() || '';
-
-                    if (value.trim() !== '' && value !== '') {
-                        hasAnyData = true;
-                    }
-                }
-
-                // אם יש נתונים בשורה, בדוק שכל השדות החובה מלאים
-                if (hasAnyData) {
-                    for (var fieldIndex = 0; fieldIndex < config.fields.length; fieldIndex++) {
-                        var field = config.fields[fieldIndex];
-                        var fieldId = 'children_' + field.ElementId + '_' + rowIndex;
-                        var value = $('#' + fieldId).val() || '';
-
-                        // בדיקת שדות חובה
-                        if (field.Mandatory || field.ElementId === 'childName' || field.ElementId === 'childZehut' || field.ElementId === 'childBirthDate') {
-                            if (value.trim() === '' || value === '') {
-                                return {
-                                    valid: false,
-                                    message: 'חובה למלא את שדה "' + field.fieldName + '" עבור ילד מספר ' + (rowIndex + 1),
-                                    fieldId: fieldId
-                                };
-                            }
-                        }
-
-                        // בדיקות ספציפיות לסוגי שדות
-                        // הוסרה בדיקת תקינות ת.ז. לילדים לפי בקשה
-
-                        if (field.ElementId === 'childBirthDate' && value.trim() !== '') {
-                            if (value.length !== 10 || value.split('/').length !== 3) {
-                                return {
-                                    valid: false,
-                                    message: 'תאריך לידה לא תקין עבור ילד מספר ' + (rowIndex + 1) + ' (פורמט: DD/MM/YYYY)',
-                                    fieldId: fieldId
-                                };
-                            }
-                            var dateParts = value.split('/');
-                            var day = parseInt(dateParts[0]);
-                            var month = parseInt(dateParts[1]);
-                            var year = parseInt(dateParts[2]);
-
-                            if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1900 || year > 2030) {
-                                return {
-                                    valid: false,
-                                    message: 'תאריך לידה לא תקין עבור ילד מספר ' + (rowIndex + 1),
-                                    fieldId: fieldId
-                                };
-                            }
-                        }
-                    }
-                }
-            }
-
+            // כרגע אין קבוצות שדות דינמיות בטופס הזה
             return { valid: true };
         }
 
@@ -2244,132 +2009,55 @@
             return emailPattern.test(email);
         }
 
-        // פונקציה לבדיקת תקינות סלקטים
+        // פונקציה לבדיקת תקינות סלקטים - לא נדרשת יותר מכיוון שאין סלקטים תלויים
         function validateSelectFields() {
-            // בדיקת סלקט קולל - אם צ'קבוקס מסומן וסלקט לא נבחר
-            if ($("#isAvrechKollel").is(':checked')) {
-                var kolelValue = $("#kolel").val();
-                if (!kolelValue || kolelValue === "") {
-                    return {
-                        valid: false,
-                        message: 'יש לבחור מוסד מהרשימה',
-                        fieldId: 'kolel'
-                    };
-                }
-            }
-
-            // בדיקת סלקט מחזור ישיבה גדולה - אם צ'קבוקס מסומן וסלקט לא נבחר
-            if ($("#isBogerYG").is(':checked')) {
-                var machzorValue = $("#YGMachzor").val();
-                if (!machzorValue || machzorValue === "") {
-                    return {
-                        valid: false,
-                        message: 'יש לבחור מחזור מהרשימה',
-                        fieldId: 'YGMachzor'
-                    };
-                }
-            }
-
-            // בדיקת סלקט צוות - אם צ'קבוקס מסומן וסלקט לא נבחר
-            if ($("#isInTzevet").is(':checked')) {
-                var tzevetValue = $("#tzevetInMosad").val();
-                if (!tzevetValue || tzevetValue === "") {
-                    return {
-                        valid: false,
-                        message: 'יש לבחור מוסד מהרשימה',
-                        fieldId: 'tzevetInMosad'
-                    };
-                }
-            }
-
-            // בדיקת סלקטים של ילדים - אם צ'קבוקס ילדים מסומן
-            if ($("#isChildInAteret").is(':checked')) {
-                var config = GroupFieldsConfig['children'];
-                if (config) {
-                    for (var rowIndex = 0; rowIndex < config.currentRows; rowIndex++) {
-                        var hasAnyData = false;
-
-                        // בדיקה אם יש נתונים כלשהם בשורה
-                        for (var fieldIndex = 0; fieldIndex < config.fields.length; fieldIndex++) {
-                            var field = config.fields[fieldIndex];
-                            var fieldId = 'children_' + field.ElementId + '_' + rowIndex;
-                            var value = $('#' + fieldId).val() || '';
-
-                            if (value.trim() !== '' && value !== '') {
-                                hasAnyData = true;
-                                break;
-                            }
-                        }
-
-                        // אם יש נתונים בשורה, בדוק את הסלקטים
-                        if (hasAnyData) {
-                            var mosadValue = $('#children_childMosadType_' + rowIndex).val();
-                            var snifValue = $('#children_childMosad_' + rowIndex).val();
-                            var classValue = $('#children_childClass_' + rowIndex).val();
-
-                            if (!mosadValue || mosadValue === "") {
-                                return {
-                                    valid: false,
-                                    message: 'יש לבחור מוסד עבור ילד מספר ' + (rowIndex + 1),
-                                    fieldId: 'children_childMosadType_' + rowIndex
-                                };
-                            }
-
-                            if (!snifValue || snifValue === "") {
-                                return {
-                                    valid: false,
-                                    message: 'יש לבחור סניף עבור ילד מספר ' + (rowIndex + 1),
-                                    fieldId: 'children_childMosad_' + rowIndex
-                                };
-                            }
-
-                            if (!classValue || classValue === "") {
-                                return {
-                                    valid: false,
-                                    message: 'יש לבחור כיתה/שיעור עבור ילד מספר ' + (rowIndex + 1),
-                                    fieldId: 'children_childClass_' + rowIndex
-                                };
-                            }
-                        }
-                    }
-                }
-            }
-
+            // כרגע אין סלקטים תלויים בטופס הזה
             return { valid: true };
         }
 
-        // פונקציה לבדיקה שלפחות אחד מארבעת הצ'קבוקסים הראשיים מסומן
+
+        // פונקציה להצגת הודעות שגיאה עם התמקדות בשדה
+        function MySwal(message, fieldId) {
+            swal({
+                type: "error",
+                title: message,
+                showConfirmButton: true,
+                allowOutsideClick: false,
+            }, function () {
+                if (fieldId) {
+                    $('#' + fieldId).focus();
+                    $('#' + fieldId).select();
+                    ScrollUp('#' + fieldId);
+                }
+                setTimeout(function () {
+                    $("#SaveDiv").show();
+                    $("#WaitDiv").hide();
+                }, 100);
+            });
+            return false;
+        }
+
+        // פונקציה לבדיקת אימייל
+        function Validate_Email(email) {
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return emailPattern.test(email);
+        }
+
+        // פונקציה לבדיקת תקינות סלקטים - לא נדרשת יותר מכיוון שאין סלקטים תלויים
+        function validateSelectFields() {
+            // כרגע אין סלקטים תלויים בטופס הזה
+            return { valid: true };
+        }
+
+        // פונקציה לבדיקה שלפחות אחד מהצ'קבוקסים הראשיים מסומן - לא נדרשת יותר
         function validateMainCheckboxes() {
-            var isAvrechKollelChecked = $("#isAvrechKollel").is(':checked');
-            var isBogerYGChecked = $("#isBogerYG").is(':checked');
-            var isChildInAteretChecked = $("#isChildInAteret").is(':checked');
-            var isInTzevetChecked = $("#isInTzevet").is(':checked');
-
-            // בדיקה שלפחות אחד מהם מסומן
-            if (!isAvrechKollelChecked && !isBogerYGChecked && !isChildInAteretChecked && !isInTzevetChecked) {
-                return {
-                    valid: false,
-                    message: 'חובה לסמן לפחות אחת מהאפשרויות: לומד במוסדות עטרת שלמה / בוגר ישיבה גדולה / הורה לילדים במוסדות עטרת שלמה / איש צוות בעטרת שלמה'
-                };
-            }
-
+            // כרגע אין צ'קבוקסים תלויים בטופס הזה
             return { valid: true };
         }
 
-        // פונקציה לאימות שדות תלויים
+        // פונקציה לאימות שדות תלויים - לא נדרשת יותר
         function validateConditionalFields() {
-            // בדיקה שאם מסמנים "לומד בכוללים", חובה לבחור "סוג הלימוד"
-            if ($("#isAvrechKollel").is(':checked')) {
-                var kolelTypeSelected = $('input[name=kolelType]:checked').val();
-                if (!kolelTypeSelected) {
-                    return {
-                        valid: false,
-                        message: 'חובה לבחור סוג הלימוד כאשר מסמנים "לומד בכוללים"',
-                        fieldId: 'kolelType_Radio0'
-                    };
-                }
-            }
-
+            // כרגע אין שדות תלויים בטופס הזה
             return { valid: true };
         }
     </script>
@@ -2619,9 +2307,7 @@
                         עדכונים.</li>
                     <li>המערכת פועלת בצורה אוטומטית ומילוי פרטים שגויים עלול לגרום לעוגמת נפש עבורכם ואף למחיקה אוטומטית
                         מהמערכת.</li>
-                    <li>מכיוון שיתכנו עדיפויות שונות וכן מכיוון שהמערכת אוטומטית ומסונכרנת עם פרטי התלמידים במוסדות, ע"כ
-                        יש למלאות את הפרטים של כלל הזכאים ממשפחתכם כולל כמה ילדים מאותו מוסד.</li>
-                    <li>שימו לב למלא את הפרטים לפי שנה"ל תשפ"ו</li>
+
                 </ul>
 
             </div>
@@ -2785,7 +2471,7 @@
 
 
             $.ajax({
-                url: "https://us-central1-tomchei-tora.cloudfunctions.net/nedarimForm-getFamily?method=1&zehut=" + encodeURIComponent(ZeoutTxt) + "&ezrachut=" + encodeURIComponent(Zihuy1) + "&birthDate=" + encodeURIComponent(KidDate),
+                url: "https://us-central1-tomchei-tora.cloudfunctions.net/nedarimForm-getFamily?isKs=true&method=1&zehut=" + encodeURIComponent(ZeoutTxt) + "&ezrachut=" + encodeURIComponent(Zihuy1) + "&birthDate=" + encodeURIComponent(KidDate),
                 data: "",
                 type: 'GET',
                 timeout: 60000,
@@ -2804,13 +2490,7 @@
                         return;
                     }
                     // עדכון אופציות הסלקטים אם קיימות
-                    if (JsonData.selectOptions) {
-                        console.log("Received selectOptions from server:", JsonData.selectOptions);
-                        updateSelectOptionsFromServer(JsonData);
-                    }
 
-                    // הגדרת אופציות לסלקטים
-                    setupSelectOptions();
 
                     // מילוי שדות המשפחה
                     if (JsonData.family && typeof JsonData.family === 'object') {
@@ -2821,7 +2501,6 @@
 
                                 // טיפול בסוגי שדות שונים
                                 if ($field.is('select')) {
-                                    console.log("Updating select field:", fieldName, "with value:", fieldValue);
                                     $field.val(fieldValue);
                                 } else if ($field.is('input[type="checkbox"]')) {
                                     $field.prop('checked', fieldValue === true || fieldValue === 'true' || fieldValue === 1 || fieldValue === '1');
@@ -2832,14 +2511,10 @@
                                 }
                             }
                         }
-                        if (JsonData.family.kolelType == "יום שלם") {
-                            $('#kolelType_Radio0').prop('checked', true);
-                        } else if (JsonData.family.kolelType == "חצי יום") {
-                            $('#kolelType_Radio1').prop('checked', true);
-                        }
                     }
                 }
 
+                $("#city").val('מודיעין עילית').attr('disabled', 'disabled'); // הגדרת עיר ברירת מחדל
                 $("#city").trigger('change');
 
                 // בכל מקרה ממשיכים לטופס
@@ -2847,10 +2522,6 @@
                 $("#zehut").val(ZeoutTxt).attr('disabled', 'disabled');
                 $("#birthDate").val(KidDate).attr('disabled', 'disabled');
 
-
-
-                // הגדרת מעקב אחר שדות חדשים בקבוצות
-                setupGroupFieldsWatcher();
 
                 // הגדרת הסתרה/הצגה של שדות תלויים
                 setupConditionalFields();
@@ -2862,288 +2533,17 @@
                 $("#ZeoutCheck").hide();
                 $("#ZeoutCheckWait").hide();
 
-                if (JsonData.family && JsonData.family.status && JsonData.family.status != 0 && JsonData.family.status != 4) {
+                if (JsonData.family) {
                     $("#ZeoutCheckSave").show();
                     $("#AllMainForm").show();
-                    if (JsonData.family.status == 1) {
-                        $("#alertStatus1").show();
-                    } if (JsonData.family.status == 2) {
-                        $("#alertStatus2").show();
-                    }
-                } else if (JsonData.family && JsonData.family.status == 4) {
-                    $("#Status4Div").show(); // הצגת מסך הכניסה
-                } else {
-                    $("#NotRegisteredDiv").show(); // הצגת מסך הכניסה
                 }
+
             }).error(function () {
                 // טיפול בשגיאה
                 $("#ZeoutCheckSave").show();
                 $("#ZeoutCheckWait").hide();
             });
 
-        }
-
-        // פונקציה להגדרת אופציות הסלקטים
-        function setupSelectOptions() {
-            // אם יש נתונים מהשרת, השתמש בהם
-            if (GlobalSelectOptions && Object.keys(GlobalSelectOptions).length > 0) {
-                updateAllSelectsWithNewOptions();
-                return;
-            }
-
-            // מילוי הסלקטים עם הנתונים מ-selectOptions (ברירת מחדל)
-
-            // // בדיקה אם יש נתונים בברירת מחדל ועדכון בהתאם
-            // if (selectOptions.kolelim && selectOptions.kolelim.length > 0) {
-            //     updateSelectOptions("#kolel", selectOptions.kolelim);
-            // }
-            // if (selectOptions.YGMachzorim && selectOptions.YGMachzorim.length > 0) {
-            //     updateSelectOptions("#YGMachzor", selectOptions.YGMachzorim);
-            // }
-            // if (selectOptions.tzevetInMosad && selectOptions.tzevetInMosad.length > 0) {
-            //     updateSelectOptions("#tzevetInMosad", selectOptions.tzevetInMosad);
-            // }
-
-            // אתחול סלקטי ילדים
-            initializeChildrenSelects();
-        }
-
-        // פונקציה לעדכון אופציות של סלקט יחיד
-        function updateSelectOptions(selectId, options) {
-            var $select = $(selectId);
-            if ($select.length > 0) {
-                $select.empty();
-
-                // הוספת אופציה ראשונה של "בחר" כברירת מחדל
-                $select.append('<option value="">בחר</option>');
-
-                // הוספת האופציות - עכשיו options הוא מערך של אובייקטים עם value ו-label
-                for (var i = 0; i < options.length; i++) {
-                    var option = options[i];
-                    $select.append('<option value="' + option.value + '">' + option.label + '</option>');
-                }
-
-            } else {
-
-            }
-        }        // פונקציה לאתחול סלקטים של ילדים
-        function initializeChildrenSelects() {
-
-            // יצירת רשימת מוסדות עם value/label
-            var institutionOptions = [{ value: "", label: "בחר מוסד" }];
-            for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
-                institutionOptions.push({
-                    value: selectOptions.childInstitutions[i].value,
-                    label: selectOptions.childInstitutions[i].label
-                });
-            }
-
-
-            // אתחול סלקטי מוסדות שכבר קיימים
-            $('select[id^="children_childMosadType_"]').each(function () {
-                var $select = $(this);
-
-                $select.empty();
-                institutionOptions.forEach(function (option) {
-                    $select.append('<option value="' + option.value + '">' + option.label + '</option>');
-                });
-            });
-
-            // הסתרת סלקטי סניפים וכיתות בהתחלה (לא המוסדות!)
-            $('select[id^="children_childMosad_"]:not([id*="Type"])').parent().hide();
-            $('select[id^="children_childClass"]').parent().hide();
-        }
-
-        // פונקציה כללית לעדכון סלקטים של ילדים
-        function updateAllChildrenSelects(selectPrefix, options) {
-            $('select[id^="' + selectPrefix + '"]').each(function () {
-                var $select = $(this);
-                var currentValue = $select.val();
-                $select.empty();
-                options.forEach(function (option) {
-                    $select.append('<option value="' + option + '">' + option + '</option>');
-                });
-                if (currentValue && options.indexOf(currentValue) !== -1) {
-                    $select.val(currentValue);
-                }
-            });
-        }
-
-        // פונקציה כללית לעדכון סלקטים של ילדים עם value/label
-        function updateAllChildrenSelectsWithValueLabel(selectPrefix, options) {
-            $('select[id^="' + selectPrefix + '"]').each(function () {
-                var $select = $(this);
-                var currentValue = $select.val();
-                $select.empty();
-                options.forEach(function (option) {
-                    $select.append('<option value="' + option.value + '">' + option.label + '</option>');
-                });
-                // נסה לשמור על הבחירה הקודמת
-                if (currentValue) {
-                    $select.val(currentValue);
-                }
-            });
-        }
-
-        // פונקציה לעדכון סניפים לפי מוסד נבחר
-        function updateChildBranches(institutionSelectId) {
-            var rowIndex = institutionSelectId.split('_')[2]; // children_childMosadType_0 -> 0
-            var selectedInstitution = $('#' + institutionSelectId).val();
-            var branchSelectId = 'children_childMosad_' + rowIndex;
-            var classSelectId = 'children_childClass_' + rowIndex;
-
-            // איפוס וסטור סלקט כיתות
-            $('#' + classSelectId).empty().append('<option value="">בחר כיתה/שיעור</option>');
-            $('#' + classSelectId).parent().hide();
-
-            if (selectedInstitution && selectedInstitution !== "") {
-                // חיפוש המוסד במערך לפי value
-                var institution = null;
-                for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
-                    if (selectOptions.childInstitutions[i].value === selectedInstitution) {
-                        institution = selectOptions.childInstitutions[i];
-                        break;
-                    }
-                }
-
-                if (institution && institution.branches) {
-                    // הצגת סלקט סניפים
-                    $('#' + branchSelectId).parent().show();
-
-                    // מילוי אופציות סניפים עם value/label
-                    var branchOptions = [{ value: "", label: "בחר סניף" }];
-                    for (var j = 0; j < institution.branches.length; j++) {
-                        branchOptions.push(institution.branches[j]);
-                    }
-
-                    var $branchSelect = $('#' + branchSelectId);
-                    $branchSelect.empty();
-                    branchOptions.forEach(function (option) {
-                        $branchSelect.append('<option value="' + option.value + '">' + option.label + '</option>');
-                    });
-
-                    // הצגת סלקט כיתות (כי עכשיו הכיתות לא תלויות בסניף)
-                    $('#' + classSelectId).parent().show();
-                    var classOptions = [{ value: "", label: "בחר כיתה/שיעור" }];
-                    for (var k = 0; k < institution.classes.length; k++) {
-                        classOptions.push(institution.classes[k]);
-                    }
-
-                    var $classSelect = $('#' + classSelectId);
-                    $classSelect.empty();
-                    classOptions.forEach(function (option) {
-                        $classSelect.append('<option value="' + option.value + '">' + option.label + '</option>');
-                    });
-                } else {
-                    // הסתרת סלקט סניפים וכיתות
-                    $('#' + branchSelectId).parent().hide();
-                    $('#' + branchSelectId).empty().append('<option value="">בחר סניף</option>');
-                }
-            } else {
-                // הסתרת סלקט סניפים
-                $('#' + branchSelectId).parent().hide();
-                $('#' + branchSelectId).empty().append('<option value="">בחר סניף</option>');
-            }
-        }
-
-        // פונקציה לעדכון כיתות לפי סניף נבחר
-        // הערה: במבנה החדש הכיתות לא תלויות בסניף, אז הפונקציה הזו לא צריכה לעשות כלום
-        function updateChildClasses(branchSelectId) {
-            // הכיתות כבר מוצגות כשבוחרים מוסד, לא צריך לעשות דבר
-            return;
-        }
-
-        // פונקציה לעדכון סלקטים של מוסדי ילדים בכל קבוצות השדות
-        function updateChildInstitutionSelects(options) {
-            // אם לא סופקו אופציות, צור רשימה מהמערך הראשי
-            var optionsToUse = options;
-            if (!optionsToUse) {
-                optionsToUse = [{ value: "", label: "בחר מוסד" }];
-                for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
-                    optionsToUse.push({
-                        value: selectOptions.childInstitutions[i].value,
-                        label: selectOptions.childInstitutions[i].label
-                    });
-                }
-            }
-            updateAllChildrenSelectsWithValueLabel("children_childMosadType", optionsToUse);
-        }
-
-        // פונקציה גנרית לעדכון כל הסלקטים עם אופציות חדשות
-        function updateAllSelectsWithNewOptions() {
-            // עדכון סלקטי מוסדות הילדים מהמערך המעודכן
-            if (selectOptions.childInstitutions && selectOptions.childInstitutions.length > 0) {
-                updateChildInstitutionSelects();
-            }
-
-            // עדכון סלקטים אחרים
-            if (selectOptions.kolelim && selectOptions.kolelim.length > 0) {
-                updateSelectOptions("#kolel", selectOptions.kolelim);
-            }
-
-            if (selectOptions.YGMachzorim && selectOptions.YGMachzorim.length > 0) {
-                updateSelectOptions("#YGMachzor", selectOptions.YGMachzorim);
-            }
-
-            if (selectOptions.tzevetInMosad && selectOptions.tzevetInMosad.length > 0) {
-                updateSelectOptions("#tzevetInMosad", selectOptions.tzevetInMosad);
-            }
-
-            // // גיבוי - אם יש נתונים גלובליים, השתמש בהם
-            // if (GlobalSelectOptions) {
-            //     // עדכון לפי נתונים גלובליים
-            //     if (GlobalSelectOptions.kolelim && !selectOptions.kolelim) {
-            //         updateSelectOptions("#kolel", GlobalSelectOptions.kolelim);
-            //     }
-            //     if (GlobalSelectOptions.YGMachzorim && !selectOptions.YGMachzorim) {
-            //         updateSelectOptions("#YGMachzor", GlobalSelectOptions.YGMachzorim);
-            //     }
-            //     if (GlobalSelectOptions.tzevetInMosad && !selectOptions.tzevetInMosad) {
-            //         updateSelectOptions("#tzevetInMosad", GlobalSelectOptions.tzevetInMosad);
-            //     }
-            // }
-        }
-
-        // מעקב אחר הוספת שדות חדשים בקבוצות
-        function setupGroupFieldsWatcher() {
-            // יירוט על הוספת אלמנטים חדשים לדף
-            var observer = new MutationObserver(function (mutations) {
-                mutations.forEach(function (mutation) {
-                    mutation.addedNodes.forEach(function (node) {
-                        if (node.nodeType === 1) { // Element node
-                            // חיפוש אחר שורות ילדים חדשות
-                            var newChildRows = $(node).find('div[id^="children_Row"]');
-                            if (newChildRows.length > 0) {
-                                newChildRows.each(function () {
-                                    var rowId = $(this).attr('id');
-                                    var rowIndex = rowId.split('_Row')[1];
-                                    if (rowIndex !== undefined) {
-                                        setupChildRowEventListeners(parseInt(rowIndex));
-                                    }
-                                });
-                            }
-
-                            // חיפוש אחר סלקטים חדשים אחרים
-                            var newSelects = $(node).find('select');
-                            if (newSelects.length > 0) {
-                                // עדכון האופציות לכל הסלקטים החדשים (לא של ילדים)
-                                newSelects.each(function () {
-                                    var selectId = $(this).attr('id');
-                                    if (selectId && !selectId.includes('children_')) {
-                                        updateAllSelectsWithNewOptions();
-                                    }
-                                });
-                            }
-                        }
-                    });
-                });
-            });
-
-            // התחלת מעקב על שינויים בגוף המסמך
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true
-            });
         }
 
         const exitFromForm = () => {
@@ -3183,8 +2583,7 @@
         function setupConditionalFields() {
             // הסתרת שדות תלויים בתחילה
             $("#kolelDiv").hide();
-            $("#kolelType").hide();
-            $("#kolelAlert").hide();
+            $("#kolelTypeDiv").hide();
             $("#YGMachzorDiv").hide();
             $("#childrenContainer").hide();
             $("#tzevetInMosadDiv").hide();
@@ -3193,12 +2592,10 @@
             $("#isAvrechKollel").change(function () {
                 if ($(this).is(':checked')) {
                     $("#kolelDiv").show();
-                    $("#kolelType").show();
-                    $("#kolelAlert").show();
+                    $("#kolelTypeDiv").show();
                 } else {
                     $("#kolelDiv").hide();
-                    $("#kolelType").hide();
-                    $("#kolelAlert").hide();
+                    $("#kolelTypeDiv").hide();
                     $("#kolel").val(""); // איפוס הערך
                     // איפוס הרדיו בוטונים
                     $('input[name=kolelType]').prop('checked', false);
@@ -3266,8 +2663,7 @@
             // בדיקה והפעלת טריגרים לצ'קבוקסים שמסומנים
             if ($("#isAvrechKollel").is(':checked')) {
                 $("#kolelDiv").show();
-                $("#kolelType").show();
-                $("#kolelAlert").show();
+                $("#kolelTypeDiv").show();
             }
 
             if ($("#isBogerYG").is(':checked')) {
@@ -3459,6 +2855,24 @@
         }
 
     </script>
+
+    <!-- מודל בחירת קהילה -->
+    <div id="KehilaChoose" class="modal" onclick='if (event.target == this) CloseKehila()'>
+        <div class="modal-content" style="max-width:400px;margin: 5px auto;">
+            <div style="-webkit-user-select: none; position: absolute"> <img
+                    style="cursor: pointer; width: 25px; height: auto; margin-top: 10px; margin-right: 10px"
+                    src="closebt.png" onclick="CloseKehila()" /></div>
+            <div style="text-align:center">
+                <div class="Koteret" style="margin-bottom:30px;padding:0px;text-align:center;display: inline-block;">בחר
+                    קהילה:</div>
+                <input id="KehilaSearch" class="TextBox" style="text-align:center" type="text"
+                    placeholder="הזן קהילה" />
+                <div style="padding: 5px 0 13px;">סה"כ תוצאות: <span id="KehilaCounter"></span></div>
+                <table id="KehilaTable" style="text-align:center;width:95%;font-size:medium;background-color:white">
+                </table>
+            </div>
+        </div>
+    </div>
 
 
 
