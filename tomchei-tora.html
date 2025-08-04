@@ -2809,6 +2809,9 @@
                         updateSelectOptionsFromServer(JsonData);
                     }
 
+                    // הגדרת אופציות לסלקטים
+                    setupSelectOptions();
+
                     // מילוי שדות המשפחה
                     if (JsonData.family && typeof JsonData.family === 'object') {
                         for (var fieldName in JsonData.family) {
@@ -2818,6 +2821,7 @@
 
                                 // טיפול בסוגי שדות שונים
                                 if ($field.is('select')) {
+                                    console.log("Updating select field:", fieldName, "with value:", fieldValue);
                                     $field.val(fieldValue);
                                 } else if ($field.is('input[type="checkbox"]')) {
                                     $field.prop('checked', fieldValue === true || fieldValue === 'true' || fieldValue === 1 || fieldValue === '1');
@@ -2827,6 +2831,11 @@
                                     $field.val(fieldValue);
                                 }
                             }
+                        }
+                        if (JsonData.family.kolelType == "יום שלם") {
+                            $('#kolelType_Radio0').prop('checked', true);
+                        } else if (JsonData.family.kolelType == "חצי יום") {
+                            $('#kolelType_Radio1').prop('checked', true);
                         }
                     }
                 }
@@ -2838,8 +2847,7 @@
                 $("#zehut").val(ZeoutTxt).attr('disabled', 'disabled');
                 $("#birthDate").val(KidDate).attr('disabled', 'disabled');
 
-                // הגדרת אופציות לסלקטים (בהמשך יגיע מהשרת)
-                setupSelectOptions();
+
 
                 // הגדרת מעקב אחר שדות חדשים בקבוצות
                 setupGroupFieldsWatcher();
@@ -2886,9 +2894,9 @@
             // מילוי הסלקטים עם הנתונים מ-selectOptions (ברירת מחדל)
 
             // // בדיקה אם יש נתונים בברירת מחדל ועדכון בהתאם
-            if (selectOptions.kolelim && selectOptions.kolelim.length > 0) {
-                updateSelectOptions("#kolel", selectOptions.kolelim);
-            }
+            // if (selectOptions.kolelim && selectOptions.kolelim.length > 0) {
+            //     updateSelectOptions("#kolel", selectOptions.kolelim);
+            // }
             // if (selectOptions.YGMachzorim && selectOptions.YGMachzorim.length > 0) {
             //     updateSelectOptions("#YGMachzor", selectOptions.YGMachzorim);
             // }
@@ -2905,6 +2913,9 @@
             var $select = $(selectId);
             if ($select.length > 0) {
                 $select.empty();
+
+                // הוספת אופציה ראשונה של "בחר" כברירת מחדל
+                $select.append('<option value="">בחר</option>');
 
                 // הוספת האופציות - עכשיו options הוא מערך של אובייקטים עם value ו-label
                 for (var i = 0; i < options.length; i++) {
@@ -3255,7 +3266,8 @@
             // בדיקה והפעלת טריגרים לצ'קבוקסים שמסומנים
             if ($("#isAvrechKollel").is(':checked')) {
                 $("#kolelDiv").show();
-                $("#kolelTypeDiv").show();
+                $("#kolelType").show();
+                $("#kolelAlert").show();
             }
 
             if ($("#isBogerYG").is(':checked')) {
