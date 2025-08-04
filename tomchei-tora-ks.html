@@ -389,7 +389,7 @@
 
 
             ],
-            "TofesId": "2302",//
+            "TofesId": "3676",//
             "Version": "3",
             "AllowChanges": false,
             "NeedSign": false,
@@ -843,9 +843,9 @@
             function ensureCityIdExists() {
                 var $cityField = $("#city");
                 var cityName = $cityField.val().trim();
-                
+
                 if (cityName && !$cityField.attr('Cityid') && window.ListCityGlobal) {
-                    var cityMatch = window.ListCityGlobal.find(function(city) {
+                    var cityMatch = window.ListCityGlobal.find(function (city) {
                         return city.name === cityName;
                     });
                     if (cityMatch) {
@@ -856,7 +856,7 @@
             }
 
             // הפעלת הפונקציה לאחר שרשימת הערים נטענת
-            setTimeout(function() {
+            setTimeout(function () {
                 ensureCityIdExists();
             }, 500);
 
@@ -947,7 +947,7 @@
             });
 
             // הגדרת קלט רק מספרים לשדה הדרכון
-            $('#DarkonCheckText').on('input', function() {
+            $('#DarkonCheckText').on('input', function () {
                 var value = $(this).val();
                 // הסרת כל מה שלא ספרות
                 var numbersOnly = value.replace(/[^0-9]/g, '');
@@ -955,7 +955,7 @@
             });
 
             // הגדרת קלט רק מספרים לשדה תעודת זהות
-            $('#ZeoutCheckText').on('input', function() {
+            $('#ZeoutCheckText').on('input', function () {
                 var value = $(this).val();
                 // הסרת כל מה שלא ספרות
                 var numbersOnly = value.replace(/[^0-9]/g, '');
@@ -1587,7 +1587,7 @@
             });
             return;
             //----TEST MODE
-            
+
             // שליחה לשרת השני עם הנתונים המקוריים - רק השדות שקיימים בפועל
             var processedPostData = originalPostData;
 
@@ -2516,7 +2516,11 @@
 
                 $("#city").val('מודיעין עילית').attr('disabled', 'disabled'); // הגדרת עיר ברירת מחדל
                 $("#city").trigger('change');
-
+                //השהיה קצרה
+                setTimeout(function () {
+                    $("#shchuna").val(JsonData.family.shchuna)
+                }, 100)
+       
                 // בכל מקרה ממשיכים לטופס
                 // שמירת הערכים בשדות המתאימים
                 $("#zehut").val(ZeoutTxt).attr('disabled', 'disabled');
