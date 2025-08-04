@@ -376,6 +376,8 @@
                         { "Text": "חצי יום" }
                     ]
                 }
+                , { "Type": "Div", "ElementId": "kolelAlert", "Text": "<div style='background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; margin: 3% 0; border-radius: 5px; text-align: center; font-size: 12px; width: 93%;'>במידה והנך לומד בשני כוללים שונים, שע\"י מוסדות עטרת שלמה יש לציין את הכולל בוקר ולבחור במסגרת יום שלם.</div>" }
+
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "ElementId": "isBogerYG", "fieldName": "בוגר ישיבה גדולה - עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field17", "Width": 70, "Br": false, "Send": true }
@@ -415,7 +417,7 @@
 
 
             ],
-            "TofesId": "2302",//
+            "TofesId": "3672",
             "Version": "3",
             "AllowChanges": false,
             "NeedSign": false,
@@ -423,7 +425,7 @@
             "MosadId": "7014477", //0
             "MainLogo": "", // Files/Pic/000_logo.jpg
             "MainTitle": "טופס עדכון פרטים לתלמידי מוסדות עטרת שלמה",
-            "SpecialCheck": "Phone:Field5;Date:Field4" //Phone:Field; Date:Field; MasavPayment "CreditCardPayment" //Zeout:Field; //Mail:Field8; //CreditCardToken:Max //CheckDouble: //Bank:Field90,Field91,Field92 //CopyMail: //Tokef:Field8
+            "SpecialCheck": "Phone:Field5,Field6,Field7;Date:Field4" //Phone:Field; Date:Field; MasavPayment "CreditCardPayment" //Zeout:Field; //Mail:Field8; //CreditCardToken:Max //CheckDouble: //Bank:Field90,Field91,Field92 //CopyMail: //Tokef:Field8
 
         }
 
@@ -762,6 +764,22 @@
                     $("#DarkonCheckText").val("");
                     $("#ZeoutCheckText").focus();
                 }
+            });
+
+            // הגדרת קלט רק מספרים לשדה הדרכון
+            $('#DarkonCheckText').on('input', function () {
+                var value = $(this).val();
+                // הסרת כל מה שלא ספרות
+                var numbersOnly = value.replace(/[^0-9]/g, '');
+                $(this).val(numbersOnly);
+            });
+
+            // הגדרת קלט רק מספרים לשדה תעודת זהות
+            $('#ZeoutCheckText').on('input', function () {
+                var value = $(this).val();
+                // הסרת כל מה שלא ספרות
+                var numbersOnly = value.replace(/[^0-9]/g, '');
+                $(this).val(numbersOnly);
             });
         });
 
@@ -2426,6 +2444,7 @@
                     style="width: 80%; text-align: center; font-size: x-large; font-weight: bold">
             </div>
             <div style="text-align:center;display:none" id="DarkonCheckTextDiv">
+                <div style="margin-bottom: 5px; color: #666; font-size: 14px;">נא לכתוב רק את הספרות בלי אותיות</div>
                 <input id="DarkonCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off" maxlength="11"
                     style="width: 80%; text-align: center; font-size: x-large; font-weight: bold">
             </div>
@@ -2740,7 +2759,15 @@
                     return false;
                 }
             }
-            // עבור דרכון - רק בדיקה שהשדה לא ריק (כבר בדקנו למעלה)
+            // בדיקות ספציפיות לדרכון
+            if (Zihuy1 == "chutz") {
+                if ($.isNumeric(ZeoutTxt) == false) {
+                    LoginSwal("נא להקיש מספר דרכון בספרות בלבד, ללא אותיות או סימנים", "DarkonCheckText");
+                    return false;
+                }
+                // השלמת מספר הדרכון ל-9 ספרות עם אפסים בהתחלה
+                ZeoutTxt = ZeoutTxt.padStart(9, '0');
+            }
 
             // בדיקת תאריך לידה
             if (KidDate.length !== 10) {
@@ -3145,7 +3172,8 @@
         function setupConditionalFields() {
             // הסתרת שדות תלויים בתחילה
             $("#kolelDiv").hide();
-            $("#kolelTypeDiv").hide();
+            $("#kolelType").hide();
+            $("#kolelAlert").hide();
             $("#YGMachzorDiv").hide();
             $("#childrenContainer").hide();
             $("#tzevetInMosadDiv").hide();
@@ -3154,10 +3182,12 @@
             $("#isAvrechKollel").change(function () {
                 if ($(this).is(':checked')) {
                     $("#kolelDiv").show();
-                    $("#kolelTypeDiv").show();
+                    $("#kolelType").show();
+                    $("#kolelAlert").show();
                 } else {
                     $("#kolelDiv").hide();
-                    $("#kolelTypeDiv").hide();
+                    $("#kolelType").hide();
+                    $("#kolelAlert").hide();
                     $("#kolel").val(""); // איפוס הערך
                     // איפוס הרדיו בוטונים
                     $('input[name=kolelType]').prop('checked', false);

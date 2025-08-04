@@ -945,6 +945,22 @@
                     $("#ZeoutCheckText").focus();
                 }
             });
+
+            // הגדרת קלט רק מספרים לשדה הדרכון
+            $('#DarkonCheckText').on('input', function() {
+                var value = $(this).val();
+                // הסרת כל מה שלא ספרות
+                var numbersOnly = value.replace(/[^0-9]/g, '');
+                $(this).val(numbersOnly);
+            });
+
+            // הגדרת קלט רק מספרים לשדה תעודת זהות
+            $('#ZeoutCheckText').on('input', function() {
+                var value = $(this).val();
+                // הסרת כל מה שלא ספרות
+                var numbersOnly = value.replace(/[^0-9]/g, '');
+                $(this).val(numbersOnly);
+            });
         });
 
 
@@ -2116,6 +2132,7 @@
                     style="width: 80%; text-align: center; font-size: x-large; font-weight: bold">
             </div>
             <div style="text-align:center;display:none" id="DarkonCheckTextDiv">
+                <div style="margin-bottom: 5px; color: #666; font-size: 14px;">נא לכתוב רק את הספרות בלי אותיות</div>
                 <input id="DarkonCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off" maxlength="11"
                     style="width: 80%; text-align: center; font-size: x-large; font-weight: bold">
             </div>
@@ -2428,7 +2445,15 @@
                     return false;
                 }
             }
-            // עבור דרכון - רק בדיקה שהשדה לא ריק (כבר בדקנו למעלה)
+            // בדיקות ספציפיות לדרכון
+            if (Zihuy1 == "chutz") {
+                if ($.isNumeric(ZeoutTxt) == false) {
+                    LoginSwal("נא להקיש מספר דרכון בספרות בלבד, ללא אותיות או סימנים", "DarkonCheckText");
+                    return false;
+                }
+                // השלמת מספר הדרכון ל-9 ספרות עם אפסים בהתחלה
+                ZeoutTxt = ZeoutTxt.padStart(9, '0');
+            }
 
             // בדיקת תאריך לידה
             if (KidDate.length !== 10) {
