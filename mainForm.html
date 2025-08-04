@@ -1,0 +1,1606 @@
+
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" translate="no">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui" />
+    <link id="Link1" rel="apple-touch-icon-precomposed" sizes="128x128" href="https://images.matara.pro/ClientsImages/7015229.jpg?"></link>
+    <link id="Link2" rel="icon" sizes="128x128" href="https://images.matara.pro/ClientsImages/7015229.jpg?"></link>
+
+    <meta property="og:type" content="website" />
+    <meta id="Og1" property="og:image" content="https://images.matara.pro/ClientsImages/7015229.jpg?"></meta>
+    <meta id="OgUrl" property="og:url" content="https://nedar.im/bUNj"></meta>
+    <meta id="OgDescription" property="og:description" content="תשלום מאובטח בכרטיס אשראי | באמצעות פלטפורמת נדרים פלוס"></meta>
+    <meta property="og:image:type" content="image/jpg" />
+    <meta id="Og2" property="og:title" content="מגן ומושיע צפת"></meta>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="robots" content="noindex">
+
+    <link href="https://fonts.googleapis.com/css?family=Assistant:400,600,700&display=swap&subset=hebrew" rel="stylesheet" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Alef" />
+    <link rel="stylesheet" type="text/css" href="Files/sweetalert.css" />
+    <link rel="stylesheet" type="text/css" href="Files/Switch.css" />
+    <link rel="stylesheet" href="Files/signature-pad.css?0" />
+    <script src="Files/sweetalert.min.js"></script>
+    <script type="text/javascript" src="Files/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="Files/JavaScript5.js?69"></script>
+
+    <title id="Title">מגן ומושיע צפת</title>
+    <meta name="description" content="באמצעות פלטפורמת נדרים פלוס" />
+
+    <style type="text/css">
+        ::-webkit-input-placeholder {
+            color: #d0d0d0;
+            font-weight: normal
+        }
+
+        .ClosingBt {
+            -webkit-user-select: none;
+            float: right;
+            width: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 0px 10px 0px 10px;
+            background-color: salmon;
+            color: white;
+            font-size: large;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 100; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+            -webkit-overflow-scrolling: touch;
+        }
+
+
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 50px auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            color: #808080;
+            font-family: 'Assistant', sans-serif;
+            -webkit-box-shadow: 0px 0px 30px 0px rgba(50, 50, 50, 0.75);
+            background-color: white;
+            max-width: 500px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .modal-open {
+            /*overflow:hidden;*/
+            position: fixed;
+        }
+
+        .RowsBt {
+            text-align: center;
+            color: #43919f;
+            text-align: center;
+            background-color: #f2f2f3;
+            border-radius: 5px;
+            border: 0px;
+            width: 20%;
+            padding: 5px;
+            font-weight: bold;
+            margin: 10px;
+            margin-top: 2px;
+        }
+
+        .GroupeDivCss {
+            font-family: 'Assistant', sans-serif;
+            font-weight: bold;
+            font-size: larger;
+            color: white;
+            line-height: 25px;
+            margin: 10px;
+            border-radius: 5px;
+            display: block;
+            text-align: center;
+            width: 95%;
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px solid;
+            border-color: #cdd4d4;
+            border-radius: 5px;
+            cursor: pointer
+        }
+
+            .GroupeDivCss:hover {
+                background-color: #fef1f1
+            }
+
+
+
+        input[type="radio"] {
+            -webkit-appearance: radio;
+        }
+
+        input[type=checkbox] {
+            -webkit-appearance: checkbox;
+        }
+
+        .GroupeBtCss {
+            line-height: 25px;
+            white-space: normal;
+            text-align: right;
+            padding: 10px;
+            width: 100%;
+            font-weight: bold;
+            font-size: large;
+            display: inline-block;
+            border: 0px;
+            color: cadetblue;
+        }
+
+
+        .ClientZoneBt {
+            cursor: pointer;
+            width: 300px;
+            max-width: 100%;
+            margin: 5px auto;
+            padding: 10px;
+            -webkit-box-sizing: border-box;
+            border-radius: 5px;
+            color: #737171;
+            font-size: small;
+            border-bottom: 1px solid #c3c3c3;
+            font-weight: 600;
+            -webkit-user-select: none;
+        }
+
+        .TextBoxCard {
+            font-family: 'Assistant', sans-serif;
+            color: #e08e0e;
+            background-color: #faf9f9;
+            border: 2px solid #febb52;
+            font-size: large;
+            border-radius: 5px;
+            text-align: right;
+            padding: 5px;
+            width: 95%;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+            -moz-box-sizing: border-box;
+            font-weight: bold;
+        }
+
+
+
+
+
+
+
+        .NewCardCss {
+            color: white;
+            white-space: normal;
+            text-align: center;
+            background-color: cadetblue;
+            font-family: 'Assistant', sans-serif;
+            border-radius: 3px;
+            padding: 5px;
+            border: 0px;
+            width: 45%;
+            font-size: large;
+            margin: 8px 0px;
+            cursor: pointer
+        }
+
+            .NewCardCss:focus {
+                background-color: #387b7d;
+            }
+
+            .NewCardCss:hover {
+                background-color: #387b7d;
+            }
+
+        input {
+            -webkit-appearance: none;
+            border-radius: 0;
+        }
+
+        .ClosingBt {
+            -webkit-user-select: none;
+            float: right;
+            width: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 10px;
+            background-color: salmon;
+            color: white;
+            font-size: large;
+            font-weight: bold;
+            cursor: pointer;
+            margin: -10px;
+        }
+
+        .WelcomBt {
+            font-family: 'Assistant', sans-serif;
+            color: cadetblue;
+            white-space: normal;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            border: none;
+            padding: 10px;
+            display: inline-block;
+            width: 90%;
+            max-width: 500px;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+            -moz-box-sizing: border-box;
+            font-weight: normal;
+            font-size: medium;
+            border-radius: 5px;
+            border: 1px solid cadetblue;
+            margin-top: 10px;
+            -webkit-appearance: none;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        textarea:focus, input[type=text]:focus, input[type=tel]:focus, input[type=email]:focus {
+            outline: none;
+            background-color: #effaff;
+            /*background:linear-gradient(90deg, rgba(117,195,239,0.1) 0%, rgba(117,195,239,0.1) 98%, rgba(117,195,239,1) 100%);*/
+        }
+
+        .TextBox {
+            -webkit-appearance: none;
+            font-family: 'Assistant', sans-serif;
+            font-weight: 600;
+            font-size: medium;
+            color: black;
+            background: #fafafa;
+            text-align: right;
+            padding: 9px 6px;
+            border-color: #eee;
+            border-style: solid;
+            border-width: 0px;
+            padding-right: 10px;
+            border-radius: 2px;
+            -webkit-box-sizing: border-box;
+            box-shadow: inset 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
+        }
+
+        .SpanDiv {
+            width: 40%;
+            -webkit-box-sizing: border-box;
+            display: inline-block;
+            vertical-align: top;
+            text-align: right;
+            margin: 2%;
+            margin-top: 10px;
+        }
+
+        .SpanLbl {
+            text-align: right;
+            width: 100%;
+            font-weight: 600;
+            color: #808080;
+            -webkit-user-select: none;
+            font-size: 14px
+        }
+
+        @media screen and (max-width: 500px) {
+            .SpanDiv {
+                width: 80% !important
+            }
+
+            #Blank1, #Blank2, #Blank3 {
+                display: none !important
+            }
+        }
+
+        .WelcomCss {
+            line-height: 25px;
+            color: white;
+            white-space: normal;
+            text-align: center;
+            background-color: #fb7c7c;
+            font-family: 'Assistant', sans-serif;
+            border-radius: 5px;
+            padding: 10px;
+            border: 0px;
+            width: 100%;
+            font-weight: bold;
+            font-size: larger;
+            -webkit-box-sizing: border-box
+        }
+
+        .SmallIcon {
+            width: 40px;
+            margin-top: 8px;
+            vertical-align: top;
+            opacity: 0.5;
+        }
+
+        iframe {
+            width: 1px;
+            min-width: 100%;
+            *width: 100%;
+        }
+    </style>
+</head>
+
+<body id="body" style="margin: 0px; font-family: Assistant; font-size: medium; background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAb1UlEQVR4nHXdy3Xj2BJE0TuGCXSDdtAN2kE3aAfcgB10g2+gOtBWNt5AS1USeD/5iYwIsqvX+/3ens/ndr/ft/v9vh3Hse37vt1ut23f9+31em33+3273W7b4/HYjuPY7vf79nq9trXWdrvdttfrdX7dbrftOI7t+Xxu7/d7O45jezwe2+fz2R6Px7bv+7nf6/XaHo/H9nq9tn3ft/f7vd3v9+3z+Wzf7/dc6/1+/zlLa38+n+04ju3z+Wz3+/187jiO89njOLa11vb9frfH47Hdbrft+/1un8/nPO/tdtuez+e27/v5zOv12j6fz/b5fLa11rbv+/nnz+ezPZ/P7fP5bO/3+z8xejwe2/P53NZa5/fu9P1+t+M4zvh2tu63SkgPtZkXaKPP53M+836/z8U7eJftciWhNdq4RBWIEl2iuuRa69y3Ink+n+d5S2pJN6Ez0T1fMgv6WusspvYtMcXi+Xyed9j3/bx365q0+Xx3KiHv9/v8ut1u555nguZDVkkbFuTb7XZeqtdVSWutc5MC2SHrhIJilVRRVbJdZ/ANYs8XgIqk4Bd0O6R9u2N/L6EVUK+tqAro4/E416s7SqLdUDF414qjovl+v2fhFYu6ZQUjQpYHr6pboCSVAKt13/ezkgusXVLAvZRd2QWsxqq/S5mQEl9Aqm6LQggySc/nc3u9Xtv3+z3PZUKs9tbp2aCneBTDCrPk1SE9I5J0fiH99Xr9dEiBrBI6kD8r4AWyaqyjSoDzqNd3qTC/IHYxX1/FFtyCV+IMpu1eURSIgl3BTPiqc+vSnmvP0KDAi/ndyfnVWq7fa01K56hL+vMZh4Jblm3vWTVt3ldBLtNVn8F6v99nVXWJhmqBrsJ7fWdybpS0gic2m5gSHZQ2JwyqUNi+xaDnSnKJqSvbv3Xba862irWzdV6humQZi1UAOmyJCdtsNTcr8LWybd3vCkhBs7qFkw5TMKykOkZmJnMpafMc3ctkVaUGVnyXjMzZcxzHnzUjKc5VmWDrzucqiO4uo308HttyILahENWB+ioQBrALGNDWqiK6UAeps6yWukBKWsWbyF5bxcmyhAThpUqcRRWstKczpnPWDXVkv694pbrd23VLaPct1pf370JN/DZusR6UiXUQ4aUKqcJKaHgqM7JrpMDhf4XgbKhICrh02TPHdrqog7Vua73OUteJ7RWA0CxpkKj0u/btzyKPFN15VgdVbKtLK8S6qGyipAVfUuECfvX3mM0cvl6qJPeznu/ndYnVLv+vALrDLBjXdn07WFp7BucfbbfzhZ9mp/FpXsmg2sP1ZH3F+H6//ySkVuxiVpEqsuzLz6v6Lmm1FYDw1A5osDskxVYrs0NXcSY/OBF2dQik5AVRyip0OEtmR9jJfjkbFc/OxpLdeYpFQ92CW11UmHK4CUcOOAd12S8YsTAZj5S2TinRvkaxNoWVMyKoLXjiducRGq/0hbaFVF5i4PC1Wwq4RKX9LFY7p4LsTsqIczYqCEvMhBKrr4VlIFWFynjaDSVAPq54qkJUzlPrqG7tPl2DIGNqjumB6Ux0lpIjCakQtDrsttadJMWzTWtGVBICP5/PthROYZz4W0Bn56gvPLywMqm0B+rZLqcN0uVV7xZOVTddBqHIWSLUFpjOeWXNOCPUGuqGuloUmBTWGaGa904K0Ofz+cOyelAlLe5qtmkN6KK2RhVeAoUNkxV02SleUqjpmS7t8xVRFab+mVUvztdJkz1aFHXDJAp1qnNC6JP2m2SFt6xPRraEqCpWuhvsqOidAZpsLV6SotG9Xt0ifBXYXiOEtr/BEuZMiN6UuKyqL1ESALWOToRU2g7rrCVtdts0JOfAVwLo7621fiBLauqQrgOELeeEl9a7kSF18QJdUDpUMyGodGAbUOdIAXIu9NXanaEBbgfKbhz0dq0zTHe2gOsiqPrtIuM5Z5Po45lWQe7iwZammW1vVjtEl1IJ6x9ZhXaGs8dOqq21M9IFfbVfwVK8/T8l3vo6AYo1v19pCTtJZjgLQXgs6NJzY1zBN/hXEORgUijOi0qDO4hdU4JU7jGOLmH1ddCeV4tYsSXYrmvPzq23JcSozDX75sxyyJaUU7BRYL6+RM/4aaxKUHrWc5jAVXXbAVbPbPEy3N+1JcTvKmpaEHaWyttDBX9qFZV/GkLu3zknVKjWhRih0IQbeB0DtVd76h4It+0TIkjrS4qWSvsdx/E3IQUrPBWLlf4FRCYiBE0qWyUHZ0Hk9IUm9Y4c6O46MLVj6mIv3h7OQhnWHOomt8KTWPi8SXVGKGztMJlhRSBROmGyIKgy28DLay+0uTaLbqwaxAsYQN8TcaB6eFW+1ozus6q8100WVwBKdM8pgH3GuSEJ0eZplvS9GHnOEmuBOEtN+Pm2dxcuUIqvAl97TidU1duM6OC2sFhdZVrlUt8Oro1jgOviOSSnVnEQ20UWkpClU2BRTCGoe9AdvF/3La7t6b0rdqH4hCxhQGo6/RnFVcmQ/eg/6dfYHXVByVUhe6nW03q4EqMmtmT3/GRpkgQFrJTcPQvclaHpm3D9XBNWZW+haiuJDNLkNU0/Z4Hm4vR/CmAD3BkjpsqyumTwp7nn4KwQdAiuFLRzQBPSewSZFZwdJUOad7XAjIf7q4GuCnh6ZxWHDkJrnZDV5ucPxvvPXdA37L2swZv2SRsbICvTpMo2pJayuyvRpmNgRcrgptEp5qtPVOpVfWfvfBWX8GrhtY4sMng0OUJid/l8Ptsq6FLaqq02MvsGukO2WFWkop/JsnquWIuB1cJQV+ghNa8UkMGFsGHROX8MePea76ELO7HFK/o/9VTQZfdOV9tu3ff9NyGKHAfuZEC2Z1jfYdzYznHg2lVd1sSLqbWy7Ky9pZV2lsxKpT7NReeCbyVMShq81o1CeneWDOhwSE66n3ZMBSupOs3FMF+RYguaiDSC8CX9FBocplosVlvBswOEu/bR0JOlVNV1SBBb1+tpdS5hRVbkXPgTKIiLRSgKeO/gb+oN46Br0ZnPhLh4wVVV2iUOuF4z+bo4q7jsmQIlY2qdimEGWPWvmu7yWjUluMQIj86T1i2h3c+3mKW7fYUQ7S1c9XvZndptCldft6SUZV7hdGXaaabZXYqxgqc1rZBUmYfH2iZ1jYO8YKppeq3Y7p1Krup82iiKQuHFedO9petBmrqm32sTqbEsDIuzYlxtYjYdqh2sQIiLtrpBN0AdTNNvDvESWTvPgelAnV7TtCim5SN11Reza+2ukiYcO5N6tkS5j5pHS8ozlTBn9R/hW2XqN9nOVoZ0V7GoptCL8mBzxliRUk55vhS15Kjs1Up2yvzgRl/CsEGw85wBE1JU5u3XgHdOSmzsJtexkILI4zh+3sKt0n2nT/tDHPx/lFCF3/NnG67fT4z3vKo/JqOeaE3fydPwk810UYuryvT3zaKetfvFd+HOu8r06twpBB38nUNV7vysMITQVcWIk3P6i7EeoEWsYiFLiLCznAlaLwa/v/shg87aRat6u+qsNIaswqvASMNLfEES3kxQ553zrDtaiNo6EqEKvvN6l+fz+ZOQHiw4siyzP2miargFrfqJv76BZfAdeLV+pKJuukp+3aQXZlUGKecnOnj7QIo9mZOCU19PLeYbUsXN+JWckEH06AzO5JMk2OotrqjSLEzFmwSxuMzLJFpT2mtCZUZBRp0pAyq4MRshojNYrTIY1b/ve/hmmtWuFaIqdzbVCcJmRdH80MoRNVrDOdyaS2yrQjqMlsW0PhQ3Zb/vqtA5zObsKAl6W8JmFVx16Q64lvCjkKzr7No6rfVcR9XdGlMYO6eExhKta24S6xZ1m1C91vr5KGlVICzZjnLlkqOd0aXsKiujNTxAF2lvK632l10VALFdJd48KQBXbK5ElBjXnkreypXWS3/dcxIhxaoEQCfAvUKXVeU4M1SOBUBI0i6p+rQ0ZsUXfB1bHVaHuupYBS9dLVEyGbtJM7COnszHJHV+dcjUWwXU10/2pLWk6PU8dmsx/6P4C9wUhVJIcbTqKyFu0t+nrR12T2uhPVW66gedgKBCgVnXtYddUNAmMwxSJSoSB4PaOSyuXifUdf/mZLDf69RfziVp9jln5PQGqIvLVKY5KGzIsFTxao6GpR/dkZL2bHtMlaugE0KmKq6ip4AU2uZ80ypSTFb5Ehs1ltAk/DvgjVvncSZr9yxnhGJl4qmfGmkBLRf9rysbWmfXtzGtsmaHM8bOmDrGgSvkdIdmlo6BbE4rRp/qqnqFFe/oDOguFpfOgsRDQd1z3+/3x8vqYRWjw0vGpMCTKsv/rbICX/uXBAfvDHzB8rNZwuB0D/THglLfQHPuqGGqbElMiVEHCaHOtJ6fat/nfJ1wL+ss/vu+/9BeRZcHkAZ6UCFOvt9a4bQtqbk24cU2d8jrCJtwz9fezagp9ubv2sMgSQbqjF4bLCsInW0VijOvGaKu0VKZg94z/PkoqfxdiuZFHfwKxF6n43ri4vr9DyOdN+Fo7VrQHX7TILS6Ta5uc/v0nA5Bz3jXOT/by+JTCF8J2CBM/0xB7HeJhLpn3/dfHaJl0Vdw1EJl2Xb3QNowXt5BVvd0aH2r9rOtLZA560674d8cmN6RnpJB9UN/Ogcqe/0z56nao+KQAgs/Mr7m6AlNfDix+O/7/tMh+jxVlMJFLHTQ9zotFA+nJSJj0xNypsw/O1Mm9jtQr7Beqly39foJGULHdAS6U3GRQsuU5gccnEu6xv1dGBXalhcWqmwzu6eqkwVpHfSc3lGQoe1iB1mpwqGqX6qoHTKZ05XtUfdZPKd3xDuNOq/SXAtIiOx7RaRtolA84Wit/xSieuf5/PeftE0+f6pG3hFT9MiwprXQRlOz9GftGZVxAdLv8m1XLRrXsdqaXVJo3QSh1E6r8qt+g29hSAL8u5rM85cUR8Ic7ML07Xb7nSFlsj9baVJH6aHeTr8TNrqUw9HusBKdF4q3zqCV4dwKqoQj59n82KlzxQ7RhzPoJb+fqZm6V8+WBAWxzLRzCF0lrb+vxJFQJKOq+q2CMuvBrBAhQejTPpCrF2z9KOeWtr5moYXjvjoCik/hTYYlxW+dXi90VSizAIXjzt/rJuO8YmGd6ziO338NyAOfqnH9/udjXcyF/fLDBylXPS8vKzTM+TVtDpW4Ca+iJRp+4lKhpi6SqFS5rj/9NdmZnRrtVpHLrHqtbkJnswmaSafbO9WpLSXzqFo6TPDQYs2PrGh1ga15ZTtUBF5IjJcJCp3BhZZElVlnqYbtuAkzqn8tkAKlHTIT0R7ete/dTwE5tYxzb51/WL//lZGzomqU8jXce+7M7r8uETe7YBCgJ1WV98zUGNLvLi9Tc3b8vyEaHAlvrSOzkwQ4N+ywgm7hSAx6nWva8cKsZq1uxDIYMqUu2KWmKi7bHWwyJ404fTHb9mQW4/33qcy7dEmYgsvfCRFXg1ibQ7p5BZkVqZCqmNP/q4Bda67fWWWidsnj8e8/+pTnGzR/11eZn8NQ2my3CU1aGdLJAtU6+lHCToFqPk0HQShtTqgVCu60bSZhqGK1jYqNhuKksvOtW2ekdlEFWmId+ssWLOC+DVoAJtY2dLukFaIQOlsRrl/nWQBB1wxWl1YTlYzgRGdAXWPRzM61ExziU9VLAISvnm+dYiiCiD76aVOM/zEmVbhWqmxDKml7mQxFky1a67excFHiHKiK0PbqfHpH/WwyNOl1BWax6dWpjVpvkhbP5J991t/PTnI+d686vDv5PszycuKefo5WyKxyW9FB24F1YkuKXamYqyCmqWggbX8TpDugiu+rAuh1zQKVthReQSyBmZ3r3rK+YMwO8q42gCJ0zUA2vLuEh/ODEHNAy0gcnn58VLgRSnwPuoBOvWLnVBQl2stdJcN9hCghKzguAQa8AjJ5siQDrAPRmhWD8ak7nKnHcfx+UM4f6slIhc10l+iwBaagdiirotfbHTKo6QJUza0pRNYpXlSImj+vEruTc8SuUCMomp2N7VOhVFDaT1o1xkzSoS46G6CHCqAV5xxJuff3AjsDHD42L0qKyvjK7iiZtb7sp8BWTVW9882ZYNfbNXV5HWqgheoSrhMr4xJiNFjtOAu8bjJhxVwmeBzHz+eypJElQwVtVruQrMP2bp4IDa3rs7NyDWKvCbq0UXRHC+CEg7rHAtNjuhrEk1nZsRbb1ZllS1LxSc0b8MWwEVBs9n3//feyDJY2RjhZden3eEgrTjtFCCtw08uZNLRDyrz0iApqzxRsK7OkTqU+/TGr+s9wHcrbDlQ4T9HoTCjBxdSPlfqupaRoKYr0ZibWlVGf0QKpNavgabR5WBMhRE0C0GVUuXlltntdoIelDihgEg4xvo7SKQgZ1F4Vp3d2Ztg1QlznlrgU78k2lx0RJjbIVZ4FtTbzIHpBbe77DD0jjZT+Gnjn07QVZuJ0mKdbYFJV1FoWU9/Y6ToQ2jEVmfRWyFI7GTv3lc1qjh4Hn35XDEr3xGId0EkTe43VfwVRBkJImn6ULd4l21sLpUSqiAuyTMyKFiKcJVJhZ6KJ6M8m0A5x9gWhxUMbqS6cxGf5kK0rzetCXbSLeFCVcNBghznwS67sSLUc/On6luhavE6VDTobrjpwqmgHawEUugz61GtCZbDksJY+hwzFUee4Lv9jLorB0yMqc9ohXtoETEUqnjp466SJq9Jv6XVnmFAgbZ1Ucs6Gfq5SPw299d9/fagvvTvhp+eKWYkombJItVj7VVTBew1xfnJxMoUuXGBbvGpQAU8HtMGr9uiyBbBDavhJaYMyXVPJR1Xbs64bFPTdj+iUYOm1GN/Z6za1xnQZTKo+nwm0iCzGziUBWGv9QNb0XdQOYrTDtdfYslMMdhg1xKSj87BCpu+l64v5d5PU2aWXV3pKC0f6KtZ7pmnj9LOZNOF27ueMlSBV1D1z/u8qZDZi5qzILqyVMumcVFfC4MDuZ356w/2seGfW/NxTA3VWZzBgt14VQJUvFXad7mOnFjPFpIk3Rp2jGRNUKTPUa+e/5KAeceAGadLIkiDbKvhqFTWJHzfq0OcgW78fzSx4Dl49JOGpJFUszjJxW91kx0pa/DBHz185C3W9glB2V/xKih6fFNv5pj93/ksOVYBYOytGT6nkNCRLrIJysiRJg7pEeixsOoyr6l4jA2pvL9jeFpLJ0cPS2ih4czBbdP3+9J9wedVC7SXKCGGd188VrCrUTQtmQbKtG9xVW61dAt3ACtHr0b6okhRYYm4/16JXHIrVYna4PyGwbu8MUubOqSapW6fnVQF7t6re+akmExYtzGD5OI7f99TVIgqVOHwV6nsK0karREVuC1ddQlYJn6Zha2ubSGGtUL0i6a8wYVf2GsmJFslMUPfve50uI5VUWFCtWVJKZjHXtXi9/v2PJdUEihXhQRyXaqpQ1RDTARBHrUQtkC7mxf2ZBaLBJ6sR81u3fTqfLsG+/34Iu25XvEkEJnuTKisoS76itZ/3TAkp9sVlVZFt4Ixw+jtUw9sOWZc1vDUdDeqcC5PNTaiYLEtTTrgrkFWfLNDu0uIQFbpTZ/Z13V+fqljFEkMG6bW6TfVeAdRRrXMyMbXElejre5cKeqqIgjyho8BbJVcMS+2ibujPBsxZ5hw42533caZn5J97NpWs86BzIXEoidLZglos/Jmf4AwRdAiKqcj0eDx+/4MdeXYX8qM3VphWhbqlwIupMjhtAw/qXOr1DVw/kmTnVVUKR3VD+yhG9bVU53a2r50Q6ufNlAoTqiYz6/nuWNzUI2fHVRVWigPHICuM5vvSHb6WDBclAwXOWTC7K7ppddopfoJSeqp+kR1Je4Uo7aAr306xWjyqcKWBndjPRJfW8fyhg3E5ddzk4LqsdUMXFrLCU4ez360cCYJzSiHZPNCicJ51wbrWS/QaHYCely1Kgzt/Q7lE2hme244tMa3jG2ZSdOm9jNKYFqcQaAU1KsYWbBB1kapAKLPCZ0WL224qc5GdTNVdYsJaSUYtrmOs3SJFdi2LSUuj4dxcdI5V8QXes1dQsqcgOPrbPOmM3s+3ir/f7+//T902llGopsVY4aiqElLERw07L6MlM5Os51RRVDDODgWl80+Bd8VoJuQWKCmwKNBrtEXqcN/38Rl1meRCsfgf+11888CTxtWyBlIFqh9Tcidrc6gXKA/vMJTWuk5JV+Q1w6ryCkEm1x5aFpqZJt6i88tZYgeIEN1LR0IyUeE0t5tv5ywPh+XrqscOYAWogn1zpwvPqpmV2rrtp/3R+l1KptTZHKbT5CzImnoFZs4BnWFp/fxsWZ0bhHVGP13izNAJcN65Znfu3J33/JCDGNjGBcjB2cayogIgU/F3+lpaCUJWAdEsnPS2itRRnlRb8apl4htmwpZr2d3tJZxOAS2R0UyVmlt0vr47K4Rfr9fv/4PK4Wswa80yr2p2mHrRAp+G6EBeJkbX4U1KzzhE+3mBjg22v8n2mc4r+SjIdv+cfVWvwfY+kpYKtTtYSCWi7yaqgviDLuJXVVSlOjDNqvohqJEeKrb0xvS7HM5TYKoD5uDt8ApCqWXB7TmHq79zhukOlKRJOjqHhaenFew1I2VxEiJpvPsVh1VganMtDB1SKyO4KSC1nIyhdZ0jVV3BdF7oEXn4AqiT0MVNhlqj4uq57jRFcIU0GY96qYBWRLrTFqOD3diIMt2tP89R8Xw+f/81II0wA1UGtRqkvIq6Ai8kiefzMAVDYiETEVa64NQ/+kP9TFZWwIQ4PbQCPgmCiSoOxkSdJjt0zrZ3nT1JhOyrdZbZl510QDHf74q6cNALWmF2jZBT5duyCr8SI6wU7II83z4oudLYYHAyLrtYUVhR6nU5L0uqH1JwaLuunTStEgVuBbhq36q+yxWwLlD3OLB7jS07Kaqisd9P3i7UVbkd0jP0/PxYj8LPmTGD1Zka+GoACYkmYr9XzXuHztvrZpeGHBWf1pJk5RTIXbBMeXi1QslQnc5Ocv7I668UuzZNh5bbq/rF2qlN5sCtirUlmj+t5WBXJ7XupOAyL8Vk9/OOQVlFJqmRmak9WvM4/v33ITIcLYcOKC9XwbdhVVPFhY+TLqoZpMqSBf0fBWgXl3JLRhRdwVn36jVXtlCF4YwoBsHo9OlKrtBlkYoodreiVY2isFxWeMEoy23mBwpauE7xwMGOA9KWNLAyqypNDVGAZERXdLX15oBUeHrW1vE54cpurCt8b2VaISawewufQmhrtl/r1dHf7/fXfg8DtTZ6UYf08gZQhdzPNB6tQCFDNqSAE/unkakVYVdWLCZ8GotdXqEr6yuYQrGzcFox2k12RcUgiREVphPS8/u+//67vZOadREv7PvHvs6Bq84Q7qTO7XVy7/X7b6RMJaw14UB1Hk0NVcdZ3eJ2AbIzTGrfpa8OZoeyRTjhVRng28VaNhVNhbcULg6nNncI93vfaFGMdfAu6gC2gmz9qkUR1kVP5rH+/r8Efabhb8fIWpwxQqLWjmq6eMz55lB3Fsy5IgTGIO1SZ7D0vXj/D1qZ7VFrqtW0AAAAAElFTkSuQmCC') repeat scroll center center rgb(179, 179, 179); background-color: #f5f5f5;"
+    onscroll="UpdateClick()" onkeydown="UpdateClick()" onmousedown="LastMouseDown=event" onmouseup="LastMouseUp=event">
+
+    <div id="IframeMatchPlus" style="width: 100%; height: 100%; position: absolute; display: none; text-align: center; color: white; font-size: large; top: 0; background-color: white; z-index: 5000; box-sizing: border-box;">
+        <iframe id="IframeMatchPlusData" src="about:blank" style="height: 100%; border: 0px;"></iframe>
+    </div>
+
+    <div id="CreditCardReader" tabindex="0"></div>
+    <div id="CreditCardData" style="display: none"></div>
+
+    <div id="CreditCardWait" style="z-index: 100; width: 480px; height: 364px; position: fixed; background-image: url(Files/Swipeimg.JPG); background-color: black; background-repeat: no-repeat; background-size: cover; display: none; left: 50%; margin-left: -240px; top: 30%; border-radius: 20px; border: solid #a6b6b6">
+    </div>
+    <div id="CreditCardWaitError" style="z-index: 100; width: 480px; height: 364px; position: fixed; background-image: url(Files/SwipeimgError.jpg); background-color: black; background-repeat: no-repeat; background-size: cover; display: none; left: 50%; margin-left: -240px; top: 30%; border-radius: 20px; border: solid #a6b6b6">
+    </div>
+    <div style="width: 98%; max-width: 600px; margin-left: auto; margin-right: auto">
+        <input id="GoBack" type="button" class="WelcomCss" value="חזרה לעמדה לתשלום באשראי" onclick="GoBackClick()" style="display: none; width: 100%" />
+    </div>
+
+
+    <div id="MainDiv" style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 90%; max-width: 600px; background-color: white; color: #808080; font-family: 'Assistant', sans-serif; vertical-align: middle; border-radius: 10px; margin-bottom: 10px; border: 2px solid #eee; padding-top: 20px; padding-bottom: 20px;">
+
+
+
+
+        <div id="PaymentDiv" style="display: none; margin: auto; background-color: white; border-radius: 10px; padding: 0px; text-align: center; position: relative">
+            <div style="position: absolute; right: 0; margin-right: 10px; font-weight: 600; font-size: small; -webkit-user-select: none; background-color: #f1f1f1; padding: 3px 5px; border-radius: 3px;"><span id="FlagEn" style="cursor: pointer" onclick="ChangeLanguange('EN')" />English</span><span id="FlagIl" style="cursor: pointer; display: none" onclick="ChangeLanguange('IL')">עברית</span></div>
+
+            <div style="text-align: center">
+                <div style="min-height: 158px; font-size: 0px;">
+                    <img id="WelcomLogo" style="height: auto; width: auto; max-width: 100%; max-height: 158px; border-radius: 5px" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" />
+                </div>
+                <div dir="rtl" id="MosadName" style="font-size: large; font-weight: bold; color: #ca4f18; max-width: 70%; margin: auto; margin-top: 15px"></div>
+            </div>
+            <div id="OnlineHtml" dir="rtl"></div>
+
+            <hr style="width: 100%; border: 1px solid #eee; margin: 30px auto 40px auto" />
+
+            <div id="FormDiv" dir="rtl" style="text-align: center">
+
+
+                <div id="ClientGroupeSpan" class="SpanDiv" style="text-align: center; width: 70%; margin-bottom: 40px">
+                    <span class="SpanLbl" style="text-align: center; color: #b98d8d; font-weight: 600"><span id="Yeoud">למה מיועדת תרומתך?</span></span><br />
+                    <input id="BtGroupe" type="button" class="TextBox" style="user-select: none; background-image: url(Files/combobox.png); background-position: left; background-repeat: no-repeat; background-size: 30px 30px; white-space: normal; width: 100%; text-align: center; font-weight: bold; cursor: pointer" onclick="OnlineOpenGroupe()" /><br />
+                </div>
+
+
+
+
+
+
+
+
+
+                <div id="ClientNameSpan" class="SpanDiv">
+                    <label for="ClientNameTxt" class="SpanLbl"><span style="color: indianred">*</span><span id="ClientNameLbl">שם משפחה ושם פרטי:</span></label><br />
+                    <input name="ClientNameTxt" type="text" id="ClientNameTxt" autocomplete="off" maxlength="50" class="TextBox" style="text-align: right; width: 50%; width: 100%" onkeydown="TabNextElement(event,&#39;ZeoutTxt&#39;)" dir="rtl" onkeyup="PressedCard(this)" /><br />
+                    <div id="ClientNameSpanAlert" style="font-size: small; color: #c97777; font-weight: 600;">הקבלה תונפק על שם זה</div>
+                </div>
+
+                <div id="ZeoutSpan" class="SpanDiv">
+                    <label for="ZeoutTxt" class="SpanLbl"><span id="NeedZeout" style="color: indianred; display: none">*</span><span id="ZeoutLbl">תעודת זהות:</span></label><br />
+                    <input name="ZeoutTxt" type="tel" id="ZeoutTxt" dir="ltr" maxlength="9" class="TextBox" autocomplete="off" style="text-align: right; width: 100%" onkeydown="TabNextElement(event,&#39;AdresseTxt&#39;)" value="315245324" /><br />
+                    <div id="LogInLbl" dir="rtl" style="text-align: right; font-size: small; font-family: Arial; margin-top: 2px; -webkit-user-select: none; opacity: 0.6"><span id="LogInLbl1">משתמש רשום?</span> <span id="LogInLbl2" onclick="OpenLogIn($('#ZeoutTxt').val(),false)" style="cursor: pointer; color: cornflowerblue;">לחץ כאן</span></div>
+                    <div id="ClientZoneLbl" dir="rtl" style="text-align: right; font-size: small; font-family: Arial; margin-top: 2px; -webkit-user-select: none; color: white; background-color: #80d6e0; padding: 3px 10px; cursor: pointer; border-radius: 3px; display: none" onclick="OpenClientZone()">כניסה לאזור אישי</div>
+                    <div id="ClientFastLogIn" dir="rtl" style="text-align: right; font-size: small; font-family: Arial; margin-top: 2px; -webkit-user-select: none; color: white; background-color: #f8d486; padding: 3px 10px; cursor: pointer; border-radius: 3px; display: none" onclick="Login(true)">אתה מוכר :) לחץ כאן</div>
+                </div>
+
+                <div id="AdresseSpan" class="SpanDiv">
+                    <label for="AdresseTxt" class="SpanLbl"><span id="NeedAdresse" style="color: indianred">*</span><span id="AdresseLbl">כתובת:</span></label><br />
+                    <input name="AdresseTxt" type="text" id="AdresseTxt" autocomplete="off" maxlength="50" class="TextBox" style="text-align: right; width: 100%" onkeydown="TabNextElement(event,&#39;CityTxt&#39;)" dir="rtl" onkeyup="PressedCard(this)" /><br />
+                </div>
+
+                <div id="CitySpan" class="SpanDiv">
+                    <label for="CityTxt" class="SpanLbl"><span id="NeedAdresse2" style="color: indianred">*</span><span id="CityLbl">עיר:</span></label><br />
+                    <input name="CityTxt" type="text" id="CityTxt" autocomplete="off" maxlength="50" class="TextBox" style="text-align: right; width: 100%" onkeydown="TabNextElement(event,&#39;PhoneTxt&#39;)" dir="rtl" onkeyup="PressedCard(this)" /><br />
+                </div>
+
+                <div id="PhoneSpan" class="SpanDiv">
+                    <label for="PhoneTxt" id="PhoneLbl" class="SpanLbl"><span id="NeedPhone" style="color: indianred">*</span><span id="PhoneLblTxt">טלפון:</span></label><br />
+                    <input name="PhoneTxt" type="tel" id="PhoneTxt" autocomplete="off" maxlength="16" class="TextBox" style="text-align: right; width: 100%" onkeydown="TabNextElement(event,&#39;MailTxt&#39;)" dir="ltr" onkeyup="PressedCard(this)" /><br />
+                </div>
+
+                <div id="MailSpan" class="SpanDiv">
+                    <label for="MailTxt" class="SpanLbl"><span id="NeedMail" style="color: indianred">*</span><span id="MailLbl">מייל:</span></label><br />
+                    <div style="display: inline-block; width: 100%" id="MailTxt_Div">
+                        <input name="MailTxt" type="email" id="MailTxt" onfocus="$(&#39;#MailHelper&#39;).show()" autocomplete="off" onfocusout="setTimeout(function(){$(&#39;#MailHelper&#39;).hide()},100)" maxlength="50" class="TextBox" onclick="$(&#39;#MailHelper&#39;).show()" style="text-align: left; width: 100%" onkeydown="TabNextElement(event,&#39;AvourTxt&#39;)" dir="ltr" onkeyup="PressedCard(this)" />
+                    </div>
+                    <br />
+                    <div id="ClientMailSpanAlert" style="font-size: small; color: #c97777; font-weight: 600;">הקבלה תשלח למייל זה</div>
+                </div>
+
+                <div id="ClientCommentSpan" class="SpanDiv" style="width: 85%">
+                    <div class="SpanLbl" id="CommentKoteret">הערות:</div>
+                    <input id="AvourTxt" name="nope" dir="rtl" type="text" maxlength="100" class="TextBox" autocomplete="off" style="text-align: right; width: 100%;" onkeyup="PressedCard(this)" onkeydown="TabNextElement(event,'AmountTxt')" /><br />
+                </div>
+
+                <hr style="width: 70%; margin-right: auto; margin-left: auto; border: 1px solid rgb(245, 245, 245); margin-top: 30px" />
+
+                <div style="display: block; vertical-align: top; text-align: center; margin: 5px; margin-top: 30px;" id="PaiementType">
+                    <div id="CreditCardRagilDiv" style="display: inline-block; margin: 5px; border: 1px solid #eee; border-radius: 5px; padding: 10px; user-select: none; color: #808080; cursor: pointer"
+                        onclick="$('#Normal').prop('checked', true);UpdatePaiementType()">
+                        <img src="Files/Card.png" /><br />
+                        <input type="radio" name="PaiementType" id="Normal" value="Normal" style="margin: 4px; cursor: pointer" onchange="UpdatePaiementType()" /><label for="Normal" style="font-weight: 600; cursor: pointer"><span id="NormalLbl"> חיוב בודד / תשלומים</span><br />
+                            <span style="font-size: small; margin-right: 10px; font-weight: normal">באמצעות אשראי</span></label>
+                    </div>
+                    <div id="CreditCardKevaDiv" style="display: inline-block; margin: 5px; border: 1px solid #eee; border-radius: 5px; padding: 10px; user-select: none; color: #808080; cursor: pointer"
+                        onclick="$('#Keva').prop('checked', true);UpdatePaiementType()">
+                        <img src="Files/CardKeva.png" /><br />
+                        <input type="radio" id="Keva" name="PaiementType" value="Keva" style="margin: 4px; cursor: pointer" onchange="UpdatePaiementType()" /><label for="Keva" style="font-weight: 600; cursor: pointer"><span id="KevaLbl"> הו"ק אשראי</span><br />
+                            <span id="KevaLbl2" style="font-size: small; margin-right: 10px; font-weight: normal">ללא תפיסת מסגרת</span></label>
+                    </div>
+                    <div id="MasavDiv" style="display: inline-block; margin: 5px; border: 1px solid #eee; border-radius: 5px; padding: 10px; user-select: none; color: #808080; cursor: pointer"
+                        onclick="$('#Masav').prop('checked', true);UpdatePaiementType()">
+                        <img src="Files/Keva.png" /><br />
+                        <input type="radio" id="Masav" name="PaiementType" value="Masav" style="margin: 4px; cursor: pointer" onchange="UpdatePaiementType()" /><label for="Masav" style="font-weight: 600; cursor: pointer"><span id="MasabLbl"> הו"ק בנקאי</span><br />
+                            <span style="font-size: small; margin-right: 10px; font-weight: normal">&nbsp;</span></label>
+                    </div>
+                    <div id="BitDiv" style="display: inline-block; margin: 5px; border: 1px solid rgb(238, 238, 238); border-radius: 5px; padding: 10px; user-select: none; color: rgb(128, 128, 128); cursor: pointer; background-color: rgb(241, 249, 230);" onclick="$('#Bit').prop('checked', true);UpdatePaiementType()">
+                        <img src="Files/Bit.png" style="border-radius: 5px;"><br>
+                        <input type="radio" name="PaiementType" id="Bit" value="Bit" style="margin: 4px; cursor: pointer" onchange="UpdatePaiementType()"><label for="Bit" style="font-weight: 600; cursor: pointer"><span id="BitLbl">ביט BIT</span><br>
+                            <span style="font-size: small; margin-right: 10px; font-weight: normal">&nbsp;</span></label>
+                    </div>
+                    <div id="DigitalTransferDiv" style="display: inline-block; margin: 5px; border: 1px solid rgb(238, 238, 238); border-radius: 5px; padding: 10px; user-select: none; color: rgb(128, 128, 128); cursor: pointer; background-color: rgb(241, 249, 230);" onclick="$('#DigitalTransfer').prop('checked', true);UpdatePaiementType()">
+                        <img src="Files/DigitalTransfer.png" style="border-radius: 5px;"><br>
+                        <input type="radio" name="PaiementType" id="DigitalTransfer" value="DigitalTransfer" style="margin: 4px; cursor: pointer" onchange="UpdatePaiementType()"><label for="DigitalTransfer" style="font-weight: 600; cursor: pointer"><span id="DigitalTransferLbl">העברה בנקאית</span><br>
+                            <span style="font-size: small; margin-right: 10px; font-weight: normal">בקליק</span></label>
+                    </div>
+                </div>
+
+
+                <div id="PaiementData" style="margin-top: 30px">
+                    <div id="ClientAmountSpan" class="SpanDiv">
+                        <span class="SpanLbl"><span style="color: indianred">*</span><span id="AmountLabel">סכום:</span></span><br />
+                        <div style="position: relative">
+                            <input id="AmountTxt" name="nope" dir="ltr" type="tel" maxlength="10" class="TextBox" autocomplete="off" style="text-align: right; width: 100%;"
+                                onkeyup="PressedCard(this);CalculateAmount()" onkeydown="TabNextElement(event,'TashloumimTxt')" /><br />
+                            <div id="AmountImgDiv" style="position: absolute; left: 3px; bottom: 0">
+                                <img id="AmountImg" src="Files/Nis.png" style="width: 30px" />
+                            </div>
+                        </div>
+                        <span id="Currency" style="margin: 5px; display: inline-block"><strong id="CurrencyLbl">מטבע: </strong>
+                            <label for="Shekel">
+                                <input type="radio" name="currency" id="Shekel" checked="checked" style="-webkit-appearance: radio;" onchange="CurrencyChange()" /><span id="CurrencyLblShekel">שקל</span></label>&nbsp;&nbsp;<label for="Dollar"><input type="radio" name="currency" id="Dollar" style="-webkit-appearance: radio;" onchange="CurrencyChange()" /><span id="CurrencyLblDollar">דולר</span></label></span>
+                    </div>
+
+                    <div id="ClientTashlumimSpan" class="SpanDiv">
+                        <span class="SpanLbl"><span style="color: indianred" id="TashloumimStar">*</span><span id="TashloumimLabel">תשלומים:</span></span><br />
+                        <input id="TashloumimTxt" name="nope" dir="ltr" type="tel" maxlength="5" class="TextBox" autocomplete="off" style="text-align: right; width: 50%; width: 100%;"
+                            onkeyup="PressedCard(this);CalculateAmount()" onkeydown="TabNextElement(event,'DayTxt','CardTxt')" /><br />
+                        <span id="TashloumimAlertTxt" style="margin: 5px; display: inline-block"></span>
+                    </div>
+                    <div id="Blank3" class="SpanDiv" style="display: inline-block">&nbsp;</div>
+
+                    <div id="ClientKevaDaySpan" class="SpanDiv">
+                        <span class="SpanLbl"><span style="color: indianred">*</span><span id="KevaDayLbl">יום גביה בכל חודש:</span><span id="MasavDay" style="font-size: small"><br />
+                            (1-5-10-15-20-25-28)</span></span><br />
+                        <input id="DayTxt" dir="ltr" name="nope" type="tel" maxlength="2" class="TextBox" autocomplete="off" style="text-align: right; width: 100%;" onkeyup="PressedCard(this);CalculateAmount()" onkeydown="TabNextElement(event,'CardTxt','BankTxt')" /><br />
+                    </div>
+                    <div id="Blank2" class="SpanDiv" style="display: inline-block">&nbsp;</div>
+
+                    <div id="ClientCardSpan" class="SpanDiv" style="position: relative">
+                        <span class="SpanLbl"><span style="color: indianred">*</span><span id="ClientCardLbl">מספר כרטיס אשראי:</span></span><br />
+                        <div style="position: relative">
+                            <input id="CardTxt" dir="ltr" type="tel" name="cardnumber" maxlength="30" class="TextBox" style="text-align: right; width: 100%;" onkeyup="PressedCard(this)" onkeydown="TabNextElement(event,'TokefTxt')" /><br />
+                            <div id="CardImgDiv" style="position: absolute; left: 3px; bottom: 0">
+                                <img src="Files/Cb.png" style="width: 30px" />
+                            </div>
+                        </div>
+                        <div id="ClientChooseCard" style="display: inline-block; margin-top: 2px; font-family: Arial; font-size: small; cursor: pointer; color: white; background-color: #80d6e0; padding: 3px 10px; border-radius: 3px; display: none; -webkit-user-select: none" onclick="if(GetURLParameter('CRM')==''){OpenClientZone('ChooseCard',true,'Pay')} else {$('#CreditCardToken').show()}">הצג רשימת כרטיסים שמורים</div>
+                        <div id="DeleteClientChooseCard" style="display: inline-block; margin-top: 2px; font-family: Arial; font-size: small; cursor: pointer; color: white; background-color: #fa8072; padding: 3px 10px; border-radius: 3px; display: none; -webkit-user-select: none" onclick="DeleteChooseCard()">ביטול שימוש בכרטיס שמור</div>
+
+                    </div>
+
+                    <div id="ClientTokefSpan" class="SpanDiv">
+                        <span class="SpanLbl"><span style="color: indianred">*</span><span id="ClientTokefLbl">תוקף:</span></span><br />
+                        <input id="TokefTxt" dir="ltr" type="tel" name="expiry" maxlength="7" placeholder="לדוגמא 0426" class="TextBox" style="text-align: right; width: 100%;" onkeyup="PressedCard(this)" onkeydown="TabNextElement(event,'CvvTxt')" /><br />
+                    </div>
+                    <div id="ClientCVVSpan" class="SpanDiv">
+                        <span class="SpanLbl"><span style="color: indianred" id="CvvStar">*</span><span id="ClientCVVLbl">3 ספרות בגב הכרטיס:</span></span><br />
+                        <input id="CvvTxt" name="cvv" dir="ltr" type="tel" maxlength="4" class="TextBox" autocomplete="off" style="text-align: right; width: 100%;" onkeydown="TabNextElement(event,'TakanonCb')" /><br />
+                    </div>
+                    <div id="Blank1" class="SpanDiv" style="display: inline-block">&nbsp;</div>
+
+                    <div id="DigitalTransferInfo" style="display: none; margin: 20px 10% 0px 10%;text-align:right">
+                        <ul>
+                            <li>מספר הזהות למעלה חייב להיות תואם לחשבון הבנק שתציינו כאן.</li>
+                            <li>במידה ואפליקציית הבנק פתוחה ברקע, עליכם לסגור אותה לפני לחיצה על המשך.</li>
+                            <li>חשבון משותף? מספר הזהות צריך להתאים לפרטי המשתמש באתר הבנק. אם מספר הזהות שייך לכם ובמעבר לבנק תזדהו עם פרטי משתמש של השותף בחשבון, הפעולה תיכשל.</li>
+                            <li>בבנק דיסקונט ומרכנתיל, יש להזין את מספר החשבון הארוך ולא הקצר.</li>
+                        </ul>
+                        <b>הקלד את פרטי חשבון שלך:</b>
+                    </div>
+
+                    <div>
+                        <div id="ClientBankSpan" class="SpanDiv" style="width: 16%">
+                            <span class="SpanLbl"><span style="color: indianred">*</span><span id="ClientBankLbl">מספר בנק:</span></span><br />
+                            <input id="BankTxt" name="nope" dir="ltr" type="tel" maxlength="2" class="TextBox" autocomplete="off" style="text-align: right; width: 100%" onkeyup='if ($(this).val().length == 2) {$("#SnifTxt").focus()}' onkeydown="TabNextElement(event,'SnifTxt')" /><br />
+                        </div>
+                        <div id="ClientSnifSpan" class="SpanDiv" style="width: 20%">
+                            <span class="SpanLbl"><span style="color: indianred">*</span><span id="ClientSnifLbl">מספר סניף:</span></span><br />
+                            <input id="SnifTxt" name="nope" dir="ltr" type="tel" maxlength="3" class="TextBox" autocomplete="off" style="text-align: right; width: 100%" onkeyup='if ($(this).val().length == 3) {$("#AccountTxt").focus()}' onkeydown="TabNextElement(event,'AccountTxt')" /><br />
+                        </div>
+                        <div id="ClientAccountSpan" class="SpanDiv" style="width: 40%">
+                            <span class="SpanLbl"><span style="color: indianred">*</span><span id="ClientAccountLbl">מספר חשבון:</span></span><br />
+                            <input id="AccountTxt" name="nope" dir="ltr" type="tel" maxlength="9" class="TextBox" autocomplete="off" style="text-align: right; width: 100%;" onkeyup="PressedCard(this)" onkeydown="TabNextElement(event,'TakanonCb')" /><br />
+                        </div>
+                    </div>
+
+                    <div id="CaptchaNedarim" style="display: none; margin-top: 30px;"></div>
+                    <div id="PayBt" style="margin-top: 30px; text-align: center">
+                        <div id="Takanon" style="-webkit-user-select: none; font-size: 15px">
+                            <label for="TakanonCb" style="cursor: pointer;">
+                                <input type="checkbox" id="TakanonCb" style="cursor: pointer" onkeydown="TabNextElement(event,'PayBtBt')" /><span id="TakanonLbl1">אני מסכים ל</span></label><span onclick="$('#TakanonDiv').show()" id="TakanonLbl2" style="color: blue; cursor: pointer">תקנון האתר</span>.
+                        </div>
+                        <input type="button" id="PayBtBt" style="width: 60%; cursor: pointer; color: white" value="אישור תשלום" class="NewCardCss" onclick="PayBtClick()" />
+                    </div>
+                    <div id="PaiementWait" style="text-align: center; margin-top: 20px; display: none">
+                        <img src="Files/wait.gif" /><br />
+                        <span id="WaitText">ממתין לאישור עסקה</span>
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+        <div id="WaitDiv" dir="rtl" style="margin: auto; background-color: white; border-radius: 10px; padding: 20px; text-align: center">
+            טוען נתונים...
+        </div>
+        <div id="PaiementOk" dir="rtl" style="margin-bottom: 5px; font-family: 'Assistant', sans-serif; color: cadetblue; line-height: 25px; display: none; text-align: center; width: 80%; margin-left: auto; margin-right: auto; margin-top: 20px">התשלום בוצע בהצלחה</div>
+
+        <div id="ReloadDiv" style="margin-top: 20px; display: none; width: 50%; margin-left: auto; margin-right: auto">
+            <input type="button" value="איפוס דף תשלום" style="display: block; width: 100%; margin-right: auto; margin-left: auto; background-color: #d0d0d0; padding: 5px" class="NewCardCss" onclick="history.go(0)" />
+        </div>
+
+
+    </div>
+
+    <div id="SecurityLogo" style="text-align: center; width: 98%; max-width: 400px; margin-left: auto; margin-right: auto; user-select: none">
+        <img src="Files/Security.PNG" style="width: 70%" />
+    </div>
+
+    <div id="NedarimFooter" style="text-decoration: none; padding: 20px; padding-top: 5px; padding-bottom: 5px; margin: 20px; color: gray; width: 200px; border-radius: 5px; opacity: 0.7; margin-left: auto; margin-right: auto; text-align: center; font-size: 75%; font-family: 'Assistant', sans-serif;">
+        <img src="nedarim.png" /><br />
+        מופעל באמצעות<br />
+        <strong>נדרים פלוס מבית מטרה הפקות</strong><br />
+        לשיווק ותמיכה: 03-7630543<br />
+        <div id="IP" data-nosnippet></div>
+        <a id="Kehi" style="animation: none; display: none" href="tutsplus://chrome_filter/?site=https://www.matara.pro/nedarimplus/v6/kivro.xml"><b>-------------</b></a>
+
+    </div>
+    <div id="BottomDiv" style="background-color: #eee; height: 0px"></div>
+
+
+
+    <script>
+        var LastMouseDown
+        var LastMouseUp
+        function RestorePass(Action, Message) {
+
+
+            $("#RestorePassDiv").show();
+            $("#LogInAskRestorePass").hide();
+            $("#RestorePassData").html('');
+
+
+
+            if (CheckZeoutJson.RescuePhone !== '') {
+                $("#RestorePassData").append('<b>באמצעות הטלפון:</b><br/>במידה וקו טלפון <span dir="ltr" style="color:cornflowerblue">' + CheckZeoutJson.RescuePhone + '</span> נמצא ברשותכם,<br/><span style="color:cornflowerblue;cursor:pointer;font-weight:600" onclick="RestorePass(\'Phone\')">לחצו כאן</span> לקבלת קוד חדש באמצעות שיחת טלפון.');
+                if (Action == 'Phone' && Message !== undefined) $("#RestorePassData").append('<br />' + Message)
+                if (Action == 'Phone' && Message == undefined) $("#RestorePassData").append('<br/><img src="Files/waitnew.gif" style="width:25px"  />')
+                $("#RestorePassData").append('<br />&nbsp;<br />')
+            }
+            if (CheckZeoutJson.RescueMail !== '') {
+                $("#RestorePassData").append('<b>באמצעות המייל:</b><br/>במידה ומייל <span dir="ltr" style="color:cornflowerblue">' + CheckZeoutJson.RescueMail + '</span> נמצא ברשותכם,<br/><span style="color:cornflowerblue;cursor:pointer;font-weight:600" onclick="RestorePass(\'Email\')">לחצו כאן</span> לקבלת קוד חדש למייל.');
+                if (Action == 'Email' && Message !== undefined) $("#RestorePassData").append('<br />' + Message)
+                if (Action == 'Email' && Message == undefined) $("#RestorePassData").append('<br/><img src="Files/waitnew.gif" style="width:25px"  />')
+                $("#RestorePassData").append('<br />&nbsp;<br />')
+            }
+
+            $("#RestorePassData").append('<b>באמצעות שרות הלקוחות:</b><br/>ניתן ליצור איתנו קשר באמצעות מייל a037630543@gmail.com<br/>או בטלפון 03-7630543 שלוחה 2<br />&nbsp;<br />');
+
+
+            $("#RestorePassData").append('<b>לאחר כניסה למערכת באמצעות הסיסמה הזמנית,<br/>יש להגדיר סיסמה קבועה בתפריט > פרטים אישיים.</b>');
+
+            if (Action !== undefined && Message == undefined) {
+                $.ajax({
+                    url: "../V6/Files/WebServices/GetClientData.aspx?Action=RestorePassword&Type=" + Action,
+                    type: "POST",
+                    data: "Zeout=" + encodeURIComponent(LogInZeout),
+                    context: Text,
+                    timeout: 10000,
+                }).success(function (data) {
+                    if (data.Result == "Error") {
+                        RestorePass(Action, '<b style="color:indianred">' + data.Message + '</b>')
+                    } else {
+                        $('#LogInTxt').unbind()//.bind('keyup', function (e) { if ($("#LogInTxt").val().length == 6 || e.keyCode == "13") { Login() } });
+                        $('#LogInTxt').val('').focus()
+                        RestorePass(Action, '<b style="color:green">' + data.Message + '</b>')
+                    }
+                }).error(function () {
+                    RestorePass(Action, '<b style="color:indianred">תקלת תקשורת. נסה שוב</b>')
+                });
+            }
+        }
+
+
+        function OpenLogIn(Zeout, BypassFirstLogin) {
+            ClientJson = undefined;
+            $("#LogInDiv").show();
+            $("#LogInTxt,#LogInBt,#NewClientDiv").show();
+            $("#LogInWait,#LogInError,#RestorePassDiv,#LogInAskRestorePass").hide();
+            $("#LogInBt").val('המשך');
+
+            $("#LogInTxt").attr('type', 'tel').css('-webkit-text-security', 'none');
+            $("#LogInTxt").val(Zeout).attr('placeholder', 'הקלד מספר זהות').focus();
+            $('#LogInTxt').unbind().bind('keyup', function (e) { if ($("#LogInTxt").val().length == 9 || e.keyCode == "13") { Login() } });
+            LogInZeout = ''
+            if (BypassFirstLogin == true) {
+                LogInZeout = Zeout
+                $("#LogInBt").val('אישור');
+                $("#LogInTxt").val('').css('-webkit-text-security', 'disc').attr('placeholder', 'הקלד סיסמה');
+            } else if (Zeout !== '') {
+                Login()
+            };
+
+        }
+        var LogInZeout
+        var LogInPass
+        var ClientJson
+        var CheckZeoutJson
+        function Login(PopUp) {
+
+            $("#LogInTxt").focus();
+            $("#LogInTxt,#LogInBt").hide()
+            $("#LogInWait").show()
+            $("#LogInError,#LogInAskRestorePass,#RestorePassDiv").hide()
+
+            if (LogInZeout == '') {
+                $("#LogInLbl").show();
+                $("#ClientZoneLbl,#ClientFastLogIn").hide();
+                LogInZeout = $("#LogInTxt").val()
+                $.ajax({
+                    url: "../V6/Files/WebServices/CheckZeoutValidity.aspx?Action=CheckZeoutValidityNew",
+                    type: "POST",
+                    data: "Zeout=" + encodeURIComponent(LogInZeout),
+                    context: Text,
+                    timeout: 10000,
+                }).success(function (data) {
+                    CheckZeoutJson = data;
+                    if (data.Result == "Error") {
+                        LogInZeout = ''
+                        $("#LogInError").html(data.Message).show();
+                        return false
+                    }
+                    if (data.ClientType == "New") {
+                        LogInZeout = ''
+                        $("#LogInError").html('אינך רשום במערכות נדרים').show();
+                        return false;
+                    }
+
+                    if (data.ClientType == "NoPass") { Login(); return false; }
+                    $("#LogInLbl,#NewClientDiv").hide();
+                    $("#ZeoutTxt").val(LogInZeout)
+                    $("#ClientFastLogIn,#LogInAskRestorePass").show();
+                    $("#LogInTxt").val('');
+                    $("#LogInBt").val('אישור');
+                    $("#LogInTxt").attr('type', data.PasswordType).css('-webkit-text-security', 'disc').attr('placeholder', 'הקלד סיסמה');
+                    $('#LogInTxt').unbind().bind('keyup', function (e) { if ($("#LogInTxt").val().length == data.PasswordLength || e.keyCode == "13") { Login() } });
+                }).error(function () {
+                    LogInZeout = ''
+                    $("#LogInError").html('תקלת תקשורת | נסה שוב').show();
+                }).complete(function () {
+                    $("#LogInTxt,#LogInBt").show()
+                    $("#LogInWait").hide()
+                    setTimeout(function () { $("#LogInTxt").focus(); }, 1)
+                });
+                return false;
+            }
+
+            if (PopUp == true) {
+                $("#LogInDiv").show();
+                $("#LogInTxt,#LogInBt,#LogInAskRestorePass").show()
+                $("#LogInWait").hide()
+                $("#LogInTxt").focus();
+                return false
+            }
+
+            $.ajax({
+                url: "../V6/Files/WebServices/GetClientData.aspx?Action=GetClientData",
+                type: "POST",
+                data: "Zeout=" + encodeURIComponent(LogInZeout) + "&LastNum=" + encodeURIComponent($("#LogInTxt").val()),
+                context: Text,
+                timeout: 10000,
+            }).success(function (data) {
+                $("#LogInAskRestorePass").show();
+                if (data == '' || data == 'Pass') {
+                    $("#LogInError").html('<b>סיסמה שגויה</b>').show();
+
+                    return false;
+                }
+                if (data == 'Block') {
+                    $("#LogInError").html('משתמש חסום').show();
+                    return false
+                }
+                if (data == 'Lock') {
+                    $("#LogInError").html('<b>משתמש נעול</b><br/>המתן 15 דקות לפני הניסיון הבא.').show();
+                    return false
+                }
+                if (data == 'NotNumber') {
+                    $("#LogInError").html('נא לרשום סיסמה בספרות בלבד').show();
+                    return false
+                }
+
+                ClientJson = jQuery.parseJSON(data);
+                DeployClientData()
+
+                LogInPass = $("#LogInTxt").val()
+                $("#LogInDiv,#LogInLbl,#ClientFastLogIn").hide();
+                $("#ClientChooseCard,#ClientZoneLbl").show();
+                $("#TakanonCb").attr('checked', 'checked');
+                $("#LogInTxt").blur()
+                $('#ClientNameTxt,#ZeoutTxt,#AdresseTxt,#CityTxt,#PhoneTxt,#MailTxt').attr('disabled', 'disabled')
+                if (GetURLParameter('ClientZone') == '1') { OpenClientZone() }
+                //OpenClientZone("ChooseCard", true, 'Pay')
+            }).error(function () {
+                $("#LogInError").html('תקלת תקשורת | נסה שוב').show();
+            }).complete(function () {
+                $("#LogInTxt,#LogInBt").show()
+                $("#LogInWait").hide()
+                setTimeout(function () { $("#LogInTxt").focus().select(); }, 1)
+            });
+            return false;
+
+        }
+
+
+        var CreditCards = [];
+        var Param1, Param2
+        function CloseClientZone() { $("#ClientZoneDiv").hide(); }
+
+        var Menus = ['ChooseCard', 'ClientData', 'Hk', 'History', 'LogOut']
+        var CurrentMenu
+        function OpenClientZone(Menu, ShowOnlyMenu, PassedParam1, PassedParam2) {
+            CurrentMenu = Menu + ShowOnlyMenu
+            Param1 = PassedParam1
+            Param2 = PassedParam2
+            //console.log("Menu:" + Menu + "\n" + "ShowOnlyMenu:" + ShowOnlyMenu + "\n" + "Param1:" + Param1 + "\n" + "Param2:" + Param2)
+            $("#ClientZoneDiv").show();
+            var CloseOnly = false
+            if (Menu !== undefined && ShowOnlyMenu !== true) { if ($("#" + Menu + "Div").css('display') == 'block') CloseOnly = true; }
+            Menus.forEach(function (MenuName) {
+                $("#" + MenuName + "Div").hide();
+                $("#" + MenuName + "Bt").css('background', 'white').show();
+                if (ShowOnlyMenu == true && Menu !== MenuName) { $("#" + MenuName + "Bt").hide() }
+                $("#" + MenuName + "Error").hide();
+            })
+
+            if (Menu !== undefined && CloseOnly == false) {
+                $("#" + Menu + "Bt").css('background', 'linear-gradient(rgb(166, 171, 175,0) 0%, rgba(166, 171, 175, 0.1) 82%, rgb(166, 171, 175,0.4) 100%)');
+                if (Menu == 'ChooseCard') {
+                    $("#ChooseCardDiv").show();
+                    $("#ChooseCardWait").show();
+                    $("#ChooseCardData").hide()
+                    $("#ChooseCardNew,#NewCardDiv").hide()
+                    $("#ChooseCardInstruction").html('');
+                    $("#ChooseCardError").hide()
+                    if (Param1 == 'UpdateHk') $("#ChooseCardInstruction").html('<b>עדכון כרטיס אשראי להוראת קבע מספר: ' + Param2 + '</br>נא לבחור כרטיס אשראי</b>');
+                    if (Param1 == 'Pay') $("#ChooseCardInstruction").html('לתשלום באמצעות כרטיס שמור, לחץ על הכרטיס הרצוי');
+
+                    $.ajax({
+                        url: "../V6/Files/WebServices/GetClientData.aspx?Action=GetCreditCards",
+                        type: "POST",
+                        data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID),
+                        context: Text,
+                        timeout: 10000,
+                    }).success(function (Json) {
+                        if (Json.Result == "Error") { $("#ChooseCardError").html(Json.Message).show(); return false; }
+                        CreditCards = Json
+                        DeployCreditCards()
+                        $("#ChooseCardNew").show(500)
+                        $("#ChooseCardData").show(500)
+                    }).error(function () {
+                        $("#ChooseCardError").html('תקלת תקשורת | נסה שוב').show();
+                    }).complete(function () {
+                        $("#ChooseCardWait").hide()
+                    });
+                }
+                if (Menu == 'Hk') {
+                    $("#HkDiv").show();
+                    $("#HkWait").show();
+                    $("#HkData").html('').hide()
+                    $.ajax({
+                        url: "../V6/Files/WebServices/GetClientData.aspx?Action=GetHk",
+                        type: "POST",
+                        data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID),
+                        context: Text,
+                        timeout: 10000,
+                    }).success(function (Json) {
+                        if (Json.Result == "Error") { $("#HkError").html(Json.Message).show(); return false; }
+                        if (Json.length == 0) $("#HkError").html('לא נמצאו הוראות קבע').show();
+                        for (var i = 0; i < Json.length; i++) {
+                            var TempHtml = '<div id="Hk' + i + 'Div" style="border:2px solid #eee;border-radius:5px;padding:10px;text-align:right;position:relative;margin:5px auto;-webkit-user-select:none">\
+                                    <div style="display:inline-block">\
+                                        <div>מוסד: <b>' + Json[i].MosadName + '</b></div>'
+                            if (Json[i].Deleted !== '') {
+                                TempHtml += '<div style="font-weight:bold;color:indianred">הוראה לא פעילה</div>'
+                            }
+                            else {
+                                TempHtml += '<div>חיוב הבא: <b>' + Json[i].NextDate + '</b></div>'
+                            };
+
+                            TempHtml += '<div>סכום בכל חודש: <b>' + Json[i].Amount + '</b></div>'
+                            if (Json[i].Groupe !== '') TempHtml += '<div>קטגוריה: <b>' + htmlEncode(Json[i].Groupe) + '</b></div>'
+                            if (Json[i].Avour !== '') TempHtml += '<div>הערות: <b>' + htmlEncode(Json[i].Avour) + '</b></div>'
+                            if (Json[i].Deleted == '') TempHtml += '<div>יתרת חיובים: <b>' + Json[i].Tashlumim + '</b></div>'
+                            TempHtml += '<div>בוצעו עד כה: <b>' + Json[i].Success + '</b> חיובים</div>\
+                                        <div>כרטיס אשראי: <b dir="ltr">*******' + Json[i].CardLastNum + '</b></div>\
+                                        <div>תוקף: <b dir="ltr">' + Json[i].Tokef + '</b></div>\
+                                    </div>'
+                            if (Json[i].Deleted == '') TempHtml += '<div id="Hk' + i + 'Bt" style="text-align:left" dir="ltr"><img id="Hk' + i + 'EditBt" src="Files/EditBt.png" style="width:20px;opacity:0.8;cursor:pointer;padding:10px" onclick="$(\'#Hk' + i + 'EditDiv\').show();$(\'#Hk' + i + 'Bt\').hide()" /></div>'
+                            TempHtml += '<div id="Hk' + i + 'DelDiv" style="display:none"><hr/><span style="color:indianred">נא לאשר שליחת בקשה לביטול הוראת הקבע.</span> \
+                            שימו לב! עד טיפול הבקשה ע"י מנהל המוסד, הוראת הקבע לא תחוייב.<br/>\
+                            <div style="text-align:center;margin-top:10px"><input type="button" style="border:0;background-color:#2ed42e;color:white;font-family:assistant;padding:5px 15px;border-radius:3px;cursor:pointer;font-size:medium" value="אישור" onclick="DeleteHk(' + Json[i].ID + ',' + i + ')" />\
+                            <input type="button" style="border:0;background-color:#c3c3c3;color:white;font-family:assistant;padding:5px 15px;border-radius:3px;cursor:pointer;font-size:medium" value="ביטול" onclick="$(\'#Hk' + i + 'DelDiv\').hide();$(\'#Hk' + i + 'Bt\').show()" /></div></div>'
+                            TempHtml += '<div id="Hk' + i + 'EditDiv" style="display:none"><hr/><b>עדכון פרטים</b><br/><span>לעדכון סכום, מספר תשלומים וכו\', עליכם לשלוח הודעה למוסד.\
+                                        <br/><br/><b>שינוי כרטיס אשראי</b><br/>לעדכון פרטי אשראי חדשים, <span style="color:cornflowerblue;cursor:pointer" onclick="OpenClientZone(\'ChooseCard\',true,\'UpdateHk\',\'' + Json[i].ID + '\')">לחצו כאן</span> ולאחר מכן יש לבחור את הכרטיס הרצוי.</span> \
+                                        <br/><br/><b>ביטול הוראה</b><br/>לשליחת בקשה לביטול הוראת הקבע, <span style="color:cornflowerblue;cursor:pointer" onclick="$(\'#Hk' + i + 'DelDiv\').show();$(\'#Hk' + i + 'EditDiv\').hide()">לחצו כאן</span>.</span> \
+                                        <div style="text-align:center;margin-top:10px"><input type="button" style="border:0;background-color:#c3c3c3;color:white;font-family:assistant;padding:5px 15px;border-radius:3px;cursor:pointer;font-size:medium" value="ביטול" onclick="$(\'#Hk' + i + 'EditDiv\').hide();$(\'#Hk' + i + 'Bt\').show()" /></div></div>'
+                            TempHtml += '</div>'
+                            $("#HkData").append(TempHtml);
+                        }
+                        $("#HkData").show(500)
+                    }).error(function (error) {
+                        console.log(error)
+                        $("#HkError").html('תקלת תקשורת | נסה שוב').show();
+                    }).complete(function () {
+                        $("#HkWait").hide()
+                    });
+                }
+
+
+                if (Menu == 'ClientData') {
+
+                    $("#ClientDataZeout,#ClientDataPass1,#ClientDataPass2,#ClientDataClientName,#ClientDataAdresse,#ClientDataCity,#ClientDataPhone,#ClientDataMail").val('')
+                    if (ClientJson == undefined) {
+                        $("#NewClient").show()
+                        $("#ClientDataZeout").val($("#LogInTxt").val())
+                    } else {
+                        $("#NewClient").hide()
+                        $("#ClientDataClientName").val(ClientJson.Name)
+                        $("#ClientDataAdresse").val(ClientJson.Adresse)
+                        $("#ClientDataCity").val(ClientJson.City)
+                        $("#ClientDataPhone").val(ClientJson.Phone)
+                        $("#ClientDataMail").val(ClientJson.Mail)
+                    }
+
+                    $("#ClientDataDiv").show((ShowOnlyMenu == true ? undefined : 500))
+                    $("#ClientDataWait,#ClientDataError").hide();
+                    $("#ClientDataSave").show()
+
+                }
+
+
+                if (Menu == 'History') {
+                    $("#HistoryDiv").show();
+                    $("#HistoryWait").show();
+                    $("#HistoryData").html('').hide()
+                    $.ajax({
+                        url: "../V6/Files/WebServices/GetClientData.aspx?Action=GetHistory",
+                        type: "POST",
+                        data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID),
+                        context: Text,
+                        timeout: 10000,
+                    }).success(function (HistoryJson) {
+                        if (HistoryJson.Result == "Error") { $("#HistoryError").html(HistoryJson.Message).show(); return false; }
+                        if (HistoryJson.length == 0) $("#HistoryError").html('לא נמצאו עסקאות').show();
+                        for (var i = 0; i < HistoryJson.length; i++) {
+
+                            var HistoryData = "<div style='border:2px solid #eee;border-radius:5px;padding:10px;text-align:right;position:relative;margin:5px auto;-webkit-user-select:none'>\
+                                    <strong>עבור מוסד: " + HistoryJson[i].MosadName + "</strong><br />"
+                                + "<strong>תאריך: </strong><span dir='ltr'>" + HistoryJson[i].Time + "</span><br /><strong>סכום: </strong><span>" + HistoryJson[i].Amount + "</span>"
+                            if (HistoryJson[i].Canceled == "1") HistoryData += "<strong style='color:red'> מבוטל</strong>"
+                            HistoryData += "<br />"
+                            if (HistoryJson[i].Type == 'הו"ק' || HistoryJson[i].Tashloumim !== '1') {
+                                HistoryData += "<strong>תשלומים: </strong><span>"
+                                if (HistoryJson[i].Type == 'הו"ק') { HistoryData += 'הו"ק' } else { HistoryData += HistoryJson[i].Tashloumim }
+                                HistoryData += "</span><br />"
+                            }
+                            if (HistoryJson[i].Confirmation !== '0000000' && HistoryJson[i].Confirmation !== '') {
+                                HistoryData += "<strong>מס' אישור: </strong><span>" + HistoryJson[i].Confirmation + "</span><br />"
+                            }
+                            if (HistoryJson[i].Groupe !== '') {
+                                HistoryData += "<strong>עבור: </strong><span>" + HistoryJson[i].Groupe + "</span><br />"
+                            }
+                            if (HistoryJson[i].Avour !== '') {
+                                HistoryData += "<strong>הערות: </strong><span>" + HistoryJson[i].Avour + "</span><br />"
+                            }
+                            HistoryData += "<strong>4 ספרות: </strong><span>" + HistoryJson[i].LastNum + "</span><br />"
+                            if (HistoryJson[i].InvoiceId !== '') HistoryData += "<strong>קבלה: </strong><span id='Invoice" + i + "' style='color:#03a9f4;font-weight:600;cursor:pointer;'>לחץ כאן להצגה</span><br />";
+
+                            //if (HistoryJson[i].MosadId !== '' && (_Artsi == '1' || _Reports !== '') && HistoryJson[i].MosadId !== CurrentMosad) {
+                            //    HistoryData += "<div style='text-align:left'>"
+                            //       + "<input type='button' id='HistoryDataMosad" + i + "' value='עבור למוסד זה + הצג הסטוריה' class='NewCardCss' style='background-color:white;margin-top:10px;width:60%;padding:4px;border:2px solid #eee;color:cadetblue;font-weight:normal;font-size:medium' />"
+                            //       + "</div>"
+                            //}
+
+                            HistoryData += "</div>"
+
+
+                            $("#HistoryData").append(HistoryData);
+                            (function (i) {
+                                $("#Invoice" + i).unbind().bind('click', function () {
+                                    GetInvoiceLink(HistoryJson[i].Id, HistoryJson[i].InvoiceId);
+                                });
+                            })(i);
+
+                            //if (HistoryJson[i].MosadId !== '' && (_Artsi == '1' || _Reports !== '') && HistoryJson[i].MosadId !== CurrentMosad) {
+                            //    (function (i) {
+                            //        $("#HistoryDataMosad" + i).unbind().bind('click', function () {
+                            //            HistoryOnlyThisMosad = true;
+                            //            GetMosadData(HistoryJson[i].MosadId, "History");
+                            //        });
+                            //    })(i);
+                            //}
+                        };
+
+
+                        //    var TempHtml = '<div id="Hk' + i + 'Div" style="border:2px solid #eee;border-radius:5px;padding:10px;text-align:right;position:relative;margin:5px auto;-webkit-user-select:none">\
+                        //        <div style="display:inline-block">\
+                        //            <div>מוסד: <b>' + Json[i].MosadName + '</b></div>'
+                        //    if (Json[i].Deleted !== '') {
+                        //        TempHtml += '<div style="font-weight:bold;color:indianred">הוראה לא פעילה</div>'
+                        //    }
+                        //    else {
+                        //        TempHtml += '<div>חיוב הבא: <b>' + Json[i].NextDate + '</b></div>'
+                        //    };
+
+                        //    TempHtml += '<div>סכום בכל חודש: <b>' + Json[i].Amount + '</b></div>'
+                        //    if (Json[i].Groupe !== '') TempHtml += '<div>קטגוריה: <b>' + htmlEncode(Json[i].Groupe) + '</b></div>'
+                        //    if (Json[i].Avour !== '') TempHtml += '<div>הערות: <b>' + htmlEncode(Json[i].Avour) + '</b></div>'
+                        //    if (Json[i].Deleted == '') TempHtml += '<div>יתרת חיובים: <b>' + Json[i].Tashlumim + '</b></div>'
+                        //    TempHtml += '<div>בוצעו עד כה: <b>' + Json[i].Success + '</b> חיובים</div>\
+                        //            <div>כרטיס אשראי: <b dir="ltr">*******' + Json[i].CardLastNum + '</b></div>\
+                        //            <div>תוקף: <b dir="ltr">' + Json[i].Tokef + '</b></div>\
+                        //        </div>'
+                        //    if (Json[i].Deleted == '') TempHtml += '<div id="Hk' + i + 'Bt" style="text-align:left" dir="ltr"><img id="Hk' + i + 'EditBt" src="Files/EditBt.png" style="width:20px;opacity:0.8;cursor:pointer;padding:10px" onclick="$(\'#Hk' + i + 'EditDiv\').show();$(\'#Hk' + i + 'Bt\').hide()" /></div>'
+                        //    TempHtml += '<div id="Hk' + i + 'DelDiv" style="display:none"><hr/><span style="color:indianred">נא לאשר שליחת בקשה לביטול הוראת הקבע.</span> \
+                        //שימו לב! עד טיפול הבקשה ע"י מנהל המוסד, הוראת הקבע לא תחוייב.<br/>\
+                        //<div style="text-align:center;margin-top:10px"><input type="button" style="border:0;background-color:#2ed42e;color:white;font-family:assistant;padding:5px 15px;border-radius:3px;cursor:pointer;font-size:medium" value="אישור" onclick="DeleteHk(' + Json[i].ID + ',' + i + ')" />\
+                        //<input type="button" style="border:0;background-color:#c3c3c3;color:white;font-family:assistant;padding:5px 15px;border-radius:3px;cursor:pointer;font-size:medium" value="ביטול" onclick="$(\'#Hk' + i + 'DelDiv\').hide();$(\'#Hk' + i + 'Bt\').show()" /></div></div>'
+                        //    TempHtml += '<div id="Hk' + i + 'EditDiv" style="display:none"><hr/><b>עדכון פרטים</b><br/><span>לעדכון סכום, מספר תשלומים וכו\', עליכם לשלוח הודעה למוסד.\
+                        //            <br/><br/><b>שינוי כרטיס אשראי</b><br/>לעדכון פרטי אשראי חדשים, <span style="color:cornflowerblue;cursor:pointer" onclick="OpenClientZone(\'ChooseCard\',true,\'UpdateHk\',\'' + Json[i].ID + '\')">לחצו כאן</span> ולאחר מכן יש לבחור את הכרטיס הרצוי.</span> \
+                        //            <br/><br/><b>ביטול הוראה</b><br/>לשליחת בקשה לביטול הוראת הקבע, <span style="color:cornflowerblue;cursor:pointer" onclick="$(\'#Hk' + i + 'DelDiv\').show();$(\'#Hk' + i + 'EditDiv\').hide()">לחצו כאן</span>.</span> \
+                        //            <div style="text-align:center;margin-top:10px"><input type="button" style="border:0;background-color:#c3c3c3;color:white;font-family:assistant;padding:5px 15px;border-radius:3px;cursor:pointer;font-size:medium" value="ביטול" onclick="$(\'#Hk' + i + 'EditDiv\').hide();$(\'#Hk' + i + 'Bt\').show()" /></div></div>'
+                        //    TempHtml += '</div>'
+                        //    $("#HkData").append(TempHtml);
+
+                        $("#HistoryData").show(500)
+                    }).error(function (error) {
+                        console.log(error)
+                        $("#HistoryError").html('תקלת תקשורת | נסה שוב').show();
+                    }).complete(function () {
+                        $("#HistoryWait").hide()
+                    });
+                }
+
+
+            }
+        }
+
+        function GetInvoiceLink(CreditCardHistoryId, InvoiceId) {
+            $.ajax({
+                url: "../V6/Files/WebServices/GetClientData.aspx?Action=GetInvoiceLink&CreditCardHistoryId=" + CreditCardHistoryId + "&InvoiceId=" + InvoiceId,
+                type: "POST",
+                data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID),
+                context: Text,
+                timeout: 10000,
+            }).success(function (Json) {
+                if (Json.Result == "Error") {
+                    EAlertConfirm(Json.Message);
+                }
+                else {
+                    window.open(Json.Message, "_blank")
+                }
+            }).error(function () {
+                EAlertConfirm('תקלת תקשורת | נסה שוב')
+                $('#Hk' + Index + 'DelDiv').show()
+            });
+
+        }
+
+
+        function DeleteHk(KevaId, Index) {
+            $('#Hk' + Index + 'DelDiv').hide()
+
+            $.ajax({ //מחיקת הוראת קבע
+                url: "../V6/Files/WebServices/GetClientData.aspx?Action=DeleteKeva",
+                type: "POST",
+                data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID) + "&KevaId=" + encodeURIComponent(KevaId),
+                context: Text,
+                timeout: 10000,
+            }).success(function (Json) {
+                if (Json.Result == "Error") {
+                    EAlertConfirm(Json.Message);
+                    $('#Hk' + Index + 'DelDiv').show()
+                    return false;
+                }
+                $('#Hk' + Index + 'Div').prepend('<div style="font-weight:bold;color:indianred">הוראה לא פעילה</div>')
+            }).error(function () {
+                EAlertConfirm('תקלת תקשורת | נסה שוב')
+                $('#Hk' + Index + 'DelDiv').show()
+            });
+
+        }
+
+        var ChoosedCard = ''
+        function DeleteChooseCard() {
+            $("#ClientChooseCard").show();
+            $("#DeleteClientChooseCard").hide();
+            $("#CardTxt,#TokefTxt,#CvvTxt").removeAttr('disabled').val('')
+            ChoosedCard = ''
+        }
+
+        function UpdateClientData() {
+
+            if ($("#ClientDataPass1").val() !== $("#ClientDataPass2").val()) {
+                $("#ClientDataError").html('הסיסמאות לא תואמות').show()
+                return false;
+            }
+
+            $("#ClientDataWait").show()
+            $("#ClientDataError,#ClientDataSave").hide()
+
+
+
+            if (ClientJson !== undefined) {
+                $.ajax({
+                    url: "../V6/Files/WebServices/GetClientData.aspx?Action=UpdateClientData",
+                    type: "POST",
+                    data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID)
+                        + "&Name=" + encodeURIComponent($("#ClientDataClientName").val())
+                        + "&Adresse=" + encodeURIComponent($("#ClientDataAdresse").val())
+                        + "&City=" + encodeURIComponent($("#ClientDataCity").val())
+                        + "&Mail=" + encodeURIComponent($("#ClientDataMail").val())
+                        + "&Phone=" + encodeURIComponent($("#ClientDataPhone").val())
+                        + "&NewPass=" + encodeURIComponent($("#ClientDataPass1").val())
+                    ,
+                    context: Text,
+                    timeout: 10000,
+                }).success(function (Json) {
+                    if (Json.Result == "Error") {
+                        $("#ClientDataError").html(Json.Message).show()
+                        return false;
+                    }
+                    OpenClientZone()
+                    ClientJson.Name = $("#ClientDataClientName").val()
+                    ClientJson.Adresse = $("#ClientDataAdresse").val()
+                    ClientJson.City = $("#ClientDataCity").val()
+                    ClientJson.Phone = $("#ClientDataPhone").val()
+                    ClientJson.Mail = $("#ClientDataMail").val()
+                    DeployClientData()
+                }).error(function (error) {
+                    $("#ClientDataError").html('תקלת תקשורת | נסה שוב').show();
+                }).complete(function () {
+                    $("#ClientDataWait").hide()
+                    $("#ClientDataSave").show()
+                });
+            }
+            else {
+
+
+                $.ajax({
+                    url: "../V6/Files/WebServices/GetClientData.aspx?Action=NewClient",
+                    type: "POST",
+                    data: "Zeout=" + encodeURIComponent($("#ClientDataZeout").val())
+                        + "&Pass=" + encodeURIComponent($("#ClientDataPass1").val())
+                        + "&Name=" + encodeURIComponent($("#ClientDataClientName").val())
+                        + "&Adresse=" + encodeURIComponent($("#ClientDataAdresse").val())
+                        + "&City=" + encodeURIComponent($("#ClientDataCity").val())
+                        + "&Mail=" + encodeURIComponent($("#ClientDataMail").val())
+                        + "&Phone=" + encodeURIComponent($("#ClientDataPhone").val())
+                    ,
+                    context: Text,
+                    timeout: 10000,
+                }).success(function (Json) {
+                    if (Json.Result == "Error") {
+                        $("#ClientDataError").html(Json.Message).show()
+                        return false;
+                    }
+                    $('#ClientZoneDiv').hide();
+                    OpenLogIn($("#ClientDataZeout").val(), true)
+                    $("#LogInTxt").val($("#ClientDataPass1").val())
+                    Login()
+                }).error(function (error) {
+                    $("#ClientDataError").html('תקלת תקשורת | נסה שוב').show();
+                }).complete(function () {
+                    $("#ClientDataWait").hide()
+                    $("#ClientDataSave").show()
+                });
+            }
+        }
+        function DeployClientData() {
+            $("#ClientNameTxt").val(ClientJson.Name)
+            $("#ZeoutTxt").val(ClientJson.Zeout)
+            $("#AdresseTxt").val(ClientJson.Adresse)
+            $("#CityTxt").val(ClientJson.City)
+            $("#PhoneTxt").val(ClientJson.Phone)
+            $("#MailTxt").val(ClientJson.Mail)
+        }
+        function OpenNewCardDiv() {
+            if ($('#NewCardDiv').css('display') == 'none') {
+                NewCardJson = {}
+                $('#NewCardNumber,#NewCardTokef,#NewCardCvv,#NewCardName').val('');
+                $('#NewCardWait,#NewCardError').hide();
+                $('#NewCardDiv,#NewCardBt,#NewCardNumberDiv').show(500);
+            }
+        }
+        function AddCard() {
+            $('#NewCardWait').show();
+            $('#NewCardBt,#NewCardError').hide();
+            $.ajax({
+                url: "../V6/Files/WebServices/GetClientData.aspx?Action=AddCard",
+                type: "POST",
+                data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID) + "&CardId=" + encodeURIComponent(AddCardJson.CardID)
+                    + "&CardNumber=" + encodeURIComponent($("#NewCardNumber").val()) + "&Tokef=" + encodeURIComponent($("#NewCardTokef").val()) + "&Cvv=" + encodeURIComponent($("#NewCardCvv").val()) + "&CardName=" + encodeURIComponent($("#NewCardName").val()),
+                context: Text,
+                timeout: 30000,
+            }).success(function (Json) {
+                if (Json.Result == "Error") {
+                    $("#NewCardError").html(Json.Message).show(); return false;
+                }
+                if (AddCardJson.CardID !== undefined) {
+                    for (var j = 0; j < CreditCards.length; j++) {
+                        if (CreditCards[j].CardID == AddCardJson.CardID) { CreditCards.splice(j, 1, Json); }
+                    }
+                } else {
+                    CreditCards.unshift(Json)
+                }
+                DeployCreditCards()
+                $('#NewCardDiv').hide();
+                $('#NewCardLbl').html('הוספת כרטיס אשראי חדש');
+                AddCardJson = {};
+            }).error(function (error) {
+                $("#NewCardError").html('תקלת תקשורת | נסה שוב').show();
+            }).complete(function () {
+                $("#NewCardWait").hide()
+                $("#NewCardBt").show()
+            });
+        }
+
+        var AddCardJson = {}
+        function UpdateCard(Json, Type) {
+            AddCardJson = Json
+            if (Type == 'Edit') $('#NewCardLbl').html('עדכון כרטיס אשראי<br/>' + AddCardJson.CardNumber);
+            if (Type == 'Replace') $('#NewCardLbl').html('החלפת כרטיס אשראי<br/>' + AddCardJson.CardNumber);
+
+            $('#NewCardLbl').show()
+
+            $('#NewCardNumber').val('')
+            if (Type == 'Edit') { $('#NewCardNumberDiv').hide() } else { $('#NewCardNumberDiv').show() }
+            if (Type == 'Edit') { $('#NewCardTokef').val(AddCardJson.Tokef) } else { $('#NewCardTokef').val('') }
+            $('#NewCardCvv').val('')
+            $('#NewCardName').val(AddCardJson.NickName)
+
+            $('#NewCardWait,#NewCardError').hide();
+            $('#NewCardDiv,#NewCardBt').show(500);
+
+            if (Type == 'Edit') { $('#NewCardTokef').focus().select() } else { $('#NewCardNumber').focus() }
+        }
+
+        function DeployCreditCards() {
+            var Json = CreditCards
+            $("#ChooseCardData").html('')
+            if (Json.length == 0) { $("#ChooseCardError").html('לא נמצאו כרטיסים שמורים').show(); } else { $("#ChooseCardError").hide() }
+            for (var i = 0; i < Json.length; i++) {
+                var TempHtml = '<div id="Credit' + i + 'BlockDiv" style="border:2px solid #eee;border-radius:5px;padding:10px;text-align:right;position:relative;margin:5px auto;-webkit-user-select:none"><div id="Credit' + i + 'Div" style="' + (Param1 !== undefined ? 'cursor:pointer' : '') + '"><img src="Files/CreditCardBt.png" class="SmallIcon" />\
+                                            <div style="display:inline-block;margin-right:15px"><div dir="ltr" style="font-weight:bold">' + Json[i].CardNumber + '</div><div>תוקף: ' + Json[i].Tokef + '</div>'
+                if (Json[i].NickName !== '') TempHtml += '<div>כינוי: <span style="font-weight:600">' + htmlEncode(Json[i].NickName) + '</span></div>'
+                TempHtml += '</div></div><div id="Credit' + i + 'Bt" style="position:absolute;bottom:0;left:0" dir="ltr"><img src="Files/EditBt.png" style="width:20px;opacity:0.8;cursor:pointer;padding:10px" onclick="$(\'#Credit' + i + 'MainDiv,#Credit' + i + 'EditDiv\').show();$(\'#Credit' + i + 'Bt,#Credit' + i + 'DelDiv\').hide();" /></div>'
+                TempHtml += '<div id="Credit' + i + 'MainDiv" style="display:none;padding-top:10px">\
+                            <hr/>\
+                            <div id="Credit' + i + 'EditDiv">\
+                            <b>עדכון כרטיס</b><br/>מיועד לעדכון תוקף וכינוי.<br/><span style="color:cornflowerblue;cursor:pointer" id="Credit' + i + 'EditLbl">לחץ כאן לעדכון.</span>\
+                            <br/><br/><b>החלפת כרטיס</b><br/>מיועד לשינוי כרטיס אשראי בכל הוראות הקבע שנגבות מהכרטיס הישן. שימו לב! במידה ואינכם מעוניינים להחליף כרטיס בכל הוראות הקבע, עליכם ללחוץ למטה על הוספת כרטיס, ולא להשתמש בלחצן החלפה.<br/><span style="color:cornflowerblue;cursor:pointer" id="Credit' + i + 'ReplaceLbl">לחץ כאן להחלפה.</span>\
+                            <br/><br/><b>מחיקת כרטיס</b><br/>שימו לב! פעולה זו רק תסיר את הכרטיס מהרשימה הזו ולא תשפיע על הוראות קבע שנגבות מכרטיס זה.<br/><span style="color:cornflowerblue;cursor:pointer" onclick="$(\'#Credit' + i + 'DelDiv\').show();$(\'#Credit' + i + 'EditDiv\').hide();">לחץ כאן למחיקה.</span>\
+                            <div style="text-align:center;margin-top:15px"><input type="button" style="border:0;background-color:#c3c3c3;color:white;font-family:assistant;padding:5px 15px;border-radius:3px;cursor:pointer;font-size:medium" value="ביטול" onclick="$(\'#Credit' + i + 'MainDiv\').hide();$(\'#Credit' + i + 'Bt\').show()" /></div>\
+                            </div>\
+                            <div id="Credit' + i + 'DelDiv"><b style="color:indianred">נא לאשר מחיקת כרטיס אשראי.</b> \
+                            <div style="text-align:center;margin-top:10px"><input id="Credit' + i + 'DelBt" type="button" style="border:0;background-color:#2ed42e;color:white;font-family:assistant;padding:5px 15px;border-radius:3px;cursor:pointer;font-size:medium" value="אישור"  />\
+                            <input type="button" style="border:0;background-color:#c3c3c3;color:white;font-family:assistant;padding:5px 15px;border-radius:3px;cursor:pointer;font-size:medium" value="ביטול" onclick="$(\'#Credit' + i + 'MainDiv\').hide();$(\'#Credit' + i + 'Bt\').show()" /></div></div></div>'
+                TempHtml += '</div>'
+                $("#ChooseCardData").append(TempHtml);
+                (function (i) {
+                    $("#Credit" + i + "EditLbl").unbind().bind('click', function () {
+                        UpdateCard(Json[i], 'Edit'); $('#Credit' + i + 'MainDiv').hide(); $('#Credit' + i + 'Bt').show()
+                    });
+                    $("#Credit" + i + "ReplaceLbl").unbind().bind('click', function () {
+                        UpdateCard(Json[i], 'Replace'); $('#Credit' + i + 'MainDiv').hide(); $('#Credit' + i + 'Bt').show()
+                    });
+                    $("#Credit" + i + "Div").unbind().bind('click', function () {
+                        ChoosedCard = ClientJson.SessionId + '|' + ClientJson.SessionPass + "|" + Json[i].CardID + '|' + Json[i].CardHash;
+                        if (Param1 == 'UpdateHk') { //עדכון כרטיס אשראי של הוראת קבע
+                            $.ajax({
+                                url: "../V6/Files/WebServices/GetClientData.aspx?Action=UpdateKevaCard",
+                                type: "POST",
+                                data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID) + "&ChoosedCard=" + encodeURIComponent(ChoosedCard) + "&KevaId=" + encodeURIComponent(Param2),
+                                context: Text,
+                                timeout: 10000,
+                            }).success(function (Json) {
+                                if (Json.Result == "Error") { EAlertConfirm(Json.Message); return false }
+                                IAlertConfirm("הוראת הקבע עודכנה בהצלחה")
+                                OpenClientZone('Hk')
+                            }).error(function () {
+                                $("#ChooseCardError").html('תקלת תקשורת | נסה שוב').show();
+                            }).complete(function () {
+                                $("#ChooseCardWait").hide()
+                            });
+                        } else if (Param1 == 'Pay') {          //בחירת כרטיס אשראי עבור תשלום                                 
+                            $("#CardTxt").val(Json[i].CardNumber)
+                            $("#TokefTxt").val(Json[i].Tokef)
+                            $("#CvvTxt").val('***')
+                            $("#CardTxt,#TokefTxt,#CvvTxt").attr('disabled', 'disabled')
+                            CloseClientZone();
+                            $("#ClientChooseCard").hide();
+                            $("#DeleteClientChooseCard").show();
+                        }
+                    });
+                    $("#Credit" + i + "DelBt").unbind().bind('click', function () {
+                        $("#Credit" + i + "BlockDiv").hide()
+                        var CardId = Json[i].CardID
+                        $.ajax({ //מחיקת כרטיס אשראי
+                            url: "../V6/Files/WebServices/GetClientData.aspx?Action=DeleteCard",
+                            type: "POST",
+                            data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID) + "&CardId=" + encodeURIComponent(CardId),
+                            context: Text,
+                            timeout: 10000,
+                        }).success(function (Json) {
+                            if (Json.Result == "Error") {
+                                EAlertConfirm(Json.Message);
+                                $("#Credit" + i + "BlockDiv").show()
+                                return false;
+                            }
+                            for (var j = 0; j < CreditCards.length; j++) {
+                                if (CreditCards[j].CardID == CardId) CreditCards.splice(j, 1);
+                            }
+                        }).error(function () {
+                            EAlertConfirm('תקלת תקשורת | נסה שוב')
+                            $("#Credit" + i + "BlockDiv").show()
+                        });
+                    });
+                })(i);
+            }
+
+        }
+
+        function ClientLogOut() {
+            $.ajax({ url: "../V6/Files/WebServices/GetClientData.aspx?Action=LogOut", type: "POST", data: "SessionId=" + encodeURIComponent(ClientJson.SessionId) + "&SessionPass=" + encodeURIComponent(ClientJson.SessionPass) + "&ClientId=" + encodeURIComponent(ClientJson.ID), context: Text, timeout: 1000 })
+            var cookies = document.cookie.split(";");
+            for (var i = 0; i < cookies.length; i++) {
+                var spcook = cookies[i].split("=");
+                if (spcook[0].indexOf('nedarim_client') > -1) {
+                    document.cookie = "nedarim_client=;domain=matara.pro;path=/;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                }
+            }
+
+            ClientJson = undefined;
+            CloseClientZone();
+            DeleteChooseCard();
+            $("#ClientNameTxt").val('')
+            $("#ZeoutTxt").val('')
+            $("#AdresseTxt").val('')
+            $("#CityTxt").val('')
+            $("#PhoneTxt").val('')
+            $("#MailTxt").val('')
+            $("#LogInLbl").show();
+            $("#ClientChooseCard,#ClientZoneLbl,#ClientFastLogIn,#LogInDiv,#ClientChooseCard").hide();
+            $('#ClientNameTxt,#ZeoutTxt,#AdresseTxt,#CityTxt,#PhoneTxt,#MailTxt').removeAttr('disabled')
+            if (GetURLParameter('ClientZone') == '1') { OpenLogIn('', false); }
+        }
+
+    </script>
+
+    <div id="CreditCardToken" class="modal" style="font-family: 'Assistant', sans-serif;" onclick='if(LastMouseUp.target == this && LastMouseDown.target == this) $(this).hide()'>
+        <div class="modal-content" id="ClientZoneModal" dir="rtl" style="width: 70%; max-width: 400px; margin: 150px auto; background-color: white">
+            <div class="ClosingBt" style="position: absolute;" onclick="$('#CreditCardToken').hide();">X</div>
+            <div style="font-weight: 600; margin-top: 25px">לתשלום באמצעות כרטיס שמור, לחץ על הכרטיס הרצוי</div>
+            <div id="CreditCardTokenData"></div>
+            <hr style="margin-top: 20px; border: 1px solid #eee" />
+            <div style="text-align: center">
+                <img style="width: 60px" src="Secure.png" />
+            </div>
+            <div style="font-size: small">
+                מערכות נדרים פלוס מאובטחות<br />
+                ומוסמכות לפי תקן PCI DSS LEVEL 1.
+            </div>
+        </div>
+    </div>
+
+    <div id="ClientZoneDiv" class="modal" style="font-family: 'Assistant', sans-serif;">
+        <div class="modal-content" id="ClientZoneModal" dir="rtl" style="width: 70%; max-width: 400px; margin: 80px auto; background-color: white">
+            <div class="ClosingBt" style="position: absolute;" onclick="$('#ClientZoneDiv').hide();if(GetURLParameter('ClientZone') == '1') { OpenLogIn('', false);}">X</div>
+            <div style="height: 20px"></div>
+            <div id="ChooseCardBt" class="ClientZoneBt" onclick="if(CurrentMenu!=='ChooseCardtrue'){OpenClientZone('ChooseCard')};">
+                <img src="Files/CreditCardBt.png" style="height: 35px" /><br />
+                כרטיסי האשראי שלי
+            </div>
+            <div id="ChooseCardDiv" style="max-width: 300px; text-align: center; margin-right: auto; margin-left: auto; margin-bottom: 40px">
+                <div id="ChooseCardInstruction" style="font-size: smaller">לתשלום באמצעות כרטיס שמור, לחץ על הכרטיס הרצוי</div>
+                <div style="margin-top: 10px">
+                    <div id="ChooseCardData"></div>
+                    <div id="ChooseCardNew" style="border: 2px solid #eee; border-radius: 5px; padding: 10px; text-align: right; position: relative; margin: 5px auto; -webkit-user-select: none">
+                        <div onclick="OpenNewCardDiv()" style="cursor: pointer">
+                            <img src="Files/NewCreditCardBt.png" class="SmallIcon" />
+                            <div id="NewCardLbl" style="display: inline-block; margin-right: 15px; font-weight: 600;">הוספת כרטיס אשראי חדש</div>
+                        </div>
+                        <div id="NewCardDiv" style="display: none; margin-top: 20px">
+                            <div id="NewCardNumberDiv">
+                                <div style="text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px"><span style="color: indianred">* </span>מספר כרטיס:</div>
+                                <input id="NewCardNumber" name="cardnumber" dir="ltr" type="tel" maxlength="20" class="TextBox" autocomplete="cc-number" style="text-align: center; width: 100%;" />
+                            </div>
+                            <div style="margin-top: 10px; text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px"><span style="color: indianred">* </span>תוקף:</div>
+                            <input id="NewCardTokef" dir="ltr" type="tel" maxlength="7" placeholder="לדוגמא 1223" class="TextBox" autocomplete="cc-exp" style="text-align: center; width: 100%;" />
+                            <div style="margin-top: 10px; text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px"><span style="color: indianred">* </span>CVV:</div>
+                            <input id="NewCardCvv" name="cvc" dir="ltr" type="tel" maxlength="4" class="TextBox" autocomplete="cc-csc" style="text-align: center; width: 100%;" />
+                            <div style="margin-top: 10px; text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px">כינוי:</div>
+                            <input id="NewCardName" name="ccname" dir="rtl" type="text" maxlength="50" class="TextBox" autocomplete="cc-name" style="text-align: center; width: 100%;" />
+                            <div id="NewCardBt" style="text-align: center; margin-top: 10px">
+                                <input type="button" style="border: 0; background-color: #2ed42e; color: white; font-family: assistant; padding: 5px 15px; border-radius: 3px; cursor: pointer; font-size: medium"
+                                    value="אישור" onclick="AddCard()" />
+                                <input type="button" style="border: 0; background-color: #c3c3c3; color: white; font-family: assistant; padding: 5px 15px; border-radius: 3px; cursor: pointer; font-size: medium" value="ביטול" onclick=" $('#NewCardLbl').html('הוספת כרטיס אשראי חדש'); $('#NewCardDiv').hide(); AddCardJson = {};" />
+                            </div>
+                            <div id="NewCardWait" style="text-align: center; margin-top: 10px">
+                                <img src="Files/waitnew.gif" style="width: 50px" />
+                            </div>
+                            <div id="NewCardError" style="text-align: center; margin-top: 10px; color: indianred"></div>
+                        </div>
+                    </div>
+                    <div id="ChooseCardWait" style="text-align: center; margin-top: 20px; display: none">
+                        <img src="Files/waitnew.gif" style="width: 50px" />
+                    </div>
+                    <div id="ChooseCardError" style="color: indianred"></div>
+                </div>
+            </div>
+            <div id="HkBt" class="ClientZoneBt" onclick="OpenClientZone('Hk')">
+                <img src="Files/KevaBt.png" style="height: 35px" /><br />
+                הוראות הקבע שלי
+            </div>
+            <div id="HkDiv" style="max-width: 300px; text-align: center; margin-right: auto; margin-left: auto; margin-bottom: 40px">
+                <div style="margin-top: 10px">
+                    <div id="HkWait" style="text-align: center; margin-top: 20px; display: none">
+                        <img src="Files/waitnew.gif" style="width: 50px" />
+                    </div>
+                    <div id="HkData"></div>
+                    <div id="HkError" style="color: indianred"></div>
+                </div>
+            </div>
+            <div id="HistoryBt" class="ClientZoneBt" onclick="OpenClientZone('History')">
+                <img src="Files/HistoryBt.png" style="height: 35px" /><br />
+                הסטוריית עסקאות
+            </div>
+            <div id="HistoryDiv" style="max-width: 300px; text-align: center; margin-right: auto; margin-left: auto; margin-bottom: 40px">
+                <div style="margin-top: 10px">
+                    <div id="HistoryWait" style="text-align: center; margin-top: 20px; display: none">
+                        <img src="Files/waitnew.gif" style="width: 50px" />
+                    </div>
+                    <div id="HistoryData"></div>
+                    <div id="HistoryError" style="color: indianred"></div>
+                </div>
+            </div>
+            <div id="ClientDataBt" class="ClientZoneBt" onclick="if(ClientJson!==undefined) OpenClientZone('ClientData')">
+                <img src="Files/PersoDetail.png" style="height: 35px" /><br />
+                פרטים אישיים
+            </div>
+            <div id="ClientDataDiv" style="max-width: 300px; text-align: center; margin-right: auto; margin-left: auto; margin-bottom: 40px">
+                <div style="height: 10px"></div>
+                <div style="text-align: right; margin-top: -10px;">
+                    <div id="NewClient">
+                        <div style="margin-top: 10px; text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px">מספר זהות:</div>
+                        <input id="ClientDataZeout" dir="ltr" type="tel" maxlength="9" class="TextBox" autocomplete="off" style="text-align: right; width: 100%" />
+                    </div>
+                    <div style="margin-top: 10px; text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px">שם משפחה ושם פרטי:</div>
+                    <input id="ClientDataClientName" dir="rtl" type="text" maxlength="50" class="TextBox" autocomplete="off" style="text-align: right; width: 100%;" />
+                    <div style="margin-top: 10px; text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px">כתובת:</div>
+                    <input id="ClientDataAdresse" dir="rtl" type="text" maxlength="50" class="TextBox" autocomplete="off" style="text-align: right; width: 100%;" />
+                    <div style="margin-top: 10px; text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px">עיר:</div>
+                    <input id="ClientDataCity" dir="rtl" type="text" maxlength="50" class="TextBox" autocomplete="off" style="text-align: right; width: 100%;" />
+                    <div style="margin-top: 10px; text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px">טלפון:</div>
+                    <input id="ClientDataPhone" dir="ltr" type="tel" maxlength="50" class="TextBox" autocomplete="off" style="text-align: right; width: 100%;" />
+                    <div style="margin-top: 10px; text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px">מייל:</div>
+                    <input id="ClientDataMail" dir="ltr" type="email" maxlength="50" class="TextBox" autocomplete="off" style="text-align: right; width: 100%;" />
+                    <div style="margin-top: 10px; text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px">סיסמה:</div>
+                    <input id="ClientDataPass1" dir="ltr" type="text" maxlength="50" class="TextBox" autocomplete="new-password" style="text-align: right; width: 100%; -webkit-text-security: disc" />
+                    <div style="margin-top: 10px; text-align: right; width: 100%; margin-right: 5px; color: #808080; font-size: 15px">הקלד סיסמה פעם נוספת:</div>
+                    <input id="ClientDataPass2" dir="ltr" type="text" maxlength="50" class="TextBox" autocomplete="new-password" style="text-align: right; width: 100%; -webkit-text-security: disc" />
+                </div>
+                <div style="margin-top: 20px">
+                    <div id="ClientDataError" style="color: indianred; margin-bottom: 10px"></div>
+                    <input id="ClientDataSave" type="button" style="border: 0; background-color: #2ed42e; color: white; font-family: assistant; padding: 5px 20px; border-radius: 3px; cursor: pointer; font-size: medium" value="שמירה" onclick="UpdateClientData()" />
+                    <div id="ClientDataWait" style="text-align: center; display: none">
+                        <img src="Files/waitnew.gif" style="width: 50px" />
+                    </div>
+                </div>
+            </div>
+            <div id="LogOutBt" class="ClientZoneBt" onclick="ClientLogOut()" style="background: #ffefed; color: indianred; font-weight: bold;">
+                <img src="/NedarimPlus/Client/LogOutBt.png" style="height: 35px"><br>
+                התנתקות מהאזור האישי
+            </div>
+            <hr style="margin-top: 20px; border: 1px solid #eee" />
+            <div style="text-align: center">
+                <img style="width: 60px" src="Secure.png" />
+            </div>
+            <div style="font-size: small">
+                מערכות נדרים פלוס מאובטחות<br />
+                ומוסמכות לפי תקן PCI DSS LEVEL 1.
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+    <div id="LogInDiv" class="modal" style="font-family: 'Assistant', sans-serif;">
+        <div class="modal-content" dir="rtl" style="width: 70%; max-width: 400px; margin: 80px auto; background-color: white">
+            <div class="ClosingBt" style="position: absolute;" onclick="$('#LogInDiv').hide();if(GetURLParameter('ClientZone') == '1') { OpenLogIn('', false);}">X</div>
+
+            <div style="max-width: 200px; text-align: center; margin-right: auto; margin-left: auto">
+                <div style="text-align: center">
+                    <img src="nedarim.png" />
+                </div>
+                <div>כניסה לאזור אישי</div>
+                <div style="margin-top: 20px">
+                    <input id="LogInTxt" class="TextBox" dir="ltr" type="tel" placeholder="מספר זהות" autocomplete="off" name="nope" style="width: 100%; text-align: center" />
+                    <input id="LogInBt" type="button" style="width: 100%; cursor: pointer; color: white" value="כניסה" class="NewCardCss" onclick="Login()" />
+                    <div id="LogInError" style="color: indianred"></div>
+                    <div id="LogInAskRestorePass" style="color: #808080; font-size: small">לא זוכר את הסיסמה? <span style="color: cornflowerblue; cursor: pointer" onclick="RestorePass()">לחץ כאן</span></div>
+                    <div id="LogInWait" style="text-align: center; margin-top: 20px; display: none">
+                        <img src="Files/waitnew.gif" style="width: 50px" />
+                    </div>
+                </div>
+            </div>
+            <hr style="margin-top: 20px; border: 1px solid #eee" />
+            <div id="NewClientDiv" style="font-size: small; margin-top: 10px">עוד לא רשום בנדרים? <span onclick="OpenClientZone('ClientData',true);$('#LogInDiv').hide();" style="cursor: pointer; color: cornflowerblue;">לחץ כאן</span></div>
+            <div id="RestorePassDiv">
+                <b>איך משחזרים סיסמה?</b><div id="RestorePassData" style="font-size: small; text-align: right; margin-top: 10px"></div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
+    <div id="OnlineGroupeDiv" class="modal" onclick='if(event.target == this && $("#BtGroupe").val() !== "") OnlineCloseGroupe()'>
+        <div class="modal-content" dir="rtl" style="width: 80%; max-width: 500px; border-radius: 10px; background-color: white; position: relative">
+            <div id="GroupeMosadDiv" style="width: 100%; text-align: center; min-height: 158px;">
+                <img id="GroupeLogo" style="height: auto; width: auto; max-width: 100%; max-height: 158px; border-radius: 5px;" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D" />
+                <div dir="rtl" id="GroupeMosadName" style="font-size: large; font-weight: bold; color: #ca4f18"></div>
+            </div>
+
+            <div style="width: 100%; color: cadetblue; font-size: medium; font-weight: bold; margin-top: 20px" id="GroupeKoteret">למה מיועדת תרומתך?</div>
+            <div id="GroupeMainBt" style="margin-top: 20px;">
+            </div>
+
+        </div>
+    </div>
+
+    <div id="ShowAdsImage" class="modal" onclick='if(event.target == this)  $("#ShowAdsImage").hide("fade");' style="z-index: 6000">
+        <div id="ShowAdsImageDiv" onclick='$("#ShowAdsImage").hide("fade");' class="modal-content" style="width: 600px; max-width: 90%; max-height: 912px; margin: 50px auto; border-radius: 20px; background-color: white; padding: 0px; border-radius: 20px; font-size: 0; position: relative">
+            <div class="ClosingBt" style="position: absolute; top: 0; right: 0;">X</div>
+            <img id="ShowAdsImageImg" onclick='$("#ShowAdsImage").hide("fade");' style="width: 100%; height: auto; border-radius: 20px" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" />
+
+        </div>
+    </div>
+
+    <div id="SignPad" class="modal" style="user-select: none;">
+        <div class="modal-content" style="max-width: 600px; width: 97%; padding: 0px; margin: 50px auto; user-select: none;">
+            <div id="MasavSignDiv" dir="rtl" style="text-align: center">
+                <div style="margin: 15px; font-weight: bold; font-size: large; color: indianred">
+                    יש לחתום חתימה זהה לחתימה המוגדרת בבנק.<br />
+                    על החתימה להיות מקורית, ע"י בעל הח-ן בלבד.
+                </div>
+                <canvas id="CanvasSign" style="display: block; border: 2px solid cadetblue; border-radius: 5px; margin-right: auto; margin-left: auto" width="500" height="300"></canvas>
+                <div style="padding: 20px">
+                    <input type="button" class="NewCardCss" value="איפוס חתימה" style="background-color: #b9b6b6; width: 150px" onclick="signaturePad.clear()" /><input type="button" class="NewCardCss" value="אישור" style="width: 150px; background-color: #59d763" onclick="    $('#SignPad').hide(); PayBtClick()" /><input type="button" class="NewCardCss" value="ביטול" style="width: 150px; background-color: #ca4f18" onclick="    signaturePad.clear(); $('#SignPad').hide();" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="TakanonDiv" class="modal" onclick='if(event.target == this) $(this).hide()'>
+        <div class="modal-content">
+            <div class="ClosingBt" onclick="$('#TakanonDiv').hide()" style="margin: -20px">X</div>
+            <div dir="rtl" style="text-align: right; padding: 20px" id="TakanonData">
+                <h2 style="font-weight: bold; text-align: center">תקנון</h2>
+                <h3 style="margin: 0; margin-top: 15px">פרטי בית העסק / עמותה</h3>
+                <span>התשלום / תרומה ינתנו לטובת:<br />
+                    <b style="color: cadetblue; font-weight: 600">[MosadName]</b><br />
+                    ח.פ: <b style="color: cadetblue; font-weight: 600">[Esek]</b><br />
+                    כתובת: <b style="color: cadetblue; font-weight: 600">[MosadLocation]</b>
+                </span>
+                <div id="Odot" style="display: none">
+                    <h3 style="margin: 0; margin-top: 15px">אודות - יצירת קשר:</h3>
+                    <span id="OdotTxt"></span>
+                </div>
+                <h3 style="margin: 0; margin-top: 15px">תמיכה טכנית</h3>
+                <span>בכל נושא הנוגע לדף תשלום, ניתן לפנות לשרות בטלפון 03-7630543 שלוחה 2 או במייל a037630543@gmail.com</span>
+                <h3 style="margin: 0; margin-top: 15px">מדיניות החזרת מוצרים וביטול עסקה</h3>
+                <span>תשלום/תרומות ניתנות לביטול בתוך 24 שעות ממועד ביצועם. יש לפנות אל בתי העסק בכתב עם בקשת הביטול, בצירוף 4 ספרות אחרונות + שם תורם + תאריך ושעת ביצוע העסקה.<br />
+                    במקרה של רכישת מוצר/שרות שלא סופקו ע"י בית העסק, הלקוח זכאי לקבל את כספו בחזרה.<br />
+                    בית העסק פועל בכפוף למדיניות החזרת המוצרים לחוק הגנת הצרכן התשמ&quot;א 1981.
+                </span>
+                <h3 style="margin: 0; margin-top: 15px">אחריות החברה ואספקת המוצרים</h3>
+                <span>בית העסק והנהלת האתר לא יהיו אחראיים ולא ישאו בכל נזק ישיר או עקיף באשר הוא.<br />
+                    בית העסק מתחייב לספק את המוצרים במסגרת זמן ההספקה שהובטח במעמד המכירה.<br />
+                    בית העסק אינו אחראי לעיכובים באספקת מוצרים כתוצאה מאירועים שאינו בשליטתו.<br />
+                    בית העסק יעביר קבלה / חשבונית לאחר התשלום ע&quot;פ הוראות מס הכנסה.
+                </span>
+                <h3 style="margin: 0; margin-top: 15px">הגבלת פרטיות</h3>
+                <span>בית העסק פועלת להגנת ולשמירת פרטיך ופרטי האשראי שלכם. פרטים אלה נשמרים בצורה מאובטחת בהתאם לתקן PCI . פרטיכם ופרטי האשראי לא יועברו לצד ג'.</span>
+            </div>
+            <input class="NewCardCss" style="background-color: #808080" type="button" value="סגירה" onclick="$('#TakanonDiv').hide()" />
+        </div>
+
+    </div>
+
+
+    <img id="TutPlusChecker" style="display: none" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" />
+
+
+
+    <script src="Files/signature_pad.js"></script>
+    <script src="Files/app.js"></script>
+</body>
+
+</html>
+
