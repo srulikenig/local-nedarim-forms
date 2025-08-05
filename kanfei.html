@@ -382,6 +382,14 @@
             html += '<div style="flex: 1; padding: 5px 8px; display: flex; align-items: center;">';
             html += '<div style="font-size: 14px; color: #666;">' + (prod.productName || '') + '</div>';
             html += '</div>';
+            
+            // הוספת ריבוע cartIndex אם קיים
+            if (prod.cartIndex) {
+                html += '<div style="background: #ff9800; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: 100%; position: relative;">';
+                html += '<span style="font-size: 16px; font-weight: bold; padding: 0 2px;">' + prod.cartIndex + '</span>';
+                html += '</div>';
+            }
+            
             html += '<div style="background: #1976d2; color: white; display: flex; align-items: center; justify-content: center; min-width: 40px; font-weight: bold; font-size: 25px; height: 100%; position: relative;">';
             html += '<span style="position: relative; top: -3px; padding: 0 2px;">' + (prod.quantityOrWeight || '') + '</span>';
             html += '<span style="font-size: 10px; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%); opacity: 0.8;">יח&#39;</span>';
