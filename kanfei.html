@@ -27,6 +27,78 @@
 
     <script type="text/javascript">
         // קבלת מוצרים לפיזור והצגה בטאב 1 עם הפרדה לפי סטטוס
+        // משתנה גלובלי לספירת המוצרים שנאספו
+        window.CollectionCounter = 0;
+        // משתנה לשמירת מעקב על מספרי המוצרים
+        window.ProductNumbers = {};
+
+        // פונקציה ליצירת אנימציה של מספר איסוף
+        function showCollectionAnimation(element, number) {
+            // יצירת אלמנט האנימציה
+            var animationElement = $('<div class="collection-animation" data-number="' + number + '">' + number + '</div>');
+            
+            // הוספת עיצוב לאלמנט האנימציה
+            animationElement.css({
+                'position': 'absolute',
+                'left': '-15px', // הזזה יותר שמאלה כדי לא להסתיר את המספר הקיים
+                'bottom': '50%',
+                'transform': 'translateY(50%)',
+                'background': '#4caf50',
+                'color': 'white',
+                'border-radius': '50%',
+                'width': '25px',
+                'height': '25px',
+                'display': 'flex',
+                'align-items': 'center',
+                'justify-content': 'center',
+                'font-weight': 'bold',
+                'font-size': '12px',
+                'z-index': '1000',
+                'opacity': '1',
+                'box-shadow': '0 2px 8px rgba(0,0,0,0.3)'
+            });
+            
+            // הוספת האלמנט לשורת המוצר
+            element.css('position', 'relative').append(animationElement);
+            
+            // אנימציה קלה של הופעה בלבד (ללא היעלמות)
+            animationElement.animate({
+                'left': '27.5px'
+            }, 200);
+        }
+
+        // פונקציה להסרת אלמנט האנימציה
+        function removeCollectionAnimation(element) {
+            element.find('.collection-animation').remove();
+        }
+
+        // פונקציה לעדכון מספרי כל האלמנטים לאחר הסרה
+        function updateAllProductNumbers(productsStatus1) {
+            var counter = 1;
+            window.ProductNumbers = {};
+            
+            // עדכון המספרים של כל המוצרים הנבחרים
+            for (var i = 0; i < productsStatus1.length; i++) {
+                var prod = productsStatus1[i];
+                var id = prod.id;
+                
+                if (window.SelectedProducts && window.SelectedProducts.indexOf(id) !== -1) {
+                    window.ProductNumbers[id] = counter;
+                    
+                    // מציאת האלמנט ועדכון המספר
+                    var $element = $("#ProductsListStatus1 .product-row").eq(i);
+                    var $animationElement = $element.find('.collection-animation');
+                    if ($animationElement.length > 0) {
+                        $animationElement.text(counter).attr('data-number', counter);
+                    }
+                    counter++;
+                }
+            }
+            
+            // עדכון המונה הגלובלי
+            window.CollectionCounter = counter - 1;
+        }
+
         // פונקציות עזר לבחירה מרובה (הגדרה גלובלית)
         function updateSelectedProductsUI(productsStatus1) {
             // עדכון עיצוב שורות
@@ -50,6 +122,18 @@
         function approveSelectedProducts() {
             if (!window.SelectedProducts || window.SelectedProducts.length === 0) return;
             var count = window.SelectedProducts ? window.SelectedProducts.length : 0;
+            
+            // יצירת מערך אוביקטים עם id ו-cartIndex
+            var productsToSend = [];
+            for (var i = 0; i < window.SelectedProducts.length; i++) {
+                var productId = window.SelectedProducts[i];
+                var cartIndex = window.ProductNumbers[productId];
+                productsToSend.push({
+                    id: productId,
+                    cartIndex: cartIndex
+                });
+            }
+            
             swal({
                 type: "warning",
                 title: "האם לאשר את כל המוצרים שנבחרו?",
@@ -66,7 +150,7 @@
                     $.ajax({
                         type: "POST",
                         url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/approveProducts",
-                        data: { products: window.SelectedProducts },
+                        data: { products: productsToSend },
                         context: Text,
                         timeout: 60000,
                         headers: {
@@ -90,6 +174,9 @@
         function getProducts() {
             // איפוס בחירות בטאב 1 בכל רענון
             window.SelectedProducts = [];
+            // איפוס מונה האיסוף ומעקב המספרים
+            window.CollectionCounter = 0;
+            window.ProductNumbers = {};
             $.ajax({
                 url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/products",
                 context: Text,
@@ -105,6 +192,15 @@
                 ListProducts = Response.data;
                 var productsStatus1 = ListProducts.filter(function (p) { return p.status == 1; });
                 var productsStatus2 = ListProducts.filter(function (p) { return p.status == 2; });
+
+                // חישוב המונה הגלובלי לפי הערך הגבוה ביותר ב-cartIndex
+                var maxCartIndex = 0;
+                for (var i = 0; i < productsStatus2.length; i++) {
+                    if (productsStatus2[i].cartIndex && productsStatus2[i].cartIndex > maxCartIndex) {
+                        maxCartIndex = productsStatus2[i].cartIndex;
+                    }
+                }
+                window.CollectionCounter = maxCartIndex;
 
                 // מערך בחירות
                 window.SelectedProducts = window.SelectedProducts || [];
@@ -151,10 +247,28 @@
                     var idx = $(this).index();
                     var prod = productsStatus1[idx];
                     var id = prod.id;
+                    var $this = $(this);
+                    
                     if (window.SelectedProducts.indexOf(id) === -1) {
+                        // הוספת מוצר חדש
                         window.SelectedProducts.push(id);
+                        
+                        // הצגת אנימציה עם המספר הבא
+                        window.CollectionCounter++;
+                        window.ProductNumbers[id] = window.CollectionCounter;
+                        showCollectionAnimation($this, window.CollectionCounter);
                     } else {
+                        // הסרת מוצר קיים
                         window.SelectedProducts = window.SelectedProducts.filter(function (pid) { return pid !== id });
+                        
+                        // הסרת האנימציה של המוצר הנוכחי
+                        removeCollectionAnimation($this);
+                        
+                        // מחיקת המספר מהמעקב
+                        delete window.ProductNumbers[id];
+                        
+                        // עדכון כל המספרים
+                        updateAllProductNumbers(productsStatus1);
                     }
                     updateSelectedProductsUI(productsStatus1);
                 });
@@ -187,6 +301,12 @@
             html += '<span style="position: relative; top: -3px; padding: 0 2px;">' + (prod.quantityOrWeight || '') + '</span>';
             html += '<span style="font-size: 10px; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%); opacity: 0.8;">יח&#39;</span>';
             html += '</div>';
+            
+            // הוספת עיגול אפור עם cartIndex עבור מוצרים עם status 2
+            if (status == 2 && prod.cartIndex) {
+                html += '<div class="cart-index-display" style="position: absolute; left: 27.5px; bottom: 50%; transform: translateY(50%); background: #888; color: white; border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; z-index: 1000; opacity: 0.8; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">' + prod.cartIndex + '</div>';
+            }
+            
             html += '</div>';
             return html;
             // עדכון UI של בחירה וכפתור אישור מרובה
