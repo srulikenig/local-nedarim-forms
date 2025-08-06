@@ -671,12 +671,7 @@
 
 
 
-            listCityGetAllCity({
-                CityId: '#city',
-                StreetId: '#street',
-                Auto_Focus_After_City_Selection: true,
-                list_Citys: []
-            })
+
 
             // הגדרת פונקציית callback עבור בחירת עיר - תופעל אוטומטית כשבוחרים עיר מהפופאפ
             window["FunctionAfetrSelectCity"] = function () {
@@ -2766,7 +2761,9 @@
                     return false;
                 }
                 // השלמת מספר הדרכון ל-9 ספרות עם אפסים בהתחלה
-                ZeoutTxt = ZeoutTxt.padStart(9, '0');
+                while (ZeoutTxt.length < 9) {
+                    ZeoutTxt = '0' + ZeoutTxt;
+                }
             }
 
             // בדיקת תאריך לידה
@@ -2863,6 +2860,15 @@
                 // הפעלה ידנית של טריגרים לצ'קבוקסים שנטענו עם נתונים
                 triggerConditionalFieldsAfterDataLoad();
 
+                //הגדרת רשימת הערים
+                listCityGetAllCity({
+                    CityId: '#city',
+                    StreetId: '#street',
+                    Auto_Focus_After_City_Selection: true,
+                    list_Citys: [],
+                    CityDefault: JsonData.family.city || "",
+                })
+
                 // הסתרת מסך הכניסה והצגת הטופס
                 $("#ZeoutCheck").hide();
                 $("#ZeoutCheckWait").hide();
@@ -2949,9 +2955,10 @@
                 var $select = $(this);
 
                 $select.empty();
-                institutionOptions.forEach(function (option) {
+                for (var j = 0; j < institutionOptions.length; j++) {
+                    var option = institutionOptions[j];
                     $select.append('<option value="' + option.value + '">' + option.label + '</option>');
-                });
+                }
             });
 
             // הסתרת סלקטי סניפים וכיתות בהתחלה (לא המוסדות!)
@@ -2965,9 +2972,10 @@
                 var $select = $(this);
                 var currentValue = $select.val();
                 $select.empty();
-                options.forEach(function (option) {
+                for (var i = 0; i < options.length; i++) {
+                    var option = options[i];
                     $select.append('<option value="' + option + '">' + option + '</option>');
-                });
+                }
                 if (currentValue && options.indexOf(currentValue) !== -1) {
                     $select.val(currentValue);
                 }
@@ -2980,9 +2988,10 @@
                 var $select = $(this);
                 var currentValue = $select.val();
                 $select.empty();
-                options.forEach(function (option) {
+                for (var i = 0; i < options.length; i++) {
+                    var option = options[i];
                     $select.append('<option value="' + option.value + '">' + option.label + '</option>');
-                });
+                }
                 // נסה לשמור על הבחירה הקודמת
                 if (currentValue) {
                     $select.val(currentValue);
@@ -3023,9 +3032,10 @@
 
                     var $branchSelect = $('#' + branchSelectId);
                     $branchSelect.empty();
-                    branchOptions.forEach(function (option) {
+                    for (var l = 0; l < branchOptions.length; l++) {
+                        var option = branchOptions[l];
                         $branchSelect.append('<option value="' + option.value + '">' + option.label + '</option>');
-                    });
+                    }
 
                     // הצגת סלקט כיתות (כי עכשיו הכיתות לא תלויות בסניף)
                     $('#' + classSelectId).parent().show();
@@ -3036,9 +3046,10 @@
 
                     var $classSelect = $('#' + classSelectId);
                     $classSelect.empty();
-                    classOptions.forEach(function (option) {
+                    for (var m = 0; m < classOptions.length; m++) {
+                        var option = classOptions[m];
                         $classSelect.append('<option value="' + option.value + '">' + option.label + '</option>');
-                    });
+                    }
                 } else {
                     // הסתרת סלקט סניפים וכיתות
                     $('#' + branchSelectId).parent().hide();
@@ -3109,58 +3120,142 @@
             // }
         }
 
-        // מעקב אחר הוספת שדות חדשים בקבוצות
-        function setupGroupFieldsWatcher() {
-            // יירוט על הוספת אלמנטים חדשים לדף
-            var observer = new MutationObserver(function (mutations) {
-                mutations.forEach(function (mutation) {
-                    mutation.addedNodes.forEach(function (node) {
-                        if (node.nodeType === 1) { // Element node
-                            // חיפוש אחר שורות ילדים חדשות
-                            var newChildRows = $(node).find('div[id^="children_Row"]');
-                            if (newChildRows.length > 0) {
-                                newChildRows.each(function () {
-                                    var rowId = $(this).attr('id');
-                                    var rowIndex = rowId.split('_Row')[1];
-                                    if (rowIndex !== undefined) {
-                                        setupChildRowEventListeners(parseInt(rowIndex));
-                                    }
-                                });
-                            }
+        // פונקציה להגדרת event listeners עבור שורת ילד חדשה
+        function setupChildRowEventListeners(rowIndex) {
+            var institutionSelectId = 'children_childMosadType_' + rowIndex;
+            var branchSelectId = 'children_childMosad_' + rowIndex;
+            var classSelectId = 'children_childClass_' + rowIndex;
 
-                            // חיפוש אחר סלקטים חדשים אחרים
-                            var newSelects = $(node).find('select');
-                            if (newSelects.length > 0) {
-                                // עדכון האופציות לכל הסלקטים החדשים (לא של ילדים)
-                                newSelects.each(function () {
-                                    var selectId = $(this).attr('id');
-                                    if (selectId && !selectId.includes('children_')) {
-                                        updateAllSelectsWithNewOptions();
-                                    }
-                                });
-                            }
-                        }
-                    });
+            // וידוא שהסלקט קיים לפני האתחול
+            var $institutionSelect = $('#' + institutionSelectId);
+
+            if ($institutionSelect.length === 0) {
+                return; // אם הסלקט לא קיים, צא מהפונקציה
+            }
+
+            // מילוי אופציות מוסדות מתוך selectOptions
+            var institutionOptions = [{ value: "", label: "בחר מוסד" }];
+            for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
+                institutionOptions.push({
+                    value: selectOptions.childInstitutions[i].value,
+                    label: selectOptions.childInstitutions[i].label
                 });
+            }
+
+            // עדכון הסלקט עם האופציות
+            $institutionSelect.empty();
+            // תיקון עבור IE9 - השימוש ב-forEach על מערך במקום על NodeList
+            for (var j = 0; j < institutionOptions.length; j++) {
+                var option = institutionOptions[j];
+                $institutionSelect.append('<option value="' + option.value + '">' + option.label + '</option>');
+            }
+
+            // הסתרת סלקט סניפים וכיתות בהתחלה
+            $('#' + branchSelectId).parent().hide();
+            $('#' + classSelectId).parent().hide();
+
+            // event listener לבחירת מוסד
+            $('#' + institutionSelectId).off('change').on('change', function () {
+                updateChildBranches(institutionSelectId);
             });
 
-            // התחלת מעקב על שינויים בגוף המסמך
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true
+            // event listener לבחירת סניף
+            $('#' + branchSelectId).off('change').on('change', function () {
+                updateChildClasses(branchSelectId);
+            });
+
+            // הוספת פורמט תאריך לשדה תאריך לידה
+            var birthDateId = 'children_childBirthDate_' + rowIndex;
+            $('#' + birthDateId).off('input').on('input', function () {
+                var TempDate = $(this).val().replace(/\//g, "");
+                if ($.isNumeric(TempDate)) {
+                    if (TempDate.length >= 4) {
+                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2, 2) + "/" + TempDate.substr(4);
+                    } else if (TempDate.length >= 2) {
+                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2);
+                    }
+                    $(this).val(TempDate);
+                }
             });
         }
 
-        const exitFromForm = () => {
+        // מעקב אחר הוספת שדות חדשים בקבוצות
+        function setupGroupFieldsWatcher() {
+            // בדיקה אם המדפדפן תומך ב-MutationObserver
+            if (window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver) {
+                // יירוט על הוספת אלמנטים חדשים לדף
+                var MutationObserverConstructor = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
+                var observer = new MutationObserverConstructor(function (mutations) {
+                    // המרת mutations למערך רגיל אם זה לא מערך
+                    var mutationsArray = Array.prototype.slice.call(mutations);
+                    
+                    for (var i = 0; i < mutationsArray.length; i++) {
+                        var mutation = mutationsArray[i];
+                        // המרת addedNodes למערך רגיל
+                        var addedNodesArray = Array.prototype.slice.call(mutation.addedNodes || []);
+                        
+                        for (var j = 0; j < addedNodesArray.length; j++) {
+                            var node = addedNodesArray[j];
+                            if (node.nodeType === 1) { // Element node
+                                // חיפוש אחר שורות ילדים חדשות
+                                var newChildRows = $(node).find('div[id^="children_Row"]');
+                                if (newChildRows.length > 0) {
+                                    newChildRows.each(function () {
+                                        var rowId = $(this).attr('id');
+                                        var rowIndex = rowId.split('_Row')[1];
+                                        if (rowIndex !== undefined) {
+                                            setupChildRowEventListeners(parseInt(rowIndex));
+                                        }
+                                    });
+                                }
+
+                                // חיפוש אחר סלקטים חדשים אחרים
+                                var newSelects = $(node).find('select');
+                                if (newSelects.length > 0) {
+                                    // עדכון האופציות לכל הסלקטים החדשים (לא של ילדים)
+                                    newSelects.each(function () {
+                                        var selectId = $(this).attr('id');
+                                        if (selectId && selectId.indexOf('children_') === -1) {
+                                            updateAllSelectsWithNewOptions();
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // התחלת מעקב על שינויים בגוף המסמך
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            } else {
+                // גיבוי עבור דפדפנים ישנים (כמו IE9) - שימוש בטיימר לבדיקה מעת לעת
+                setInterval(function() {
+                    // בדיקה של שורות ילדים חדשות שאולי נוספו
+                    $('div[id^="children_Row"]').each(function() {
+                        var rowId = $(this).attr('id');
+                        var rowIndex = rowId.split('_Row')[1];
+                        if (rowIndex !== undefined && !$(this).data('listeners-setup')) {
+                            setupChildRowEventListeners(parseInt(rowIndex));
+                            $(this).data('listeners-setup', true);
+                        }
+                    });
+                }, 500); // בדיקה כל חצי שנייה
+            }
+        }
+
+        function exitFromForm() {
             if (MasofId !== '') {
                 parent.GoToMenu("Tafrit");
                 parent.closeIFrame()
             } else {
                 $('html, body').scrollTop(0); location.reload();
             }
-
         }
-        const goToForm = () => {
+        
+        function goToForm() {
             $("#NotRegisteredDiv").hide();
             $("#Status4Div").hide();
             $("#ZeoutCheckSave").show();
@@ -3356,64 +3451,6 @@
                     }
                 }
             }
-        }
-
-        // פונקציה להגדרת event listeners עבור שורת ילד חדשה
-        function setupChildRowEventListeners(rowIndex) {
-            var institutionSelectId = 'children_childMosadType_' + rowIndex;
-            var branchSelectId = 'children_childMosad_' + rowIndex;
-            var classSelectId = 'children_childClass_' + rowIndex;
-
-            // וידוא שהסלקט קיים לפני האתחול
-            var $institutionSelect = $('#' + institutionSelectId);
-
-            if ($institutionSelect.length === 0) {
-                return; // אם הסלקט לא קיים, צא מהפונקציה
-            }
-
-            // מילוי אופציות מוסדות מתוך selectOptions
-            var institutionOptions = [{ value: "", label: "בחר מוסד" }];
-            for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
-                institutionOptions.push({
-                    value: selectOptions.childInstitutions[i].value,
-                    label: selectOptions.childInstitutions[i].label
-                });
-            }
-
-            // עדכון הסלקט עם האופציות
-            $institutionSelect.empty();
-            institutionOptions.forEach(function (option) {
-                $institutionSelect.append('<option value="' + option.value + '">' + option.label + '</option>');
-            });
-
-
-            // הסתרת סלקט סניפים וכיתות בהתחלה
-            $('#' + branchSelectId).parent().hide();
-            $('#' + classSelectId).parent().hide();
-
-            // event listener לבחירת מוסד
-            $('#' + institutionSelectId).off('change').on('change', function () {
-                updateChildBranches(institutionSelectId);
-            });
-
-            // event listener לבחירת סניף
-            $('#' + branchSelectId).off('change').on('change', function () {
-                updateChildClasses(branchSelectId);
-            });
-
-            // הוספת פורמט תאריך לשדה תאריך לידה
-            var birthDateId = 'children_childBirthDate_' + rowIndex;
-            $('#' + birthDateId).off('input').on('input', function () {
-                var TempDate = $(this).val().replace(/\//g, "");
-                if ($.isNumeric(TempDate)) {
-                    if (TempDate.length >= 4) {
-                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2, 2) + "/" + TempDate.substr(4);
-                    } else if (TempDate.length >= 2) {
-                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2);
-                    }
-                    $(this).val(TempDate);
-                }
-            });
         }
 
         // פונקציה להגדרת שדה השכונות התלוי בעיר
