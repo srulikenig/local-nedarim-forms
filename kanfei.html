@@ -150,8 +150,7 @@
                     $.ajax({
                         type: "POST",
                         url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/approveProducts",
-                        data: JSON.stringify({ products: productsToSend }), 
-                        contentType: "application/json",
+                        data: { products: productsToSend },
                         context: Text,
                         timeout: 60000,
                         headers: {
