@@ -762,7 +762,7 @@
 
 
             , { "Type": "Koteret", "Text": "פרטי הורים" }
-            , { "ElementId": "OA1", "MaxLength": 30, "Width": 40, "fieldNameShow": "שם פרטי אב האברך", "fieldName": "שם האב - הורי האברך", "Type": "Text", "Mandatory": true, "DbName": "Field36", "Br": false }
+            , { "ElementId": "OA1", "MaxLength": 30, "Width": 40, "fieldNameShow": "שם פרטי אב האברך", "fieldName": "שם האב - הורי האברך", "Type": "Text", "Mandatory": true, "DbName": "Field36", "Br": true }
             , { "ElementId": "OA6", "MaxLength": 30, "Width": 40, "fieldNameShow": "שם  משפחה אב האישה", "fieldName": "שם משפחה - אב האשה", "Type": "Text", "Mandatory": false, "DbName": "Field41", "Br": false }
             , { "ElementId": "OA11", "MaxLength": 30, "Width": 40, "fieldNameShow": "שם פרטי אב האישה", "fieldName": "שם האב - אב האשה", "Type": "Text", "Mandatory": false, "DbName": "Field7", "Br": false }
 
@@ -1073,25 +1073,6 @@
 
                 document.getElementById('Span123').appendChild(document.getElementById('Span321'))
 
-                listCityGetAllCity({
-                    CityId: '#City',
-                    StreetId: '#Street',
-                    Auto_Focus_After_City_Selection: true,
-                    list_Citys: []
-                })
-                listCityGetAllCity({
-                    CityId: '#OA14',
-                    StreetId: '#OA5',
-                    Auto_Focus_After_City_Selection: true,
-                    list_Citys: []
-                })
-                listCityGetAllCity({
-                    CityId: '#OA12',
-                    StreetId: '#OA10',
-                    Auto_Focus_After_City_Selection: true,
-                    list_Citys: []
-                })
-
 
 
 
@@ -1331,24 +1312,14 @@
                 $('#TitleForStatus2').show()
                 $('#Span321').hide();
 
-                listCityGetAllCity({
-                    CityId: '#City',
-                    // StreetId: '#Street',
-                    Auto_Focus_After_City_Selection: false,
-                    list_Citys: []
-                })
+
 
 
             } else if (status == 3) {
                 $('#TitleForStatus3').show()
 
                 $('#Span321').hide();
-                listCityGetAllCity({
-                    CityId: '#City',
-                    StreetId: '#Street',
-                    Auto_Focus_After_City_Selection: true,
-                    list_Citys: []
-                })
+
 
                 //טיפול בכמה ישיבות 
                 for (var i = 2; i < 4; i++) {
@@ -1442,7 +1413,7 @@
             // בדיקה אם אחד מהטלפונים זהה לטלפון מהמסך הראשון ולהפוך אותו ללא זמין
             if (typeof TelTxt !== 'undefined' && TelTxt !== '') {
                 var loginPhone = TelTxt.replace(/-/g, '').replace(/\s/g, ''); // מנקה רווחים ומקפים
-                
+
                 // בדיקה לכל שדה טלפון
                 if (avrechData.telephone && avrechData.telephone.replace(/-/g, '').replace(/\s/g, '') === loginPhone) {
                     $("#Tel1").prop('disabled', true);
@@ -1461,7 +1432,7 @@
                     $("#Tel4").css('background-color', '#f0f0f0');
                 }
             }
-            
+
             $("#Mail").val(avrechData.email);
 
             if (avrechData.snifLimud) {
@@ -1519,6 +1490,14 @@
 
                 $("#City").val(avrechData.city);
                 $("#Street").val(avrechData.street);
+                listCityGetAllCity({
+                    CityId: '#City',
+                    StreetId: '#Street',
+                    Auto_Focus_After_City_Selection: true,
+                    list_Citys: [],
+                    CityDefault: avrechData.city,
+                })
+
                 $("#Home").val(avrechData.binyan);
                 $("#Enter").val(avrechData.knisa);
                 $("#Dira").val(avrechData.dira);
@@ -1555,6 +1534,13 @@
                 $("#OA14").val(avrechData.orimBaalCity);
                 $("#OA5").val(avrechData.orimBaalStreet);
                 $("#OA13").val(avrechData.orimBaalBinyan);
+                listCityGetAllCity({
+                    CityId: '#OA14',
+                    StreetId: '#OA5',
+                    Auto_Focus_After_City_Selection: true,
+                    list_Citys: [],
+                    CityDefault: avrechData.orimBaalCity
+                })
 
                 $("#OA6").val(avrechData.orimIshaLastName);
                 $("#OA11").val(avrechData.orimIshaAvName);
@@ -1564,6 +1550,14 @@
                 $("#OA12").val(avrechData.orimIshaCity);
                 $("#OA10").val(avrechData.orimIshaStreet);
                 $("#OA15").val(avrechData.orimIshaBinyan);
+                listCityGetAllCity({
+                    CityId: '#OA12',
+                    StreetId: '#OA10',
+                    Auto_Focus_After_City_Selection: true,
+                    list_Citys: [],
+                    CityDefault: avrechData.orimIshaCity
+                })
+
 
                 if (avrechData.tzavaStatus == 1) {
                     $('#military_Radio0').prop('checked', true).trigger('change')
@@ -1652,6 +1646,13 @@
                 $("#BDEMarrige").val(avrechData.heMarriedDate);
                 $("#Note").val(avrechData.note);
 
+                listCityGetAllCity({
+                    CityId: '#City',
+                    // StreetId: '#Street',
+                    Auto_Focus_After_City_Selection: false,
+                    list_Citys: [],
+                    CityDefault: avrechData.city,
+                })
             } else if (formStatus == 3) {
 
                 $("#YKName").val(avrechData.makomLimudYK);
@@ -1668,21 +1669,33 @@
                 $("#Street").val(avrechData.street);
                 $("#Home").val(avrechData.binyan);
 
-                if (avrechData.makomLimudYG && Array.isArray(avrechData.makomLimudYG)) {
-                    for (var i = 0; i < avrechData.makomLimudYG.length; i++) {
+                listCityGetAllCity({
+                    CityId: '#City',
+                    StreetId: '#Street',
+                    Auto_Focus_After_City_Selection: true,
+                    list_Citys: [],
+                    CityDefault: avrechData.city,
+                })
+
+                // טיפול בישיבות גדולות - פיצול הסטרינג למערך
+                if (avrechData.makomLimudYG && typeof avrechData.makomLimudYG === 'string' && avrechData.makomLimudYG.trim() !== '') {
+                    var yeshivotArray = avrechData.makomLimudYG.split(", ");
+                    for (var i = 0; i < yeshivotArray.length; i++) {
                         if (i > 0) {
                             $('#AddYGRow').trigger('click')
                         }
-                        $('#NameYeshivaG' + i).val(avrechData.makomLimudYG[i]);
+                        $('#NameYeshivaG' + (i + 1)).val(yeshivotArray[i].trim());
                     }
                 }
 
-                if (avrechData.makomLimudKodem && Array.isArray(avrechData.makomLimudKodem)) {
-                    for (var i = 0; i < avrechData.makomLimudKodem.length; i++) {
+                // טיפול בכוללים - פיצול הסטרינג למערך
+                if (avrechData.makomLimudKodem && typeof avrechData.makomLimudKodem === 'string' && avrechData.makomLimudKodem.trim() !== '') {
+                    var kolelimdArray = avrechData.makomLimudKodem.split(", ");
+                    for (var i = 0; i < kolelimdArray.length; i++) {
                         if (i > 0) {
                             $('#AddKRow').trigger('click')
                         }
-                        $('#NameKolel' + i).val(avrechData.makomLimudKodem[i]);
+                        $('#NameKolel' + (i + 1)).val(kolelimdArray[i].trim());
                     }
                 }
 
@@ -2496,8 +2509,21 @@
                 if ($("#VAAD").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "VAAD"); return false; }
             } else if (formStatus == 3) {
                 if ($("#YKName").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "YKName"); return false; }
-                if ($("#YGName").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "YGName"); return false; }
-                if ($("#OWN").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OWN"); return false; }
+
+                // וולידציה לישיבות גדולות - בדיקה על כל השדות הקיימים
+                for (var i = 1; i <= 10; i++) {
+                    if ($("#NameYeshivaG" + i).length > 0 && $("#NameYeshivaG" + i).val().search('[a-zA-Z]') >= 0) {
+                        MySwal("נא להזין בעברית בלבד", "NameYeshivaG" + i); return false;
+                    }
+                }
+
+                // וולידציה לכוללים - בדיקה על כל השדות הקיימים
+                for (var i = 1; i <= 10; i++) {
+                    if ($("#NameKolel" + i).length > 0 && $("#NameKolel" + i).val().search('[a-zA-Z]') >= 0) {
+                        MySwal("נא להזין בעברית בלבד", "NameKolel" + i); return false;
+                    }
+                }
+
                 if ($("#OA1").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA1"); return false; }
                 if ($("#OA6").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA6"); return false; }
                 if ($("#OA11").val().search('[a-zA-Z]') >= 0) { MySwal("נא להזין בעברית בלבד", "OA11"); return false; }
@@ -2838,27 +2864,31 @@
                 objToSend.street = $("#Street").val();
                 objToSend.binyan = $("#Home").val();
 
-                objToSend.makomLimudYG = [];
+                // איסוף ישיבות גדולות לסטרינג מופרד בפסיקים
+                var yeshivotGdolot = [];
                 if ($('#NameYeshivaG1').val() != "") {
-                    objToSend.makomLimudYG.push($('#NameYeshivaG1').val())
+                    yeshivotGdolot.push($('#NameYeshivaG1').val())
                 }
                 if ($('#NameYeshivaG2').val() != "") {
-                    objToSend.makomLimudYG.push($('#NameYeshivaG2').val())
+                    yeshivotGdolot.push($('#NameYeshivaG2').val())
                 }
                 if ($('#NameYeshivaG3').val() != "") {
-                    objToSend.makomLimudYG.push($('#NameYeshivaG3').val())
+                    yeshivotGdolot.push($('#NameYeshivaG3').val())
                 }
+                objToSend.makomLimudYG = yeshivotGdolot.join(", ");
 
-                objToSend.makomLimudKodem = [];
+                // איסוף כוללים לסטרינג מופרד בפסיקים
+                var kolelim = [];
                 if ($('#NameKolel1').val() != "") {
-                    objToSend.makomLimudKodem.push($('#NameKolel1').val())
+                    kolelim.push($('#NameKolel1').val())
                 }
                 if ($('#NameKolel2').val() != "") {
-                    objToSend.makomLimudKodem.push($('#NameKolel2').val())
+                    kolelim.push($('#NameKolel2').val())
                 }
                 if ($('#NameKolel3').val() != "") {
-                    objToSend.makomLimudKodem.push($('#NameKolel3').val())
+                    kolelim.push($('#NameKolel3').val())
                 }
+                objToSend.makomLimudKodem = kolelim.join(", ");
 
             }
 
@@ -2871,10 +2901,11 @@
                 context: Text,
                 timeout: 180000,
             }).success(function (JsonData) {
-                if (JsonData.Status == 'Error') {
+                console.log(JsonData, "JsonData");
+                if (JsonData.status == 'error') {
                     swal({
                         type: "error",
-                        title: JsonData.Message,
+                        title: JsonData.message,
                         showConfirmButton: true,
                         allowOutsideClick: false,
                     }, function () {
@@ -3041,7 +3072,6 @@
             <div style="text-align:center;margin:10px;font-family:Assistant,Arial;color:#808080;display:none"
                 id="ZeoutCheckWait"><img src="waitnew.gif" style="width:50px;"><br><span id="ZeoutCheckWaitText">נא
                     להמתין...</span></div>
-            <div style="height:200px"></div>
 
 
             <div
@@ -3059,7 +3089,9 @@
                 </p>
 
             </div>
+            <div style="height:200px"></div>
         </div>
+
 
 
         <div id="CodeCheck" style="margin-top: 30px;display:none;">
@@ -3075,16 +3107,17 @@
             <!-- <br /> לאחר מכן תקבל שיחה עם קוד גישה למערכת -->
             <div style="    text-align: center;    font-size: 18px;">
 
-                <div style="    font-weight: bold;    color: indianred;">קוד האימות הוא 6 הספרות האחרונות של המספר
+                <div style="font-weight: bold; color: indianred;">קוד האימות הוא <span
+                        style="color: #1196d2;">4</span> הספרות האחרונות של המספר
                     שמחייג אליכם</div>
-                <div style="    margin-top: 5px;    color: #9a7400;    /* font-size: 19px; */    font-weight: bold;">
-                    ניתן גם לענות לשיחה ולשמוע את קוד האימות</div>
-                <div style="    color: #9a7400;">(יתכן ויקח זמן מה עד שהאימות יגיע אליכם)</div>
+                <!-- <div style="    margin-top: 5px;    color: #9a7400;    /* font-size: 19px; */    font-weight: bold;">
+                    ניתן גם לענות לשיחה ולשמוע את קוד האימות</div> -->
+                <!-- <div style="    color: #9a7400;">(יתכן ויקח זמן מה עד שהאימות יגיע אליכם)</div> -->
 
             </div>
             <div class="Koteret"
                 style="color: #607D8B;font-size:large;text-align:center;margin: 30px 0px 10px;padding:0px;width:100%;font-weight: normal;"
-                id="CodeCheckKoteret">עליכם לכתוב כאן את 6 הספרות האחרונות <br>של המספר שמחייג/חייג אליכם.</div>
+                id="CodeCheckKoteret">עליכם לכתוב כאן את 4 הספרות האחרונות <br>של המספר שמחייג/חייג אליכם.</div>
 
             <div style="text-align:center" id="CodeCheckTextDiv"><input id="CodeCheckText" class="TextBox" type="tel"
                     dir="ltr" autocomplete="off" maxlength="9"
