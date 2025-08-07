@@ -335,6 +335,23 @@
     </style>
     <script>
 
+        // Polyfill לתמיכה בדפדפנים ישנים (IE9+)
+        if (!String.prototype.startsWith) {
+            String.prototype.startsWith = function(searchString, position) {
+                position = position || 0;
+                return this.substr(position, searchString.length) === searchString;
+            };
+        }
+
+        if (!String.prototype.endsWith) {
+            String.prototype.endsWith = function(searchString, length) {
+                if (length === undefined || length > this.length) {
+                    length = this.length;
+                }
+                return this.substring(length - searchString.length, length) === searchString;
+            };
+        }
+
         var Json = {
             "FormElements": [
 
@@ -1577,6 +1594,11 @@
                 if (param.length === 2) {
                     var key = decodeURIComponent(param[0]);
                     var value = decodeURIComponent(param[1]);
+
+                    // בדיקה שהמפתח הוא מחרוזת תקינה
+                    if (typeof key !== 'string' || key === '') {
+                        continue;
+                    }
 
                     // רק שדות שמתחילים ב-Field ולא _Name
                     if (key.startsWith('Field') && !key.endsWith('_Name')) {
