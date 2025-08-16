@@ -149,7 +149,7 @@
                 if (res == true) {
                     $.ajax({
                         type: "POST",
-                        url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/approveProducts",
+                        url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/approveProducts",
                         data: { products: productsToSend },
                         context: Text,
                         timeout: 60000,
@@ -178,7 +178,7 @@
             window.CollectionCounter = 0;
             window.ProductNumbers = {};
             $.ajax({
-                url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/products",
+                url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/products",
                 context: Text,
                 timeout: 16000,
                 headers: {
@@ -348,7 +348,7 @@
                     if (res == true) {
                         $.ajax({
                             type: "POST",
-                            url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/approveProducts",
+                            url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/approveProducts",
                             data: { products: window.SelectedProducts },
                             context: Text,
                             timeout: 60000,
@@ -409,7 +409,7 @@
             // איפוס בחירות בטאב 2 בכל רענון
             window.SelectedOrderProducts = [];
             $.ajax({
-                url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/orderProducts?viewMode=" + window.ViewMode,
+                url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/orderProducts?viewMode=" + window.ViewMode,
                 context: Text,
                 timeout: 16000,
                 headers: {
@@ -526,7 +526,7 @@
                 if (res == true) {
                     $.ajax({
                         type: "POST",
-                        url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/approveOrderProducts",
+                        url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/approveOrderProducts",
                         data: { orderProducts: window.SelectedOrderProducts },
                         context: Text,
                         timeout: 60000,
@@ -2488,7 +2488,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/login",
+                    url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/login",
                     data: { "userName": $("#CheckUserName").val(), "password": $("#CheckUserPass").val() },
                     context: Text,
                     timeout: 60000,
@@ -2522,7 +2522,7 @@
                 // איפוס בחירות בטאב 3 בכל רענון
                 window.SelectedShippingProducts = [];
                 $.ajax({
-                    url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/productsShipping",
+                    url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/productsShipping",
                     context: Text,
                     timeout: 16000,
                     headers: {
@@ -2613,7 +2613,7 @@
                 // איפוס בחירות בטאב 3 בכל רענון
                 window.SelectedOrders = [];
                 $.ajax({
-                    url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/orders",
+                    url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/orders",
                     context: Text,
                     timeout: 16000,
                     headers: {
@@ -2774,7 +2774,7 @@
                     if (res == true) {
                         $.ajax({
                             type: "POST",
-                            url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/approveOrders",
+                            url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/approveOrders",
                             data: {
                                 "orders": window.SelectedOrders,
                                 "isTzintuk": isTzintuk
@@ -2900,7 +2900,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/approveOrders",
+                            url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/approveOrders",
                             data: { "orders": Id },
                             context: Text,
                             timeout: 60000,
@@ -2957,7 +2957,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/message",
+                        url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/message",
                         data: JsonSend,
                         context: Text,
                         timeout: 60000,
@@ -3269,7 +3269,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "https://us-central1-kanfei-nesharim.cloudfunctions.net/posApi/login",
+                    url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/login",
                     data: { "cardNumber": $("#CreditCardData").html().replace("»", "=").replace("º", "").replace("ף", "").replace(";", "") },
                     context: Text,
                     timeout: 60000,
