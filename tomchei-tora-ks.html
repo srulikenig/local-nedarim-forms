@@ -1533,7 +1533,7 @@
             }
 
             $.ajax({
-                url: "https://us-central1-tomchei-tora.cloudfunctions.net/nedarimForm-saveFamily",
+                url: "https://us-central1-tomchei-tora2.cloudfunctions.net/nedarimForm-saveFamily",
                 type: "POST",
                 data: JSON.stringify(stage1Data),
                 contentType: "application/json; charset=utf-8",
@@ -2471,7 +2471,7 @@
 
 
             $.ajax({
-                url: "https://us-central1-tomchei-tora.cloudfunctions.net/nedarimForm-getFamily?isKs=true&method=1&zehut=" + encodeURIComponent(ZeoutTxt) + "&ezrachut=" + encodeURIComponent(Zihuy1) + "&birthDate=" + encodeURIComponent(KidDate),
+                url: "https://us-central1-tomchei-tora2.cloudfunctions.net/nedarimForm-getFamily?isKs=true&method=1&zehut=" + encodeURIComponent(ZeoutTxt) + "&ezrachut=" + encodeURIComponent(Zihuy1) + "&birthDate=" + encodeURIComponent(KidDate),
                 data: "",
                 type: 'GET',
                 timeout: 60000,
