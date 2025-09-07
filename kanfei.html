@@ -149,7 +149,7 @@
                 if (res == true) {
                     $.ajax({
                         type: "POST",
-                        url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/approveProducts",
+                        url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/approveProducts",
                         data: { products: productsToSend },
                         context: Text,
                         timeout: 60000,
@@ -178,7 +178,7 @@
             window.CollectionCounter = 0;
             window.ProductNumbers = {};
             $.ajax({
-                url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/products",
+                url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/products",
                 context: Text,
                 timeout: 16000,
                 headers: {
@@ -348,7 +348,7 @@
                     if (res == true) {
                         $.ajax({
                             type: "POST",
-                            url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/approveProducts",
+                            url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/approveProducts",
                             data: { products: window.SelectedProducts },
                             context: Text,
                             timeout: 60000,
@@ -409,7 +409,7 @@
             // איפוס בחירות בטאב 2 בכל רענון
             window.SelectedOrderProducts = [];
             $.ajax({
-                url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/orderProducts?viewMode=" + window.ViewMode,
+                url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/orderProducts?viewMode=" + window.ViewMode,
                 context: Text,
                 timeout: 16000,
                 headers: {
@@ -526,7 +526,7 @@
                 if (res == true) {
                     $.ajax({
                         type: "POST",
-                        url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/approveOrderProducts",
+                        url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/approveOrderProducts",
                         data: { orderProducts: window.SelectedOrderProducts },
                         context: Text,
                         timeout: 60000,
@@ -758,6 +758,7 @@
             margin-right: 10px
         }
     </style>
+    
     <script>
 
         var Json = {
@@ -2488,7 +2489,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/login",
+                    url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/login",
                     data: { "userName": $("#CheckUserName").val(), "password": $("#CheckUserPass").val() },
                     context: Text,
                     timeout: 60000,
@@ -2522,7 +2523,7 @@
                 // איפוס בחירות בטאב 3 בכל רענון
                 window.SelectedShippingProducts = [];
                 $.ajax({
-                    url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/productsShipping",
+                    url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/productsShipping",
                     context: Text,
                     timeout: 16000,
                     headers: {
@@ -2613,7 +2614,7 @@
                 // איפוס בחירות בטאב 3 בכל רענון
                 window.SelectedOrders = [];
                 $.ajax({
-                    url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/orders",
+                    url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/orders",
                     context: Text,
                     timeout: 16000,
                     headers: {
@@ -2774,7 +2775,7 @@
                     if (res == true) {
                         $.ajax({
                             type: "POST",
-                            url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/approveOrders",
+                            url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/approveOrders",
                             data: {
                                 "orders": window.SelectedOrders,
                                 "isTzintuk": isTzintuk
@@ -2900,7 +2901,7 @@
 
                         $.ajax({
                             type: "POST",
-                            url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/approveOrders",
+                            url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/approveOrders",
                             data: { "orders": Id },
                             context: Text,
                             timeout: 60000,
@@ -2957,7 +2958,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/message",
+                        url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/message",
                         data: JsonSend,
                         context: Text,
                         timeout: 60000,
@@ -3174,16 +3175,6 @@
 
 
     <script>
-
-
-
-
-
-
-
-
-
-
         var MySwalTimeOut;
         function MySwal(Text, Id, Type) {
             if (Type == "success") {
@@ -3269,7 +3260,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "https://us-central1-kanfei-nesharim2.cloudfunctions.net/posApi/login",
+                    url: "https://us-central1-kanfei-nesharim-test.cloudfunctions.net/posApi/login",
                     data: { "cardNumber": $("#CreditCardData").html().replace("»", "=").replace("º", "").replace("ף", "").replace(";", "") },
                     context: Text,
                     timeout: 60000,
@@ -3337,9 +3328,9 @@
 
             var html = ""
             if (_IsQpos == true) {
-                html += '<div id="CardTransferCard" style="margin: 17px 15px;font-weight: bold;color: #474747;font-size: 18px;text-align: center;padding: 13px;"><span>העבר כרטיס<div style="display:block;color:indianred;font-size: 2vh;">פס מגנטי כלפי מטה</div></span><img src="/NedarimPlus/POS/Files/Swipe.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;"></div>'
+                html += '<div id="CardTransferCard" style="margin: 17px 15px;font-weight: bold;color: #474747;font-size: 18px;text-align: center;padding: 13px;"><span>העבר כרטיס<div style="display:block;color:indianred;font-size: 2vh;">פס מגנטי כלפי מטה</div></span><img src="./Files/Pic/Swipe.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;"></div>'
 
-                html += '<div onclick="$(\'#CheckUser\').show(); $(\'#CardGetMagneticCard\').hide(); $(\'#CheckUserName\').focus();" style="cursor: pointer; margin: 17px 15px; background: linear-gradient(rgb(221 221 221), rgb(235 235 235), rgb(219 219 219)); font-weight: bold; color: #474747; font-size: 18px; text-align: center; padding: 13px;">לחץ כאן להתחברות ע"י הזנת פרטים<img src="/NedarimPlus/POS/Files/Manual.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;" /></div>';
+                html += '<div onclick="$(\'#CheckUser\').show(); $(\'#CardGetMagneticCard\').hide(); $(\'#CheckUserName\').focus();" style="cursor: pointer; margin: 17px 15px; background: linear-gradient(rgb(221 221 221), rgb(235 235 235), rgb(219 219 219)); font-weight: bold; color: #474747; font-size: 18px; text-align: center; padding: 13px;">לחץ כאן להתחברות ע"י הזנת פרטים<img src="./Files/Pic/Manual.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;" /></div>';
                 if (_POS_Firmware == 'D20_SZFP_release_20221119' && _POS_Sign !== 'Normal') html += '<div style="font-size: 2.5vh;background-color: #fb7455;color: white;padding: 4px 0px;border-radius: 3px;display: inline-block;font-weight: 600;position: absolute;top: 60px;opacity: 0.9;width: 100%;left: 0;">במידה ומכשיר זה אינו מגיב להעברת כרטיס,<br />נסו לבצע הפעלה מחדש כעת.<br/><u>והשתדלו להשאירו מנותק מהחשמל</u><br />(שמנו לב שיש פחות בעיות כשלא מחובר למטען)<br /><b>הנושא בטיפול מול היצרן. עמכם הסליחה.</b></div>';
 
                 OpenPOSTimeout = setTimeout(function () {
@@ -3352,8 +3343,8 @@
 
             } else {
 
-                html += '<div id="CardTransferCard" style="margin: 17px 15px;font-weight: bold;color: #474747;font-size: 18px;text-align: center;padding: 13px;"><span>העבר כרטיס בקורא מגנטי</span><img src="/NedarimPlus/POS/Files/SwipeNoPOS.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;"></div>'
-                html += '<div onclick="$(\'#CheckUser\').show(); $(\'#CardGetMagneticCard\').hide(); $(\'#CheckUserName\').focus();" style="cursor: pointer; margin: 17px 15px; background: linear-gradient(rgb(221 221 221), rgb(235 235 235), rgb(219 219 219)); font-weight: bold; color: #474747; font-size: 18px; text-align: center; padding: 13px;">לחץ כאן להתחברות ע"י הזנת פרטים<img src="/NedarimPlus/POS/Files/Manual.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;" /></div>';
+                html += '<div id="CardTransferCard" style="margin: 17px 15px;font-weight: bold;color: #474747;font-size: 18px;text-align: center;padding: 13px;"><span>העבר כרטיס בקורא מגנטי</span><img src="./Files/Pic/SwipeNoPOS.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;"></div>'
+                html += '<div onclick="$(\'#CheckUser\').show(); $(\'#CardGetMagneticCard\').hide(); $(\'#CheckUserName\').focus();" style="cursor: pointer; margin: 17px 15px; background: linear-gradient(rgb(221 221 221), rgb(235 235 235), rgb(219 219 219)); font-weight: bold; color: #474747; font-size: 18px; text-align: center; padding: 13px;">לחץ כאן להתחברות ע"י הזנת פרטים<img src="./Files/Pic/Manual.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;" /></div>';
             }
 
             $('#CardGetMagneticCard').html(html).show();
