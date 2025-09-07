@@ -26,11 +26,11 @@
     <title>טופס - נדרים פלוס</title>
 
     <script type="text/javascript">
-        // קבלת מוצרים לפיזור והצגה בטאב 1 עם הפרדה לפי סטטוס
-        // משתנה גלובלי לספירת המוצרים שנאספו
+        // קבלת הזמנות להצגה בטאב 1 עם הפרדה לפי סטטוס
+        // משתנה גלובלי לספירת ההזמנות שנאספו
         window.CollectionCounter = 0;
-        // משתנה לשמירת מעקב על מספרי המוצרים
-        window.ProductNumbers = {};
+        // משתנה לשמירת מעקב על מספרי ההזמנות
+        window.OrderNumbers = {};
         window.baseUrl = 'https://us-central1-kanfei-nesharim-test.cloudfunctions.net/';
 
         // פונקציה ליצירת אנימציה של מספר איסוף
@@ -74,20 +74,20 @@
         }
 
         // פונקציה לעדכון מספרי כל האלמנטים לאחר הסרה
-        function updateAllProductNumbers(productsStatus1) {
+        function updateAllOrderNumbers(ordersStatus1) {
             var counter = 1;
-            window.ProductNumbers = {};
+            window.OrderNumbers = {};
 
-            // עדכון המספרים של כל המוצרים הנבחרים
-            for (var i = 0; i < productsStatus1.length; i++) {
-                var prod = productsStatus1[i];
-                var id = prod.id;
+            // עדכון המספרים של כל ההזמנות הנבחרות
+            for (var i = 0; i < ordersStatus1.length; i++) {
+                var order = ordersStatus1[i];
+                var id = order.id;
 
-                if (window.SelectedProducts && window.SelectedProducts.indexOf(id) !== -1) {
-                    window.ProductNumbers[id] = counter;
+                if (window.SelectedOrders && window.SelectedOrders.indexOf(id) !== -1) {
+                    window.OrderNumbers[id] = counter;
 
                     // מציאת האלמנט ועדכון המספר
-                    var $element = $("#ProductsListStatus1 .product-row").eq(i);
+                    var $element = $("#OrdersListStatus1 .order-row").eq(i);
                     var $animationElement = $element.find('.collection-animation');
                     if ($animationElement.length > 0) {
                         $animationElement.text(counter).attr('data-number', counter);
@@ -101,23 +101,23 @@
         }
 
         // פונקציות עזר לבחירה מרובה (הגדרה גלובלית)
-        function updateSelectedProductsUI(productsStatus1) {
+        function updateSelectedOrdersUI(ordersStatus1) {
             // עדכון עיצוב שורות בסטטוס 1
-            $("#ProductsListStatus1 .product-row").each(function (idx) {
-                var prod = productsStatus1[idx];
-                var id = prod.id;
-                if (window.SelectedProducts && window.SelectedProducts.indexOf(id) !== -1) {
+            $("#OrdersListStatus1 .order-row").each(function (idx) {
+                var order = ordersStatus1[idx];
+                var id = order.id;
+                if (window.SelectedOrders && window.SelectedOrders.indexOf(id) !== -1) {
                     $(this).css({ "background": "#e0f7fa", "border": "2.5px solid #009688" });
                 } else {
                     $(this).css({ "background": "#fffdfa", "border": "2px solid #e7e7e7" });
                 }
             });
             // עדכון עיצוב שורות בסטטוס 2 (הזמנות בליקוט)
-            $("#ProductsListStatus2 .product-row").each(function (idx) {
-                var prod = window.ListProducts.filter(function(p) { return p.responsible !== null && (!Array.isArray(p.responsible) || p.responsible.length > 0); })[idx];
-                if (prod) {
-                    var id = prod.id;
-                    if (window.SelectedProducts && window.SelectedProducts.indexOf(id) !== -1) {
+            $("#OrdersListStatus2 .order-row").each(function (idx) {
+                var order = window.ListOrders.filter(function(o) { return o.responsible !== null && (!Array.isArray(o.responsible) || o.responsible.length > 0); })[idx];
+                if (order) {
+                    var id = order.id;
+                    if (window.SelectedOrders && window.SelectedOrders.indexOf(id) !== -1) {
                         $(this).css({ "background": "#e0f7fa", "border": "2.5px solid #009688" });
                     } else {
                         $(this).css({ "background": "#ffe0f0", "border": "2px solid #d0d0d0" });
@@ -125,32 +125,32 @@
                 }
             });
             // עדכון כפתור/טקסט בתחתית
-            if (!window.SelectedProducts || window.SelectedProducts.length === 0) {
-                $("#ApproveSelectedProductsBarContent").html('<span style="color:#888;font-size:17px;">לחץ על שורה כדי לבחור</span>');
+            if (!window.SelectedOrders || window.SelectedOrders.length === 0) {
+                $("#ApproveSelectedOrdersBarContent").html('<span style="color:#888;font-size:17px;">לחץ על שורה כדי לבחור</span>');
             } else {
-                $("#ApproveSelectedProductsBarContent").html('<div onclick="approveSelectedProducts()" style="display:inline-flex;align-items:center;justify-content:center;background:#8bc34a;font-weight:bold;color:#4a4a4a;cursor:pointer;width:max-content;height:100%;padding:10px 18px;box-sizing:border-box;border-radius:3px;font-size:18px;"><i class="fa-solid fa-check"></i><span style="padding:0 5px 0 0;">אשר ' + window.SelectedProducts.length + ' הזמנות</span></div>');
+                $("#ApproveSelectedOrdersBarContent").html('<div onclick="approveSelectedOrders()" style="display:inline-flex;align-items:center;justify-content:center;background:#8bc34a;font-weight:bold;color:#4a4a4a;cursor:pointer;width:max-content;height:100%;padding:10px 18px;box-sizing:border-box;border-radius:3px;font-size:18px;"><i class="fa-solid fa-check"></i><span style="padding:0 5px 0 0;">אשר ' + window.SelectedOrders.length + ' הזמנות</span></div>');
             }
         }
 
-        function approveSelectedProducts() {
-            if (!window.SelectedProducts || window.SelectedProducts.length === 0) return;
-            var count = window.SelectedProducts ? window.SelectedProducts.length : 0;
+        function approveSelectedOrders() {
+            if (!window.SelectedOrders || window.SelectedOrders.length === 0) return;
+            var count = window.SelectedOrders ? window.SelectedOrders.length : 0;
 
             // יצירת מערך אוביקטים עם id ו-cartIndex
-            var productsToSend = [];
-            for (var i = 0; i < window.SelectedProducts.length; i++) {
-                var productId = window.SelectedProducts[i];
-                var cartIndex = window.ProductNumbers[productId];
-                productsToSend.push({
-                    id: productId,
+            var ordersToSend = [];
+            for (var i = 0; i < window.SelectedOrders.length; i++) {
+                var orderId = window.SelectedOrders[i];
+                var cartIndex = window.OrderNumbers[orderId];
+                ordersToSend.push({
+                    id: orderId,
                     cartIndex: cartIndex
                 });
             }
 
             swal({
                 type: "warning",
-                title: "האם לאשר את כל המוצרים שנבחרו?",
-                text: 'נבחרו ' + count + ' מוצרים',
+                title: "האם לאשר את כל ההזמנות שנבחרו?",
+                text: 'נבחרו ' + count + ' הזמנות',
                 showConfirmButton: true,
                 confirmButtonText: 'אישור',
                 confirmButtonColor: 'rgb(140, 212, 245)',
@@ -162,8 +162,8 @@
                 if (res == true) {
                     $.ajax({
                         type: "POST",
-                        url: `${window.baseUrl}posApi/approveProducts`,
-                        data: { products: productsToSend },
+                        url: `${window.baseUrl}posApi/approveOrders`,
+                        data: { orders: ordersToSend },
                         context: Text,
                         timeout: 60000,
                         headers: {
@@ -174,8 +174,8 @@
                             MySwal(Response.massege)
                             return false;
                         }
-                        window.SelectedProducts = [];
-                        getProducts();
+                        window.SelectedOrders = [];
+                        getOrders();
                         MySwal(Response.massege, undefined, "success");
                     }).error(function () {
                         MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
@@ -183,7 +183,7 @@
                 }
             });
         }
-        var ListProducts = [];
+        var ListOrders = [];
         // function getProducts() {
         //     // איפוס בחירות בטאב 1 בכל רענון
         //     window.SelectedProducts = [];
@@ -293,16 +293,16 @@
         //     });
         // }
 
-        // פונקציה ליצירת שורת מוצר לאיסוף (Tab 1)
+        // פונקציה ליצירת שורת הזמנה לאיסוף (Tab 1)
 
-        function getProducts() {
+        function getOrders() {
             // איפוס בחירות בטאב 1 בכל רענון
-            window.SelectedProducts = [];
+            window.SelectedOrders = [];
             // איפוס מונה האיסוף ומעקב המספרים
             window.CollectionCounter = 0;
-            window.ProductNumbers = {};
+            window.OrderNumbers = {};
             $.ajax({
-                url: `${window.baseUrl}posApi/products`,
+                url: `${window.baseUrl}posApi/orders`,
                 context: Text,
                 timeout: 16000,
                 headers: {
@@ -313,8 +313,8 @@
                     MySwal(Response.massege)
                     return false;
                 }
-                // ListProducts = Response.data;
-                ListProducts = [{
+                // ListOrders = Response.data;
+                ListOrders = [{
                     id: 1,
                     orderId: 12345,
                     productsUnits: 7,
@@ -347,32 +347,32 @@
                     complitionPrecent: 0,
                 }  
              ];
-                console.log(ListProducts);
+                console.log(ListOrders);
                 
-                var productsStatus1 = ListProducts.filter(function (p) { return p.responsible === null || (Array.isArray(p.responsible) && p.responsible.length === 0); });
-                var productsStatus2 = ListProducts.filter(function (p) { return p.responsible !== null && (!Array.isArray(p.responsible) || p.responsible.length > 0); });
+                var ordersStatus1 = ListOrders.filter(function (o) { return o.responsible === null || (Array.isArray(o.responsible) && o.responsible.length === 0); });
+                var ordersStatus2 = ListOrders.filter(function (o) { return o.responsible !== null && (!Array.isArray(o.responsible) || o.responsible.length > 0); });
 
                 // חישוב המונה הגלובלי לפי הערך הגבוה ביותר ב-cartIndex
                 var maxCartIndex = 0;
-                for (var i = 0; i < productsStatus2.length; i++) {
-                    if (productsStatus2[i].cartIndex && productsStatus2[i].cartIndex > maxCartIndex) {
-                        maxCartIndex = productsStatus2[i].cartIndex;
+                for (var i = 0; i < ordersStatus2.length; i++) {
+                    if (ordersStatus2[i].cartIndex && ordersStatus2[i].cartIndex > maxCartIndex) {
+                        maxCartIndex = ordersStatus2[i].cartIndex;
                     }
                 }
                 window.CollectionCounter = maxCartIndex;
 
                 // מערך בחירות
-                window.SelectedProducts = window.SelectedProducts || [];
+                window.SelectedOrders = window.SelectedOrders || [];
 
                 var html = '';
                 html += '<div style="padding: 0 10px 70px;">';
-                // html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">רשימת מוצרים לאיסוף</div>';
-                html += '<div id="ProductsListStatus1">';
-                if (productsStatus1.length === 0) {
-                    html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין מוצרים לאיסוף</div>';
+                // html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">רשימת הזמנות לאיסוף</div>';
+                html += '<div id="OrdersListStatus1">';
+                if (ordersStatus1.length === 0) {
+                    html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין הזמנות לאיסוף</div>';
                 } else {
-                    for (var i = 0; i < productsStatus1.length; i++) {
-                        html += renderProductRow(productsStatus1[i], i, 1);
+                    for (var i = 0; i < ordersStatus1.length; i++) {
+                        html += renderOrderRow(ordersStatus1[i], i, 1);
                     }
                 }
                 html += '</div>';
@@ -381,64 +381,64 @@
                     + '<span style="color:#888; font-size:15px; background:#fff; padding:0 10px;">הזמנות בליקוט</span>'
                     + '<hr style="flex:1; border:none; border-top:1.5px solid #e0e0e0; margin:0 10px;">'
                     + '</div>';
-                html += '<div id="ProductsListStatus2">';
-                if (productsStatus2.length === 0) {
-                    html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין מוצרים בעגלה</div>';
+                html += '<div id="OrdersListStatus2">';
+                if (ordersStatus2.length === 0) {
+                    html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין הזמנות בליקוט</div>';
                 } else {
-                    for (var j = 0; j < productsStatus2.length; j++) {
-                        html += renderProductRow(productsStatus2[j], j, 2);
+                    for (var j = 0; j < ordersStatus2.length; j++) {
+                        html += renderOrderRow(ordersStatus2[j], j, 2);
                     }
                 }
                 html += '</div>';
                 html += '</div>';
 
                 // אלמנט קבוע בתחתית TAB
-                html += '<div id="ApproveSelectedProductsBar" style="position:fixed;bottom:0;left:0;width:100%;z-index:10;">'
+                html += '<div id="ApproveSelectedOrdersBar" style="position:fixed;bottom:0;left:0;width:100%;z-index:10;">'
                     + '<div style="max-width:500px;width:95%;margin:auto;position:relative;background:#ffffff;padding:8px 0;box-sizing:border-box;border-top:2px solid #cbcbcb;text-align:center;">'
-                    + '<div id="ApproveSelectedProductsBarContent"></div>'
+                    + '<div id="ApproveSelectedOrdersBarContent"></div>'
                     + '</div>'
                     + '</div>';
 
                 $("#Tab1List").html(html);
 
                 // סימון שורה בלחיצה (גם לסטטוס 1 וגם לסטטוס 2)
-                $("#ProductsListStatus1 .product-row, #ProductsListStatus2 .product-row").off("click").on("click", function () {
+                $("#OrdersListStatus1 .order-row, #OrdersListStatus2 .order-row").off("click").on("click", function () {
                     var $this = $(this);
                     var idx = $this.index();
-                    var isStatus2 = $this.closest('#ProductsListStatus2').length > 0;
-                    var prod = isStatus2 ? productsStatus2[idx] : productsStatus1[idx];
-                    var id = prod.id;
+                    var isStatus2 = $this.closest('#OrdersListStatus2').length > 0;
+                    var order = isStatus2 ? ordersStatus2[idx] : ordersStatus1[idx];
+                    var id = order.id;
 
-                    if (window.SelectedProducts.indexOf(id) === -1) {
-                        window.SelectedProducts.push(id);
+                    if (window.SelectedOrders.indexOf(id) === -1) {
+                        window.SelectedOrders.push(id);
                         window.CollectionCounter++;
-                        window.ProductNumbers[id] = window.CollectionCounter;
+                        window.OrderNumbers[id] = window.CollectionCounter;
                         showCollectionAnimation($this, window.CollectionCounter);
                     } else {
-                        window.SelectedProducts = window.SelectedProducts.filter(function (pid) { return pid !== id });
+                        window.SelectedOrders = window.SelectedOrders.filter(function (oid) { return oid !== id });
                         removeCollectionAnimation($this);
-                        delete window.ProductNumbers[id];
+                        delete window.OrderNumbers[id];
                         if (isStatus2) {
-                            updateAllProductNumbers(productsStatus2);
+                            updateAllOrderNumbers(ordersStatus2);
                         } else {
-                            updateAllProductNumbers(productsStatus1);
+                            updateAllOrderNumbers(ordersStatus1);
                         }
                     }
                     if (isStatus2) {
-                        updateSelectedProductsUI(productsStatus2);
+                        updateSelectedOrdersUI(ordersStatus2);
                     } else {
-                        updateSelectedProductsUI(productsStatus1);
+                        updateSelectedOrdersUI(ordersStatus1);
                     }
                 });
 
                 // עדכון UI ראשוני
-                updateSelectedProductsUI(productsStatus1);
+                updateSelectedOrdersUI(ordersStatus1);
             }).error(function () {
                 MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
             });
         }
 
-        function renderProductRow(prod, idx, status) {
+        function renderOrderRow(prod, idx, status) {
             var html = '';
             // נוסיף class נוסף לזיהוי בחירה
             var backgroundColor = status == 2 ? '#ffe0f0' : '#fffdfa'; // ורוד להזמנות משוייכות
@@ -446,7 +446,7 @@
             var sectionBackgroundColor = status == 2 ? '#9e9e9e' : '#4db6ac';
             var textOpacity = status == 2 ? '0.6' : '1';
 
-            html += '<div class="product-row" data-collected="false" data-product-id="' + prod.id + '" style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; margin: 5px auto; background: ' + backgroundColor + '; font-size: 18px; box-sizing: border-box; border: 2px solid ' + borderColor + '; overflow: visible; min-height: 40px; transition: background 0.2s, border 0.2s; opacity: ' + textOpacity + ';">';
+            html += '<div class="order-row" data-collected="false" data-product-id="' + prod.id + '" style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; margin: 5px auto; background: ' + backgroundColor + '; font-size: 18px; box-sizing: border-box; border: 2px solid ' + borderColor + '; overflow: visible; min-height: 40px; transition: background 0.2s, border 0.2s; opacity: ' + textOpacity + ';">';
             // צד ימין: מס' פריטים
             html += '<div style="background: ' + sectionBackgroundColor + '; color: white; display: flex; align-items: center; justify-content: center; min-width: 60px; font-weight: bold; font-size: 18px; position: relative; border-radius: 0 5px 5px 0;">';
             html += '<span style="font-size: 18px; font-weight: bold;">' + (prod.productsUnits || '') + '</span>';
@@ -462,7 +462,7 @@
             html += '<span style="font-size: 12px; margin-right: 4px;">יחידות</span>';
             html += '</div>';
 
-            // הוספת עיגול אפור עם cartIndex עבור מוצרים עם status 2
+            // הוספת עיגול אפור עם cartIndex עבור הזמנות עם status 2
             if (status == 2 && prod.cartIndex) {
                 html += '<div class="cart-index-display" style="position: absolute; left: 27.5px; bottom: 50%; transform: translateY(50%); background: #888; color: white; border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; z-index: 1000; opacity: 0.8; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">' + prod.cartIndex + '</div>';
             }
@@ -474,66 +474,6 @@
 
             html += '</div>';
             return html;
-            // עדכון UI של בחירה וכפתור אישור מרובה
-            function updateSelectedProductsUI(productsStatus1) {
-                // עדכון עיצוב שורות
-                $("#ProductsListStatus1 .product-row").each(function (idx) {
-                    var prod = productsStatus1[idx];
-                    var id = prod.id;
-                    if (window.SelectedProducts.indexOf(id) !== -1) {
-                        $(this).css({ "background": "#e0f7fa", "border": "2.5px solid #009688" });
-                    } else {
-                        $(this).css({ "background": "#fffdfa", "border": "2px solid #e7e7e7" });
-                    }
-                });
-                // עדכון כפתור/טקסט בתחתית
-                if (window.SelectedProducts.length === 0) {
-                    $("#ApproveSelectedProductsBarContent").html('<span style="color:#888;font-size:17px;">לחץ על שורה כדי לבחור</span>');
-                } else {
-                    $("#ApproveSelectedProductsBarContent").html('<div onclick="approveSelectedProducts()" style="display:inline-flex;align-items:center;justify-content:center;background:#8bc34a;font-weight:bold;color:#4a4a4a;cursor:pointer;width:max-content;height:100%;padding:10px 18px;box-sizing:border-box;border-radius:3px;font-size:18px;"><i class="fa-solid fa-check"></i><span style="padding:0 5px 0 0;">אשר ' + window.SelectedProducts.length + ' הזמנות</span></div>');
-                }
-            }
-
-            // פונקציית אישור מרובה
-            function approveSelectedProducts() {
-                if (!window.SelectedProducts || window.SelectedProducts.length === 0) return;
-                var selectedNames = ListProducts.filter(function (p) { return window.SelectedProducts.indexOf(p.id) !== -1; }).map(function (p) { return p.productName; });
-                swal({
-                    type: "warning",
-                    title: "האם לאשר את כל המוצרים שנבחרו?",
-                    text: selectedNames.join("\n"),
-                    showConfirmButton: true,
-                    confirmButtonText: 'אישור',
-                    confirmButtonColor: 'rgb(140, 212, 245)',
-                    showCancelButton: true,
-                    cancelButtonText: 'ביטול',
-                    allowOutsideClick: false,
-                    html: true
-                }, function (res) {
-                    if (res == true) {
-                        $.ajax({
-                            type: "POST",
-                            url: `${window.baseUrl}posApi/approveProducts`,
-                            data: { products: window.SelectedProducts },
-                            context: Text,
-                            timeout: 60000,
-                            headers: {
-                                "authorization": UserToken
-                            }
-                        }).success(function (Response) {
-                            if (Response.status == 'error') {
-                                MySwal(Response.massege)
-                                return false;
-                            }
-                            window.SelectedProducts = [];
-                            getProducts();
-                            MySwal(Response.massege, undefined, "success");
-                        }).error(function () {
-                            MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
-                        });
-                    }
-                });
-            }
         }
 
         // פונקציה ליצירת שורת מוצר לפיזור (Tab 2) - עיצוב חדש עם אייקון ארגז
@@ -1086,7 +1026,7 @@
 
             $("#MainForm").html(MainForm);
 
-            // קריאה אוטומטית להצגת מוצרים בטאב 1
+            // קריאה אוטומטית להצגת הזמנות בטאב 1
 
         });
 
@@ -2634,7 +2574,7 @@
                         searchHtml1 += '<input autocomplete="off" type="search" id="Filter_Search" oninput="Filter_Search()" placeholder="חיפוש לפי מס\' הזמנה" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
                         searchHtml1 += '</div>';
                         $("#TabContent1").html(titleHtml1 + searchHtml1 + '<div id="Tab1List"></div>');
-                        getProducts();
+                        getOrders();
                         break;
                     case 2:
                         $("#TabContent2").show();
@@ -2858,9 +2798,9 @@
                     html += '</div>';
                     html += '</div>';
                     // פס קבוע בתחתית TAB
-                    html += '<div id="ApproveSelectedOrdersBar" style="position:fixed;bottom:0;left:0;width:100%;z-index:10;">'
+                    html += '<div id="ApproveSelectedShipmentsBar" style="position:fixed;bottom:0;left:0;width:100%;z-index:10;">'
                         + '<div style="max-width:500px;width:95%;margin:auto;position:relative;background:#ffffff;padding:8px 0;box-sizing:border-box;border-top:2px solid #cbcbcb;text-align:center;">'
-                        + '<div id="ApproveSelectedOrdersBarContent"></div>'
+                        + '<div id="ApproveSelectedShipmentsBarContent"></div>'
                         + '</div>'
                         + '</div>';
                     $("#TabContent3").html(html);
@@ -2873,11 +2813,11 @@
                         } else {
                             window.SelectedOrders = window.SelectedOrders.filter(function (oid) { return oid !== id });
                         }
-                        updateSelectedOrdersUI(Response.data);
+                        updateSelectedShipmentsUI(Response.data);
                     });
 
                     // עדכון UI ראשוני
-                    updateSelectedOrdersUI(Response.data);
+                    updateSelectedShipmentsUI(Response.data);
                     Filter_Search();
                     Top();
                 }).error(function () {
@@ -2886,7 +2826,7 @@
             }
 
             // עדכון UI של בחירה וכפתור אישור מרובה למשלוחים
-            function updateSelectedOrdersUI(orders) {
+            function updateSelectedShipmentsUI(orders) {
                 $("#OrdersList .order-row").each(function (idx) {
                     var id = $(this).data('order-id');
                     if (window.SelectedOrders && window.SelectedOrders.indexOf(id) !== -1) {
@@ -2896,23 +2836,23 @@
                     }
                 });
                 if (!window.SelectedOrders || window.SelectedOrders.length === 0) {
-                    $("#ApproveSelectedOrdersBarContent").html('<span style="color:#888;font-size:17px;">לחץ על שורה כדי לבחור</span>');
+                    $("#ApproveSelectedShipmentsBarContent").html('<span style="color:#888;font-size:17px;">לחץ על שורה כדי לבחור</span>');
                 } else {
-                    $("#ApproveSelectedOrdersBarContent").html(
+                    $("#ApproveSelectedShipmentsBarContent").html(
                         '<div style="display:flex;justify-content:space-between;align-items:center;height:100%;width:100%;gap:10px;">' +
-                        '<div onclick="approveSelectedOrders(true)" style="display:inline-flex;align-items:center;justify-content:center;background:#ff9800;font-weight:bold;color:white;cursor:pointer;padding:10px 15px;box-sizing:border-box;border-radius:3px;font-size:16px;flex:1;"><span>אישור עם צינתוק</span></div>' +
+                        '<div onclick="approveSelectedShipments(true)" style="display:inline-flex;align-items:center;justify-content:center;background:#ff9800;font-weight:bold;color:white;cursor:pointer;padding:10px 15px;box-sizing:border-box;border-radius:3px;font-size:16px;flex:1;"><span>אישור עם צינתוק</span></div>' +
                         '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;color:#333;font-weight:bold;">' +
                         '<span style="font-size:18px;">' + window.SelectedOrders.length + '</span>' +
                         '<span style="font-size:12px;">נבחרו</span>' +
                         '</div>' +
-                        '<div onclick="approveSelectedOrders(false)" style="display:inline-flex;align-items:center;justify-content:center;background:#8bc34a;font-weight:bold;color:#4a4a4a;cursor:pointer;padding:10px 15px;box-sizing:border-box;border-radius:3px;font-size:16px;flex:1;"><span>אישור בלי צינתוק</span></div>' +
+                        '<div onclick="approveSelectedShipments(false)" style="display:inline-flex;align-items:center;justify-content:center;background:#8bc34a;font-weight:bold;color:#4a4a4a;cursor:pointer;padding:10px 15px;box-sizing:border-box;border-radius:3px;font-size:16px;flex:1;"><span>אישור בלי צינתוק</span></div>' +
                         '</div>'
                     );
                 }
             }
 
             // פונקציית אישור מרובה למשלוחים
-            function approveSelectedOrders(isTzintuk) {
+            function approveSelectedShipments(isTzintuk) {
                 if (!window.SelectedOrders || window.SelectedOrders.length === 0) return;
                 var selectedNames = [];
                 var orders = [];
@@ -3006,10 +2946,10 @@
                     return;
                 }
 
-                // טאב 1 (איסוף) - סינון מוצרים
-                if (CurrentTab === 1 && $("#Tab1List .product-row").length > 0) {
+                // טאב 1 (איסוף) - סינון הזמנות
+                if (CurrentTab === 1 && $("#Tab1List .order-row").length > 0) {
                     var keywords = val.split(' ');
-                    $("#Tab1List .product-row").each(function () {
+                    $("#Tab1List .order-row").each(function () {
                         var $row = $(this);
                         var text = $row.text().replace(/\s+/g, ' ').trim();
                         var show = true;
