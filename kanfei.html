@@ -749,7 +749,7 @@
                 
                 // הוספת פס התקדמות ואינדיקטורים רק אם יש בחירה
                 if (percentage > 0) {
-                    var progressBar = $('<div class="progress-bar" style="position: absolute; bottom: 0; left: 0; height: 4px; background: ' + progressColor + '; width: ' + Math.min(percentage, 100) + '%; transition: width 0.3s ease;"></div>');
+                    var progressBar = $('<div class="progress-bar" style="position: absolute; bottom: 0; right: 0; height: 4px; background: ' + progressColor + '; width: ' + Math.min(percentage, 100) + '%; transition: width 0.3s ease;"></div>');
                     $(this).append(progressBar);
                     
                     // הוספת טקסט כמות אם לא הושלם 100%
