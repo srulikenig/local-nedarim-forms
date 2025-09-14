@@ -164,16 +164,8 @@
             if (!window.SelectedOrders || window.SelectedOrders.length === 0) return;
             var count = window.SelectedOrders ? window.SelectedOrders.length : 0;
 
-            // יצירת מערך אוביקטים עם id ו-cartIndex
-            var ordersToSend = [];
-            for (var i = 0; i < window.SelectedOrders.length; i++) {
-                var orderId = window.SelectedOrders[i];
-                var cartIndex = window.OrderNumbers[orderId];
-                ordersToSend.push({
-                    id: orderId,
-                    cartIndex: cartIndex
-                });
-            }
+            // יצירת מערך של orderId בלבד (בהתאם לאנדפוינט החדש)
+            var ordersArr = window.SelectedOrders.slice(); // העתקה של המערך
 
             swal({
                 type: "warning",
@@ -190,8 +182,8 @@
                 if (res == true) {
                     $.ajax({
                         type: "POST",
-                        url: `${window.baseUrl}posApi/approveOrders`,
-                        data: { orders: ordersToSend },
+                        url: `${window.baseUrl}posApi/approveEmployeesToOrders`,
+                        data: { ordersArr: ordersArr },
                         context: Text,
                         timeout: 60000,
                         headers: {
@@ -473,38 +465,12 @@
                     updateSelectedOrdersUI(ordersStatus1, ordersStatus2);
                 });
 
-                // סימון שורה בלחיצה לסטטוס 2
+                // סימון שורה בלחיצה לסטטוס 2 - מבוטל כי הזמנות בליקוט לא ניתנות ללחיצה
                 $("#OrdersListStatus2 .order-row").off("click").on("click", function (e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    
-                    var $this = $(this);
-                    var idx = $("#OrdersListStatus2 .order-row").index($this);
-                    var order = ordersStatus2[idx];
-                    
-                    console.log('Status2 clicked - Index:', idx, 'Order:', order);
-                    
-                    if (!order) {
-                        console.error('Order not found at index:', idx, 'in status 2');
-                        return;
-                    }
-                    
-                    var id = order.orderId || order.id;
-                    console.log('Order ID:', id);
-
-                    if (window.SelectedOrders.indexOf(id) === -1) {
-                        window.SelectedOrders.push(id);
-                        window.CollectionCounter++;
-                        window.OrderNumbers[id] = window.CollectionCounter;
-                        console.log('Added order to selection:', id);
-                    } else {
-                        window.SelectedOrders = window.SelectedOrders.filter(function (oid) { return oid !== id });
-                        delete window.OrderNumbers[id];
-                        console.log('Removed order from selection:', id);
-                    }
-                    
-                    console.log('Current selected orders:', window.SelectedOrders);
-                    updateSelectedOrdersUI(ordersStatus1, ordersStatus2);
+                    // מניעת לחיצה על הזמנות שכבר בליקוט
+                    return false;
                 });
 
                 // עדכון UI ראשוני
@@ -525,8 +491,9 @@
             var borderColor = isAssigned ? '#d0d0d0' : '#e7e7e7';
             var sectionBackgroundColor = isAssigned ? '#C5C5C5' : '#4db6ac'; // אפור כהה יותר לריבועים של הזמנות שנתפסו
             var textOpacity = isAssigned ? '0.8' : '1';
+            var cursorStyle = (status == 2) ? 'not-allowed' : 'pointer'; // מניעת לחיצה על הזמנות בליקוט
 
-            html += '<div class="order-row" data-collected="false" data-product-id="' + prod.id + '" style="text-align: right; position: relative; border-radius: 5px; margin: 5px auto; background: ' + backgroundColor + '; font-size: 18px; box-sizing: border-box; border: 2px solid ' + borderColor + '; overflow: visible; transition: background 0.2s, border 0.2s; opacity: ' + textOpacity + ';">';
+            html += '<div class="order-row" data-collected="false" data-product-id="' + prod.id + '" style="text-align: right; position: relative; border-radius: 5px; margin: 5px auto; background: ' + backgroundColor + '; font-size: 18px; box-sizing: border-box; border: 2px solid ' + borderColor + '; overflow: visible; transition: background 0.2s, border 0.2s; opacity: ' + textOpacity + '; cursor: ' + cursorStyle + ';">';
             
             // שורת ההזמנה הראשית
             html += '<div style="display: flex; align-items: stretch; min-height: 50px;">';
@@ -590,6 +557,8 @@
 
         // פונקציה ליצירת שורת מוצר לפיזור (Tab 2) - עיצוב חדש עם אייקון ארגז
         function renderOrderProductRow(prod, idx) {
+            console.log('***Prod: ',prod);
+            
             var html = '';
             html += '<div class="order-product-row product-row" data-product-id="' + prod.id + '" style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; margin: 5px auto; background: #f8faff; font-size: 18px; box-sizing: border-box; border: 2px solid #e7e7e7; overflow: visible; min-height: 40px; transition: background 0.2s, border 0.2s;">';
             html += '<div style="background: #1976d2; color: white; display: flex; align-items: center; justify-content: center; min-width: 45px; font-weight: bold; font-size: 20px; position: relative;">';
