@@ -373,8 +373,6 @@
                 }
                 ListOrders = Response.data;
                 
-                console.log(ListOrders);
-                
                 // הזמנות שעדיין לא נתפסו (employeeObjects ריק) - יופיעו מעל הקו
                 var ordersStatus1 = ListOrders.filter(function (o) { return !o.employeeObjects || o.employeeObjects.length === 0; });
                 // הזמנות שכבר נתפסו (employeeObjects לא ריק) - יופיעו מתחת לקו  
@@ -429,7 +427,6 @@
 
                 $("#Tab1List").html(html);
                 
-                console.log('Setting up click handlers. Orders Status1:', ordersStatus1.length, 'Orders Status2:', ordersStatus2.length);
 
                 // סימון שורה בלחיצה לסטטוס 1
                 $("#OrdersListStatus1 .order-row").off("click").on("click", function (e) {
@@ -440,28 +437,22 @@
                     var idx = $("#OrdersListStatus1 .order-row").index($this);
                     var order = ordersStatus1[idx];
                     
-                    console.log('Status1 clicked - Index:', idx, 'Order:', order);
-                    
                     if (!order) {
                         console.error('Order not found at index:', idx, 'in status 1');
                         return;
                     }
                     
                     var id = order.orderId || order.id;
-                    console.log('Order ID:', id);
 
                     if (window.SelectedOrders.indexOf(id) === -1) {
                         window.SelectedOrders.push(id);
                         window.CollectionCounter++;
                         window.OrderNumbers[id] = window.CollectionCounter;
-                        console.log('Added order to selection:', id);
                     } else {
                         window.SelectedOrders = window.SelectedOrders.filter(function (oid) { return oid !== id });
                         delete window.OrderNumbers[id];
-                        console.log('Removed order from selection:', id);
                     }
                     
-                    console.log('Current selected orders:', window.SelectedOrders);
                     updateSelectedOrdersUI(ordersStatus1, ordersStatus2);
                 });
 
@@ -557,7 +548,6 @@
 
         // פונקציה ליצירת שורת מוצר לפיזור (Tab 2) - עיצוב חדש עם אייקון ארגז ומקום לקוביות
         function renderOrderProductRow(prod, idx) {
-            console.log('***Prod: ',prod);
             
             var html = '';
             // קונטיינר עליון שמכיל את השורה והקוביות
@@ -619,8 +609,7 @@
                 var orderProducts = Response.data || [];
                 var html = '';
                 html += '<div style="padding: 0 10px 70px;">';
-                    html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">רשימת הזמנות זמינות</div>';
-                html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">מוצרים לארגזים</div>';
+                html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">מוצרים לליקוט</div>';
 
                 // טוגל בוטון לבחירת סוג התצוגה
                 html += '<div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">';
@@ -1443,7 +1432,6 @@
                 context: Text,
                 timeout: 60000,
             }).success(function (JsonData) {
-                console.log(JsonData)
             }).error(function () {
                 EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
             });
@@ -2062,7 +2050,6 @@
                 context: Text,
                 timeout: 60000,
             }).success(function (JsonData) {
-                console.log(JsonData.Message)
             }).error(function () {
                 EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
             })
@@ -2418,7 +2405,6 @@
                 timeout: 180000,
             }).success(function (JsonData) {
 
-                console.log(JsonData.Time)
                 Current_Houer = +JsonData.Time.split(":")[0];
                 Current_Minute = +JsonData.Time.split(":")[1];
                 GetMatrimJson();
@@ -2921,27 +2907,7 @@
             var UserType;
             var CurrentTab = 1; // משתנה לשמירת הטאב הנוכחי
 
-            // לוג מצב התחברות בטעינת הדף
-            console.log("=== מצב התחברות בטעינת הדף ===");
-            console.log("טוקן נוכחי:", UserToken || "ריק");
-            console.log("שם משתמש נוכחי:", UserName || "ריק");
-            console.log("זמן טעינת הדף:", new Date().toLocaleString("he-IL"));
-            console.log("================================");
-            
-            // הוראות שימוש בפונקציות ניטור
-            console.log("💡 לבדיקת מצב המשתמש בכל זמן, הקלד בקונסול: checkUserStatus()");
-            console.log("💡 לפענוח טוקן המשתמש, הקלד בקונסול: decodeUserToken()");
-            console.log("💡 כל התחברות תירשם בקונסול באופן אוטומטי");
-            console.log("================================");
-
             function ShowMainScreen() {
-                // לוג מעבר למסך הראשי
-                console.log("=== מעבר למסך הראשי ===");
-                console.log("משתמש שהתחבר:", UserName);
-                console.log("טוקן פעיל:", UserToken ? "קיים" : "לא קיים");
-                console.log("זמן מעבר למסך:", new Date().toLocaleString("he-IL"));
-                console.log("========================");
-
                 // הסתרת מסכי הכניסה והצגת המסך הראשי
                 $(".Card").hide();
                 $("#Logo").hide();
@@ -2957,13 +2923,6 @@
 
             // פונקציה לבדיקת מצב המשתמש הנוכחי - ניתן לקרוא מהקונסול
             function checkUserStatus() {
-                console.log("=== מצב משתמש נוכחי ===");
-                console.log("שם משתמש:", UserName || "לא מחובר");
-                console.log("טוקן:", UserToken || "לא קיים");
-                console.log("סוג משתמש:", UserType || "לא זמין");
-                console.log("זמן בדיקה:", new Date().toLocaleString("he-IL"));
-                console.log("מחובר:", !!UserToken && !!UserName ? "כן" : "לא");
-                console.log("======================");
                 return {
                     userName: UserName,
                     userToken: UserToken,
@@ -2975,7 +2934,6 @@
             // פונקציה לפענוח טוקן JWT - ניתן לקרוא מהקונסול
             function decodeUserToken() {
                 if (!UserToken) {
-                    console.log("אין טוקן לפענח");
                     return null;
                 }
                 
@@ -2985,25 +2943,13 @@
                     // פיצול הטוקן לחלקים
                     var parts = token.split('.');
                     if (parts.length !== 3) {
-                        console.log("טוקן לא תקין");
                         return null;
                     }
                     
                     // פענוח החלק השני (payload)
                     var payload = JSON.parse(atob(parts[1]));
-                    
-                    console.log("=== פרטי טוקן מפוענח ===");
-                    console.log("שם משתמש:", payload.userName || "לא זמין");
-                    console.log("מזהה משתמש:", payload.userId || "לא זמין");
-                    console.log("תוקף מ:", payload.iat ? new Date(payload.iat * 1000).toLocaleString("he-IL") : "לא זמין");
-                    console.log("תוקף עד:", payload.exp ? new Date(payload.exp * 1000).toLocaleString("he-IL") : "לא זמין");
-                    console.log("פג תוקף:", payload.exp && payload.exp < Date.now() / 1000 ? "כן" : "לא");
-                    console.log("מידע נוסף:", payload);
-                    console.log("========================");
-                    
                     return payload;
                 } catch (error) {
-                    console.log("שגיאה בפענוח טוקן:", error);
                     return null;
                 }
             }
@@ -3048,7 +2994,7 @@
                     case 1:
                         $("#TabContent1").show();
                         // הוספת כותרת ואז שדה חיפוש (כמו בטאב 3)
-                        var titleHtml1 = '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">רשימת הזמנות לליקוט</div>';
+                        var titleHtml1 = '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">הזמנות לליקוט</div>';
                         
                         // פילטר עם 3 כפתורים
                         var filterHtml1 = '<div style="display: flex; justify-content: center; align-items: center; margin: 15px 0;">';
@@ -3088,7 +3034,6 @@
                     context: Text,
                     timeout: 60000,
                 }).success(function (Response) {
-console.log('***Response***', Response);
 
                     if (Response.status == 'error') {
                         MySwal(Response.massege)
@@ -3097,16 +3042,6 @@ console.log('***Response***', Response);
 
                     UserToken = "Bearer " + Response.token
                     UserName = Response.userName
-
-                    // לוג פרטי המשתמש שהתחבר
-                    console.log("=== פרטי התחברות משתמש ===");
-                    console.log("שם משתמש:", UserName);
-                    console.log("טוקן:", UserToken);
-                    console.log("מזהה משתמש:", Response.userId || "לא זמין");
-                    console.log("סוג משתמש:", Response.userType || "לא זמין");
-                    console.log("זמן התחברות:", new Date().toLocaleString("he-IL"));
-                    console.log("תגובה מלאה מהשרת:", Response);
-                    console.log("===============================");
 
                     // פענוח טוקן אוטומטי אחרי התחברות
                     decodeUserToken();
@@ -3236,7 +3171,6 @@ console.log('***Response***', Response);
                         return false;
                     }
                     ListOrders = Response.data
-                    console.log('**List orders: ', ListOrders);
                     
                     // מערך בחירות למשלוחים
                     window.SelectedOrders = window.SelectedOrders || [];
