@@ -590,9 +590,36 @@
         // משתנה גלובלי לטאב 3 (משלוחים)
         window.ShippingViewMode = 'orders'; // 'orders' או 'products'
 
+        // פונקציות עזר לעבודה עם המבנה החדש של מוצרים נבחרים
+        function findSelectedProduct(productId) {
+            return window.SelectedOrderProducts.find(function(item) { return item.id === productId });
+        }
+
+        function addOrUpdateSelectedProduct(productId, quantity, maxQuantity) {
+            var existing = findSelectedProduct(productId);
+            if (existing) {
+                existing.quantity = quantity;
+                if (existing.quantity > maxQuantity) {
+                    existing.quantity = 0; // איפוס אם עברנו את המקסימום
+                }
+            } else if (quantity > 0) {
+                window.SelectedOrderProducts.push({ id: productId, quantity: quantity, maxQuantity: maxQuantity });
+            }
+            
+            // הסרת פריטים עם כמות 0
+            window.SelectedOrderProducts = window.SelectedOrderProducts.filter(function(item) { 
+                return item.quantity > 0; 
+            });
+        }
+
+        function getSelectedProductQuantity(productId) {
+            var existing = findSelectedProduct(productId);
+            return existing ? existing.quantity : 0;
+        }
+
         // קבלת מוצרים לפיזור והצגה בטאב 2
         function getOrderProducts() {
-            // איפוס בחירות בטאב 2 בכל רענון
+            // איפוס בחירות בטאב 2 בכל רענון - כעת מערך של אובייקטים עם ID וכמות
             window.SelectedOrderProducts = [];
             $.ajax({
                 url: `${window.baseUrl}posApi/orderProducts?viewMode=` + window.ViewMode,
@@ -643,16 +670,27 @@
                     + '</div>';
                 $("#Tab2List").html(html);
 
-                // סימון שורה בלחיצה
+                // סימון שורה בלחיצה - כעת תומך בכמויות דרגתיות
                 $("#OrderProductsList .order-product-row").off("click").on("click", function () {
                     var idx = $(this).index();
                     var prod = orderProducts[idx];
                     var id = prod.id;
-                    if (window.SelectedOrderProducts.indexOf(id) === -1) {
-                        window.SelectedOrderProducts.push(id);
-                    } else {
-                        window.SelectedOrderProducts = window.SelectedOrderProducts.filter(function (pid) { return pid !== id });
+                    var maxQuantity = parseFloat(prod.quantityOrWeight || 1);
+                    
+                    // קבלת הכמות הנוכחית
+                    var currentQuantity = getSelectedProductQuantity(id);
+                    
+                    // הגדלת הכמות ב-1
+                    var newQuantity = currentQuantity + 1;
+                    
+                    // אם הגענו מעל המקסימום, איפוס ל-0
+                    if (newQuantity > maxQuantity) {
+                        newQuantity = 0;
                     }
+                    
+                    // עדכון המבנה
+                    addOrUpdateSelectedProduct(id, newQuantity, maxQuantity);
+                    
                     updateSelectedOrderProductsUI(orderProducts);
                 });
 
@@ -667,40 +705,105 @@
             window.ViewMode = mode;
             getOrderProducts(); // רענון הנתונים עם המצב החדש
         }
-        // עדכון UI של בחירה וכפתור אישור מרובה לפיזור
+        // עדכון UI של בחירה וכפתור אישור מרובה לפיזור - עם תמיכה באחוזי מילוי
         function updateSelectedOrderProductsUI(orderProducts) {
             $("#OrderProductsList .order-product-row").each(function (idx) {
                 var prod = orderProducts[idx];
                 var id = prod.id;
-                if (window.SelectedOrderProducts && window.SelectedOrderProducts.indexOf(id) !== -1) {
-                    $(this).css({ "background": "#e3f2fd", "border": "2.5px solid #1976d2" });
+                var maxQuantity = parseFloat(prod.quantityOrWeight || 1);
+                var currentQuantity = getSelectedProductQuantity(id);
+                
+                // חישוב אחוז ההשלמה
+                var percentage = maxQuantity > 0 ? (currentQuantity / maxQuantity) * 100 : 0;
+                
+                // הגדרת צבעים בהתאם לאחוז
+                var backgroundColor, borderColor, progressColor;
+                
+                if (percentage === 0) {
+                    // לא נבחר
+                    backgroundColor = "#f8faff";
+                    borderColor = "#e7e7e7";
+                    progressColor = "transparent";
+                } else if (percentage >= 100) {
+                    // הושלם 100% - ירוק
+                    backgroundColor = "#e8f5e8";
+                    borderColor = "#4caf50";
+                    progressColor = "#4caf50";
                 } else {
-                    $(this).css({ "background": "#f8faff", "border": "2px solid #e7e7e7" });
+                    // בתהליך - כחול עם אחוז
+                    backgroundColor = "#e3f2fd";
+                    borderColor = "#1976d2";
+                    progressColor = "#1976d2";
+                }
+                
+                // עדכון עיצוב השורה
+                $(this).css({ 
+                    "background": backgroundColor, 
+                    "border": "2.5px solid " + borderColor,
+                    "position": "relative"
+                });
+                
+                // הסרת פס התקדמות ואינדיקטור כמות קיימים
+                $(this).find('.progress-bar').remove();
+                $(this).find('.quantity-indicator').remove();
+                
+                // הוספת פס התקדמות ואינדיקטורים רק אם יש בחירה
+                if (percentage > 0) {
+                    var progressBar = $('<div class="progress-bar" style="position: absolute; bottom: 0; left: 0; height: 4px; background: ' + progressColor + '; width: ' + Math.min(percentage, 100) + '%; transition: width 0.3s ease;"></div>');
+                    $(this).append(progressBar);
+                    
+                    // הוספת טקסט כמות אם לא הושלם 100%
+                    if (percentage < 100) {
+                        var quantityIndicator = $('<div class="quantity-indicator" style="position: absolute; top: 5px; left: 5px; background: ' + progressColor + '; color: white; padding: 2px 6px; border-radius: 10px; font-size: 12px; font-weight: bold;">' + currentQuantity + '/' + maxQuantity + '</div>');
+                        $(this).append(quantityIndicator);
+                    } else {
+                        // סימן V להשלמה
+                        var checkMark = $('<div class="quantity-indicator" style="position: absolute; top: 5px; left: 5px; background: #4caf50; color: white; padding: 2px 6px; border-radius: 50%; font-size: 12px; font-weight: bold; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;">✓</div>');
+                        $(this).append(checkMark);
+                    }
                 }
             });
-            if (!window.SelectedOrderProducts || window.SelectedOrderProducts.length === 0) {
+            
+            // עדכון מונה בתחתית
+            var totalSelectedProducts = window.SelectedOrderProducts.length;
+            var totalItemsCount = 0;
+            
+            // חישוב סך כל הפריטים שנבחרו
+            for (var i = 0; i < window.SelectedOrderProducts.length; i++) {
+                totalItemsCount += window.SelectedOrderProducts[i].quantity;
+            }
+            
+            if (totalSelectedProducts === 0) {
                 $("#ApproveSelectedOrderProductsBarContent").html('<span style="color:#888;font-size:17px;">לחץ על שורה כדי לבחור</span>');
             } else {
                 $("#ApproveSelectedOrderProductsBarContent").html(
                     '<div style="display:flex;justify-content:space-between;align-items:center;height:100%;width:100%;gap:10px;">' +
                     '<div onclick="approveSelectedOrderProducts()" style="display:inline-flex;align-items:center;justify-content:center;background:#8bc34a;font-weight:bold;color:#4a4a4a;cursor:pointer;padding:10px 18px;box-sizing:border-box;border-radius:3px;font-size:18px;flex:1;"><span>אשר מוצרים</span></div>' +
                     '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;color:#333;font-weight:bold;">' +
-                    '<span style="font-size:18px;">' + window.SelectedOrderProducts.length + '</span>' +
-                    '<span style="font-size:12px;">נבחרו</span>' +
+                    '<span style="font-size:18px;">' + totalSelectedProducts + '</span>' +
+                    '<span style="font-size:12px;">' + totalItemsCount + ' יח\'</span>' +
                     '</div>' +
                     '</div>'
                 );
             }
         }
 
-        // פונקציית אישור מרובה לפיזור
+        // פונקציית אישור מרובה לפיזור - עם תצוגה מעודכנת של כמויות
         function approveSelectedOrderProducts() {
             if (!window.SelectedOrderProducts || window.SelectedOrderProducts.length === 0) return;
-            var count = window.SelectedOrderProducts ? window.SelectedOrderProducts.length : 0;
+            
+            var count = window.SelectedOrderProducts.length;
+            var totalQuantity = 0;
+            
+            // חישוב סך כל הכמויות
+            for (var i = 0; i < window.SelectedOrderProducts.length; i++) {
+                totalQuantity += window.SelectedOrderProducts[i].quantity;
+            }
+            
             swal({
                 type: "warning",
                 title: "האם לאשר את כל המוצרים שנבחרו?",
-                text: 'נבחרו ' + count + ' מוצרים',
+                text: 'נבחרו ' + count + ' מוצרים עם סך של ' + totalQuantity + ' יחידות',
                 showConfirmButton: true,
                 confirmButtonText: 'אישור',
                 confirmButtonColor: 'rgb(56, 142, 60)',
