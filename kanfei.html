@@ -690,22 +690,9 @@
                         // עדכון עיצוב השורה
                         updateProductRowUI(id);
                     } else {
-                        // אם המוצר כבר פתוח ויש בו קוביות מסומנות - רק לסגור את הקוביות
-                        // אם אין קוביות מסומנות - לצבוע קוביה 1 בירוק
-                        if (!hasAnySelectedCubes(id)) {
-                            if (!window.ProductCubes[id]) {
-                                window.ProductCubes[id] = {};
-                            }
-                            window.ProductCubes[id][1] = 'green';
-                            
-                            // עדכון הקוביה בתצוגה
-                            var cube1 = $productContainer.find('.product-cube[data-cube-number="1"]');
-                            if (cube1.length > 0) {
-                                updateCubeColor(cube1, 'green');
-                            }
-                            
-                            updateProductRowUI(id);
-                        }
+                        // אם המוצר כבר פתוח - סגירה של אזור הקוביות
+                        window.ExpandedProducts[id] = false;
+                        $productContainer.find('.cubes-area').hide().empty();
                     }
                 });
 
