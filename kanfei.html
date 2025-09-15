@@ -694,7 +694,7 @@ function openPrintQueuePopup() {
             
             // מרכז: מס' הזמנה (רק המספר)
             html += '<div style="flex: 1; padding: 5px 8px; display: flex; align-items: center; justify-content: center; word-wrap: break-word; min-height: 50px;">';
-            html += '<div style="font-size: 24px; color: #333; font-weight: bold;">' + (prod.order ? prod.order.nbsOrderId : prod.orderId || '') + '</div>';
+            html += '<div style="font-size: 24px; color: #333; font-weight: bold;">' + (prod.order ? prod.order.weeklyId : prod.orderId || '') + '</div>';
             html += '</div>';
             
             // צד שמאל: שם העובד אם קיים
@@ -742,6 +742,7 @@ function openPrintQueuePopup() {
 
         // פונקציה ליצירת שורת מוצר לפיזור (Tab 2) - עיצוב חדש עם אייקון ארגז ומקום לקוביות
         function renderOrderProductRow(prod, idx) {
+            console.log(prod);
             
             var html = '';
             // קונטיינר עליון שמכיל את השורה והקוביות
