@@ -903,22 +903,29 @@ function openPrintQueuePopup() {
                 $(this).find('.cubes-area').hide().empty();
                 $(this).find('.quantity-indicator').remove();
                 
-                // בדיקה אם יש קוביות מסומנות למוצר
+                // בדיקה אם יש קוביות מסומנות ומצב אם כל הקוביות סומנו
                 var hasSelectedCubes = hasAnySelectedCubes(id);
-                
+                var fullyMarked = allCubesMarked(id);
+
                 // עדכון עיצוב שורת המוצר
                 var $productRow = $(this).find('.order-product-row');
-                if (hasSelectedCubes) {
-                    // רקע כחול אם יש קוביות מסומנות
+                if (!hasSelectedCubes) {
+                    // אין סימונים - רקע רגיל
+                    $productRow.css({ 
+                        "background": "#f8faff", 
+                        "border": "2px solid #e7e7e7"
+                    });
+                } else if (fullyMarked) {
+                    // כל הקוביות סומנו - רקע כחול (הושלם)
                     $productRow.css({ 
                         "background": "#e3f2fd", 
                         "border": "2.5px solid #1976d2"
                     });
                 } else {
-                    // רקע רגיל אם אין קוביות מסומנות
+                    // חלקי - יש קוביות לבנות - הצג אזהרה צהובה
                     $productRow.css({ 
-                        "background": "#f8faff", 
-                        "border": "2px solid #e7e7e7"
+                        "background": "#fff8e1", /* light warning yellow */
+                        "border": "2px solid #f7bb4d" /* amber border */
                     });
                 }
                 
@@ -948,6 +955,18 @@ function openPrintQueuePopup() {
                    Object.keys(window.ProductCubes[productId]).some(function(cubeNum) {
                        return window.ProductCubes[productId][cubeNum] !== 'white';
                    });
+        }
+
+        // האם כל הקוביות של מוצר מסומןות (אין קוביות לבנות)
+        function allCubesMarked(productId) {
+            if (!window.ProductCubes[productId]) return false;
+            var keys = Object.keys(window.ProductCubes[productId]);
+            if (keys.length === 0) return false;
+            for (var i = 0; i < keys.length; i++) {
+                var val = window.ProductCubes[productId][keys[i]];
+                if (val === 'white') return false;
+            }
+            return true;
         }
         
         function getSelectedProductsCount() {
@@ -1091,17 +1110,23 @@ function openPrintQueuePopup() {
                 var rowProductId = $(this).data('product-id');
                 if (rowProductId && rowProductId.toString() === productId.toString()) {
                     var hasSelectedCubes = hasAnySelectedCubes(productId);
+                    var fullyMarked = allCubesMarked(productId);
                     var $productRow = $(this).find('.order-product-row');
-                    
-                    if (hasSelectedCubes) {
+
+                    if (!hasSelectedCubes) {
+                        $productRow.css({ 
+                            "background": "#f8faff", 
+                            "border": "2px solid #e7e7e7"
+                        });
+                    } else if (fullyMarked) {
                         $productRow.css({ 
                             "background": "#e3f2fd", 
                             "border": "2.5px solid #1976d2"
                         });
                     } else {
                         $productRow.css({ 
-                            "background": "#f8faff", 
-                            "border": "2px solid #e7e7e7"
+                            "background": "#fff8e1",
+                            "border": "2px solid #f7bb4d"
                         });
                     }
                 }
