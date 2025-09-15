@@ -28,48 +28,62 @@
     <script type="text/javascript">
         // פופאפ הדפסה להזמנות שטופלו
         function openPrintQueuePopup() {
-            ListOrders[0].completedItems = 1;
-            ListOrders[0].completedUnits = 1;
-            // שליפת הזמנות שטופלו: כל הפריטים והיחידות טופלו
-            var orders = (window.ListOrders || []).filter(function(order) {
-                return order.totalItems > 0 &&
-                    order.completedItems === order.totalItems &&
-                    order.completedUnits === order.totalUnits;
-            });
-            if (!orders.length) {
-                swal({
-                    title: 'אין הזמנות להדפסה',
-                    text: 'לא נמצאו הזמנות שכל הפריטים והיחידות טופלו.',
-                    type: 'info',
-                    confirmButtonText: 'סגור'
-                });
-                return;
-            }
-            var html = '<div id="print-queue-list" style="max-height:350px;overflow-y:auto;text-align:right"></div>';
+            // שליפת הזמנות מוכנות להדפסה מהשרת
             swal({
-                title: 'הזמנות להדפסה',
-                html: true,
-                text: html,
-                showConfirmButton: false,
-                showCancelButton: true,
-                cancelButtonText: 'סגור',
-                customClass: 'print-queue-popup'
+                title: 'טוען הזמנות...'
             });
-            setTimeout(function() {
-                var $list = $('#print-queue-list');
-                var htmlInner = '';
-                orders.forEach(function(order) {
-                    htmlInner += '<div style="border-bottom:1px solid #eee;padding:8px 0;display:flex;align-items:center;justify-content:space-between;direction:ltr">';
-                    htmlInner += '<button type="button" class="print-btn" data-orderid="' + (order.orderId || order.id) + '" style="margin:0 0 0 10px;background:#1976d2;color:#fff;border:none;border-radius:3px;padding:4px 12px;cursor:pointer;font-size:15px;">הדפס</button>';
-                    htmlInner += '<span style="font-family:monospace;font-size:16px;">' + (order.orderId || order.id) + '</span>';
-                    htmlInner += '</div>';
-                });
-                $list.html(htmlInner);
-                $list.off('click').on('click', '.print-btn', function(e) {
-                    var orderId = $(this).data('orderid');
-                    sendOrderToPrintQueue(orderId);
-                });
-            }, 100);
+            $.ajax({
+                url: window.baseUrl + 'posApi/completedOrders',
+                method: 'GET',
+                headers: {
+                    "authorization": UserToken
+                },
+                success: function(res) {
+                    if (!res || res.status !== 'ok' || !Array.isArray(res.data) || res.data.length === 0) {
+                        swal({
+                            title: 'אין הזמנות להדפסה',
+                            text: 'לא נמצאו הזמנות שכל הפריטים והיחידות טופלו.',
+                            type: 'info',
+                            confirmButtonText: 'סגור'
+                        });
+                        return;
+                    }
+                    var orders = res.data;
+                    var html = '<div id="print-queue-list" style="max-height:350px;overflow-y:auto;text-align:right"></div>';
+                    swal({
+                        title: 'הזמנות להדפסה',
+                        html: true,
+                        text: html,
+                        showConfirmButton: false,
+                        showCancelButton: true,
+                        cancelButtonText: 'סגור',
+                        customClass: 'print-queue-popup'
+                    });
+                    setTimeout(function() {
+                        var $list = $('#print-queue-list');
+                        var htmlInner = '';
+                        orders.forEach(function(order) {
+                            htmlInner += '<div style="border-bottom:1px solid #eee;padding:8px 0;display:flex;align-items:center;justify-content:space-between;direction:ltr">';
+                            htmlInner += '<button type="button" class="print-btn" data-orderid="' + (order.orderId || order.id) + '" style="margin:0 0 0 10px;background:#1976d2;color:#fff;border:none;border-radius:3px;padding:4px 12px;cursor:pointer;font-size:15px;">הדפס</button>';
+                            htmlInner += '<span style="font-family:monospace;font-size:16px;">' + (order.orderId || order.id) + '</span>';
+                            htmlInner += '</div>';
+                        });
+                        $list.html(htmlInner);
+                        $list.off('click').on('click', '.print-btn', function(e) {
+                            var orderId = $(this).data('orderid');
+                            sendOrderToPrintQueue(orderId);
+                        });
+                    }, 100);
+                },
+                error: function() {
+                    swal({
+                        title: 'שגיאה',
+                        text: 'שגיאה בשליפת ההזמנות מהשרת',
+                        type: 'error',
+                        confirmButtonText: 'סגור'
+                    });
+                }
+            });
         }
 
         // שליחת הזמנה לשרת
