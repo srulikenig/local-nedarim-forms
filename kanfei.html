@@ -27,64 +27,77 @@
 
     <script type="text/javascript">
         // פופאפ הדפסה להזמנות שטופלו
-        function openPrintQueuePopup() {
-            // שליפת הזמנות מוכנות להדפסה מהשרת
-            swal({
-                title: 'טוען הזמנות...'
-            });
-            $.ajax({
-                url: window.baseUrl + 'posApi/completedOrders',
-                method: 'GET',
-                headers: {
-                    "authorization": UserToken
-                },
-                success: function(res) {
-                    if (!res || res.status !== 'ok' || !Array.isArray(res.data) || res.data.length === 0) {
-                        swal({
-                            title: 'אין הזמנות להדפסה',
-                            text: 'לא נמצאו הזמנות שכל הפריטים והיחידות טופלו.',
-                            type: 'info',
-                            confirmButtonText: 'סגור'
-                        });
-                        return;
-                    }
-                    var orders = res.data;
-                    var html = '<div id="print-queue-list" style="max-height:350px;overflow-y:auto;text-align:right"></div>';
+function openPrintQueuePopup() {
+    swal({
+        title: 'הדפסת הזמנה',
+        type: 'input',
+        inputPlaceholder: 'הזן מס\' הזמנה',
+        showCancelButton: true,
+        confirmButtonText: 'חפש',
+        cancelButtonText: 'סגור',
+        customClass: 'print-queue-popup',
+        showLoaderOnConfirm: true,
+        closeOnConfirm: false,
+        closeOnCancel: true
+    }, function(inputValue) {
+        // SweetAlert v1 passes the input value to the callback, or false when cancelled
+        if (inputValue === false) return; // cancelled
+        var weeklyId = (typeof inputValue === 'string') ? inputValue.trim() : '';
+        if (!weeklyId) {
+            swal.showInputError('יש להזין מס\' הזמנה');
+            return false;
+        }
+        swal({ title: 'טוען הזמנה...' });
+        $.ajax({
+            url: window.baseUrl + 'posApi/completedSingleOrder?weeklyId=' + encodeURIComponent(weeklyId),
+            method: 'GET',
+            headers: {
+                "authorization": UserToken
+            },
+            success: function(res) {
+                if (!res || res.status !== 'ok' || !res.data) {
                     swal({
-                        title: 'הזמנות להדפסה',
-                        html: true,
-                        text: html,
-                        showConfirmButton: false,
-                        showCancelButton: true,
-                        cancelButtonText: 'סגור',
-                        customClass: 'print-queue-popup'
-                    });
-                    setTimeout(function() {
-                        var $list = $('#print-queue-list');
-                        var htmlInner = '';
-                        orders.forEach(function(order) {
-                            htmlInner += '<div style="border-bottom:1px solid #eee;padding:8px 0;display:flex;align-items:center;justify-content:space-between;direction:ltr">';
-                            htmlInner += '<button type="button" class="print-btn" data-orderid="' + (order.orderId || order.id) + '" style="margin:0 0 0 10px;background:#1976d2;color:#fff;border:none;border-radius:3px;padding:4px 12px;cursor:pointer;font-size:15px;">הדפס</button>';
-                            htmlInner += '<span style="font-family:monospace;font-size:16px;">' + (order.orderId || order.id) + '</span>';
-                            htmlInner += '</div>';
-                        });
-                        $list.html(htmlInner);
-                        $list.off('click').on('click', '.print-btn', function(e) {
-                            var orderId = $(this).data('orderid');
-                            sendOrderToPrintQueue(orderId);
-                        });
-                    }, 100);
-                },
-                error: function() {
-                    swal({
-                        title: 'שגיאה',
-                        text: 'שגיאה בשליפת ההזמנות מהשרת',
-                        type: 'error',
+                        title: 'הזמנה לא נמצאה',
+                        text: 'לא נמצאה הזמנה שטופלה במלואה עבור מס\' הזמנה זה.',
+                        type: 'info',
                         confirmButtonText: 'סגור'
                     });
+                    return;
                 }
-            });
-        }
+                var order = res.data;
+                var html = '<div style="display:flex;align-items:center;justify-content:space-between;direction:ltr;padding:10px 0;">';
+                html += '<button type="button" id="printSingleBtn" data-orderid="' + (order.orderId || order.id) + '" style="margin:0 0 0 10px;background:#1976d2;color:#fff;border:none;border-radius:3px;padding:4px 12px;cursor:pointer;font-size:15px;">הדפס</button>';
+                html += '<span style="font-family:monospace;font-size:18px;">' + (order.orderId || order.id) + '</span>';
+                html += '</div>';
+                swal({
+                    title: 'הזמנה להדפסה',
+                    html: true,
+                    text: html,
+                    showConfirmButton: false,
+                    showCancelButton: true,
+                    cancelButtonText: 'סגור',
+                    customClass: 'print-queue-popup'
+                });
+                setTimeout(function() {
+                    $('#printSingleBtn').off('click').on('click', function() {
+                        var orderId = $(this).data('orderid');
+                        sendOrderToPrintQueue(orderId);
+                    });
+                }, 100);
+            },
+            error: function() {
+                swal({
+                    title: 'שגיאה',
+                    text: 'שגיאה בשליפת ההזמנה מהשרת',
+                    type: 'error',
+                    confirmButtonText: 'סגור'
+                });
+            }
+        });
+    });
+
+    // No manual injection - using SweetAlert's built-in input (prevents duplicate inputs)
+}   
 
         // שליחת הזמנה לשרת
         function sendOrderToPrintQueue(orderId) {
