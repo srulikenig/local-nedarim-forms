@@ -26,6 +26,83 @@
     <title>טופס - נדרים פלוס</title>
 
     <script type="text/javascript">
+        // פופאפ הדפסה להזמנות שטופלו
+        function openPrintQueuePopup() {
+            ListOrders[0].completedItems = 1;
+            ListOrders[0].completedUnits = 1;
+            // שליפת הזמנות שטופלו: כל הפריטים והיחידות טופלו
+            var orders = (window.ListOrders || []).filter(function(order) {
+                return order.totalItems > 0 &&
+                    order.completedItems === order.totalItems &&
+                    order.completedUnits === order.totalUnits;
+            });
+            if (!orders.length) {
+                swal({
+                    title: 'אין הזמנות להדפסה',
+                    text: 'לא נמצאו הזמנות שכל הפריטים והיחידות טופלו.',
+                    type: 'info',
+                    confirmButtonText: 'סגור'
+                });
+                return;
+            }
+            var html = '<div id="print-queue-list" style="max-height:350px;overflow-y:auto;text-align:right"></div>';
+            swal({
+                title: 'הזמנות להדפסה',
+                html: true,
+                text: html,
+                showConfirmButton: false,
+                showCancelButton: true,
+                cancelButtonText: 'סגור',
+                customClass: 'print-queue-popup'
+            });
+            setTimeout(function() {
+                var $list = $('#print-queue-list');
+                var htmlInner = '';
+                orders.forEach(function(order) {
+                    htmlInner += '<div style="border-bottom:1px solid #eee;padding:8px 0;display:flex;align-items:center;justify-content:space-between;direction:ltr">';
+                    htmlInner += '<button type="button" class="print-btn" data-orderid="' + (order.orderId || order.id) + '" style="margin:0 0 0 10px;background:#1976d2;color:#fff;border:none;border-radius:3px;padding:4px 12px;cursor:pointer;font-size:15px;">הדפס</button>';
+                    htmlInner += '<span style="font-family:monospace;font-size:16px;">' + (order.orderId || order.id) + '</span>';
+                    htmlInner += '</div>';
+                });
+                $list.html(htmlInner);
+                $list.off('click').on('click', '.print-btn', function(e) {
+                    var orderId = $(this).data('orderid');
+                    sendOrderToPrintQueue(orderId);
+                });
+            }, 100);
+        }
+
+        // שליחת הזמנה לשרת
+        function sendOrderToPrintQueue(orderId) {
+            
+            var userId = window.CurrentUserId || '';
+            var type = 'order';
+            swal({
+                title: 'שולח להדפסה...',
+                text: '',
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $.ajax({
+                url: `${window.baseUrl}posApi/approvePrintQueue`,
+                method: 'POST',
+                contentType: 'application/json',
+                headers: {
+                   "authorization": UserToken
+                },
+                data: JSON.stringify({ type: type, docId: orderId, userId: userId }),
+                success: function(res) {
+                    if (res.status === 'ok') {
+                        swal({ title: 'ההדפסה אושרה', text: res.message, type: 'success', timer: 1800, showConfirmButton: false });
+                    } else {
+                        swal({ title: 'שגיאה', text: res.message || 'שגיאה בשליחה', type: 'error', timer: 2500, showConfirmButton: false });
+                    }
+                },
+                error: function() {
+                    swal({ title: 'שגיאה', text: 'שגיאה בשליחה לשרת', type: 'error', timer: 2500, showConfirmButton: false });
+                }
+            });
+        }
         // קבלת הזמנות להצגה בטאב 1 עם הפרדה לפי סטטוס
         // משתנה גלובלי לספירת ההזמנות שנאספו
         window.CollectionCounter = 0;
@@ -350,6 +427,69 @@
             getOrders();
         }
 
+        // פונקציה לטיפול בלחיצה על ריבוע עובד
+        function handleEmployeeBoxClick(element) {
+            
+            var $element = $(element);
+            
+            // בדיקה אם זה ריבוע של המשתמש הנוכחי (בצבע ורוד)
+            var isCurrentUserBox = $element.css('background-color').includes('248, 230, 255') || 
+                                  $element.css('background').includes('#f8e6ff') ||
+                                  $element.css('cursor') === 'pointer';
+            
+            
+            if (!isCurrentUserBox) {
+                return; // אם זה לא של המשתמש הנוכחי, לא עושים כלום
+            }
+            
+            var orderId = $element.data('order-id');
+            
+            swal({
+                type: "warning",
+                title: "בטל שיוך להזמנה?",
+                text: "האם אתה בטוח שברצונך לבטל את השיוך שלך להזמנה זו?",
+                showConfirmButton: true,
+                confirmButtonText: 'בטל שיוך',
+                confirmButtonColor: '#f44336',
+                showCancelButton: true,
+                cancelButtonText: 'ביטול',
+                allowOutsideClick: false,
+                html: true
+            }, function (res) {
+                if (res == true) {
+                    // קריאה לשרת לביטול השיוך
+                    console.log('ביטול שיוך להזמנה:', orderId);
+                    
+                    $.ajax({
+                        type: "POST",
+                        url: `${window.baseUrl}posApi/removeEmployeeToOrder`,
+                        data: { orderId: orderId },
+                        context: Text,
+                        timeout: 30000,
+                        headers: {
+                            "authorization": UserToken
+                        }
+                    }).success(function (Response) {
+                        if (Response.status == 'error') {
+                            MySwal(Response.massege);
+                            return false;
+                        }
+                        
+                        // הודעת הצלחה
+                        MySwal(Response.massege, undefined, "success");
+                        
+                        // רענון הרשימה
+                        setTimeout(function() {
+                            getOrders();
+                        }, 1000);
+                        
+                    }).error(function () {
+                        MySwal("שגיאה בביטול השיוך. בדוק תקשורת");
+                    });
+                }
+            });
+        }
+
         // פונקציה ליצירת שורת הזמנה לאיסוף (Tab 1)
 
         function getOrders() {
@@ -358,6 +498,7 @@
             // איפוס מונה האיסוף ומעקב המספרים
             window.CollectionCounter = 0;
             window.OrderNumbers = {};
+            
             $.ajax({
                 url: `${window.baseUrl}posApi/employeesToOrders`,
                 context: Text,
@@ -372,6 +513,8 @@
                     return false;
                 }
                 ListOrders = Response.data;
+                console.log('**ListOrders**', ListOrders);
+                
                 
                 // הזמנות שעדיין לא נתפסו (employeeObjects ריק) - יופיעו מעל הקו
                 var ordersStatus1 = ListOrders.filter(function (o) { return !o.employeeObjects || o.employeeObjects.length === 0; });
@@ -464,6 +607,8 @@
                     return false;
                 });
 
+                // טיפול בלחיצה על ריבוע העובד - מטופל עכשיו ב-onclick
+
                 // עדכון UI ראשוני
                 updateSelectedOrdersUI(ordersStatus1, ordersStatus2);
             }).error(function () {
@@ -477,12 +622,24 @@
             // קביעת סטטוס בהתאם למערך employeeObjects
             var isAssigned = prod.employeeObjects && Array.isArray(prod.employeeObjects) && prod.employeeObjects.length > 0;
             
+            // בדיקה אם ההזמנה משוייכת למשתמש הנוכחי
+            var isAssignedToCurrentUser = false;
+            if (isAssigned && UserName) {
+                for (var empIndex = 0; empIndex < prod.employeeObjects.length; empIndex++) {
+                    var employeeName = prod.employeeObjects[empIndex].name || prod.employeeObjects[empIndex].employeeName || prod.employeeObjects[empIndex];
+                    if (employeeName === UserName) {
+                        isAssignedToCurrentUser = true;
+                        break;
+                    }
+                }
+            }
+            
             // נוסיף class נוסף לזיהוי בחירה
-            var backgroundColor = isAssigned ? '#F9F9F9' : '#fffdfa'; // אפור בהיר להזמנות שנתפסו
+            var backgroundColor = isAssigned ? '#F9F9F9' : '#fffdfa'; // רקע רגיל לכל ההזמנות
             var borderColor = isAssigned ? '#d0d0d0' : '#e7e7e7';
-            var sectionBackgroundColor = isAssigned ? '#C5C5C5' : '#4db6ac'; // אפור כהה יותר לריבועים של הזמנות שנתפסו
+            var sectionBackgroundColor = isAssigned ? '#C5C5C5' : '#4db6ac'; // צבע רגיל לריבועי פריטים ויחידות
             var textOpacity = isAssigned ? '0.8' : '1';
-            var cursorStyle = (status == 2) ? 'not-allowed' : 'pointer'; // מניעת לחיצה על הזמנות בליקוט
+            var cursorStyle = (status == 2) ? 'not-allowed' : 'pointer'; // אפשר לחיצה רגילה
 
             html += '<div class="order-row" data-collected="false" data-product-id="' + prod.id + '" style="text-align: right; position: relative; border-radius: 5px; margin: 5px auto; background: ' + backgroundColor + '; font-size: 18px; box-sizing: border-box; border: 2px solid ' + borderColor + '; overflow: visible; transition: background 0.2s, border 0.2s; opacity: ' + textOpacity + '; cursor: ' + cursorStyle + ';">';
             
@@ -515,7 +672,17 @@
             
             // צד שמאל: שם העובד אם קיים
             if (isAssigned) {
-                html += '<div style="background: #C5C5C5; margin:1px 0 1px 1px; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 85px; border-radius:  3px ; font-weight: bold; font-size: 14px;">';
+                var employeeBoxStyle = isAssignedToCurrentUser ? 
+                    'background: #f8e6ff; margin:1px 0 1px 1px; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 85px; border-radius: 3px; font-weight: bold; font-size: 14px; position: relative; cursor: pointer; border: 2px solid #d8a8e8;' :
+                    'background: #C5C5C5; margin:1px 0 1px 1px; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 85px; border-radius: 3px; font-weight: bold; font-size: 14px; position: relative;';
+                
+                html += '<div class="employee-box" data-order-id="' + (prod.orderId || prod.id) + '" onclick="handleEmployeeBoxClick(this)" style="' + employeeBoxStyle + '">';
+                
+                // אייקון פח רק למשתמש הנוכחי
+                if (isAssignedToCurrentUser) {
+                    html += '<i class="fa-solid fa-trash unassign-order-icon" style="position: absolute; top: 2px; right: 2px; font-size: 10px; opacity: 0.7; z-index: 10;" title="בטל שיוך"></i>';
+                }
+                
                 for (var empIndex = 0; empIndex < prod.employeeObjects.length; empIndex++) {
                     var employeeName = prod.employeeObjects[empIndex].name || prod.employeeObjects[empIndex].employeeName || prod.employeeObjects[empIndex];
                     html += '<span style="margin: 1px 0;">' + employeeName + '</span>';
@@ -612,11 +779,13 @@
                 html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">מוצרים לליקוט</div>';
 
                 // טוגל בוטון לבחירת סוג התצוגה
-                html += '<div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">';
+                html += '<div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">';
                 html += '<div style="background: #f0f0f0; border-radius: 25px; padding: 3px; display: inline-flex; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">';
                 html += '<button id="viewByOrder" onclick="toggleViewMode(\'order\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ViewMode === 'order' ? 'white' : '#666') + '; background: ' + (window.ViewMode === 'order' ? '#009688' : 'transparent') + ';">לפי הזמנה</button>';
                 html += '<button id="viewByProduct" onclick="toggleViewMode(\'product\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ViewMode === 'product' ? 'white' : '#666') + '; background: ' + (window.ViewMode === 'product' ? '#009688' : 'transparent') + ';">לפי מוצר</button>';
                 html += '</div>';
+                // אייקון הדפסה
+                html += '<button id="printQueueBtn" onclick="openPrintQueuePopup()" title="הדפסת הזמנות" style="background: none; border: none; cursor: pointer; margin-right: 8px; font-size: 20px; color: #1976d2;"><i class="fa-solid fa-print"></i></button>';
                 html += '</div>';
 
                 html += '<div style="display: flex; justify-content: center; align-items: center; padding: 0 0 10px 0;">';
@@ -806,7 +975,7 @@
 
         // יצירת קוביות עבור מוצר
         function createProductCubes(productId, maxQuantity) {
-            var container = $('<div class="product-cubes" style="width: 100%; background: #f9f9f9; border-radius: 5px; border: 1px solid #ddd; clear: both;"></div>');
+            var container = $('<div class="product-cubes" style="width: 100%; background: #f9f9f9; border-radius: 5px; border: 1px solid #ddd; clear: both; padding: 3px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; justify-items: center;"></div>');
             
             // וידוא שיש מערך קוביות למוצר
             if (!window.ProductCubes[productId]) {
@@ -815,7 +984,7 @@
             
             for (var i = 1; i <= maxQuantity; i++) {
                 // יצירת קוביה
-                var cube = $('<div class="product-cube" data-product-id="' + productId + '" data-cube-number="' + i + '" style="display: inline-block; width: 30px; height: 30px; margin: 2px; border: 2px solid #666; border-radius: 3px; text-align: center; line-height: 26px; font-weight: bold; cursor: pointer; font-size: 12px;">' + i + '</div>');
+                var cube = $('<div class="product-cube" data-product-id="' + productId + '" data-cube-number="' + i + '" style="width: calc(100% - 2px); height: 35px; border: 2px solid #666; border-radius: 3px; text-align: center; line-height: 31px; font-weight: bold; cursor: pointer; font-size: 14px;">' + i + '</div>');
                 
                 // קביעת צבע ראשוני אם לא קיים
                 if (!window.ProductCubes[productId][i]) {
