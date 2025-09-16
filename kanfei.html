@@ -741,11 +741,16 @@ function openPrintQueuePopup() {
         }
 
         // פונקציה ליצירת שורת מוצר לפיזור (Tab 2) - עיצוב חדש עם אייקון ארגז ומקום לקוביות
-        function renderOrderProductRow(prod, idx) {
+        function renderOrderProductRow(prod, idx, isCompleted) {
+            isCompleted = isCompleted || false;
             
             var html = '';
             // קונטיינר עליון שמכיל את השורה והקוביות
-            html += '<div class="product-container" data-product-id="' + prod.id + '" style="margin: 5px auto; border-radius: 5px; transition: all 0.2s;">';
+            var containerStyle = 'margin: 5px auto; border-radius: 5px; transition: all 0.2s;';
+            if (isCompleted) {
+                containerStyle += ' opacity: 0.8;'; // שקיפות קלה למוצרים מושלמים
+            }
+            html += '<div class="product-container" data-product-id="' + prod.id + '" data-completed="' + isCompleted + '" style="' + containerStyle + '">';
             
             // השורה עצמה
             html += '<div class="order-product-row product-row" style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; background: #f8faff; font-size: 18px; box-sizing: border-box; border: 2px solid #e7e7e7; overflow: visible; min-height: 40px; transition: background 0.2s, border 0.2s; cursor: pointer;">';
@@ -788,6 +793,8 @@ function openPrintQueuePopup() {
             // איפוס בחירות בטאב 2 בכל רענון - כעת מערך של קוביות
             window.ProductCubes = {};
             window.ExpandedProducts = {};
+            window.OriginalServerData = {}; // נתוני השרת המקוריים
+            window.ModifiedProducts = {}; // מוצרים שעברו שינוי ידני
             $.ajax({
                 url: `${window.baseUrl}posApi/orderProducts?viewMode=` + window.ViewMode,
                 context: Text,
@@ -803,6 +810,19 @@ function openPrintQueuePopup() {
                 console.log('*** op: ', Response.data);
                 
                 var orderProducts = Response.data || [];
+                
+                // הפרדת מוצרים לפי מצב טיפול
+                var productsInProgress = orderProducts.filter(function(prod) {
+                    return !isProductFullyProcessedByServer(prod);
+                });
+                var productsCompleted = orderProducts.filter(function(prod) {
+                    return isProductFullyProcessedByServer(prod);
+                });
+                
+                // שמירת המערכים המופרדים למשתנים גלובליים לשימוש בלחיצות
+                window.CurrentProductsInProgress = productsInProgress;
+                window.CurrentProductsCompleted = productsCompleted;
+                
                 var html = '';
                 html += '<div style="padding: 0 10px 70px;">';
                 html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">מוצרים לליקוט</div>';
@@ -820,14 +840,32 @@ function openPrintQueuePopup() {
                 html += '<div style="display: flex; justify-content: center; align-items: center; padding: 0 0 10px 0;">';
                 // html += '<input autocomplete="off" type="search" id="Filter_Search" oninput="Filter_Search()" placeholder="חיפוש הזמנה" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
                 html += '</div>';
+                
                 html += '<div id="OrderProductsList">';
-                if (orderProducts.length === 0) {
-                    html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין מוצרים ברשימה</div>';
+                
+                // מוצרים בתהליך (למעלה)
+                if (productsInProgress.length === 0) {
+                    html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין מוצרים בתהליך</div>';
                 } else {
-                    for (var i = 0; i < orderProducts.length; i++) {
-                        html += renderOrderProductRow(orderProducts[i], i);
+                    for (var i = 0; i < productsInProgress.length; i++) {
+                        html += renderOrderProductRow(productsInProgress[i], i, false);
                     }
                 }
+                
+                // קו הפרדה אם יש מוצרים מושלמים
+                if (productsCompleted.length > 0) {
+                    html += '<div style="margin: 18px 0 10px 0; display: flex; align-items: center;">'
+                        + '<hr style="flex:1; border:none; border-top:1.5px solid #e0e0e0; margin:0 10px;">'
+                        + '<span style="color:#888; font-size:15px; background:#fff; padding:0 10px;">מוצרים מושלמים</span>'
+                        + '<hr style="flex:1; border:none; border-top:1.5px solid #e0e0e0; margin:0 10px;">'
+                        + '</div>';
+                    
+                    // מוצרים מושלמים (למטה)
+                    for (var j = 0; j < productsCompleted.length; j++) {
+                        html += renderOrderProductRow(productsCompleted[j], j, true);
+                    }
+                }
+                
                 html += '</div>';
                 html += '</div>';
                 // פס קבוע בתחתית TAB
@@ -841,8 +879,28 @@ function openPrintQueuePopup() {
                 // לוגיקת לחיצה חדשה על מוצרים - הצגת קוביות
                 $("#OrderProductsList .order-product-row").off("click").on("click", function () {
                     var $productContainer = $(this).closest('.product-container');
-                    var idx = $productContainer.index();
-                    var prod = orderProducts[idx];
+                    
+                    // מציאת המוצר הנכון בהתבסס על אינדקס החדש
+                    var allContainers = $("#OrderProductsList .product-container");
+                    var containerIndex = allContainers.index($productContainer);
+                    
+                    var prod;
+                    var currentIndex = 0;
+                    
+                    // חיפוש המוצר הנכון במערכים המופרדים
+                    // תחילה במוצרים בתהליך
+                    if (containerIndex < window.CurrentProductsInProgress.length) {
+                        prod = window.CurrentProductsInProgress[containerIndex];
+                    } else {
+                        // אחר כך במוצרים מושלמים
+                        var completedIndex = containerIndex - window.CurrentProductsInProgress.length;
+                        if (completedIndex >= 0 && completedIndex < window.CurrentProductsCompleted.length) {
+                            prod = window.CurrentProductsCompleted[completedIndex];
+                        }
+                    }
+                    
+                    if (!prod) return; // לא נמצא מוצר
+                    
                     var id = prod.id;
                     var maxQuantity = parseFloat(prod.quantityOrWeight || 1);
                     
@@ -864,6 +922,19 @@ function openPrintQueuePopup() {
                         // אתחול קוביות על פי נתוני השרת
                         initializeCubesFromServerData(id, prod, maxQuantity);
                         
+                        // אם אין נתונים מהשרת ולא נבחרו קוביות בעבר, צבע קוביה 1 בירוק
+                        if (!hasAnySelectedCubes(id)) {
+                            var qtyCollected = 0;
+                            var qtyMissing = 0;
+                            if (prod.collectionInfo) {
+                                qtyCollected = parseInt(prod.collectionInfo.qtyCollected || 0);
+                                qtyMissing = parseInt(prod.collectionInfo.qtyMissing || 0);
+                            }
+                            if (qtyCollected === 0 && qtyMissing === 0) {
+                                window.ProductCubes[id][1] = 'green';
+                            }
+                        }
+                        
                         // הוספת הקוביות באזור המיועד
                         var cubesContainer = createProductCubes(id, maxQuantity);
                         var $cubesArea = $productContainer.find('.cubes-area');
@@ -879,7 +950,7 @@ function openPrintQueuePopup() {
                 });
 
                 // עדכון UI ראשוני
-                updateSelectedOrderProductsUI(orderProducts);
+                updateSelectedOrderProductsUI(window.CurrentProductsInProgress.concat(window.CurrentProductsCompleted));
             }).error(function () {
                 MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
             });
@@ -1019,6 +1090,54 @@ function openPrintQueuePopup() {
             return missing;
         }
         
+        // בדיקה אם מוצר טופל במלואו על פי נתוני השרת
+        function hasAnySelectedCubes(productId) {
+            if (!window.ProductCubes[productId]) {
+                return false;
+            }
+            
+            for (var cubeNum in window.ProductCubes[productId]) {
+                var color = window.ProductCubes[productId][cubeNum];
+                if (color && color !== 'white') {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function isProductModifiedFromServer(productId) {
+            if (!window.ProductCubes[productId] || !window.OriginalServerData[productId]) {
+                return false;
+            }
+            
+            // חישוב הנתונים הנוכחיים
+            var currentGreen = 0;
+            var currentRed = 0;
+            
+            for (var cubeNum in window.ProductCubes[productId]) {
+                if (window.ProductCubes[productId][cubeNum] === 'green') {
+                    currentGreen++;
+                } else if (window.ProductCubes[productId][cubeNum] === 'red') {
+                    currentRed++;
+                }
+            }
+            
+            // השוואה לנתונים המקוריים מהשרת
+            var originalData = window.OriginalServerData[productId];
+            return (currentGreen !== originalData.qtyCollected || currentRed !== originalData.qtyMissing);
+        }
+
+        function isProductFullyProcessedByServer(productData) {
+            if (!productData.collectionInfo) return false;
+            
+            var qtyCollected = parseInt(productData.collectionInfo.qtyCollected || 0);
+            var qtyMissing = parseInt(productData.collectionInfo.qtyMissing || 0);
+            var maxQuantity = parseFloat(productData.quantityOrWeight || 1);
+            
+            // מוצר טופל במלואו אם סך הקוביות המטופלות (ירוק + אדום) שווה לכמות הכוללת
+            return (qtyCollected + qtyMissing) >= maxQuantity;
+        }
+        
         // אתחול קוביות על פי נתוני השרת
         function initializeCubesFromServerData(productId, productData, maxQuantity) {
             // וידוא שיש מערך קוביות למוצר
@@ -1034,6 +1153,12 @@ function openPrintQueuePopup() {
                 qtyCollected = parseInt(productData.collectionInfo.qtyCollected || 0);
                 qtyMissing = parseInt(productData.collectionInfo.qtyMissing || 0);
             }
+            
+            // שמירת הנתונים המקוריים מהשרת
+            window.OriginalServerData[productId] = {
+                qtyCollected: qtyCollected,
+                qtyMissing: qtyMissing
+            };
             
             // אתחול כל הקוביות ללבן
             for (var i = 1; i <= maxQuantity; i++) {
@@ -1144,6 +1269,9 @@ function openPrintQueuePopup() {
             window.ProductCubes[productId][cubeNumber] = nextColor;
             updateCubeColor(cubeElement, nextColor);
             
+            // סימון שהמוצר עבר שינוי ידני
+            window.ModifiedProducts[productId] = true;
+            
             // עדכון UI של המוצר
             updateProductRowUI(productId);
         }
@@ -1235,8 +1363,21 @@ function openPrintQueuePopup() {
             // יצירת מערך מוצרים לשליחה עם נתוני הקוביות
             var productsToApprove = [];
             
+            console.log('=== DEBUG: Starting approval process ===');
+            console.log('ProductCubes:', window.ProductCubes);
+            console.log('OriginalServerData:', window.OriginalServerData);
+            console.log('ModifiedProducts:', window.ModifiedProducts);
+            
             for (var productId in window.ProductCubes) {
-                if (hasAnySelectedCubes(productId)) {
+                console.log('Checking product:', productId);
+                
+                var hasSelected = hasAnySelectedCubes(productId);
+                var isModified = isProductModifiedFromServer(productId);
+                
+                console.log('hasSelected:', hasSelected, 'isModified:', isModified);
+                
+                // בדיקה אם המוצר נבחר או שונה מנתוני השרת המקוריים
+                if (hasSelected || isModified) {
                     var selectedQuantity = 0;
                     var missingQuantity = 0;
                     
@@ -1249,17 +1390,29 @@ function openPrintQueuePopup() {
                         }
                     }
                     
-                    if (selectedQuantity > 0 || missingQuantity > 0) {
-                        productsToApprove.push({
+                    console.log('Product', productId, '- green:', selectedQuantity, 'red:', missingQuantity);
+                    
+                    // אם המוצר שונה מהשרת או שיש בו קוביות צבועות - שלח אותו
+                    if (selectedQuantity > 0 || missingQuantity > 0 || isModified) {
+                        var productData = {
                             orderProductId: productId,
                             qtyCollected: selectedQuantity,
                             qtyMissing: missingQuantity  // השדה החדש
-                        });
+                        };
+                        productsToApprove.push(productData);
+                        console.log('Added product to approval:', productData);
                     }
                 }
             }
             
-            if (productsToApprove.length === 0) return;
+            console.log('=== Products to approve ===');
+            console.log('Total products:', productsToApprove.length);
+            console.log('Products array:', productsToApprove);
+            
+            if (productsToApprove.length === 0) {
+                console.log('No products to approve - returning');
+                return;
+            }
             
             var totalQuantity = 0;
             var totalMissing = 0;
@@ -1286,7 +1439,10 @@ function openPrintQueuePopup() {
                 allowOutsideClick: false,
                 html: true
             }, function (res) {
-                if (res == true) {                    
+                if (res == true) {
+                    console.log('=== Sending to server ===');
+                    console.log('Data to send:', { orderProducts: productsToApprove });
+                    
                     $.ajax({
                         type: "POST",
                         url: `${window.baseUrl}posApi/approveOrderProducts`,
@@ -1297,6 +1453,9 @@ function openPrintQueuePopup() {
                             "authorization": UserToken
                         }
                     }).success(function (Response) {
+                        console.log('=== Server Response ===');
+                        console.log('Response:', Response);
+                        
                         if (Response.status == 'error') {
                             MySwal(Response.massege)
                             return false;
@@ -1304,9 +1463,15 @@ function openPrintQueuePopup() {
                         // איפוס כל הנתונים
                         window.ProductCubes = {};
                         window.ExpandedProducts = {};
+                        window.OriginalServerData = {};
+                        window.ModifiedProducts = {};
                         getOrderProducts();
                         MySwal(Response.massege, undefined, "success");
-                    }).error(function () {
+                    }).error(function (xhr, status, error) {
+                        console.log('=== AJAX Error ===');
+                        console.log('Status:', status);
+                        console.log('Error:', error);
+                        console.log('Response:', xhr.responseText);
                         MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
                     });
                 }
