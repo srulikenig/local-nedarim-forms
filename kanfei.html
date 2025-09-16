@@ -119,10 +119,12 @@ function openPrintQueuePopup() {
                 },
                 data: JSON.stringify({ type: type, docId: orderId }),
                 success: function(res) {
+                    console.log('**res', res);
+                    
                     if (res.status === 'ok') {
-                        swal({ title: 'ההדפסה אושרה', text: res.message, type: 'success', timer: 1800, showConfirmButton: false });
+                        swal({ title: 'ההדפסה אושרה', text: res.massege, type: 'success', timer: 1800, showConfirmButton: false });
                     } else {
-                        swal({ title: 'שגיאה', text: res.message || 'שגיאה בשליחה', type: 'error', timer: 2500, showConfirmButton: false });
+                        swal({ title: 'שגיאה', text: res.massege || 'שגיאה בשליחה', type: 'error', timer: 2500, showConfirmButton: false });
                     }
                 },
                 error: function() {
