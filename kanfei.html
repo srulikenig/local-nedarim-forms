@@ -692,33 +692,50 @@ function openPrintQueuePopup() {
             html += '</div>';
             html += '</div>';
             
-            // מרכז: מס' הזמנה (רק המספר)
-            html += '<div style="flex: 1; padding: 5px 8px; display: flex; align-items: center; justify-content: center; word-wrap: break-word; min-height: 50px;">';
+            // מרכז: מס' הזמנה ושם העובד מתחת במקרה של הזמנה משוייכת
+            html += '<div style="flex: 1; padding: 5px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; word-wrap: break-word; min-height: 50px;">';
             html += '<div style="font-size: 24px; color: #333; font-weight: bold;">' + (prod.order ? prod.order.collectionIndex : prod.orderId || '') + '</div>';
-            html += '</div>';
             
-            // צד שמאל: שם העובד אם קיים
-            if (isAssigned) {
-                var employeeBoxStyle = isAssignedToCurrentUser ? 
-                    'background: #f8e6ff; margin:1px 0 1px 1px; color: #333; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 85px; border-radius: 3px; font-weight: bold; font-size: 14px; position: relative; cursor: pointer; border: 2px solid #d8a8e8;' :
-                    'background: #C5C5C5; margin:1px 0 1px 1px; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 85px; border-radius: 3px; font-weight: bold; font-size: 14px; position: relative;';
-                
-                html += '<div class="employee-box" data-order-id="' + (prod.orderId || prod.id) + '" onclick="handleEmployeeBoxClick(this)" style="' + employeeBoxStyle + '">';
-                
-                // אייקון פח רק למשתמש הנוכחי
-                if (isAssignedToCurrentUser) {
-                    html += '<i class="fa-solid fa-trash unassign-order-icon" style="position: absolute; top: 2px; right: 2px; font-size: 10px; opacity: 0.7; z-index: 10;" title="בטל שיוך"></i>';
-                }
-                
+            // הצגת שם העובד מתחת למספר ההזמנה במקרה של הזמנה משוייכת
+            if (isAssigned && prod.employeeObjects && prod.employeeObjects.length > 0) {
                 for (var empIndex = 0; empIndex < prod.employeeObjects.length; empIndex++) {
                     var employeeName = prod.employeeObjects[empIndex].name || prod.employeeObjects[empIndex].employeeName || prod.employeeObjects[empIndex];
-                    html += '<span style="margin: 1px 0;">' + employeeName + '</span>';
+                    if (employeeName) {
+                        html += '<div style="font-size: 12px; color: #666; margin-top: 2px;">' + employeeName + '</div>';
+                    }
                 }
+            }
+            
+            html += '</div>';
+            
+            // צד שמאל: 4 אייקונים לפעולות על ההזמנה בגריד 2x2
+            html += '<div style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; margin: 1px 0 1px 1px; width: 62px; height: 60px;">';
+            
+            // שורה ראשונה - אייקון ביטול שיוך (יופיע רק אם ההזמנה משוייכת למשתמש הנוכחי)
+            if (isAssigned && isAssignedToCurrentUser) {
+                html += '<div class="action-icon unassign-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="handleEmployeeBoxClick(this)" style="background: #f44336; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 10px;" title="בטל שיוך">';
+                html += '<i class="fa-solid fa-trash"></i>';
                 html += '</div>';
             } else {
-                // מקום ריק כדי לשמור על יישור
-                html += '<div style="min-width: 20px;"></div>';
+                html += '<div style="background: #e0e0e0;"></div>'; // מקום ריק באפור
             }
+            
+            // שורה שנייה - אייקון סגירת הזמנה
+            html += '<div class="action-icon close-order-icon" data-order-id="' + (prod.orderId || prod.id) + '" style="background: #ff9800; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 10px;" title="סגירת הזמנה">';
+            html += '<i class="fa-solid fa-check-circle"></i>';
+            html += '</div>';
+            
+            // שורה ראשונה - אייקון הדפסת מדבקות
+            html += '<div class="action-icon print-labels-icon" data-order-id="' + (prod.orderId || prod.id) + '" style="background: #2196f3; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 10px;" title="הדפסת מדבקות">';
+            html += '<i class="fa-solid fa-tags"></i>';
+            html += '</div>';
+            
+            // שורה שנייה - אייקון הדפסת הזמנה
+            html += '<div class="action-icon print-order-icon" data-order-id="' + (prod.orderId || prod.id) + '" style="background: #4caf50; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 10px;" title="הדפסת הזמנה">';
+            html += '<i class="fa-solid fa-print"></i>';
+            html += '</div>';
+            
+            html += '</div>';
 
             html += '</div>'; // סגירת שורת ההזמנה הראשית
 
