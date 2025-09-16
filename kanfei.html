@@ -694,7 +694,7 @@ function openPrintQueuePopup() {
             
             // מרכז: מס' הזמנה (רק המספר)
             html += '<div style="flex: 1; padding: 5px 8px; display: flex; align-items: center; justify-content: center; word-wrap: break-word; min-height: 50px;">';
-            html += '<div style="font-size: 24px; color: #333; font-weight: bold;">' + (prod.order ? prod.order.weeklyId : prod.orderId || '') + '</div>';
+            html += '<div style="font-size: 24px; color: #333; font-weight: bold;">' + (prod.order ? prod.order.collectionIndex : prod.orderId || '') + '</div>';
             html += '</div>';
             
             // צד שמאל: שם העובד אם קיים
@@ -861,13 +861,8 @@ function openPrintQueuePopup() {
                         // פתיחת המוצר הנוכחי
                         window.ExpandedProducts[id] = true;
                         
-                        // אם עדיין לא סומנו קוביות - צבע קוביה 1 בירוק בדיפולט
-                        if (!hasAnySelectedCubes(id)) {
-                            if (!window.ProductCubes[id]) {
-                                window.ProductCubes[id] = {};
-                            }
-                            window.ProductCubes[id][1] = 'green';
-                        }
+                        // אתחול קוביות על פי נתוני השרת
+                        initializeCubesFromServerData(id, prod, maxQuantity);
                         
                         // הוספת הקוביות באזור המיועד
                         var cubesContainer = createProductCubes(id, maxQuantity);
@@ -904,6 +899,9 @@ function openPrintQueuePopup() {
                 // הסרת קוביות ואינדיקטורים קיימים
                 $(this).find('.cubes-area').hide().empty();
                 $(this).find('.quantity-indicator').remove();
+                
+                // אתחול קוביות על פי נתוני השרת
+                initializeCubesFromServerData(id, prod, maxQuantity);
                 
                 // בדיקה אם יש קוביות מסומנות ומצב אם כל הקוביות סומנו
                 var hasSelectedCubes = hasAnySelectedCubes(id);
@@ -1019,6 +1017,42 @@ function openPrintQueuePopup() {
                 }
             }
             return missing;
+        }
+        
+        // אתחול קוביות על פי נתוני השרת
+        function initializeCubesFromServerData(productId, productData, maxQuantity) {
+            // וידוא שיש מערך קוביות למוצר
+            if (!window.ProductCubes[productId]) {
+                window.ProductCubes[productId] = {};
+            }
+            
+            var qtyCollected = 0;
+            var qtyMissing = 0;
+            
+            // חילוץ נתונים מהשרת
+            if (productData.collectionInfo) {
+                qtyCollected = parseInt(productData.collectionInfo.qtyCollected || 0);
+                qtyMissing = parseInt(productData.collectionInfo.qtyMissing || 0);
+            }
+            
+            // אתחול כל הקוביות ללבן
+            for (var i = 1; i <= maxQuantity; i++) {
+                window.ProductCubes[productId][i] = 'white';
+            }
+            
+            var cubeIndex = 1;
+            
+            // צביעת קוביות בירוק (נלקטו)
+            for (var collected = 0; collected < qtyCollected && cubeIndex <= maxQuantity; collected++) {
+                window.ProductCubes[productId][cubeIndex] = 'green';
+                cubeIndex++;
+            }
+            
+            // צביעת קוביות באדום (חסרים)
+            for (var missing = 0; missing < qtyMissing && cubeIndex <= maxQuantity; missing++) {
+                window.ProductCubes[productId][cubeIndex] = 'red';
+                cubeIndex++;
+            }
         }
 
         // יצירת קוביות עבור מוצר
