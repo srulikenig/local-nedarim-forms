@@ -42,14 +42,14 @@ function openPrintQueuePopup() {
     }, function(inputValue) {
         // SweetAlert v1 passes the input value to the callback, or false when cancelled
         if (inputValue === false) return; // cancelled
-        var weeklyId = (typeof inputValue === 'string') ? inputValue.trim() : '';
-        if (!weeklyId) {
+        var collectionIndex = (typeof inputValue === 'string') ? inputValue.trim() : '';
+        if (!collectionIndex) {
             swal.showInputError('יש להזין מס\' הזמנה');
             return false;
         }
         swal({ title: 'טוען הזמנה...' });
         $.ajax({
-            url: window.baseUrl + 'posApi/completedSingleOrder?weeklyId=' + encodeURIComponent(weeklyId),
+            url: window.baseUrl + 'posApi/completedSingleOrder?collectionIndex=' + encodeURIComponent(collectionIndex),
             method: 'GET',
             headers: {
                 "authorization": UserToken
@@ -742,7 +742,6 @@ function openPrintQueuePopup() {
 
         // פונקציה ליצירת שורת מוצר לפיזור (Tab 2) - עיצוב חדש עם אייקון ארגז ומקום לקוביות
         function renderOrderProductRow(prod, idx) {
-            console.log(prod);
             
             var html = '';
             // קונטיינר עליון שמכיל את השורה והקוביות
@@ -801,6 +800,8 @@ function openPrintQueuePopup() {
                     MySwal(Response.massege)
                     return false;
                 }
+                console.log('*** op: ', Response.data);
+                
                 var orderProducts = Response.data || [];
                 var html = '';
                 html += '<div style="padding: 0 10px 70px;">';
@@ -1080,6 +1081,7 @@ function openPrintQueuePopup() {
         }
 
         // מחזור צבעי קוביה (לבן -> ירוק -> אדום -> לבן)
+        // רק עובד בכיר (role 1) יכול לצבוע באדום, עובד פשוט (role 2) רק ירוק ולבן
         function cycleCubeColor(productId, cubeNumber, cubeElement) {
             var currentColor = window.ProductCubes[productId][cubeNumber];
             var nextColor;
@@ -1089,7 +1091,14 @@ function openPrintQueuePopup() {
                     nextColor = 'green';
                     break;
                 case 'green':
-                    nextColor = 'red';
+                    // רק עובד בכיר (Role == 1) יכול לעבור לאדום
+                    if (Role == 1) {
+                        nextColor = 'red';
+                    } else {
+                        // עובד פשוט (Role == 2) חוזר ללבן
+                        nextColor = 'white';
+                        // הצגת הודעה לעובד פשוט
+                    }
                     break;
                 case 'red':
                     nextColor = 'white';
@@ -1104,7 +1113,7 @@ function openPrintQueuePopup() {
             // עדכון UI של המוצר
             updateProductRowUI(productId);
         }
-        
+
         // עדכון עיצוב שורת מוצר ספציפי
         function updateProductRowUI(productId) {
             $("#OrderProductsList .product-container").each(function() {
@@ -1208,9 +1217,9 @@ function openPrintQueuePopup() {
                     
                     if (selectedQuantity > 0 || missingQuantity > 0) {
                         productsToApprove.push({
-                            id: productId,
-                            quantity: selectedQuantity,
-                            missing: missingQuantity  // השדה החדש
+                            orderProductId: productId,
+                            qtyCollected: selectedQuantity,
+                            qtyMissing: missingQuantity  // השדה החדש
                         });
                     }
                 }
@@ -1223,8 +1232,8 @@ function openPrintQueuePopup() {
             
             // חישוב סכומים
             for (var i = 0; i < productsToApprove.length; i++) {
-                totalQuantity += productsToApprove[i].quantity;
-                totalMissing += productsToApprove[i].missing;
+                totalQuantity += productsToApprove[i].qtyCollected;
+                totalMissing += productsToApprove[i].qtyMissing;
             }
             
             var summaryText = 'נבחרו ' + productsToApprove.length + ' מוצרים<br/>' +
@@ -3124,7 +3133,8 @@ function openPrintQueuePopup() {
             //TODO: clean
             // var UserToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InNydWxpayIsInVzZXJJZCI6ImNjOTN3eFo2Q0NpR3dSY3ZwNDNkIiwiaWF0IjoxNzUyMDcyNjQyLCJleHAiOjE3NTIyNDU0NDJ9.UaW-oDQxO8y5I-hMpl2weZaeqTGpI_eybkfcixCjiBU"
             // var UserName = "srulik kenig";
-            var UserToken = ""
+            var UserToken = "";
+            var Role = 0;
             var UserName = "";
             var UserType;
             var CurrentTab = 1; // משתנה לשמירת הטאב הנוכחי
@@ -3264,6 +3274,9 @@ function openPrintQueuePopup() {
 
                     UserToken = "Bearer " + Response.token
                     UserName = Response.userName
+                    Role = Response.role
+                    console.log('*** Res: ', Response);
+                    
 
                     // פענוח טוקן אוטומטי אחרי התחברות
                     decodeUserToken();
