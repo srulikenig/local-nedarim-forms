@@ -1604,9 +1604,22 @@
                 totalMissing += productsToApprove[i].qtyMissing;
             }
             
-            var summaryText = 'נבחרו ' + productsToApprove.length + ' מוצרים<br/>' +
-                             'נלקטו: ' + totalQuantity + ' יחידות<br/>' +
-                             (totalMissing > 0 ? 'חסרים: ' + totalMissing + ' יחידות' : '');
+            // שימוש באותה ספירה כxxxxxxxxxxxxון
+            var actualSelectedProductsCount = getUserModifiedProductsCount();
+            var actualCollectedQuantity = getUserCollectedQuantity(); // רק מה שהעובד לקט בפועל
+            var actualMissingQuantity = getUserMissingQuantity(); // רק מה שהעובד סימן כחסר בפועל
+            
+            var summaryText = 'נבחרו ' + actualSelectedProductsCount + ' מוצרים<br/>' +
+                             'נלקטו: ' + actualCollectedQuantity + ' יחידות<br/>' +
+                             (actualMissingQuantity > 0 ? 'חסרים: ' + actualMissingQuantity + ' יחידות' : '');
+            
+            // דיבוג - הדפסה לקונסול להבנה מה קורה
+            console.log('מספר מוצרים שנבחרו (אמיתי):', actualSelectedProductsCount);
+            console.log('מספר מוצרים לאישור:', productsToApprove.length);
+            console.log('סך יחידות שנלקטו (כולל שרת):', totalQuantity);
+            console.log('יחידות שהעובד לקט בפועל:', actualCollectedQuantity);
+            console.log('יחידות שהעובד סימן כחסרות:', actualMissingQuantity);
+            console.log('פירוט המוצרים:', productsToApprove);
             
             swal({
                 type: "warning",
