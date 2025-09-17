@@ -27,77 +27,77 @@
 
     <script type="text/javascript">
         // פופאפ הדפסה להזמנות שטופלו
-function openPrintQueuePopup() {
-    swal({
-        title: 'הדפסת הזמנה',
-        type: 'input',
-        inputPlaceholder: 'הזן מס\' הזמנה',
-        showCancelButton: true,
-        confirmButtonText: 'חפש',
-        cancelButtonText: 'סגור',
-        customClass: 'print-queue-popup',
-        showLoaderOnConfirm: true,
-        closeOnConfirm: false,
-        closeOnCancel: true
-    }, function(inputValue) {
-        // SweetAlert v1 passes the input value to the callback, or false when cancelled
-        if (inputValue === false) return; // cancelled
-        var collectionIndex = (typeof inputValue === 'string') ? inputValue.trim() : '';
-        if (!collectionIndex) {
-            swal.showInputError('יש להזין מס\' הזמנה');
-            return false;
-        }
-        swal({ title: 'טוען הזמנה...' });
-        $.ajax({
-            url: window.baseUrl + 'posApi/completedSingleOrder?collectionIndex=' + encodeURIComponent(collectionIndex),
-            method: 'GET',
-            headers: {
-                "authorization": UserToken
-            },
-            success: function(res) {
-                if (!res || res.status !== 'ok' || !res.data) {
-                    swal({
-                        title: 'הזמנה לא נמצאה',
-                        text: 'לא נמצאה הזמנה שטופלה במלואה עבור מס\' הזמנה זה.',
-                        type: 'info',
-                        confirmButtonText: 'סגור'
-                    });
-                    return;
+        function openPrintQueuePopup() {
+            swal({
+                title: 'הדפסת הזמנה',
+                type: 'input',
+                inputPlaceholder: 'הזן מס\' הזמנה',
+                showCancelButton: true,
+                confirmButtonText: 'חפש',
+                cancelButtonText: 'סגור',
+                customClass: 'print-queue-popup',
+                showLoaderOnConfirm: true,
+                closeOnConfirm: false,
+                closeOnCancel: true
+            }, function(inputValue) {
+                // SweetAlert v1 passes the input value to the callback, or false when cancelled
+                if (inputValue === false) return; // cancelled
+                var collectionIndex = (typeof inputValue === 'string') ? inputValue.trim() : '';
+                if (!collectionIndex) {
+                    swal.showInputError('יש להזין מס\' הזמנה');
+                    return false;
                 }
-                var order = res.data;
-                var html = '<div style="display:flex;align-items:center;justify-content:space-between;direction:ltr;padding:10px 0;">';
-                html += '<button type="button" id="printSingleBtn" data-orderid="' + (order.orderId || order.id) + '" style="margin:0 0 0 10px;background:#1976d2;color:#fff;border:none;border-radius:3px;padding:4px 12px;cursor:pointer;font-size:15px;">הדפס</button>';
-                html += '<span style="font-family:monospace;font-size:18px;">' + (order.orderId || order.id) + '</span>';
-                html += '</div>';
-                swal({
-                    title: 'הזמנה להדפסה',
-                    html: true,
-                    text: html,
-                    showConfirmButton: false,
-                    showCancelButton: true,
-                    cancelButtonText: 'סגור',
-                    customClass: 'print-queue-popup'
+                swal({ title: 'טוען הזמנה...' });
+                $.ajax({
+                    url: window.baseUrl + 'posApi/completedSingleOrder?collectionIndex=' + encodeURIComponent(collectionIndex),
+                    method: 'GET',
+                    headers: {
+                        "authorization": UserToken
+                    },
+                    success: function(res) {
+                        if (!res || res.status !== 'ok' || !res.data) {
+                            swal({
+                                title: 'הזמנה לא נמצאה',
+                                text: 'לא נמצאה הזמנה שטופלה במלואה עבור מס\' הזמנה זה.',
+                                type: 'info',
+                                confirmButtonText: 'סגור'
+                            });
+                            return;
+                        }
+                        var order = res.data;
+                        var html = '<div style="display:flex;align-items:center;justify-content:space-between;direction:ltr;padding:10px 0;">';
+                        html += '<button type="button" id="printSingleBtn" data-orderid="' + (order.orderId || order.id) + '" style="margin:0 0 0 10px;background:#1976d2;color:#fff;border:none;border-radius:3px;padding:4px 12px;cursor:pointer;font-size:15px;">הדפס</button>';
+                        html += '<span style="font-family:monospace;font-size:18px;">' + (order.orderId || order.id) + '</span>';
+                        html += '</div>';
+                        swal({
+                            title: 'הזמנה להדפסה',
+                            html: true,
+                            text: html,
+                            showConfirmButton: false,
+                            showCancelButton: true,
+                            cancelButtonText: 'סגור',
+                            customClass: 'print-queue-popup'
+                        });
+                        setTimeout(function() {
+                            $('#printSingleBtn').off('click').on('click', function() {
+                                var orderId = $(this).data('orderid');
+                                sendOrderToPrintQueue(orderId);
+                            });
+                        }, 100);
+                    },
+                    error: function() {
+                        swal({
+                            title: 'שגיאה',
+                            text: 'שגיאה בשליפת ההזמנה מהשרת',
+                            type: 'error',
+                            confirmButtonText: 'סגור'
+                        });
+                    }
                 });
-                setTimeout(function() {
-                    $('#printSingleBtn').off('click').on('click', function() {
-                        var orderId = $(this).data('orderid');
-                        sendOrderToPrintQueue(orderId);
-                    });
-                }, 100);
-            },
-            error: function() {
-                swal({
-                    title: 'שגיאה',
-                    text: 'שגיאה בשליפת ההזמנה מהשרת',
-                    type: 'error',
-                    confirmButtonText: 'סגור'
-                });
-            }
-        });
-    });
-
-    // No manual injection - using SweetAlert's built-in input (prevents duplicate inputs)
-}   
+            });
+        
+            // No manual injection - using SweetAlert's built-in input (prevents duplicate inputs)
+        }   
 
         // שליחת הזמנה לשרת
         function sendOrderToPrintQueue(orderId) {
@@ -235,7 +235,7 @@ function openPrintQueuePopup() {
         window.OrderNumbers = {};
         window.baseUrl = 'https://us-central1-kanfei-nesharim-test.cloudfunctions.net/';
         // משתנה גלובלי לפילטר ההזמנות
-        window.OrderFilter = 'all';
+        window.OrderFilter = 'mine';
 
         // פונקציה ליצירת אנימציה של מספר איסוף
         function showCollectionAnimation(element, number) {
@@ -3519,6 +3519,7 @@ function openPrintQueuePopup() {
             // var UserName = "srulik kenig";
             var UserToken = "";
             var Role = 0;
+            var OrderId = "None";
             var UserName = "";
             var UserType;
             var CurrentTab = 1; // משתנה לשמירת הטאב הנוכחי
@@ -3615,9 +3616,9 @@ function openPrintQueuePopup() {
                         // פילטר עם 3 כפתורים
                         var filterHtml1 = '<div style="display: flex; justify-content: center; align-items: center; margin: 15px 0;">';
                         filterHtml1 += '<div style="background: #f0f0f0; border-radius: 25px; padding: 3px; display: inline-flex; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">';
-                        filterHtml1 += '<button id="filterAll" onclick="setOrderFilter(\'all\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: white; background: #009688;">הכל</button>';
-                        filterHtml1 += '<button id="filterMine" onclick="setOrderFilter(\'mine\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: #666; background: transparent;">שלי</button>';
+                        filterHtml1 += '<button id="filterMine" onclick="setOrderFilter(\'mine\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: white; background: #009688;">שלי</button>';
                         filterHtml1 += '<button id="filterNew" onclick="setOrderFilter(\'new\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: #666; background: transparent;">חדש</button>';
+                        filterHtml1 += '<button id="filterAll" onclick="setOrderFilter(\'all\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: #666; background: transparent;">הכל</button>';
                         filterHtml1 += '</div>';
                         filterHtml1 += '</div>';
                         
