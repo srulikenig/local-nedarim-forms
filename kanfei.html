@@ -807,34 +807,82 @@
             
             html += '</div>';
             
-            // צד שמאל: 4 אייקונים לפעולות על ההזמנה בגריד 2x2
-            html += '<div style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; margin: 1px 0 1px 1px; width: 62px; height: 60px;">';
+            // צד שמאל: אייקונים לפעולות - עיצוב נקי ומסודר
+            html += '<div style="display: flex; flex-direction: column; gap: 2px; margin: 1px 0 1px 1px; width: 60px; height: 60px;">';
             
-            // שורה ראשונה - אייקון ביטול שיוך (יופיע רק אם ההזמנה משוייכת למשתמש הנוכחי)
+            // שורה עליונה של אייקונים
+            html += '<div style="display: flex; gap: 2px; height: 28px;">';
+            
+            // אייקון ביטול שיוך או פח אפור
             if (isAssigned && isAssignedToCurrentUser) {
-                html += '<div class="action-icon unassign-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="handleEmployeeBoxClick(this)" style="background: #f44336; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 10px;" title="בטל שיוך">';
+                // פח אדום פעיל - ביטול שיוך
+                html += '<div class="action-icon unassign-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="handleEmployeeBoxClick(this)" style="background: #f44336; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 11px; width: 28px; height: 28px;" title="בטל שיוך">';
                 html += '<i class="fa-solid fa-trash"></i>';
                 html += '</div>';
             } else {
-                html += '<div style="background: #e0e0e0;"></div>'; // מקום ריק באפור
+                // פח אפור לא פעיל
+                html += '<div style="background: #bdbdbd; color: #757575; display: flex; align-items: center; justify-content: center; border-radius: 3px; font-size: 11px; width: 28px; height: 28px;" title="ביטול שיוך לא זמין">';
+                html += '<i class="fa-solid fa-trash"></i>';
+                html += '</div>';
             }
             
-            // שורה שנייה - אייקון סגירת הזמנה
-            html += '<div class="action-icon close-order-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="closeOrderFromIcon(this)" style="background: #ff9800; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 10px;" title="סגירת הזמנה">';
-            html += '<i class="fa-solid fa-check-circle"></i>';
-            html += '</div>';
-            
-            // שורה ראשונה - אייקון הדפסת מדבקות
-            html += '<div class="action-icon print-labels-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="printStickersFromIcon(this)" style="background: #2196f3; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 10px;" title="הדפסת מדבקות">';
+            // אייקון הדפסת מדבקות
+            html += '<div class="action-icon print-labels-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="printStickersFromIcon(this)" style="background: #2196f3; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 11px; width: 28px; height: 28px;" title="הדפסת מדבקות">';
             html += '<i class="fa-solid fa-tags"></i>';
             html += '</div>';
             
-            // שורה שנייה - אייקון הדפסת הזמנה
-            html += '<div class="action-icon print-order-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="printOrderFromIcon(this)" style="background: #4caf50; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 10px;" title="הדפסת הזמנה">';
+            html += '</div>'; // סגירת שורה עליונה
+            
+            // שורה תחתונה של אייקונים
+            html += '<div style="display: flex; gap: 2px; height: 28px;">';
+            
+            // אייקון סגירת הזמנה - הלוגיקה המתוקנת:
+            // 1. הזמנות חדשות (לא משוייכות) - אפור ולא לחיץ
+            // 2. הזמנות משוייכות לעובד אחר + עובד פשוט - אפור ולא לחיץ
+            // 3. הזמנות משוייכות לעובד אחר + בכיר - כתום ולחיץ
+            // 4. הזמנות משוייכות למשתמש הנוכחי - כתום ולחיץ
+            
+            var canCloseThisOrder = false;
+            
+            if (!isAssigned) {
+                // הזמנה חדשה - לא ניתן לסגור
+                canCloseThisOrder = false;
+            } else if (isAssignedToCurrentUser) {
+                // הזמנה משוייכת למשתמש הנוכחי - ניתן לסגור
+                canCloseThisOrder = true;
+            } else if (Role == 1) {
+                // הזמנה משוייכת לעובד אחר אבל אני בכיר - ניתן לסגור
+                canCloseThisOrder = true;
+            } else {
+                // הזמנה משוייכת לעובד אחר ואני עובד פשוט - לא ניתן לסגור
+                canCloseThisOrder = false;
+            }
+            
+            if (canCloseThisOrder) {
+                html += '<div class="action-icon close-order-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="closeOrderFromIcon(this)" style="background: #ff9800; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 11px; width: 28px; height: 28px;" title="סגירת הזמנה">';
+                html += '<i class="fa-solid fa-check-circle"></i>';
+                html += '</div>';
+            } else {
+                html += '<div style="background: #bdbdbd; color: #757575; display: flex; align-items: center; justify-content: center; border-radius: 3px; font-size: 11px; width: 28px; height: 28px;" title="אין אפשרות לסגור הזמנה זו">';
+                html += '<i class="fa-solid fa-check-circle"></i>';
+                html += '</div>';
+            }
+            
+            // אייקון הדפסת הזמנה
+            html += '<div class="action-icon print-order-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="printOrderFromIcon(this)" style="background: #4caf50; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 11px; width: 28px; height: 28px;" title="הדפסת הזמנה">';
             html += '<i class="fa-solid fa-print"></i>';
             html += '</div>';
             
-            html += '</div>';
+            html += '</div>'; // סגירת שורה תחתונה
+            
+            html += '</div>'; // סגירת קונטיינר האייקונים
+            
+            // אייקון מעבר לליקוט לעובד בכיר - נפרד ונקי
+            if (Role == 1 && isAssigned) {
+                html += '<div class="action-icon go-to-collection-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="goToCollectionFromOrder(this)" style="background: #9c27b0; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 14px; width: 30px; height: 60px; margin-left: 2px;" title="עבור לליקוט הזמנה">';
+                html += '<i class="fa-solid fa-arrow-left"></i>';
+                html += '</div>';
+            }
 
             html += '</div>'; // סגירת שורת ההזמנה הראשית
 
@@ -898,6 +946,24 @@
             return html;
         }
 
+        // פונקציה למעבר לטאב ליקוט עם מס' הזמנה
+        function goToCollectionFromOrder(element) {
+            // עצירת התפשטות האירוע
+            event.stopPropagation();
+            
+            // קבלת מס' ההזמנה מהאלמנט
+            var orderId = $(element).data('order-id');
+            console.log(orderId);
+            
+            if (orderId) {
+                // שמירת מס' ההזמנה במשתנה הגלובלי
+                OrderId = orderId;
+                
+                // מעבר לטאב ליקוט (טאב 2)
+                ShowTab(2);
+            }
+        }
+
         // משתנה גלובלי לסוג התצוגה
         window.ViewMode = 'order'; // 'order' או 'product'
 
@@ -912,8 +978,17 @@
             window.OriginalServerData = {}; // נתוני השרת המקוריים
             window.ModifiedProducts = {}; // מוצרים שעברו שינוי ידני
             window.UserChanges = {}; // שינויים ספציפיים שהעובד עשה
+            
+            // בניית URL עם פרמטרים
+            var url = `${window.baseUrl}posApi/orderProducts?viewMode=` + window.ViewMode;
+            if (OrderId && OrderId !== "None") {
+                url += '&orderId=' + OrderId;
+            }
+            console.log('****URL: ', url);
+            
+            
             $.ajax({
-                url: `${window.baseUrl}posApi/orderProducts?viewMode=` + window.ViewMode,
+                url: url,
                 context: Text,
                 timeout: 16000,
                 headers: {
@@ -942,7 +1017,13 @@
                 
                 var html = '';
                 html += '<div style="padding: 0 10px 70px;">';
-                html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">מוצרים לליקוט</div>';
+                
+                // הצגת כותרת עם מספר הזמנה אם יש
+                var titleText = 'מוצרים לליקוט';
+                // if (OrderId && OrderId !== "None") {
+                //     titleText += ' - הזמנה #' + OrderId;
+                // }
+                html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">' + titleText + '</div>';
 
                 // טוגל בוטון לבחירת סוג התצוגה
                 html += '<div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">';
@@ -3609,6 +3690,9 @@
                 $("#TabContent3").hide();
                 switch (CurrentTab) {
                     case 1:
+                        // איפוס OrderId כשחוזרים לטאב הזמנות
+                        OrderId = "None";
+                        
                         $("#TabContent1").show();
                         // הוספת כותרת ואז שדה חיפוש (כמו בטאב 3)
                         var titleHtml1 = '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">הזמנות לליקוט</div>';
