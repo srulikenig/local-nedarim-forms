@@ -404,116 +404,9 @@
                     });
                 }
             });
+            ShowTab(2);
         }
         var ListOrders = [];
-        // function getProducts() {
-        //     // איפוס בחירות בטאב 1 בכל רענון
-        //     window.SelectedProducts = [];
-        //     // איפוס מונה האיסוף ומעקב המספרים
-        //     window.CollectionCounter = 0;
-        //     window.ProductNumbers = {};
-        //     $.ajax({
-        //         url: `${window.baseUrl}posApi/products`,
-        //         context: Text,
-        //         timeout: 16000,
-        //         headers: {
-        //             "authorization": UserToken
-        //         }
-        //     }).success(function (Response) {
-        //         if (Response.status == 'error') {
-        //             MySwal(Response.massege)
-        //             return false;
-        //         }
-        //         ListProducts = Response.data;
-        //         var productsStatus1 = ListProducts.filter(function (p) { return p.status == 1; });
-        //         var productsStatus2 = ListProducts.filter(function (p) { return p.status == 2; });
-
-        //         // חישוב המונה הגלובלי לפי הערך הגבוה ביותר ב-cartIndex
-        //         var maxCartIndex = 0;
-        //         for (var i = 0; i < productsStatus2.length; i++) {
-        //             if (productsStatus2[i].cartIndex && productsStatus2[i].cartIndex > maxCartIndex) {
-        //                 maxCartIndex = productsStatus2[i].cartIndex;
-        //             }
-        //         }
-        //         window.CollectionCounter = maxCartIndex;
-
-        //         // מערך בחירות
-        //         window.SelectedProducts = window.SelectedProducts || [];
-
-        //         var html = '';
-        //         html += '<div style="padding: 0 10px 70px;">';
-        //         // html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">רשימת מוצרים לאיסוף</div>';
-        //         html += '<div id="ProductsListStatus1">';
-        //         if (productsStatus1.length === 0) {
-        //             html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין מוצרים לאיסוף</div>';
-        //         } else {
-        //             for (var i = 0; i < productsStatus1.length; i++) {
-        //                 html += renderProductRow(productsStatus1[i], i, 1);
-        //             }
-        //         }
-        //         html += '</div>';
-        //         html += '<div style="margin: 18px 0 10px 0; display: flex; align-items: center;">'
-        //             + '<hr style="flex:1; border:none; border-top:1.5px solid #e0e0e0; margin:0 10px;">'
-        //             + '<span style="color:#888; font-size:15px; background:#fff; padding:0 10px;">פריטים בעגלה</span>'
-        //             + '<hr style="flex:1; border:none; border-top:1.5px solid #e0e0e0; margin:0 10px;">'
-        //             + '</div>';
-        //         html += '<div id="ProductsListStatus2">';
-        //         if (productsStatus2.length === 0) {
-        //             html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין מוצרים בעגלה</div>';
-        //         } else {
-        //             for (var j = 0; j < productsStatus2.length; j++) {
-        //                 html += renderProductRow(productsStatus2[j], j, 2);
-        //             }
-        //         }
-        //         html += '</div>';
-        //         html += '</div>';
-
-        //         // אלמנט קבוע בתחתית TAB
-        //         html += '<div id="ApproveSelectedProductsBar" style="position:fixed;bottom:0;left:0;width:100%;z-index:10;">'
-        //             + '<div style="max-width:500px;width:95%;margin:auto;position:relative;background:#ffffff;padding:8px 0;box-sizing:border-box;border-top:2px solid #cbcbcb;text-align:center;">'
-        //             + '<div id="ApproveSelectedProductsBarContent"></div>'
-        //             + '</div>'
-        //             + '</div>';
-
-        //         $("#Tab1List").html(html);
-
-        //         // סימון שורה בלחיצה
-        //         $("#ProductsListStatus1 .product-row").off("click").on("click", function () {
-        //             var idx = $(this).index();
-        //             var prod = productsStatus1[idx];
-        //             var id = prod.id;
-        //             var $this = $(this);
-
-        //             if (window.SelectedProducts.indexOf(id) === -1) {
-        //                 // הוספת מוצר חדש
-        //                 window.SelectedProducts.push(id);
-
-        //                 // הצגת אנימציה עם המספר הבא
-        //                 window.CollectionCounter++;
-        //                 window.ProductNumbers[id] = window.CollectionCounter;
-        //                 showCollectionAnimation($this, window.CollectionCounter);
-        //             } else {
-        //                 // הסרת מוצר קיים
-        //                 window.SelectedProducts = window.SelectedProducts.filter(function (pid) { return pid !== id });
-
-        //                 // הסרת האנימציה של המוצר הנוכחי
-        //                 removeCollectionAnimation($this);
-
-        //                 // מחיקת המספר מהמעקב
-        //                 delete window.ProductNumbers[id];
-
-        //                 // עדכון כל המספרים
-        //                 updateAllProductNumbers(productsStatus1);
-        //             }
-        //             updateSelectedProductsUI(productsStatus1);
-        //         });
-
-        //         // עדכון UI ראשוני
-        //         updateSelectedProductsUI(productsStatus1);
-        //     }).error(function () {
-        //         MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
-        //     });
-        // }
 
         // פונקציה לטיפול בכפתורי פילטר ההזמנות
         function setOrderFilter(filterType) {
@@ -663,7 +556,7 @@
                 html += '<div style="padding: 0 10px 70px;">';
                 // html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">רשימת הזמנות לאיסוף</div>';
                 html += '<div id="OrdersListStatus1">';
-                if (ordersStatus1.length === 0) {
+                if (ordersStatus1.length === 0 && window.OrderFilter === "all") {
                     html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין הזמנות ממתינות</div>';
                 } else {
                     for (var i = 0; i < ordersStatus1.length; i++) {
@@ -671,20 +564,33 @@
                     }
                 }
                 html += '</div>';
-                html += '<div style="margin: 18px 0 10px 0; display: flex; align-items: center;">'
-                    + '<hr style="flex:1; border:none; border-top:1.5px solid #e0e0e0; margin:0 10px;">'
-                    + '<span style="color:#888; font-size:15px; background:#fff; padding:0 10px;">הזמנות בליקוט</span>'
-                    + '<hr style="flex:1; border:none; border-top:1.5px solid #e0e0e0; margin:0 10px;">'
-                    + '</div>';
-                html += '<div id="OrdersListStatus2">';
-                if (ordersStatus2.length === 0) {
-                    html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין הזמנות בליקוט</div>';
-                } else {
-                    for (var j = 0; j < ordersStatus2.length; j++) {
-                        html += renderOrderRow(ordersStatus2[j], j, 2);
+                
+                // הצגת קו מפריד וחלק "הזמנות בליקוט" רק אם:
+                // 1. יש הזמנות בליקוט (ordersStatus2.length > 0), או
+                // 2. הפילטר הוא "שלי" או "הכל" (כי אז רוצים לראות את החלוקה)
+                var currentFilter = window.OrderFilter || 'mine';
+                var shouldShowStatus2Section = ordersStatus2.length > 0 || (currentFilter === 'mine' || currentFilter === 'all');
+                
+                if (shouldShowStatus2Section) {
+                    currentFilter === 'all' && 
+                    (html += '<div style="margin: 18px 0 10px 0; display: flex; align-items: center;">'
+                        + '<hr style="flex:1; border:none; border-top:1.5px solid #e0e0e0; margin:0 10px;">'
+                        + '<span style="color:#888; font-size:15px; background:#fff; padding:0 10px;">הזמנות בליקוט</span>'
+                        + '<hr style="flex:1; border:none; border-top:1.5px solid #e0e0e0; margin:0 10px;">'
+                        + '</div>');
+                    html += '<div id="OrdersListStatus2">';
+                    if (ordersStatus2.length === 0) {
+                        html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין הזמנות בליקוט</div>';
+                    } else {
+                        for (var j = 0; j < ordersStatus2.length; j++) {
+                            html += renderOrderRow(ordersStatus2[j], j, 2);
+                        }
                     }
+                    html += '</div>';
+                } else {
+                    // אם לא מציגים את החלק של הזמנות בליקוט, עדיין צריך את הdiv עם id
+                    html += '<div id="OrdersListStatus2" style="display: none;"></div>';
                 }
-                html += '</div>';
                 html += '</div>';
 
                 // אלמנט קבוע בתחתית TAB
@@ -3697,12 +3603,23 @@
                         // הוספת כותרת ואז שדה חיפוש (כמו בטאב 3)
                         var titleHtml1 = '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">הזמנות לליקוט</div>';
                         
-                        // פילטר עם 3 כפתורים
+                        // פילטר עם 3 כפתורים - בהתאם לבחירה הנוכחית
+                        var currentFilter = window.OrderFilter || 'mine';
                         var filterHtml1 = '<div style="display: flex; justify-content: center; align-items: center; margin: 15px 0;">';
                         filterHtml1 += '<div style="background: #f0f0f0; border-radius: 25px; padding: 3px; display: inline-flex; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">';
-                        filterHtml1 += '<button id="filterMine" onclick="setOrderFilter(\'mine\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: white; background: #009688;">שלי</button>';
-                        filterHtml1 += '<button id="filterNew" onclick="setOrderFilter(\'new\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: #666; background: transparent;">חדש</button>';
-                        filterHtml1 += '<button id="filterAll" onclick="setOrderFilter(\'all\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: #666; background: transparent;">הכל</button>';
+                        
+                        // כפתור "שלי"
+                        var mineStyle = (currentFilter === 'mine') ? 'color: white; background: #009688;' : 'color: #666; background: transparent;';
+                        filterHtml1 += '<button id="filterMine" onclick="setOrderFilter(\'mine\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; ' + mineStyle + '">שלי</button>';
+                        
+                        // כפתור "חדש"
+                        var newStyle = (currentFilter === 'new') ? 'color: white; background: #009688;' : 'color: #666; background: transparent;';
+                        filterHtml1 += '<button id="filterNew" onclick="setOrderFilter(\'new\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; ' + newStyle + '">חדש</button>';
+                        
+                        // כפתור "הכל"
+                        var allStyle = (currentFilter === 'all') ? 'color: white; background: #009688;' : 'color: #666; background: transparent;';
+                        filterHtml1 += '<button id="filterAll" onclick="setOrderFilter(\'all\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; ' + allStyle + '">הכל</button>';
+                        
                         filterHtml1 += '</div>';
                         filterHtml1 += '</div>';
                         
