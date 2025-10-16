@@ -4510,9 +4510,9 @@
 
             var html = ""
             if (_IsQpos == true) {
-                html += '<div id="CardTransferCard" style="margin: 17px 15px;font-weight: bold;color: #474747;font-size: 18px;text-align: center;padding: 13px;"><span>העבר כרטיס<div style="display:block;color:indianred;font-size: 2vh;">פס מגנטי כלפי מטה</div></span><img src="./Files/Pic/Swipe.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;"></div>'
+                html += '<div id="CardTransferCard" style="margin: 17px 15px;font-weight: bold;color: #474747;font-size: 18px;text-align: center;padding: 13px;"><span>העבר כרטיס<div style="display:block;color:indianred;font-size: 2vh;">פס מגנטי כלפי מטה</div></span><img src="/NedarimPlus/POS/Files/Swipe.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;"></div>'
 
-                html += '<div onclick="$(\'#CheckUser\').show(); $(\'#CardGetMagneticCard\').hide(); $(\'#CheckUserName\').focus();" style="cursor: pointer; margin: 17px 15px; background: linear-gradient(rgb(221 221 221), rgb(235 235 235), rgb(219 219 219)); font-weight: bold; color: #474747; font-size: 18px; text-align: center; padding: 13px;">לחץ כאן להתחברות ע"י הזנת פרטים<img src="./Files/Pic/Manual.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;" /></div>';
+                html += '<div onclick="$(\'#CheckUser\').show(); $(\'#CardGetMagneticCard\').hide(); $(\'#CheckUserName\').focus();" style="cursor: pointer; margin: 17px 15px; background: linear-gradient(rgb(221 221 221), rgb(235 235 235), rgb(219 219 219)); font-weight: bold; color: #474747; font-size: 18px; text-align: center; padding: 13px;">לחץ כאן להתחברות ע"י הזנת פרטים<img src="/NedarimPlus/POS/Files/Manual.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;" /></div>';
                 if (_POS_Firmware == 'D20_SZFP_release_20221119' && _POS_Sign !== 'Normal') html += '<div style="font-size: 2.5vh;background-color: #fb7455;color: white;padding: 4px 0px;border-radius: 3px;display: inline-block;font-weight: 600;position: absolute;top: 60px;opacity: 0.9;width: 100%;left: 0;">במידה ומכשיר זה אינו מגיב להעברת כרטיס,<br />נסו לבצע הפעלה מחדש כעת.<br/><u>והשתדלו להשאירו מנותק מהחשמל</u><br />(שמנו לב שיש פחות בעיות כשלא מחובר למטען)<br /><b>הנושא בטיפול מול היצרן. עמכם הסליחה.</b></div>';
 
                 OpenPOSTimeout = setTimeout(function () {
@@ -4525,8 +4525,8 @@
 
             } else {
 
-                html += '<div id="CardTransferCard" style="margin: 17px 15px;font-weight: bold;color: #474747;font-size: 18px;text-align: center;padding: 13px;"><span>העבר כרטיס בקורא מגנטי</span><img src="./Files/Pic/SwipeNoPOS.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;"></div>'
-                html += '<div onclick="$(\'#CheckUser\').show(); $(\'#CardGetMagneticCard\').hide(); $(\'#CheckUserName\').focus();" style="cursor: pointer; margin: 17px 15px; background: linear-gradient(rgb(221 221 221), rgb(235 235 235), rgb(219 219 219)); font-weight: bold; color: #474747; font-size: 18px; text-align: center; padding: 13px;">לחץ כאן להתחברות ע"י הזנת פרטים<img src="./Files/Pic/Manual.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;" /></div>';
+                html += '<div id="CardTransferCard" style="margin: 17px 15px;font-weight: bold;color: #474747;font-size: 18px;text-align: center;padding: 13px;"><span>העבר כרטיס בקורא מגנטי</span><img src="/NedarimPlus/POS/Files/SwipeNoPOS.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;"></div>'
+                html += '<div onclick="$(\'#CheckUser\').show(); $(\'#CardGetMagneticCard\').hide(); $(\'#CheckUserName\').focus();" style="cursor: pointer; margin: 17px 15px; background: linear-gradient(rgb(221 221 221), rgb(235 235 235), rgb(219 219 219)); font-weight: bold; color: #474747; font-size: 18px; text-align: center; padding: 13px;">לחץ כאן להתחברות ע"י הזנת פרטים<img src="/NedarimPlus/POS/Files/Manual.png" style="width:200px;display:block;margin-right: auto; margin-left: auto;" /></div>';
             }
 
             $('#CardGetMagneticCard').html(html).show();
