@@ -748,18 +748,28 @@
             html += '</div>';
             html += '</div>';
 
-            // מרכז: מס' הזמנה ושם העובד מתחת במקרה של הזמנה משוייכת
-            html += '<div style="flex: 1; padding: 5px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; word-wrap: break-word; min-height: 50px;">';
-            html += '<div style="font-size: 24px; color: #333; font-weight: bold;">' + (prod.order ? prod.order.collectionIndex : prod.orderId || '') + '</div>';
-
-            // הצגת שם העובד מתחת למספר ההזמנה במקרה של הזמנה משוייכת
+            // מרכז: מס' הזמנה, שם לקוח ושם העובד
+            html += '<div style="flex: 1; padding: 0px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; word-wrap: break-word; min-height: 50px;">';
+            
+            // חלק עליון (אינדקס ושם לקוח) - 50% מהגובה
+            html += '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 22px; width: 100%;">';
+            html += '<div style="font-size: 14px; color: #333; font-weight: bold;">' + (prod.order ? prod.order.collectionIndex : prod.orderId || '') + '</div>';
+            html += '<div style="font-size: 12px; color: #333;  text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 80px;">' + (prod.order.fullName || '') + '</div>';
+            html += '</div>';
+            
             if (isAssigned && prod.employeeObjects && prod.employeeObjects.length > 0) {
-                for (var empIndex = 0; empIndex < prod.employeeObjects.length; empIndex++) {
-                    var employeeName = prod.employeeObjects[empIndex].name || prod.employeeObjects[empIndex].employeeName || prod.employeeObjects[empIndex];
-                    if (employeeName) {
-                        html += '<div style="font-size: 12px; color: #666; margin-top: 2px;">' + employeeName + '</div>';
+                 // קו מפריד
+                html += '<div style="width: 80%; height: 1px; background: #e0e0e0; "></div>';
+
+                // חלק תחתון (שם העובד) - 50% מהגובה
+                html += '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 25px; width: 100%;">';
+                    for (var empIndex = 0; empIndex < prod.employeeObjects.length; empIndex++) {
+                        var employeeName = prod.employeeObjects[empIndex].name || prod.employeeObjects[empIndex].employeeName || prod.employeeObjects[empIndex];
+                        if (employeeName) {
+                            html += '<div style="font-size: 12px; color: #666;">' + employeeName + '</div>';
+                        }
                     }
-                }
+                    html += '</div>';
             }
 
             html += '</div>';
