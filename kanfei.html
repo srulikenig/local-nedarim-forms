@@ -138,8 +138,26 @@
         // הדפסת הזמנה מהאייקון
         function printOrderFromIcon(element) {
             event.stopPropagation(); // עצירת התפשטות האירוע
+            console.log('PrintOrderFromIcon - Element:', element);
+            console.log('PrintOrderFromIcon - Element data:', $(element).data());
+            
             var orderId = $(element).data('order-id');
+            if (!orderId && element.dataset) {
+                orderId = element.dataset.orderId;
+                console.log('PrintOrderFromIcon - Using dataset.orderId:', orderId);
+            }
+            
+            console.log('PrintOrderFromIcon - Final orderId:', orderId);
+            console.log('PrintOrderFromIcon - window.OrderId:', window.OrderId);
+            
+            // אם אין orderId מהאלמנט, ננסה להשתמש ב-window.OrderId
+            if (!orderId && window.OrderId && window.OrderId !== "None") {
+                orderId = window.OrderId;
+                console.log('PrintOrderFromIcon - Using window.OrderId:', orderId);
+            }
+            
             if (!orderId) {
+                console.error('PrintOrderFromIcon - No orderId found');
                 swal({ title: 'שגיאה', text: 'לא נמצא מזהה הזמנה', type: 'error', timer: 2000, showConfirmButton: false });
                 return;
             }
@@ -187,8 +205,26 @@
         // סגירת הזמנה
         function closeOrderFromIcon(element) {
             event.stopPropagation(); // עצירת התפשטות האירוע
+            console.log('CloseOrderFromIcon - Element:', element);
+            console.log('CloseOrderFromIcon - Element data:', $(element).data());
+            
             var orderId = $(element).data('order-id');
+            if (!orderId && element.dataset) {
+                orderId = element.dataset.orderId;
+                console.log('CloseOrderFromIcon - Using dataset.orderId:', orderId);
+            }
+            
+            console.log('CloseOrderFromIcon - Final orderId:', orderId);
+            console.log('CloseOrderFromIcon - window.OrderId:', window.OrderId);
+            
+            // אם אין orderId מהאלמנט, ננסה להשתמש ב-window.OrderId
+            if (!orderId && window.OrderId && window.OrderId !== "None") {
+                orderId = window.OrderId;
+                console.log('CloseOrderFromIcon - Using window.OrderId:', orderId);
+            }
+            
             if (!orderId) {
+                console.error('CloseOrderFromIcon - No orderId found');
                 swal({ title: 'שגיאה', text: 'לא נמצא מזהה הזמנה', type: 'error', timer: 2000, showConfirmButton: false });
                 return;
             }
@@ -784,7 +820,7 @@
             html += '</div>'; // סגירת קונטיינר האייקונים
 
             // אייקון מעבר לליקוט לעובד בכיר - נפרד ונקי
-            if (Role == 1 && isAssigned) {
+            if (Role == 1 || isAssigned) {
                 html += '<div class="action-icon go-to-collection-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="goToCollectionFromOrder(this)" style="background: #9c27b0; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 14px; width: 30px; height: 60px; margin-left: 2px;" title="עבור לליקוט הזמנה">';
                 html += '<i class="fa-solid fa-arrow-left"></i>';
                 html += '</div>';
@@ -859,14 +895,20 @@
 
             // קבלת מס' ההזמנה מהאלמנט
             var orderId = $(element).data('order-id');
-            console.log(orderId);
+            
+            // ניסיון לקבל את ה-ID בדרך אחרת
+            if (!orderId) {
+                orderId = element.dataset.orderId;
+            }
 
             if (orderId) {
                 // שמירת מס' ההזמנה במשתנה הגלובלי
-                OrderId = orderId;
+                window.OrderId = orderId;
 
                 // מעבר לטאב ליקוט (טאב 2)
                 ShowTab(2);
+            } else {
+                console.error('No orderId found in element:', element);
             }
         }
 
@@ -929,7 +971,26 @@
                 // if (OrderId && OrderId !== "None") {
                 //     titleText += ' - הזמנה #' + OrderId;
                 // }
-                html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">' + titleText + '</div>';
+                // כותרת עם אייקונים
+                html += '<div style="display: flex; align-items: center; justify-content: space-between; margin: 10px 0; padding: 0 10px;">';
+                html += '<div style="width: 60px;"></div>'; // רווח שמאלי לאייקונים
+                // כותרת במרכז
+                html += '<div style="flex-grow: 1; text-align: center; font-size: 18px; font-weight: bold; color: #009688;">' + titleText + '</div>';
+                
+                // אייקונים בצד שמאל (אם יש OrderId)
+                if (window.OrderId && window.OrderId !== "None") {
+                    html += '<div style="display: flex; gap: 5px; margin-right: 10px;">';
+                    // אייקון סגירה
+                    html += '<div onclick="closeOrderFromIcon({dataset:{orderId:window.OrderId}})" style="display:flex; align-items:center; justify-content:center; width:28px; height:28px; background:#ff9800; color:white; border-radius:3px; cursor:pointer;" title="סגירת הזמנה">';
+                    html += '<i class="fa-solid fa-check-circle" style="font-size:14px;"></i>';
+                    html += '</div>';
+                    // אייקון הדפסה
+                    html += '<div onclick="printOrderFromIcon({dataset:{orderId:window.OrderId}})" style="display:flex; align-items:center; justify-content:center; width:28px; height:28px; background:#4caf50; color:white; border-radius:3px; cursor:pointer;" title="הדפסת הזמנה">';
+                    html += '<i class="fa-solid fa-print" style="font-size:14px;"></i>';
+                    html += '</div>';
+                    html += '</div>';
+                }
+                html += '</div>';
 
                 // טוגל בוטון לבחירת סוג התצוגה
                 html += '<div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">';
@@ -1290,6 +1351,7 @@
             return false;
         }
 
+        // בדיקה אם מוצר שונה מהנתונים שהגיעו מהשרת
         function isProductModifiedFromServer(productId) {
             if (!window.ProductCubes[productId] || !window.OriginalServerData[productId]) {
                 return false;
@@ -1312,6 +1374,7 @@
             return (currentGreen !== originalData.qtyCollected || currentRed !== originalData.qtyMissing);
         }
 
+        // בדיקה אם מוצר טופל במלואו על פי נתוני השרת
         function isProductFullyProcessedByServer(productData) {
             var qtyCollected = parseInt(productData.qtyCollected || 0);
             var qtyMissing = parseInt(productData.qtyMissing || 0);
@@ -1593,7 +1656,15 @@
                 }
             }
 
-            if (productsToApprove.length === 0) return;
+            if (productsToApprove.length === 0) {
+                swal({
+                    title: 'שגיאה',
+                    text: 'יש לאשר את השינויים שנעשו',
+                    type: 'error',
+                    confirmButtonText: 'סגור'
+                });
+                return;
+            }
 
             var totalQuantity = 0;
             var totalMissing = 0;
@@ -2041,6 +2112,7 @@
         });
 
 
+        // בדיקת גרסה
         function CheckVersion() {
             $.ajax({
                 url: "Manage.aspx?Action=CheckVersion&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId,
@@ -2054,6 +2126,7 @@
 
 
 
+        // קבלת הגדרות תופס
         function GetTofesSettings() {
 
             $.ajax({
@@ -2125,6 +2198,7 @@
             });
             return false;
         }
+
 
 
         function listCityOpenCloseCardFixed(Type, Num) {
@@ -2671,80 +2745,6 @@
 
         }
 
-
-
-
-
-        //function ZeoutCheck() {
-
-        //    $("#ZeoutCheckSave").hide()
-        //    $("#ZeoutCheckWait").show()
-        //    setTimeout(function () {
-        //        ZeoutNumber = $("#ZeoutCheckText").val();
-        //        if ($.isNumeric(ZeoutNumber) == false) { LoginSwal("נא להקיש מספר זהות בספרות בלבד, ללא סימנים", "ZeoutCheckText"); return false };
-        //        for (var Elem in MatrimJson) {
-        //            var KidZeout = MatrimJson[Elem].Name.split("|")[0].trim()
-        //            console.log("KidZeout: " + KidZeout)
-        //            console.log("ZeoutNumber: " + ZeoutNumber)
-        //            if (KidZeout == ZeoutNumber) {
-        //                OpenPage(KidZeout, MatrimJson[Elem].Name.split("|")[1], MatrimJson[Elem].Name.split("|")[2]);
-        //                return false;
-        //            }
-        //        }
-        //        LoginSwal("מספר הזהות שהוקש לא נמצא במערכת."); return false;
-        //$("#ZeoutCheckSave").show()
-        //$("#ZeoutCheckWait").hide()
-
-
-
-
-
-
-        //    }, 1000)
-        //}
-
-
-        //function ZeoutCheck() {
-
-        //    $("#ZeoutCheckSave").hide()
-        //    $("#ZeoutCheckWait").show()
-        //    ZeoutNumber = $("#ZeoutCheckText").val();
-        //    if ($.isNumeric(ZeoutNumber) == false) { LoginSwal("נא להקיש מספר זהות בספרות בלבד, ללא סימנים", "ZeoutCheckText"); return false };
-
-        //    $.ajax({
-        //        url: "Manage.aspx?Action=CheckAllowedZeout&MosadId=" + Json.MosadId + "&Zeout=" + encodeURIComponent(ZeoutNumber),
-        //        context: Text,
-        //        timeout: 60000,
-        //    }).success(function (JsonData) {
-        //        if (JsonData.Status == 'Error' || JsonData.Result == 'Error') {
-        //            swal({
-        //                type: "warning",
-        //                title: "מספר הזהות שהוקש לא נמצא במערכת <br/> הנך מועבר לטופס הרשמה למערכת",
-        //                timer: 3000,
-        //                showConfirmButton: false,
-        //                html: true
-        //            }, function (r) {
-        //                Open(968)
-        //            })
-        //        }
-        //        else {
-        //            $('#AllMainForm').show();
-        //            $('#ZeoutCheck').hide();
-        //            $("#Zeout").val(ZeoutNumber);
-        //            $("#Zeout").attr('disabled', 'disabled');
-        //            return false;
-        //        }
-        //    }).error(function () {
-        //        EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
-        //    });
-
-
-        //}
-
-
-
-
-
         function GetPreData_UserName() {
             $.ajax({
                 url: "Manage.aspx?Action=GetPreData_UserName&TofesId=" + Json.TofesId,
@@ -2761,63 +2761,11 @@
 
 
 
-
-
-
         function SignCancel() {
             $('#SignPad,#WaitDiv').hide();
             $('#SaveDiv').show();
         }
 
-
-
-        // *** MatchPlusData 490***
-        //var MatchPlusData;
-
-        //function MatchPlus() {
-        //    $.ajax({
-        //        url: "../V6/MatchPlus.aspx?Action=ShowGoal&MatchingId=229",
-        //        context: Text,
-        //        timeout: 5000,
-        //    }).success(function (data) {
-        //        MatchPlusData = data
-        //        ShowDataMatchPlus()
-        //    }).error(function () {
-
-        //        EAlertConfirm("תקלת תקשורת - שגיאה בקבלת נתונים", '', 6000);
-        //    })
-        //}
-
-        //var Sign = '₪'
-        //function ShowDataMatchPlus() {
-        //    try {
-        //        $('#CurDonator').html(MatchPlusData.Donator)
-        //        //MatchPlusData.data.relationships.campaign_stats.data.total=2005268
-        //        $('#CurAmount').html((+MatchPlusData.Donated).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').replace('.00', '') + ' ' + Sign)
-        //        var Goal = +MatchPlusData.Goal
-        //        var GoalText = 'יעד'
-        //        //if (MatchPlusData.data.attributes.rounds.length > 1) {
-        //        //    if (MatchPlusData.data.attributes.rounds[1].goal !== undefined) {
-        //        //        if (parseFloat(MatchPlusData.data.relationships.campaign_stats.data.total) > parseFloat(Goal)) {
-        //        //            Goal = MatchPlusData.data.attributes.rounds[1].goal
-        //        //            GoalText = 'יעד בונוס'
-        //        //        }
-        //        //    }
-        //        //}
-        //        $('#goal').html(GoalText + ': ' + Goal.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,').replace('.00', '') + ' ' + Sign)
-
-        //        // $('#goal').html(GoalText + ': ' + Goal.replace(/\d(?=(\d{3})+\.)/g, '$&,').replace('.00', '') + ' ' + Sign)
-        //        var Percent = +MatchPlusData.Donated / Goal * 100
-        //        $('#CurPercent').html((Percent).toFixed(2) + '%')
-        //        if (Percent > 100) Percent = 100;
-        //        $('#progress').css('width', (Percent).toFixed(2) + '%')
-        //        $('.goal-stat').show()
-        //    }
-        //    catch (err) {
-        //        console.log(err.message);
-        //    }
-        //    //CountDownTimer(MatchPlusData.data.attributes.end_date, 'countdown');
-        //}
 
 
 
@@ -3056,138 +3004,14 @@
                     }
                 }
 
-
-
             }
-
-
-            //if (Zeout == "" && MasofId !== "" && ($('input[name=TashlumStatus]:checked').val() !== "אשראי")) {
-            //    MySwal("תשלום במזומן ניתן לאחר הזדהות בלבד", "TashlumStatus"); return false;
-            //};
-
-
-            //var Txt = '';
-            //for (var i = 1; i <= 20; i++) {
-            //    Txt += ', { "Type": "DivOpen", "ElementId": "DivOpen' + i + '", "Text": "", "Style": "" }'
-            //    Txt += ', { "ElementId": "Name' + i + '", "Type": "Span", "Text": "' + i + '.", "BeforeBr": false }'
-            //    Txt += ', { "ElementId": "KidName' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true, "Br": false }'
-            //    Txt += ', { "ElementId": "KidFamily' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "שם משפחה", "Type": "Text", "Mandatory": true, "Br": false }'
-            //    Txt += ', { "ElementId": "KidId' + i + '", "MaxLength": 9, "Width": 40, "fieldName": "תעודת זהות", "Type": "Tel", "Mandatory": true, "Br": false }'
-            //    Txt += ', { "ElementId": "Gender' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מגדר", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "LblHide": false, "RadioBt": [{ "Text": "בן" }, { "Text": "בת" }] }'
-            //    Txt += ', { "ElementId": "KidBDE' + i + '", "MaxLength": 10, "Width": 40, "fieldName": "ת.לידה", "Type": "Tel", "Mandatory": true, "Br": false}'
-            //    Txt += ', { "ElementId": "KidScholl' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מקום לימודים", "Type": "Text", "Mandatory": true, "Br": false }'
-            //    Txt += ', { "ElementId": "KidStatus' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "נשוי", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "LblHide": false, "RadioBt": [{ "Text": "כן" }, { "Text": "לא" }] }'
-            //    Txt += ', { "Type": "DivClose" }Moshe'
-
-
-
-            //}
-            //console.log(Txt)
-
-
-            //var a = 50;
-            //var Txt = '';
-            //for (var i = 1; i <= 5; i++) {
-            //    Txt += ', { "Type": "DivOpen", "ElementId": "DivOpen_' + i + '", "Text": "", "Style": "margin-right: 10px;display:none" }'
-            //    Txt += ', { "ElementId": "Num_' + i + '","Type": "IndexNumber", "ElementId": "DivOpenIndexNumber_' + i + '", "Text": "' + i + '", "Style": "" }'
-            //    Txt += ', { "ElementId": "Masechet_' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מסכת ממבחן קודם",  "Type": "Text", "Mandatory": true, "Br": true , "DbName": "Field' + a++ + '"}'
-            //    Txt += ', { "ElementId": "Dapim' + i + '", "MaxLength": 2, "Width": 40, "fieldName": "דפים למבחן הקודם",  "Type": "Tel", "Mandatory": true, "Br": false , "DbName": "Field' + a++ + '"}'
-            //    Txt += ', { "ElementId": "Maslul' + i + '", "MaxLength": 50, "Width": 40, "fieldName": "מסלול מבחן קודם","fieldNameShow": "מסלול מבחן קודם (30-50)",  "Type": "Tel", "Mandatory": true, "Br": false, "DbName": "Field' + a++ + '" }'
-            //    Txt += ', {"ElementId": "RGPT' + i + '", "MaxLength": 50, "Width": 40, "fieldName":"רש\\"י / גפ\\"ת", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "DbName": "Field' + a++ + '", "LblHide": false, "RadioBt": [{ "Text": "רש\\"י" }, { "Text": "גפ\\"ת" }]}'
-            //    Txt += ', {"ElementId": "TestMonth' + i + '", "MaxLength": 50, "Width": 40, "fieldName":"תאריך המבחן הקודם", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "DbName": "Field' + a++ + '", "LblHide": false, "RadioBt": [{ "Text": "תשרי" }, { "Text": "ניסן" }]}'
-            //    Txt += ', {"ElementId": "TestMonthYear' + i + '", "MaxLength": 50, "Width": 40, "fieldName":"שנת", "Type": "Radio", "Mandatory": true, "Br": false, "br": false, "DbName": "Field' + a++ + '", "LblHide": false, "RadioBt": [{ "Text": "תשפ\\"ב" }, { "Text": "תשפ\\"ג" }]}'
-            //    Txt += ', { "Type": "DivClose" }Moshe'
-            //}
-            //console.log(Txt)
-
-
-
-            //var Bank = 0;
-            //if ($('#Bank').val() !== "") { Bank += 1 }
-            //if ($('#Snif').val() !== "") { Bank += 1 }
-            //if ($('#Account').val() !== "") { Bank += 1 }
-
-            //if (Bank == 1 || Bank == 2) {
-            //    MySwal("לא ניתן להזין פרטי בנק באופן חלקי", "SpanBankList"); return false;
-            //}
-
-            //OemHtml
-            //if ($('input[name=GanSelected]:checked').val() == "תינוקיה" || $('input[name=GanSelected]:checked').val() == "גן אסנת" || $('input[name=GanSelected]:checked').val() == "גן רבקי") {
-            //    //$('#MailTashlumPrivate').html($("input[name=TashlumAmount_Private]:checked").val() + "₪");
-            //    //document.getElementById('MailTashlumPrivate').appendChild(document.getElementById('Field' + i))
-            //    OemHtml = '<div dir="rtl" style="text-align: right;color:rgb(32,18,77) ;font-family:inherit;font-size: 13px;margin:10px;text-align: justify;width: 90%;max-width:700px;">'
-            //        + '<span style="font-size: large;font-weight:bold;">תקנון</span> <br/>'
-            //        + '<ol>'
-
-            //        + '<li>התשלום שנקבע הוא: ' + $("input[name=TashlumAmount_Private]:checked").val() + ' ₪ </li>'
-            //        + '<li>שנת הלימודים הינה החל מ-1 בספטמבר עד ה-8 באוגוסט כולל קייטנת קיץ ראשונה. עבור קייטנת קיץ שניה עד ה-15 באוגוסט, יגבה תשלום נוסף בנפרד.</li>'
-
-            //        + '</ol>'
-
-            //        + '</div>'
-            //}
-
-
-
-
-            //console.log("Type: " + CreditCard_Type);
-            //console.log("Amount: " + CreditCard_Amount);
-            //console.log("Tashloumim: " + CreditCard_Tashloumim);
-            //console.log("HKDay: " + $("#HKDay").val());
-
-
-            //$("#SaveDiv").show()
-            //$("#WaitDiv").hide()
-            //return false;
-
-
-
-            //if ($('input[name=RemeberDate]:checked').val() !== undefined) {
-            //    if ($('input[name=RemeberDate]:checked').val().indexOf('לא ידוע תאריך מדויק') !== -1) {
-            //        var TotalDate = getDate($("#BDE1").val(), $("#BDE2").val())
-            //        if (TotalDate > 90) { MySwal("לא ניתן להזין טווח תאריכים גדול מ3 חודשים.", "BDE2"); return false; }
-            //        if (TotalDate < 0) { MySwal("נא להזין תאריך סיום מאוחר מתאריך התחלה", "BDE2"); return false; }
-            //        if (getDate($("#BDE1").val(), 'Today') < 0) { MySwal("אין להזין תאריך עתידי", "BDE1"); return false; }
-            //        if (getDate('Today', $("#BDE2").val()) > 0) { MySwal("אין להזין תאריך עתידי", "BDE2"); return false; }
-
-
-
-            //    } else if ($('input[name=RemeberDate]:checked').val().indexOf('ידוע תאריך מדויק') !== -1) {
-            //        if (getDate($("#BDE3").val(), 'Today') < 0) { MySwal("אין להזין תאריך עתידי", "BDE3"); return false; }
-
-            //        $("#BDE1").val($("#BDE3").val());
-            //        $("#BDE2").val($("#BDE3").val());
-            //    }
-            //}
-
-
 
 
             if (GetURLParameter("Demo") == "1") { IAlertConfirm("זהו טופס לדוגמה. לא ניתן לבצע שליחה."); return false; }
 
-            //if (GetURLParameter("Zeout") == "") { IAlertConfirm("טופס זה ניתן לשליחה רק מעמדת נדרים פלוס."); return false; }
-
-            //if ($.isNumeric($("#TashlumAmount").val()) == false) { MySwal("אין סכום לתשלום.", "TashlumAmount"); return false; }
-            //if (parseInt($('#TashlumAmount').val()) < 5) { MySwal("נא להזין לפחות 5 ש\"ח", "TashlumAmount"); return false; };
-
-            //if ($('input[name=TashlumType]:checked').val() == "דולר" && $("#Tashlumim option:selected").val() !== 1) { MySwal("לא ניתן לחלק עסקת דולרים בתשלומים, נא לשנות לתשלום 1 או לעשות הוראת קבע", "Tashlumim"); return false; }
-
-
-
-            //var today = new Date();
-            //var dd = String(today.getDate()).padStart(2, '0');
-            //var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-            //var yyyy = today.getFullYear();
-
-            //today = mm + '/' + dd + '/' + yyyy;
-
-
-
             $("#SaveDiv").hide()
             $("#WaitDiv").show()
 
-
-            //if ($("#MisparAmuta").val().length > 0 && $("#MisparAmuta").val().length < 9) { MySwal("מספר עמותה / ח.פ. חייב להכיל 9 ספרות", "MisparAmuta"); return false; };
 
             //Calculate()
             var PostData = ''
@@ -3460,11 +3284,7 @@
             src="waitnew.gif" alt="waiting" />
     </div>
 
-    <!--  <div id="TopMenuBg" style="position:fixed;background-color:white;height:40px;top:0;width:100%;text-align:left;padding-top:10px;padding-bottom:10px;white-space:normal;font-size:0px;opacity:0.7"></div>
-      <div id="TopMenu" style="position:fixed;height:40px;top:0;width:100%;text-align:center;padding-top:10px;padding-bottom:10px;white-space:normal;font-size:0px">
-          <input class="Bt" style="margin:4px ;font-size:medium;padding:4px 10px 4px 10px;border-radius:3px;" type="button" value="שלח טופס" onclick="$('html, body').scrollTop(5000); SendData()" />
-          <input class="Bt" style="margin:4px ;background-color:#ff6a00;font-size:medium;padding:4px 10px 4px 10px;border-radius:3px;" type="button" value="חזרה לנדרים פלוס" id="BackToNedarimTop" onclick="if (MasofId !== '') parent.GoToMenu('Choose')" />
-      </div>-->
+
     <!--כפתורים עליונים-->
     <div id="BackToNedarim" style="text-align:center;margin-top:10px;display:none"> <input class="Bt"
             style="background-color:#ff6a00;display:inline-block;min-width:40%;padding:8px" type="button"
@@ -3583,10 +3403,12 @@
                 $("#Tabs").after(tabsHTML);
             }
 
-            function ShowTab(tabNumber) {
-
+            function ShowTab(tabNumber, orderId) {
                 if (tabNumber) {
                     CurrentTab = tabNumber;
+                }
+                if (orderId) {
+                    window.OrderId = orderId;
                 }
 
                 // עדכון עיצוב הטאבים
@@ -3602,6 +3424,9 @@
                     "border-bottom": "3px solid #00695c"
                 });
 
+                // הסרת הכפתורים הקודמים אם קיימים
+                $("#actionButtons").remove();
+
                 // עדכון תוכן המסך
                 var content = "";
                 $("#TabContent1").hide();
@@ -3610,7 +3435,7 @@
                 switch (CurrentTab) {
                     case 1:
                         // איפוס OrderId כשחוזרים לטאב הזמנות
-                        OrderId = "None";
+                        window.OrderId = "None";
 
                         $("#TabContent1").show();
                         // הוספת כותרת ואז שדה חיפוש (כמו בטאב 3)
@@ -3645,7 +3470,11 @@
                     case 2:
                         $("#TabContent2").show();
                         // ללא שדה חיפוש בפיזור
-                        $("#TabContent2").html('<div id="Tab2List"></div>');
+                        var html = '<div style="padding: 10px;">';
+                        html += '<div id="Tab2List"></div>';
+                        html += '</div>';
+                        $("#TabContent2").html(html);
+
                         getOrderProducts();
                         break;
                     case 3:
