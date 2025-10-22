@@ -151,16 +151,11 @@
             console.log('PrintOrderFromIcon - window.OrderId:', window.OrderId);
             
             // אם אין orderId מהאלמנט, ננסה להשתמש ב-window.OrderId
-            if (!orderId && window.OrderId && window.OrderId !== "None") {
+            if (!orderId && window.OrderId && window.OrderId !== "") {
                 orderId = window.OrderId;
                 console.log('PrintOrderFromIcon - Using window.OrderId:', orderId);
             }
             
-            if (!orderId) {
-                console.error('PrintOrderFromIcon - No orderId found');
-                swal({ title: 'שגיאה', text: 'לא נמצא מזהה הזמנה', type: 'error', timer: 2000, showConfirmButton: false });
-                return;
-            }
             sendOrderToPrintQueue(orderId);
         }
 
@@ -218,15 +213,9 @@
             console.log('CloseOrderFromIcon - window.OrderId:', window.OrderId);
             
             // אם אין orderId מהאלמנט, ננסה להשתמש ב-window.OrderId
-            if (!orderId && window.OrderId && window.OrderId !== "None") {
+            if (!orderId && window.OrderId && window.OrderId !== "") {
                 orderId = window.OrderId;
                 console.log('CloseOrderFromIcon - Using window.OrderId:', orderId);
-            }
-            
-            if (!orderId) {
-                console.error('CloseOrderFromIcon - No orderId found');
-                swal({ title: 'שגיאה', text: 'לא נמצא מזהה הזמנה', type: 'error', timer: 2000, showConfirmButton: false });
-                return;
             }
 
             var userId = window.CurrentUserId || '';
@@ -954,7 +943,7 @@
 
             // בניית URL עם פרמטרים
             var url = `${window.baseUrl}posApi/orderProducts?viewMode=` + window.ViewMode;
-            if (OrderId && OrderId !== "None") {
+            if (OrderId && OrderId !== "") {
                 url += '&orderId=' + OrderId;
             }
             console.log('****URL: ', url);
@@ -993,7 +982,7 @@
 
                 // הצגת כותרת עם מספר הזמנה אם יש
                 var titleText = 'מוצרים לליקוט';
-                // if (OrderId && OrderId !== "None") {
+                // if (OrderId && OrderId !== "") {
                 //     titleText += ' - הזמנה #' + OrderId;
                 // }
                 // כותרת עם אייקונים
@@ -1003,7 +992,6 @@
                 html += '<div style="flex-grow: 1; text-align: center; font-size: 18px; font-weight: bold; color: #009688;">' + titleText + '</div>';
                 
                 // אייקונים בצד שמאל (אם יש OrderId)
-                if (window.OrderId && window.OrderId !== "None") {
                     html += '<div style="display: flex; gap: 5px; margin-right: 10px;">';
                     // אייקון סגירה
                     html += '<div onclick="closeOrderFromIcon({dataset:{orderId:window.OrderId}})" style="display:flex; align-items:center; justify-content:center; width:28px; height:28px; background:#ff9800; color:white; border-radius:3px; cursor:pointer;" title="סגירת הזמנה">';
@@ -1014,7 +1002,6 @@
                     html += '<i class="fa-solid fa-print" style="font-size:14px;"></i>';
                     html += '</div>';
                     html += '</div>';
-                }
                 html += '</div>';
 
                 // טוגל בוטון לבחירת סוג התצוגה
@@ -3364,7 +3351,7 @@
             // var UserName = "srulik kenig";
             var UserToken = "";
             var Role = 0;
-            var OrderId = "None";
+            var OrderId = "";
             var UserName = "";
             var UserType;
             var CurrentTab = 1; // משתנה לשמירת הטאב הנוכחי
@@ -3460,7 +3447,7 @@
                 switch (CurrentTab) {
                     case 1:
                         // איפוס OrderId כשחוזרים לטאב הזמנות
-                        window.OrderId = "None";
+                        window.OrderId = "";
 
                         $("#TabContent1").show();
                         // הוספת כותרת ואז שדה חיפוש (כמו בטאב 3)
