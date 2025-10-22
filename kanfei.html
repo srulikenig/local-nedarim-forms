@@ -231,12 +231,25 @@
 
             var userId = window.CurrentUserId || '';
 
+            // שאלת אישור לפני סגירת ההזמנה
             swal({
-                title: 'סוגר הזמנה...',
-                text: '',
-                showConfirmButton: false,
-                allowOutsideClick: false
-            });
+                title: 'אישור סגירת הזמנה',
+                text: 'האם אתה בטוח שברצונך לסגור את ההזמנה?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff5722',
+                confirmButtonText: 'אישור',
+                cancelButtonText: 'ביטול',
+                closeOnConfirm: false
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    // אם אישר - מתחילים את תהליך הסגירה
+                    swal({
+                        title: 'סוגר הזמנה...',
+                        text: '',
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
 
             $.ajax({
                 url: `${window.baseUrl}posApi/closeOrder`,
@@ -261,6 +274,8 @@
                 },
                 error: function () {
                     swal({ title: 'שגיאה', text: 'שגיאה בשליחה לשרת', type: 'error', timer: 2500, showConfirmButton: false });
+                }
+            });
                 }
             });
         }
