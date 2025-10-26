@@ -862,6 +862,8 @@
 
         // פונקציה ליצירת שורת מוצר לפיזור (Tab 2) - עיצוב חדש עם אייקון ארגז ומקום לקוביות
         function renderOrderProductRow(prod, idx, isCompleted) {
+            console.log(prod);
+            
             isCompleted = isCompleted || false;
 
             var html = '';
@@ -872,8 +874,11 @@
             }
             html += '<div class="product-container" data-product-id="' + prod.id + '" data-completed="' + isCompleted + '" style="' + containerStyle + '">';
 
+            // דיב עוטף עם flex-direction: column
+            html += '<div style="display: flex; flex-direction: column;">';
+
             // השורה עצמה
-            html += '<div class="order-product-row product-row" style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: 5px; background: #f8faff; font-size: 18px; box-sizing: border-box; border: 2px solid #e7e7e7; overflow: visible; min-height: 40px; transition: background 0.2s, border 0.2s; cursor: pointer;">';
+            html += '<div class="order-product-row" style="display: flex; align-items: stretch; text-align: right; position: relative; border-radius: ' + (prod.note ? '5px 5px 0 0' : '5px') + '; background: #f8faff; font-size: 18px; box-sizing: border-box; border: 2px solid #e7e7e7; ' + (prod.note ? 'border-bottom: none;' : '') + ' overflow: visible; min-height: 40px; transition: background 0.2s, border 0.2s; cursor: pointer;">';
             html += '<div style="background: #1976d2; color: white; display: flex; align-items: center; justify-content: center; min-width: 45px; font-weight: bold; font-size: 20px; position: relative;">';
             html += '<span style="font-size: 20px; font-weight: bold; padding: 0 2px;">' + (prod.collectionGroupOrder || '') + '</span>';
             html += '<i class="fa-solid fa-box-open" style="font-size: 15px; position: absolute; top: 1px; left: 50%; transform: translateX(-50%); opacity: 0.8;"></i>';
@@ -893,7 +898,16 @@
             html += '<span style="position: relative; top: -3px; padding: 0 2px;">' + (prod.quantityOrWeight || '') + '</span>';
             html += '<span style="font-size: 10px; position: absolute; bottom: 0px; left: 50%; transform: translateX(-50%); opacity: 0.8;">יח&#39;</span>';
             html += '</div>';
-            html += '</div>'; // סגירת השורה
+            html += '</div>'; // סגירת השורה העיקרית
+
+            // הוספת הערה אם קיימת - כעת מתחת לשורה העיקרית
+            if (prod.note && prod.note.trim() !== "") {
+                html += '<div style="background: #fff3e0; padding: 8px 12px; border: 2px solid #e7e7e7; border-top: none; font-size: 14px; color: #e65100; border-radius: 0 0 5px 5px;">';
+                html += '<i class="fa-solid fa-comment" style="margin-left: 5px;"></i>' + prod.note.trim();
+                html += '</div>';
+            }
+
+            html += '</div>'; // סגירת הדיב העוטף
 
             // מקום לקוביות - בתחילה מוסתר
             html += '<div class="cubes-area" style="display: none;"></div>';
