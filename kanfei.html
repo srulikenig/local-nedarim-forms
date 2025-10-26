@@ -1638,11 +1638,8 @@
             var productsToApprove = [];
 
             for (var productId in window.ProductCubes) {
-                var hasSelected = hasAnySelectedCubes(productId);
-                var isModified = hasUserActuallyModifiedProduct(productId); // שימוש בפונקציה החדשה
-
-                // בדיקה אם המוצר נבחר או שונה מנתוני השרת המקוריים
-                if (hasSelected || isModified) {
+                // בדיקה אם המוצר שונה מהנתונים המקוריים מהשרת
+                if (window.ModifiedProducts[productId]) {
                     var selectedQuantity = 0;
                     var missingQuantity = 0;
 
@@ -1655,13 +1652,14 @@
                         }
                     }
 
-                    // אם המוצר שונה מהשרת או שיש בו קוביות צבועות - שלח אותו
-                    if (selectedQuantity > 0 || missingQuantity > 0 || isModified) {
+                    // בדיקה אם המצב הנוכחי שונה מהמצב המקורי בשרת
+                    var originalData = window.OriginalServerData[productId] || { qtyCollected: 0, qtyMissing: 0 };
+                    if (selectedQuantity !== originalData.qtyCollected || missingQuantity !== originalData.qtyMissing) {
                         var productData = {
                             orderProductId: productId,
                             qtyCollected: selectedQuantity,
                             qtyMissing: missingQuantity,
-                            userChanges: window.UserChanges[productId] || [] // הוספת השינויים שהעובד עשה
+                            userChanges: window.UserChanges[productId] || [] // השינויים שהעובד הנוכחי ביצע
                         };
                         productsToApprove.push(productData);
                     }
