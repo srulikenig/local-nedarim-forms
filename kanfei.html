@@ -140,22 +140,22 @@
             event.stopPropagation(); // עצירת התפשטות האירוע
             console.log('PrintOrderFromIcon - Element:', element);
             console.log('PrintOrderFromIcon - Element data:', $(element).data());
-            
+
             var orderId = $(element).data('order-id');
             if (!orderId && element.dataset) {
                 orderId = element.dataset.orderId;
                 console.log('PrintOrderFromIcon - Using dataset.orderId:', orderId);
             }
-            
+
             console.log('PrintOrderFromIcon - Final orderId:', orderId);
             console.log('PrintOrderFromIcon - window.OrderId:', window.OrderId);
-            
+
             // אם אין orderId מהאלמנט, ננסה להשתמש ב-window.OrderId
             if (!orderId && window.OrderId && window.OrderId !== "") {
                 orderId = window.OrderId;
                 console.log('PrintOrderFromIcon - Using window.OrderId:', orderId);
             }
-            
+
             sendOrderToPrintQueue(orderId);
         }
 
@@ -202,16 +202,16 @@
             event.stopPropagation(); // עצירת התפשטות האירוע
             console.log('CloseOrderFromIcon - Element:', element);
             console.log('CloseOrderFromIcon - Element data:', $(element).data());
-            
+
             var orderId = $(element).data('order-id');
             if (!orderId && element.dataset) {
                 orderId = element.dataset.orderId;
                 console.log('CloseOrderFromIcon - Using dataset.orderId:', orderId);
             }
-            
+
             console.log('CloseOrderFromIcon - Final orderId:', orderId);
             console.log('CloseOrderFromIcon - window.OrderId:', window.OrderId);
-            
+
             // אם אין orderId מהאלמנט, ננסה להשתמש ב-window.OrderId
             if (!orderId && window.OrderId && window.OrderId !== "") {
                 orderId = window.OrderId;
@@ -230,7 +230,7 @@
                 confirmButtonText: 'אישור',
                 cancelButtonText: 'ביטול',
                 closeOnConfirm: false
-            }, function(isConfirm) {
+            }, function (isConfirm) {
                 if (isConfirm) {
                     // אם אישר - מתחילים את תהליך הסגירה
                     swal({
@@ -240,31 +240,31 @@
                         allowOutsideClick: false
                     });
 
-            $.ajax({
-                url: `${window.baseUrl}posApi/closeOrder`,
-                method: 'POST',
-                contentType: 'application/json',
-                headers: {
-                    "authorization": UserToken
-                },
-                data: JSON.stringify({ orderId: orderId }),
-                success: function (res) {
-                    console.log('***', res);
+                    $.ajax({
+                        url: `${window.baseUrl}posApi/closeOrder`,
+                        method: 'POST',
+                        contentType: 'application/json',
+                        headers: {
+                            "authorization": UserToken
+                        },
+                        data: JSON.stringify({ orderId: orderId }),
+                        success: function (res) {
+                            console.log('***', res);
 
-                    if (res.status === 'ok') {
-                        swal({ title: 'ההזמנה נסגרה', text: res.massege, type: 'success', timer: 1800, showConfirmButton: false });
-                        // רענון הרשימה
-                        setTimeout(function () {
-                            getOrders();
-                        }, 1000);
-                    } else {
-                        swal({ title: 'שגיאה', text: res.massege || 'שגיאה בסגירת ההזמנה', type: 'error', timer: 2500, showConfirmButton: false });
-                    }
-                },
-                error: function () {
-                    swal({ title: 'שגיאה', text: 'שגיאה בשליחה לשרת', type: 'error', timer: 2500, showConfirmButton: false });
-                }
-            });
+                            if (res.status === 'ok') {
+                                swal({ title: 'ההזמנה נסגרה', text: res.massege, type: 'success', timer: 1800, showConfirmButton: false });
+                                // רענון הרשימה
+                                setTimeout(function () {
+                                    getOrders();
+                                }, 1000);
+                            } else {
+                                swal({ title: 'שגיאה', text: res.massege || 'שגיאה בסגירת ההזמנה', type: 'error', timer: 2500, showConfirmButton: false });
+                            }
+                        },
+                        error: function () {
+                            swal({ title: 'שגיאה', text: 'שגיאה בשליחה לשרת', type: 'error', timer: 2500, showConfirmButton: false });
+                        }
+                    });
                 }
             });
         }
@@ -273,9 +273,9 @@
         window.CollectionCounter = 0;
         // משתנה לשמירת מעקב על מספרי ההזמנות
         window.OrderNumbers = {};
-        window.baseUrl = 'https://us-central1-kanfei-nesharim2.cloudfunctions.net/';
+        window.baseUrl = 'https://us-central1-kanfei-nesharim-test.cloudfunctions.net/';
         // משתנה גלובלי לפילטר ההזמנות
-        window.OrderFilter = 'mine';
+        window.OrderFilter = 'new';
 
         // פונקציה ליצירת אנימציה של מספר איסוף
         function showCollectionAnimation(element, number) {
@@ -608,7 +608,7 @@
                 // הצגת קו מפריד וחלק "הזמנות בליקוט" רק אם:
                 // 1. יש הזמנות בליקוט (ordersStatus2.length > 0), או
                 // 2. הפילטר הוא "שלי" או "הכל" (כי אז רוצים לראות את החלוקה)
-                var currentFilter = window.OrderFilter || 'mine';
+                var currentFilter = window.OrderFilter || 'new';
                 var shouldShowStatus2Section = ordersStatus2.length > 0 || (currentFilter === 'mine' || currentFilter === 'all');
 
                 if (shouldShowStatus2Section) {
@@ -739,26 +739,26 @@
 
             // מרכז: מס' הזמנה, שם לקוח ושם העובד
             html += '<div style="flex: 1; padding: 0px 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; word-wrap: break-word; min-height: 50px;">';
-            
+
             // חלק עליון (אינדקס ושם לקוח) - 50% מהגובה
             html += '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 22px; width: 100%;">';
             html += '<div style="font-size: 14px; color: #333; font-weight: bold;">' + (prod.order ? prod.order.collectionIndex : prod.orderId || '') + '</div>';
             html += '<div style="font-size: 12px; color: #333;  text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 80px;">' + (prod.order.fullName || '') + '</div>';
             html += '</div>';
-            
+
             if (isAssigned && prod.employeeObjects && prod.employeeObjects.length > 0) {
-                 // קו מפריד
+                // קו מפריד
                 html += '<div style="width: 80%; height: 1px; background: #e0e0e0; "></div>';
 
                 // חלק תחתון (שם העובד) - 50% מהגובה
                 html += '<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 25px; width: 100%;">';
-                    for (var empIndex = 0; empIndex < prod.employeeObjects.length; empIndex++) {
-                        var employeeName = prod.employeeObjects[empIndex].name || prod.employeeObjects[empIndex].employeeName || prod.employeeObjects[empIndex];
-                        if (employeeName) {
-                            html += '<div style="font-size: 12px; color: #666;">' + employeeName + '</div>';
-                        }
+                for (var empIndex = 0; empIndex < prod.employeeObjects.length; empIndex++) {
+                    var employeeName = prod.employeeObjects[empIndex].name || prod.employeeObjects[empIndex].employeeName || prod.employeeObjects[empIndex];
+                    if (employeeName) {
+                        html += '<div style="font-size: 12px; color: #666;">' + employeeName + '</div>';
                     }
-                    html += '</div>';
+                }
+                html += '</div>';
             }
 
             html += '</div>';
@@ -909,7 +909,7 @@
 
             // קבלת מס' ההזמנה מהאלמנט
             var orderId = $(element).data('order-id');
-            
+
             // ניסיון לקבל את ה-ID בדרך אחרת
             if (!orderId) {
                 orderId = element.dataset.orderId;
@@ -990,18 +990,18 @@
                 html += '<div style="width: 60px;"></div>'; // רווח שמאלי לאייקונים
                 // כותרת במרכז
                 html += '<div style="flex-grow: 1; text-align: center; font-size: 18px; font-weight: bold; color: #009688;">' + titleText + '</div>';
-                
+
                 // אייקונים בצד שמאל (אם יש OrderId)
-                    html += '<div style="display: flex; gap: 5px; margin-right: 10px;">';
-                    // אייקון סגירה
-                    html += '<div onclick="closeOrderFromIcon({dataset:{orderId:window.OrderId}})" style="display:flex; align-items:center; justify-content:center; width:28px; height:28px; background:#ff9800; color:white; border-radius:3px; cursor:pointer;" title="סגירת הזמנה">';
-                    html += '<i class="fa-solid fa-check-circle" style="font-size:14px;"></i>';
-                    html += '</div>';
-                    // אייקון הדפסה
-                    html += '<div onclick="printOrderFromIcon({dataset:{orderId:window.OrderId}})" style="display:flex; align-items:center; justify-content:center; width:28px; height:28px; background:#4caf50; color:white; border-radius:3px; cursor:pointer;" title="הדפסת הזמנה">';
-                    html += '<i class="fa-solid fa-print" style="font-size:14px;"></i>';
-                    html += '</div>';
-                    html += '</div>';
+                html += '<div style="display: flex; gap: 5px; margin-right: 10px;">';
+                // אייקון סגירה
+                html += '<div onclick="closeOrderFromIcon({dataset:{orderId:window.OrderId}})" style="display:flex; align-items:center; justify-content:center; width:28px; height:28px; background:#ff9800; color:white; border-radius:3px; cursor:pointer;" title="סגירת הזמנה">';
+                html += '<i class="fa-solid fa-check-circle" style="font-size:14px;"></i>';
+                html += '</div>';
+                // אייקון הדפסה
+                html += '<div onclick="printOrderFromIcon({dataset:{orderId:window.OrderId}})" style="display:flex; align-items:center; justify-content:center; width:28px; height:28px; background:#4caf50; color:white; border-radius:3px; cursor:pointer;" title="הדפסת הזמנה">';
+                html += '<i class="fa-solid fa-print" style="font-size:14px;"></i>';
+                html += '</div>';
+                html += '</div>';
                 html += '</div>';
 
                 // טוגל בוטון לבחירת סוג התצוגה
@@ -1694,13 +1694,6 @@
                 'נלקטו: ' + actualCollectedQuantity + ' יחידות<br/>' +
                 (actualMissingQuantity > 0 ? 'חסרים: ' + actualMissingQuantity + ' יחידות' : '');
 
-            // דיבוג - הדפסה לקונסול להבנה מה קורה
-            console.log('מספר מוצרים שנבחרו (אמיתי):', actualSelectedProductsCount);
-            console.log('מספר מוצרים לאישור:', productsToApprove.length);
-            console.log('סך יחידות שנלקטו (כולל שרת):', totalQuantity);
-            console.log('יחידות שהעובד לקט בפועל:', actualCollectedQuantity);
-            console.log('יחידות שהעובד סימן כחסרות:', actualMissingQuantity);
-            console.log('פירוט המוצרים:', productsToApprove);
 
             swal({
                 type: "warning",
@@ -1718,7 +1711,13 @@
                     $.ajax({
                         type: "POST",
                         url: `${window.baseUrl}posApi/approveOrderProducts`,
-                        data: { orderProducts: productsToApprove },
+                        data: {
+                            orderProducts: productsToApprove.map(product => ({
+                                orderProductId: product.orderProductId,
+                                qtyCollected: product.qtyCollected,
+                                qtyMissing: product.qtyMissing
+                            }))
+                        },
                         context: Text,
                         timeout: 60000,
                         headers: {
@@ -3452,7 +3451,7 @@
                         var titleHtml1 = '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">הזמנות לליקוט</div>';
 
                         // פילטר עם 3 כפתורים - בהתאם לבחירה הנוכחית
-                        var currentFilter = window.OrderFilter || 'mine';
+                        var currentFilter = window.OrderFilter || 'new';
                         var filterHtml1 = '<div style="display: flex; justify-content: center; align-items: center; margin: 15px 0;">';
                         filterHtml1 += '<div style="background: #f0f0f0; border-radius: 25px; padding: 3px; display: inline-flex; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">';
 
@@ -3496,6 +3495,7 @@
             }
 
             function CheckUser() {
+                console.log(`${window.baseUrl}posApi/login`);
 
                 $.ajax({
                     type: "POST",
