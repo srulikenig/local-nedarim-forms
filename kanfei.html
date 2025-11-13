@@ -825,9 +825,9 @@
             }
 
             // אייקון הדפסת הזמנה
-            html += '<div class="action-icon print-order-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="printOrderFromIcon(this)" style="background: #4caf50; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 11px; width: 28px; height: 28px;" title="הדפסת הזמנה">';
-            html += '<i class="fa-solid fa-print"></i>';
-            html += '</div>';
+            // html += '<div class="action-icon print-order-icon" data-order-id="' + (prod.orderId || prod.id) + '" onclick="printOrderFromIcon(this)" style="background: #4caf50; color: white; display: flex; align-items: center; justify-content: center; border-radius: 3px; cursor: pointer; font-size: 11px; width: 28px; height: 28px;" title="הדפסת הזמנה">';
+            // html += '<i class="fa-solid fa-print"></i>';
+            // html += '</div>';
 
             html += '</div>'; // סגירת שורה תחתונה
 
@@ -863,7 +863,7 @@
         // פונקציה ליצירת שורת מוצר לפיזור (Tab 2) - עיצוב חדש עם אייקון ארגז ומקום לקוביות
         function renderOrderProductRow(prod, idx, isCompleted) {
             console.log(prod);
-            
+
             isCompleted = isCompleted || false;
 
             var html = '';
@@ -996,9 +996,6 @@
 
                 // הצגת כותרת עם מספר הזמנה אם יש
                 var titleText = 'מוצרים לליקוט';
-                // if (OrderId && OrderId !== "") {
-                //     titleText += ' - הזמנה #' + OrderId;
-                // }
                 // כותרת עם אייקונים
                 html += '<div style="display: flex; align-items: center; justify-content: space-between; margin: 10px 0; padding: 0 10px;">';
                 html += '<div style="width: 60px;"></div>'; // רווח שמאלי לאייקונים
@@ -1010,10 +1007,6 @@
                 // אייקון סגירה
                 html += '<div onclick="closeOrderFromIcon({dataset:{orderId:window.OrderId}})" style="display:flex; align-items:center; justify-content:center; width:28px; height:28px; background:#ff9800; color:white; border-radius:3px; cursor:pointer;" title="סגירת הזמנה">';
                 html += '<i class="fa-solid fa-check-circle" style="font-size:14px;"></i>';
-                html += '</div>';
-                // אייקון הדפסה
-                html += '<div onclick="printOrderFromIcon({dataset:{orderId:window.OrderId}})" style="display:flex; align-items:center; justify-content:center; width:28px; height:28px; background:#4caf50; color:white; border-radius:3px; cursor:pointer;" title="הדפסת הזמנה">';
-                html += '<i class="fa-solid fa-print" style="font-size:14px;"></i>';
                 html += '</div>';
                 html += '</div>';
                 html += '</div>';
@@ -1027,7 +1020,6 @@
                 html += '</div>';
 
                 html += '<div style="display: flex; justify-content: center; align-items: center; padding: 0 0 10px 0;">';
-                // html += '<input autocomplete="off" type="search" id="Filter_Search" oninput="Filter_Search()" placeholder="חיפוש הזמנה" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
                 html += '</div>';
 
                 html += '<div id="OrderProductsList">';
@@ -1758,11 +1750,6 @@
         }
     </script>
 
-    <!--<meta name="og:image" content="https://images.matara.pro/ClientsImages/0.jpg?2" runat="server" id="Og1" />
-    <meta name="og:image:type" content="image/jpg" />
-    <meta name="og:title" content="מילוי טופס" runat="server" id="Og2" />
-    <meta name="og:description" content="נדרים פלוס" />-->
-
     <style>
         * {
             font-family: 'Assistant', Arial, sans-serif;
@@ -2189,16 +2176,7 @@
             } else {
                 window.open("https://www.matara.pro/nedarimplus/online/?mosad=7009250");
             }
-
-            //if (Device == 'true') {
-            //    $('#PayBt').click(function () {
-            //        parent.GetMosadData(7001566, 'SetMosad', function () {
-            //            parent.GoToMenu('NewPaiement')
-            //        })
-            //    })
-            //} else {
-            //    $('#PayBt').click(function () { window.open("https://www.matara.pro/nedarimplus/online/?mosad=7001566"); });
-            //}
+            
         }
 
 
