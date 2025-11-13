@@ -138,22 +138,15 @@
         // הדפסת הזמנה מהאייקון
         function printOrderFromIcon(element) {
             event.stopPropagation(); // עצירת התפשטות האירוע
-            console.log('PrintOrderFromIcon - Element:', element);
-            console.log('PrintOrderFromIcon - Element data:', $(element).data());
 
             var orderId = $(element).data('order-id');
             if (!orderId && element.dataset) {
                 orderId = element.dataset.orderId;
-                console.log('PrintOrderFromIcon - Using dataset.orderId:', orderId);
             }
-
-            console.log('PrintOrderFromIcon - Final orderId:', orderId);
-            console.log('PrintOrderFromIcon - window.OrderId:', window.OrderId);
 
             // אם אין orderId מהאלמנט, ננסה להשתמש ב-window.OrderId
             if (!orderId && window.OrderId && window.OrderId !== "") {
                 orderId = window.OrderId;
-                console.log('PrintOrderFromIcon - Using window.OrderId:', orderId);
             }
 
             sendOrderToPrintQueue(orderId);
@@ -200,22 +193,15 @@
         // סגירת הזמנה
         function closeOrderFromIcon(element) {
             event.stopPropagation(); // עצירת התפשטות האירוע
-            console.log('CloseOrderFromIcon - Element:', element);
-            console.log('CloseOrderFromIcon - Element data:', $(element).data());
 
             var orderId = $(element).data('order-id');
             if (!orderId && element.dataset) {
                 orderId = element.dataset.orderId;
-                console.log('CloseOrderFromIcon - Using dataset.orderId:', orderId);
             }
-
-            console.log('CloseOrderFromIcon - Final orderId:', orderId);
-            console.log('CloseOrderFromIcon - window.OrderId:', window.OrderId);
 
             // אם אין orderId מהאלמנט, ננסה להשתמש ב-window.OrderId
             if (!orderId && window.OrderId && window.OrderId !== "") {
                 orderId = window.OrderId;
-                console.log('CloseOrderFromIcon - Using window.OrderId:', orderId);
             }
 
             var userId = window.CurrentUserId || '';
@@ -255,7 +241,7 @@
                                 swal({ title: 'ההזמנה נסגרה', text: res.massege, type: 'success', timer: 1800, showConfirmButton: false });
                                 // רענון הרשימה
                                 setTimeout(function () {
-                                    getOrders();
+                                    ShowTab(1);
                                 }, 1000);
                             } else {
                                 swal({ title: 'שגיאה', text: res.massege || 'שגיאה בסגירת ההזמנה', type: 'error', timer: 2500, showConfirmButton: false });
@@ -273,7 +259,7 @@
         window.CollectionCounter = 0;
         // משתנה לשמירת מעקב על מספרי ההזמנות
         window.OrderNumbers = {};
-        window.baseUrl = 'https://us-central1-kanfei-nesharim2.cloudfunctions.net/';
+        window.baseUrl = 'https://us-central1-kanfei-nesharim-test.cloudfunctions.net/';
         // משתנה גלובלי לפילטר ההזמנות
         window.OrderFilter = 'new';
 
@@ -437,7 +423,6 @@
                             return false;
                         }
                         window.SelectedOrders = [];
-                        getOrders();
                         MySwal(Response.massege, undefined, "success");
                     }).error(function () {
                         MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
@@ -1140,7 +1125,7 @@
 
         function toggleViewMode(mode) {
             window.ViewMode = mode;
-            getOrderProducts(); // רענון הנתונים עם המצב החדש
+            ShowTab(2); // רענון הנתונים עם המצב החדש
         }
         // עדכון UI לבחירה עם קוביות - גרסה חדשה ללא פס התקדמות
         function updateSelectedOrderProductsUI(orderProducts) {
@@ -1740,7 +1725,7 @@
                         window.OriginalServerData = {};
                         window.ModifiedProducts = {};
                         window.UserChanges = {};
-                        getOrderProducts();
+                        ShowTab(2);
                         MySwal(Response.massege, undefined, "success");
                     }).error(function () {
                         MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
@@ -2176,7 +2161,7 @@
             } else {
                 window.open("https://www.matara.pro/nedarimplus/online/?mosad=7009250");
             }
-            
+
         }
 
 
@@ -3395,9 +3380,10 @@
             function CreateTabs() {
                 // יצירת HTML של הטאבים
                 var tabsHTML = '<div id="TabsContainer" style="display: flex; width: 100%; border-bottom: 2px solid #e0e0e0; background: #f5f5f5;">';
-                tabsHTML += '<div id="Tab1" class="tab-button" onclick="ShowTab(1)" style="flex: 1; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #009688; color: white; border-bottom: 3px solid #00695c;">הזמנות</div>';
-                tabsHTML += '<div id="Tab2" class="tab-button" onclick="ShowTab(2)" style="flex: 1; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">ליקוט</div>';
-                tabsHTML += '<div id="Tab3" class="tab-button" onclick="ShowTab(3)" style="flex: 1; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">משלוחים</div>';
+                tabsHTML += '<div id="Tab1" class="tab-button" onclick="ShowTab(1)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #009688; color: white; border-bottom: 3px solid #00695c;">הזמנות</div>';
+                tabsHTML += '<div id="Tab2" class="tab-button" onclick="ShowTab(2)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">ליקוט</div>';
+                tabsHTML += '<div id="Tab3" class="tab-button" onclick="ShowTab(3)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">משלוחים</div>';
+                tabsHTML += '<div id="Tab4" class="tab-button" onclick="ShowTab(4)" style="flex-basis: 10%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;"><i class="fa-regular fa-envelope"></i></div>';
                 tabsHTML += '</div>';
 
                 // הוספת הטאבים למסך
@@ -3433,6 +3419,7 @@
                 $("#TabContent1").hide();
                 $("#TabContent2").hide();
                 $("#TabContent3").hide();
+                $("#TabContent4").hide();
                 switch (CurrentTab) {
                     case 1:
                         // איפוס OrderId כשחוזרים לטאב הזמנות
@@ -3482,9 +3469,229 @@
                         $("#TabContent3").show();
                         GetOrders();
                         break;
+                    case 4:
+                        $("#TabContent4").show();
+                        GetMessages();
+                        break;
                 }
 
             }
+
+            function GetMessages() {
+                $.ajax({
+                    url: `${window.baseUrl}posApi/messages`,
+                    headers: {
+                        "authorization": UserToken
+                    },
+                    context: Text,
+                    timeout: 60000,
+                }).success(function (Response) {
+                    renderMessages(Response.data);
+                    if (Response.status == 'error') {
+                        MySwal(Response.massege)
+                        return false;
+                    }
+                }
+                ).error(function () {
+                    MySwal("שגיאה בקבלת נתונים. בדוק תקשורת")
+                })
+            }
+
+            function renderMessages(messages) {
+                const container = document.getElementById("TabContent4");
+                container.innerHTML = "";
+
+                if (messages.length === 0) {
+                    container.innerHTML = "<p style='text-align:center;color:#888;'>אין הודעות להצגה</p>";
+                    return;
+                }
+
+                messages.forEach((msg) => {
+                    const messageDiv = document.createElement("div");
+
+                    // קובע אם ההודעה מימין או משמאל
+                    const isSystem = msg.role === "system";
+                    messageDiv.style.cssText = `
+            display: flex;
+            justify-content: ${isSystem ? "flex-end" : "flex-start"};
+            margin: 10px 0;
+            padding: 0 10px;
+        `;
+
+                    // בלון ההודעה
+                    const bubble = document.createElement("div");
+                    bubble.style.cssText = `
+            background: ${isSystem ? "#0084ff" : "#f0f0f0"};
+            color: ${isSystem ? "#fff" : "#000"};
+            padding: 12px 16px;
+            border-radius: 20px;
+            max-width: 65%;
+            word-wrap: break-word;
+            font-size: 15px;
+            line-height: 1.4;
+            ${isSystem ? "border-bottom-left-radius: 4px;" : "border-bottom-right-radius: 4px;"}
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+            position: relative;
+        `;
+
+                    // תוכן ההודעה
+                    const messageText = document.createElement("div");
+                    messageText.textContent = msg.message || "";
+                    messageText.style.cssText = "margin-bottom: 4px;";
+
+                    // זמן ההודעה
+                    const timestamp = document.createElement("div");
+                    timestamp.textContent = formatTimestamp(msg.timestamp);
+                    timestamp.style.cssText = `
+            font-size: 11px;
+            color: ${isSystem ? "rgba(255,255,255,0.8)" : "#666"};
+            text-align: ${isSystem ? "left" : "right"};
+            margin-top: 4px;
+        `;
+
+                    bubble.appendChild(messageText);
+                    bubble.appendChild(timestamp);
+                    messageDiv.appendChild(bubble);
+                    container.appendChild(messageDiv);
+                });
+
+                // אזור כתיבת הודעה (נוסף רק פעם אחת בסוף)
+                const inputArea = document.createElement("div");
+                inputArea.style.cssText = `
+        display: flex;
+        gap: 8px;
+        padding: 10px;
+        background: #f5f5f5;
+        border-top: 1px solid #ddd;
+        position: sticky;
+        bottom: 0;
+        margin: 0 -10px;
+    `;
+
+                const messageInput = document.createElement("input");
+                messageInput.type = "text";
+                messageInput.id = "messageInput";
+                messageInput.placeholder = "הקלד הודעה...";
+                messageInput.style.cssText = `
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        outline: none;
+        font-size: 14px;
+    `;
+                messageInput.addEventListener("keypress", function (event) {
+                    if (event.key === "Enter") {
+                        SendMessage();
+                    }
+                });
+
+                const sendButton = document.createElement("button");
+                sendButton.textContent = "שלח";
+                sendButton.style.cssText = `
+        padding: 12px 24px;
+        background: #0084ff;
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+    `;
+                sendButton.addEventListener("click", SendMessage);
+
+                inputArea.appendChild(messageInput);
+                inputArea.appendChild(sendButton);
+                container.appendChild(inputArea);
+
+                // אלמנט סמוי לגלילה אוטומטית
+                const scrollAnchor = document.createElement("div");
+                scrollAnchor.id = "scrollAnchor";
+                scrollAnchor.style.height = "1px";
+                container.appendChild(scrollAnchor);
+
+                // גלילה אוטומטית לסוף
+                setTimeout(() => {
+                    const anchor = document.getElementById("scrollAnchor");
+                    if (anchor) {
+                        anchor.scrollIntoView({ behavior: "smooth", block: "end" });
+                    } else {
+                        container.scrollTop = container.scrollHeight;
+                    }
+                }, 100);
+            }
+
+            // פונקציית שליחת הודעה
+            function SendMessage() {
+                const input = document.getElementById("messageInput");
+                const message = input.value.trim();
+
+                if (!message) {
+                    MySwal("נא להזין הודעה");
+                    return;
+                }
+
+                $.ajax({
+                    url: `${window.baseUrl}posApi/messages`,
+                    method: "POST",
+                    headers: {
+                        "authorization": UserToken,
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify({
+                        message: message,
+                        role: "user",
+                        timestamp: new Date().toISOString()
+                    }),
+                    timeout: 60000,
+                }).success(function (Response) {
+                    if (Response.status == 'success') {
+                        input.value = ""; // ניקוי השדה
+                        MySwal(Response.massege, undefined, "success");
+                        ShowTab(4); // רענון ההודעות
+                    } else {
+                        MySwal(Response.massege || "שגיאה בשליחת ההודעה");
+                    }
+                }).error(function () {
+                    MySwal("שגיאה בשליחת ההודעה. בדוק תקשורת");
+                });
+            }
+
+
+            // פונקציה עזר לעיצוב תאריך
+            function formatTimestamp(timestamp) {
+                if (!timestamp) return "";
+
+                try {
+                    let date;
+
+                    // אם יש פונקציית toDate (Firestore SDK)
+                    if (typeof timestamp.toDate === "function") {
+                        date = timestamp.toDate();
+                    }
+                    // אם זה אובייקט JSON עם _seconds
+                    else if (timestamp._seconds !== undefined) {
+                        date = new Date(timestamp._seconds * 1000);
+                    }
+                    // אחרת ננסה ליצור Date רגיל
+                    else {
+                        date = new Date(timestamp);
+                    }
+
+                    return date.toLocaleString("he-IL", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    });
+                } catch (err) {
+                    console.error("שגיאה בהמרת תאריך:", err);
+                    return "";
+                }
+            }
+
+
 
             function CheckUser() {
                 console.log(`${window.baseUrl}posApi/login`);
@@ -3519,10 +3726,6 @@
                     MySwal("שגיאה בקבלת נתונים. בדוק תקשורת")
                 })
             }
-
-
-
-
 
             var ListOrders = []
             var ListShippingProducts = []
@@ -3802,7 +4005,7 @@
                                 return false;
                             }
                             window.SelectedOrders = [];
-                            GetOrders();
+                            ShowTab(3);
                             MySwal(Response.massege, undefined, "success");
                         }).error(function () {
                             MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
@@ -3887,8 +4090,6 @@
                 }
             }
 
-
-
             function approveOrder(Id, IsList) {
                 if (!IsList) {
                     var V = []
@@ -3937,9 +4138,6 @@
                     }
                 });
             }
-
-
-
 
             function SendMesaage(Id) {
                 swal({
@@ -4124,8 +4322,7 @@
             <div id="TabContent1" style="display:none;">
                 <div style="padding: 0 10px 20px;">
                     <div style="text-align: center; padding: 50px; font-size: 36px; font-weight: bold; color: #009688;">
-                        <!-- טוען רשימת איסוף -->
-                        hello world
+                        טוען רשימת איסוף
                     </div>
 
 
@@ -4166,16 +4363,18 @@
                     </div>
                 </div>
             </div>
+            <div id="TabContent4" style="display:none;">
+                <div style="padding: 0 10px 20px;">
+                    <div style="text-align: center; padding: 50px; font-size: 36px; font-weight: bold; color: #009688;">
+                        טוען רשימת הודעות...
+                    </div>
+
+
+                </div>
+
+            </div>
         </div>
-
-
-
     </div>
-
-
-
-
-
 
     <div id="CardGetMagneticCard" style="max-width: 500px;margin:auto;"></div>
     <div id="Height_POS" style="height:200px;display:none;"></div>
