@@ -492,6 +492,7 @@
 
 
             , { "Type": "Koteret", "Text": "פרטי חשבון בנק" }
+            , { "Type": "SubKoteret", "ElementId": "NoteCheshbon", "Text": "שים לב! הפרטים לא בהכרח משקפים את מה שמעודכן במערכת המלגות" }
             , { "Type": "SubKoteret2", "Text": "פרטי חשבון על שם האברך בלבד" }
 
             , { "ElementId": "IshurAccountWife", "fieldName": "חשבון בנק על שם האשה", "Type": "CheckBox", "Mandatory": false, "Br": true, "DbName": "Field68" }
@@ -989,6 +990,7 @@
             // $('#Zeout1Div').hide();
             $('input[name=ChutzQ]').attr('checked', false);
             $('#Zeout1').prop('disabled', true);
+            $('#Zeout1').css('background-color', '#f0f0f0');
 
             $('#ChutzQ').hide();
 
@@ -1021,10 +1023,12 @@
                 $('#SnifMoveDiv').hide();
                 $('#IsMoveSnif').change(function () {
                     $('#SnifMoveDiv').hide();
+                    $("#NoteSnifDiv").show();
                     $('#SnifMove').val('');
                     selectedSnifMoveId = '';
                     if ($("#IsMoveSnif").is(":checked") == true) {
                         $('#SnifMoveDiv').show();
+                        $("#NoteSnifDiv").hide();
                     }
                 });
 
@@ -1580,6 +1584,13 @@
 
                 if (avrechData.isIshurAccountWife == true) {
                     $('#NoteIshurAccountWife').prop('checked', true).trigger('change');
+                }
+
+                if (avrechData.accountNumber) {
+                    $('#AccountN, #IshurAccountWife, #ZeoutWife, #Bank, #Snif, #Account, #NoteIshurAccountWife').prop('disabled', true);
+                    $('#AccountN, #IshurAccountWife, #ZeoutWife, #Bank, #Snif, #Account, #NoteIshurAccountWife').css('background-color', '#f0f0f0');
+                }else{
+                    $('#NoteCheshbon').hide();
                 }
 
                 $("#EnterKolel").val(avrechData.heLearnStartDate).trigger('input');
@@ -3107,8 +3118,8 @@
             <!-- <br /> לאחר מכן תקבל שיחה עם קוד גישה למערכת -->
             <div style="    text-align: center;    font-size: 18px;">
 
-                <div style="font-weight: bold; color: indianred;">קוד האימות הוא <span
-                        style="color: #1196d2;">4</span> הספרות האחרונות של המספר
+                <div style="font-weight: bold; color: indianred;">קוד האימות הוא <span style="color: #1196d2;">4</span>
+                    הספרות האחרונות של המספר
                     שמחייג אליכם</div>
                 <!-- <div style="    margin-top: 5px;    color: #9a7400;    /* font-size: 19px; */    font-weight: bold;">
                     ניתן גם לענות לשיחה ולשמוע את קוד האימות</div> -->
