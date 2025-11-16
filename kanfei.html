@@ -3717,7 +3717,7 @@
                     var timeSinceLastActivity = Date.now() - window.LastUserActivity;
                     var fiveMinutes = 5 * 60 * 1000; // 5 דקות במילישניות
 
-                    if (timeSinceLastActivity < fiveMinutes) {
+                    if (timeSinceLastActivity < fiveMinutes || CurrentTab === 4) {
                         // המשתמש פעיל - בצע בדיקה
                         CheckUnreadMessages();
                     } else {
