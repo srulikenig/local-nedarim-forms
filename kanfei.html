@@ -259,7 +259,7 @@
         window.CollectionCounter = 0;
         // משתנה לשמירת מעקב על מספרי ההזמנות
         window.OrderNumbers = {};
-        window.baseUrl = 'https://us-central1-kanfei-nesharim-test.cloudfunctions.net/';
+        window.baseUrl = 'https://us-central1-kanfei-nesharim2.cloudfunctions.net/';
         // משתנה גלובלי לפילטר ההזמנות
         window.OrderFilter = 'new';
 
@@ -3330,6 +3330,10 @@
             var UserType;
             var CurrentTab = 1; // משתנה לשמירת הטאב הנוכחי
 
+            // מערכת מעקב אחר פעילות משתמש לבדיקת הודעות
+            window.LastUserActivity = Date.now();
+            window.UnreadMessagesInterval = null;
+
             function ShowMainScreen() {
                 // הסתרת מסכי הכניסה והצגת המסך הראשי
                 $(".Card").hide();
@@ -3383,7 +3387,7 @@
                 tabsHTML += '<div id="Tab1" class="tab-button" onclick="ShowTab(1)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #009688; color: white; border-bottom: 3px solid #00695c;">הזמנות</div>';
                 tabsHTML += '<div id="Tab2" class="tab-button" onclick="ShowTab(2)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">ליקוט</div>';
                 tabsHTML += '<div id="Tab3" class="tab-button" onclick="ShowTab(3)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">משלוחים</div>';
-                tabsHTML += '<div id="Tab4" class="tab-button" onclick="ShowTab(4)" style="flex-basis: 10%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;"><i class="fa-regular fa-envelope"></i></div>';
+                tabsHTML += '<div id="Tab4" class="tab-button" onclick="ShowTab(4)" style="flex-basis: 10%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent; position: relative;"><i class="fa-regular fa-envelope"></i><span id="UnreadMessagesCount" style="position: absolute; top: 5px; right: 5px; background: #ff0000; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">!</span></div>';
                 tabsHTML += '</div>';
 
                 // הוספת הטאבים למסך
@@ -3391,6 +3395,14 @@
             }
 
             function ShowTab(tabNumber, orderId) {
+                // עדכון זמן פעילות אחרונה
+                window.LastUserActivity = Date.now();
+
+                // הפעלת מערכת בדיקת הודעות אם עדיין לא פעילה
+                if (!window.UnreadMessagesInterval) {
+                    startUnreadMessagesCheck();
+                }
+
                 if (tabNumber) {
                     CurrentTab = tabNumber;
                 }
@@ -3485,6 +3497,7 @@
                     },
                     context: Text,
                     timeout: 60000,
+                    global: false,
                 }).success(function (Response) {
                     renderMessages(Response.data);
                     if (Response.status == 'error') {
@@ -3501,61 +3514,71 @@
                 const container = document.getElementById("TabContent4");
                 container.innerHTML = "";
 
+                // קונטיינר עם גלילה - בדיוק כמו בטאבים האחרים
+                const scrollableContainer = document.createElement("div");
+                scrollableContainer.style.cssText = `
+                    padding: 0 10px 70px;
+                    overflow-y: auto;
+                    max-height: calc(100vh - 200px);
+                `;
+
                 if (messages.length === 0) {
-                    container.innerHTML = "<p style='text-align:center;color:#888;'>אין הודעות להצגה</p>";
-                    return;
+                    scrollableContainer.innerHTML = "<p style='text-align:center;color:#888;padding:20px 0;'>אין הודעות להצגה</p>";
+                } else {
+                    messages.forEach((msg) => {
+                        const messageDiv = document.createElement("div");
+
+                        // קובע אם ההודעה מימין או משמאל
+                        const isSystem = msg.role === "system";
+                        messageDiv.style.cssText = `
+                display: flex;
+                justify-content: ${!isSystem ? "flex-end" : "flex-start"};
+                margin: 10px 0;
+                padding: 0 10px;
+            `;
+
+                        // בלון ההודעה
+                        const bubble = document.createElement("div");
+                        bubble.style.cssText = `
+                background: ${isSystem ? "#0084ff" : "#f0f0f0"};
+                color: ${isSystem ? "#fff" : "#000"};
+                padding: 12px 16px;
+                border-radius: 20px;
+                max-width: 65%;
+                word-wrap: break-word;
+                font-size: 15px;
+                line-height: 1.4;
+                ${!isSystem ? "border-bottom-left-radius: 4px;" : "border-bottom-right-radius: 4px;"}
+                box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+                position: relative;
+            `;
+
+                        // תוכן ההודעה
+                        const messageText = document.createElement("div");
+                        messageText.textContent = msg.message || "";
+                        messageText.style.cssText = "margin-bottom: 4px;";
+
+                        // זמן ההודעה
+                        const timestamp = document.createElement("div");
+                        timestamp.textContent = formatTimestamp(msg.timestamp);
+                        timestamp.style.cssText = `
+                font-size: 11px;
+                color: ${isSystem ? "rgba(255,255,255,0.8)" : "#666"};
+                text-align: ${isSystem ? "right" : "left"};
+                margin-top: 4px;
+            `;
+
+                        bubble.appendChild(messageText);
+                        bubble.appendChild(timestamp);
+                        messageDiv.appendChild(bubble);
+                        scrollableContainer.appendChild(messageDiv);
+                    });
                 }
 
-                messages.forEach((msg) => {
-                    const messageDiv = document.createElement("div");
+                // הוספת הקונטיינר הראשי
+                container.appendChild(scrollableContainer);
 
-                    // קובע אם ההודעה מימין או משמאל
-                    const isSystem = msg.role === "system";
-                    messageDiv.style.cssText = `
-            display: flex;
-            justify-content: ${isSystem ? "flex-end" : "flex-start"};
-            margin: 10px 0;
-            padding: 0 10px;
-        `;
-
-                    // בלון ההודעה
-                    const bubble = document.createElement("div");
-                    bubble.style.cssText = `
-            background: ${isSystem ? "#0084ff" : "#f0f0f0"};
-            color: ${isSystem ? "#fff" : "#000"};
-            padding: 12px 16px;
-            border-radius: 20px;
-            max-width: 65%;
-            word-wrap: break-word;
-            font-size: 15px;
-            line-height: 1.4;
-            ${isSystem ? "border-bottom-left-radius: 4px;" : "border-bottom-right-radius: 4px;"}
-            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-            position: relative;
-        `;
-
-                    // תוכן ההודעה
-                    const messageText = document.createElement("div");
-                    messageText.textContent = msg.message || "";
-                    messageText.style.cssText = "margin-bottom: 4px;";
-
-                    // זמן ההודעה
-                    const timestamp = document.createElement("div");
-                    timestamp.textContent = formatTimestamp(msg.timestamp);
-                    timestamp.style.cssText = `
-            font-size: 11px;
-            color: ${isSystem ? "rgba(255,255,255,0.8)" : "#666"};
-            text-align: ${isSystem ? "left" : "right"};
-            margin-top: 4px;
-        `;
-
-                    bubble.appendChild(messageText);
-                    bubble.appendChild(timestamp);
-                    messageDiv.appendChild(bubble);
-                    container.appendChild(messageDiv);
-                });
-
-                // אזור כתיבת הודעה (נוסף רק פעם אחת בסוף)
+                // אזור כתיבת הודעה - תמיד מוצג (גם אם אין הודעות)
                 const inputArea = document.createElement("div");
                 inputArea.style.cssText = `
         display: flex;
@@ -3563,9 +3586,13 @@
         padding: 10px;
         background: #f5f5f5;
         border-top: 1px solid #ddd;
-        position: sticky;
+        position: fixed;
         bottom: 0;
-        margin: 0 -10px;
+        left: 0;
+        right: 0;
+        max-width: 500px;
+        margin: 0 auto;
+        z-index: 10;
     `;
 
                 const messageInput = document.createElement("input");
@@ -3604,21 +3631,12 @@
                 inputArea.appendChild(sendButton);
                 container.appendChild(inputArea);
 
-                // אלמנט סמוי לגלילה אוטומטית
-                const scrollAnchor = document.createElement("div");
-                scrollAnchor.id = "scrollAnchor";
-                scrollAnchor.style.height = "1px";
-                container.appendChild(scrollAnchor);
-
-                // גלילה אוטומטית לסוף
-                setTimeout(() => {
-                    const anchor = document.getElementById("scrollAnchor");
-                    if (anchor) {
-                        anchor.scrollIntoView({ behavior: "smooth", block: "end" });
-                    } else {
-                        container.scrollTop = container.scrollHeight;
-                    }
-                }, 100);
+                // גלילה אוטומטית לתחתית (רק אם יש הודעות)
+                if (messages.length > 0) {
+                    setTimeout(() => {
+                        scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
+                    }, 100);
+                }
             }
 
             // פונקציית שליחת הודעה
@@ -3633,21 +3651,19 @@
 
                 $.ajax({
                     url: `${window.baseUrl}posApi/messages`,
-                    method: "POST",
+                    method: 'POST',
+                    contentType: 'application/json',
                     headers: {
-                        "authorization": UserToken,
-                        "Content-Type": "application/json"
+                        "authorization": UserToken
                     },
                     data: JSON.stringify({
                         message: message,
-                        role: "user",
-                        timestamp: new Date().toISOString()
                     }),
                     timeout: 60000,
                 }).success(function (Response) {
-                    if (Response.status == 'success') {
+                    if (Response.status == 'ok') {
                         input.value = ""; // ניקוי השדה
-                        MySwal(Response.massege, undefined, "success");
+                        MySwal(Response.massege, undefined, "ok");
                         ShowTab(4); // רענון ההודעות
                     } else {
                         MySwal(Response.massege || "שגיאה בשליחת ההודעה");
@@ -3657,6 +3673,61 @@
                 });
             }
 
+
+            // בדיקת כמות הודעות שלא נקראו
+            function CheckUnreadMessages() {
+                $.ajax({
+                    url: `${window.baseUrl}posApi/unreadMessagesCount`,
+                    headers: {
+                        "authorization": UserToken
+                    },
+                    timeout: 10000,
+                    global: false,
+                }).success(function (Response) {
+                    if (Response.status == 'ok' && Response.data !== undefined) {
+                        var count = parseInt(Response.data);
+                        if (count > 0) {
+                            $("#UnreadMessagesCount").text(count).show();
+
+                            if (CurrentTab === 4) {
+                                GetMessages();
+                            }
+                        } else {
+                            $("#UnreadMessagesCount").hide();
+                        }
+                    }
+                }).error(function () {
+                    // שגיאה בשקט - לא להפריע למשתמש
+                    console.log("שגיאה בבדיקת הודעות שלא נקראו");
+                });
+            }
+
+            // הפעלת מערכת בדיקה אוטומטית של הודעות
+            function startUnreadMessagesCheck() {
+                // אם כבר יש interval פעיל, לא נפעיל עוד אחד
+                if (window.UnreadMessagesInterval) {
+                    return;
+                }
+
+                // ביצוע בדיקה ראשונית מיידית
+                CheckUnreadMessages();
+
+                // הפעלת interval שבודק כל 15 שניות
+                window.UnreadMessagesInterval = setInterval(function () {
+                    var timeSinceLastActivity = Date.now() - window.LastUserActivity;
+                    var fiveMinutes = 5 * 60 * 1000; // 5 דקות במילישניות
+
+                    if (timeSinceLastActivity < fiveMinutes) {
+                        // המשתמש פעיל - בצע בדיקה
+                        CheckUnreadMessages();
+                    } else {
+                        // עברו יותר מ-5 דקות - הפסק את ה-interval
+                        clearInterval(window.UnreadMessagesInterval);
+                        window.UnreadMessagesInterval = null;
+                        console.log("הופסקה בדיקת הודעות עקב חוסר פעילות");
+                    }
+                }, 15000); // כל 15 שניות
+            }
 
             // פונקציה עזר לעיצוב תאריך
             function formatTimestamp(timestamp) {
@@ -4305,10 +4376,6 @@
             <div onclick="ShowTab()"
                 style="border-radius: 2px; position: absolute; top: 2px; right: 2px; display: flex; justify-content: center; align-items: center; padding: 10px; background: #d9d9d9; font-weight: bold; color: #4a4a4a; cursor: pointer; height: 41px; box-sizing: border-box;">
                 <i class="fa-solid fa-arrows-rotate"></i>
-            </div>
-            <div onclick="SendMesaage('')"
-                style="border-radius: 2px; position: absolute; top: 2px; right: 42px; display: flex; justify-content: center; align-items: center; padding: 10px; background: #d9d9d9; font-weight: bold; color: #4a4a4a; cursor: pointer; height: 41px; box-sizing: border-box;">
-                <i class="fa-regular fa-envelope"></i>
             </div>
 
             <div class="UserName"
