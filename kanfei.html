@@ -3342,11 +3342,11 @@
                 $("#CardGetMagneticCard").hide();
                 $("#DivOrders").show();
 
-                // יצירת הטאבים
-                CreateTabs();
+                // יצירת תפריט ההמבורגר
+                CreateHamburgerMenu();
 
-                // הצגת הטאב הראשון כברירת מחדל
-                ShowTab(1);
+                // אל תטען שום מסך בברירת מחדל - המשתמש יבחר
+                // ShowTab(1); - מבוטל לפי הדרישות
             }
 
             // פונקציה לבדיקת מצב המשתמש הנוכחי - ניתן לקרוא מהקונסול
@@ -3382,18 +3382,60 @@
                 }
             }
 
-            function CreateTabs() {
-                // יצירת HTML של הטאבים
-                var tabsHTML = '<div id="TabsContainer" style="display: flex; width: 100%; border-bottom: 2px solid #e0e0e0; background: #f5f5f5;">';
-                tabsHTML += '<div id="Tab1" class="tab-button" onclick="ShowTab(1)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #009688; color: white; border-bottom: 3px solid #00695c;">הזמנות</div>';
-                tabsHTML += '<div id="Tab2" class="tab-button" onclick="ShowTab(2)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">ליקוט</div>';
-                tabsHTML += '<div id="Tab3" class="tab-button" onclick="ShowTab(3)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">משלוחים</div>';
-                tabsHTML += '<div id="Tab4" class="tab-button" onclick="ShowTab(4)" style="flex-basis: 10%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent; position: relative;"><i class="fa-regular fa-envelope"></i><span id="UnreadMessagesCount" style="position: absolute; top: 5px; right: 5px; background: #ff0000; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">!</span></div>';
-                tabsHTML += '</div>';
+            function CreateHamburgerMenu() {
+                // יצירת תפריט המבורגר עם כפתור הודעות קבוע
+                var menuHTML = '<div id="MenuContainer" style="display: flex; align-items: center; justify-content: space-between; width: 100%; border-bottom: 2px solid #e0e0e0; background: #f5f5f5; padding: 10px; box-sizing: border-box;">';
+                
+                // כפתור המבורגר בצד ימין
+                menuHTML += '<div id="HamburgerButton" onclick="toggleMenu()" style="cursor: pointer; padding: 8px; display: flex; align-items: center; gap: 8px;">';
+                menuHTML += '<i class="fa-solid fa-bars" style="font-size: 24px; color: #009688;"></i>';
+                menuHTML += '<span id="CurrentScreenName" style="font-weight: bold; color: #009688; font-size: 18px;">תפריט</span>';
+                menuHTML += '</div>';
+                
+                // כפתור הודעות קבוע בצד שמאל
+                menuHTML += '<div id="MessagesButton" onclick="ShowTab(4)" style="cursor: pointer; padding: 8px; position: relative;">';
+                menuHTML += '<i class="fa-regular fa-envelope" style="font-size: 24px; color: #009688;"></i>';
+                menuHTML += '<span id="UnreadMessagesCount" style="position: absolute; top: 2px; right: 2px; background: #ff0000; color: white; border-radius: 50%; min-width: 18px; height: 18px; display: none; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; padding: 0 4px;"></span>';
+                menuHTML += '</div>';
+                
+                menuHTML += '</div>';
+                
+                // תפריט נפתח/נסגר
+                menuHTML += '<div id="MenuDropdown" style="display: none; position: fixed; top: 95px; right: 10px; background: white; border: 2px solid #e0e0e0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; min-width: 200px; max-width: 90%;">';
+                menuHTML += '<div class="menu-item" onclick="ShowTab(1)" style="padding: 15px 20px; border-bottom: 1px solid #e0e0e0; cursor: pointer; font-weight: bold; color: #333; font-size: 16px; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-box" style="color: #009688;"></i>הזמנות</div>';
+                menuHTML += '<div class="menu-item" onclick="ShowTab(2)" style="padding: 15px 20px; border-bottom: 1px solid #e0e0e0; cursor: pointer; font-weight: bold; color: #333; font-size: 16px; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-hands-holding" style="color: #009688;"></i>ליקוט</div>';
+                menuHTML += '<div class="menu-item" onclick="ShowTab(3)" style="padding: 15px 20px; border-bottom: 1px solid #e0e0e0; cursor: pointer; font-weight: bold; color: #333; font-size: 16px; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-truck" style="color: #009688;"></i>משלוחים</div>';
+                menuHTML += '<div class="menu-item" onclick="ShowTab(5)" style="padding: 15px 20px; border-bottom: 1px solid #e0e0e0; cursor: pointer; font-weight: bold; color: #333; font-size: 16px; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-clipboard-list" style="color: #009688;"></i>ספירת מלאי</div>';
+                menuHTML += '<div class="menu-item" onclick="ShowTab(6)" style="padding: 15px 20px; border-bottom: 1px solid #e0e0e0; cursor: pointer; font-weight: bold; color: #333; font-size: 16px; display: flex; align-items: center; gap: 10px;"><i class="fa-solid fa-tags" style="color: #009688;"></i>מדבקות מיקום</div>';
+                menuHTML += '<div class="menu-item" onclick="ShowTab(4)" style="padding: 15px 20px; cursor: pointer; font-weight: bold; color: #333; font-size: 16px; display: flex; align-items: center; gap: 10px; position: relative;"><i class="fa-regular fa-envelope" style="color: #009688;"></i>הודעות<span id="UnreadMessagesCountMenu" style="margin-right: auto; background: #ff0000; color: white; border-radius: 50%; min-width: 20px; height: 20px; display: none; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; padding: 0 5px;"></span></div>';
+                menuHTML += '</div>';
 
-                // הוספת הטאבים למסך
-                $("#Tabs").after(tabsHTML);
+                // הוספת התפריט למסך
+                $("#Tabs").after(menuHTML);
+                
+                // הוספת hover effects
+                $(".menu-item").hover(
+                    function() { $(this).css("background", "#f0f0f0"); },
+                    function() { $(this).css("background", "white"); }
+                );
             }
+            
+            // פונקציה לפתיחה/סגירה של התפריט
+            function toggleMenu() {
+                var menu = $("#MenuDropdown");
+                if (menu.is(":visible")) {
+                    menu.fadeOut(200);
+                } else {
+                    menu.fadeIn(200);
+                }
+            }
+            
+            // סגירת התפריט בלחיצה מחוץ לתפריט
+            $(document).on("click", function(event) {
+                if (!$(event.target).closest("#HamburgerButton, #MenuDropdown").length) {
+                    $("#MenuDropdown").fadeOut(200);
+                }
+            });
 
             function ShowTab(tabNumber, orderId) {
                 // עדכון זמן פעילות אחרונה
@@ -3411,18 +3453,19 @@
                     window.OrderId = orderId;
                 }
 
-                // עדכון עיצוב הטאבים
-                $(".tab-button").css({
-                    "background": "#e0e0e0",
-                    "color": "#666",
-                    "border-bottom": "3px solid transparent"
-                });
+                // סגירת התפריט הנפתח
+                $("#MenuDropdown").fadeOut(200);
 
-                $("#Tab" + CurrentTab).css({
-                    "background": "#009688",
-                    "color": "white",
-                    "border-bottom": "3px solid #00695c"
-                });
+                // עדכון שם המסך הנוכחי
+                var screenNames = {
+                    1: "הזמנות",
+                    2: "ליקוט",
+                    3: "משלוחים",
+                    4: "הודעות",
+                    5: "ספירת מלאי",
+                    6: "מדבקות מיקום"
+                };
+                $("#CurrentScreenName").text(screenNames[CurrentTab] || "תפריט");
 
                 // הסרת הכפתורים הקודמים אם קיימים
                 $("#actionButtons").remove();
@@ -3433,6 +3476,8 @@
                 $("#TabContent2").hide();
                 $("#TabContent3").hide();
                 $("#TabContent4").hide();
+                $("#TabContent5").hide();
+                $("#TabContent6").hide();
                 switch (CurrentTab) {
                     case 1:
                         // איפוס OrderId כשחוזרים לטאב הזמנות
@@ -3485,6 +3530,16 @@
                     case 4:
                         $("#TabContent4").show();
                         GetMessages();
+                        break;
+                    case 5:
+                        $("#TabContent5").show();
+                        // מסך ספירת מלאי - ריק לעת עתה
+                        $("#TabContent5").html('<div style="padding: 20px; text-align: center;"><div style="font-size: 24px; font-weight: bold; color: #009688; margin-bottom: 20px;"><i class="fa-solid fa-clipboard-list" style="margin-left: 10px;"></i>ספירת מלאי</div><div style="color: #666; font-size: 16px;">מסך זה בהכנה</div></div>');
+                        break;
+                    case 6:
+                        $("#TabContent6").show();
+                        // מסך מדבקות מיקום - ריק לעת עתה
+                        $("#TabContent6").html('<div style="padding: 20px; text-align: center;"><div style="font-size: 24px; font-weight: bold; color: #009688; margin-bottom: 20px;"><i class="fa-solid fa-tags" style="margin-left: 10px;"></i>מדבקות מיקום</div><div style="color: #666; font-size: 16px;">מסך זה בהכנה</div></div>');
                         break;
                 }
 
@@ -3710,13 +3765,15 @@
                         window.LastUnreadCount = count;
                         
                         if (count > 0) {
-                            $("#UnreadMessagesCount").text(count).show();
+                            $("#UnreadMessagesCount").text(count).css("display", "flex");
+                            $("#UnreadMessagesCountMenu").text(count).css("display", "flex");
 
                             if (CurrentTab === 4) {
                                 GetMessages();
                             }
                         } else {
                             $("#UnreadMessagesCount").hide();
+                            $("#UnreadMessagesCountMenu").hide();
                         }
                     }
                 }).error(function () {
@@ -4476,6 +4533,20 @@
 
                 </div>
 
+            </div>
+            <div id="TabContent5" style="display:none;">
+                <div style="padding: 0 10px 20px;">
+                    <div style="text-align: center; padding: 50px; font-size: 36px; font-weight: bold; color: #009688;">
+                        ספירת מלאי
+                    </div>
+                </div>
+            </div>
+            <div id="TabContent6" style="display:none;">
+                <div style="padding: 0 10px 20px;">
+                    <div style="text-align: center; padding: 50px; font-size: 36px; font-weight: bold; color: #009688;">
+                        מדבקות מיקום
+                    </div>
+                </div>
             </div>
         </div>
     </div>
