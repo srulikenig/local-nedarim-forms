@@ -2062,6 +2062,32 @@
             font-weight: 600;
             color: #333;
         }
+
+        /* Selection Screen Card Styles */
+        .selection-card {
+            color: white;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .selection-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .selection-card i {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .selection-card div {
+            font-size: 18px;
+            font-weight: bold;
+        }
     </style>
 
     <script>
@@ -3547,48 +3573,43 @@
                 html += '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 500px; margin: 0 auto;">';
                 
                 // Card 1: הזמנות
-                html += '<div onclick="ShowTab(1)" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
-                html += '<i class="fa-solid fa-box" style="font-size: 48px; margin-bottom: 15px;"></i>';
-                html += '<div style="font-size: 18px; font-weight: bold;">הזמנות</div>';
+                html += '<div class="selection-card" onclick="ShowTab(1)" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">';
+                html += '<i class="fa-solid fa-box"></i>';
+                html += '<div>הזמנות</div>';
                 html += '</div>';
                 
                 // Card 2: ליקוט
-                html += '<div onclick="ShowTab(2)" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
-                html += '<i class="fa-solid fa-hand-holding" style="font-size: 48px; margin-bottom: 15px;"></i>';
-                html += '<div style="font-size: 18px; font-weight: bold;">ליקוט</div>';
+                html += '<div class="selection-card" onclick="ShowTab(2)" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">';
+                html += '<i class="fa-solid fa-hand-holding"></i>';
+                html += '<div>ליקוט</div>';
                 html += '</div>';
                 
                 // Card 3: משלוחים
-                html += '<div onclick="ShowTab(3)" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
-                html += '<i class="fa-solid fa-truck" style="font-size: 48px; margin-bottom: 15px;"></i>';
-                html += '<div style="font-size: 18px; font-weight: bold;">משלוחים</div>';
+                html += '<div class="selection-card" onclick="ShowTab(3)" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">';
+                html += '<i class="fa-solid fa-truck"></i>';
+                html += '<div>משלוחים</div>';
                 html += '</div>';
                 
                 // Card 4: ספירת מלאי
-                html += '<div onclick="ShowTab(5)" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
-                html += '<i class="fa-solid fa-clipboard-list" style="font-size: 48px; margin-bottom: 15px;"></i>';
-                html += '<div style="font-size: 18px; font-weight: bold;">ספירת מלאי</div>';
+                html += '<div class="selection-card" onclick="ShowTab(5)" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">';
+                html += '<i class="fa-solid fa-clipboard-list"></i>';
+                html += '<div>ספירת מלאי</div>';
                 html += '</div>';
                 
                 // Card 5: מדבקות מיקום
-                html += '<div onclick="ShowTab(6)" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
-                html += '<i class="fa-solid fa-tags" style="font-size: 48px; margin-bottom: 15px;"></i>';
-                html += '<div style="font-size: 18px; font-weight: bold;">מדבקות מיקום</div>';
+                html += '<div class="selection-card" onclick="ShowTab(6)" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">';
+                html += '<i class="fa-solid fa-tags"></i>';
+                html += '<div>מדבקות מיקום</div>';
                 html += '</div>';
                 
                 // Card 6: הודעות
-                html += '<div onclick="ShowTab(4)" style="background: linear-gradient(135deg, #fccb90 0%, #d57eeb 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
-                html += '<i class="fa-regular fa-envelope" style="font-size: 48px; margin-bottom: 15px;"></i>';
-                html += '<div style="font-size: 18px; font-weight: bold;">הודעות</div>';
+                html += '<div class="selection-card" onclick="ShowTab(4)" style="background: linear-gradient(135deg, #fccb90 0%, #d57eeb 100%);">';
+                html += '<i class="fa-regular fa-envelope"></i>';
+                html += '<div>הודעות</div>';
                 html += '</div>';
                 
                 html += '</div>'; // Close grid
                 html += '</div>'; // Close padding container
-                
-                // Add CSS for hover effect
-                html += '<style>';
-                html += '#TabContent0 > div > div > div:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }';
-                html += '</style>';
                 
                 $("#TabContent0").html(html);
             }
