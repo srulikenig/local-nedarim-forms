@@ -1938,6 +1938,130 @@
             -webkit-user-select: none;
             margin-right: 10px
         }
+
+        /* Unified Navigation Bar Styles */
+        #unifiedNav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #fff;
+            border-bottom: 2px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #topBar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            min-height: 45px;
+            background: #f5f5f5;
+        }
+
+        #leftActions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #centerInfo {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        #rightActions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 3px;
+            background: #d9d9d9;
+            color: #4a4a4a;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #c0c0c0;
+        }
+
+        #hamburgerMenu {
+            background: #009688;
+            color: white;
+        }
+
+        #hamburgerMenu:hover {
+            background: #00796b;
+        }
+
+        #messagesBtn {
+            position: relative;
+        }
+
+        #screenName {
+            font-size: 16px;
+            font-weight: bold;
+            color: #009688;
+        }
+
+        #employeeName {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Hamburger Menu Styles */
+        #menuDropdown {
+            display: none;
+            background: #fff;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        #menuDropdown.show {
+            display: block;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #f5f5f5;
+        }
+
+        .menu-item.active {
+            background: #e0f2f1;
+            border-right: 4px solid #009688;
+        }
+
+        .menu-item i {
+            font-size: 20px;
+            width: 30px;
+            color: #009688;
+        }
+
+        .menu-item span {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
     </style>
 
     <script>
@@ -3345,8 +3469,8 @@
                 // יצירת הטאבים
                 CreateTabs();
 
-                // הצגת הטאב הראשון כברירת מחדל
-                ShowTab(1);
+                // הצגת מסך הבחירה הראשוני כברירת מחדל
+                ShowTab(0);
             }
 
             // פונקציה לבדיקת מצב המשתמש הנוכחי - ניתן לקרוא מהקונסול
@@ -3383,16 +3507,90 @@
             }
 
             function CreateTabs() {
-                // יצירת HTML של הטאבים
-                var tabsHTML = '<div id="TabsContainer" style="display: flex; width: 100%; border-bottom: 2px solid #e0e0e0; background: #f5f5f5;">';
-                tabsHTML += '<div id="Tab1" class="tab-button" onclick="ShowTab(1)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #009688; color: white; border-bottom: 3px solid #00695c;">הזמנות</div>';
-                tabsHTML += '<div id="Tab2" class="tab-button" onclick="ShowTab(2)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">ליקוט</div>';
-                tabsHTML += '<div id="Tab3" class="tab-button" onclick="ShowTab(3)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">משלוחים</div>';
-                tabsHTML += '<div id="Tab4" class="tab-button" onclick="ShowTab(4)" style="flex-basis: 10%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent; position: relative;"><i class="fa-regular fa-envelope"></i><span id="UnreadMessagesCount" style="position: absolute; top: 5px; right: 5px; background: #ff0000; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">!</span></div>';
-                tabsHTML += '</div>';
+                // Tabs are now part of the unified navigation - no need to create them dynamically
+                // Just update the employee name
+                $(".UserName").html(UserName);
+            }
 
-                // הוספת הטאבים למסך
-                $("#Tabs").after(tabsHTML);
+            // Toggle hamburger menu
+            function toggleMenu() {
+                var menu = $("#menuDropdown");
+                menu.toggleClass("show");
+            }
+
+            // Update screen name based on current tab
+            function updateScreenName(tabNumber) {
+                var screenNames = {
+                    0: "בחר מסך",
+                    1: "הזמנות",
+                    2: "ליקוט",
+                    3: "משלוחים",
+                    4: "הודעות",
+                    5: "ספירת מלאי",
+                    6: "מדבקות מיקום"
+                };
+                $("#screenName").text(screenNames[tabNumber] || "");
+
+                // Update active menu item
+                $(".menu-item").removeClass("active");
+                if (tabNumber >= 1 && tabNumber <= 6) {
+                    $(".menu-item").eq(tabNumber - 1).addClass("active");
+                }
+            }
+
+            // Create visual selection screen
+            function createSelectionScreen() {
+                var html = '<div style="padding: 20px 10px;">';
+                html += '<div style="text-align: center; font-size: 24px; font-weight: bold; color: #009688; margin-bottom: 30px;">בחר מסך לעבודה</div>';
+                
+                // Create a grid of cards
+                html += '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 500px; margin: 0 auto;">';
+                
+                // Card 1: הזמנות
+                html += '<div onclick="ShowTab(1)" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
+                html += '<i class="fa-solid fa-box" style="font-size: 48px; margin-bottom: 15px;"></i>';
+                html += '<div style="font-size: 18px; font-weight: bold;">הזמנות</div>';
+                html += '</div>';
+                
+                // Card 2: ליקוט
+                html += '<div onclick="ShowTab(2)" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
+                html += '<i class="fa-solid fa-hand-holding" style="font-size: 48px; margin-bottom: 15px;"></i>';
+                html += '<div style="font-size: 18px; font-weight: bold;">ליקוט</div>';
+                html += '</div>';
+                
+                // Card 3: משלוחים
+                html += '<div onclick="ShowTab(3)" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
+                html += '<i class="fa-solid fa-truck" style="font-size: 48px; margin-bottom: 15px;"></i>';
+                html += '<div style="font-size: 18px; font-weight: bold;">משלוחים</div>';
+                html += '</div>';
+                
+                // Card 4: ספירת מלאי
+                html += '<div onclick="ShowTab(5)" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
+                html += '<i class="fa-solid fa-clipboard-list" style="font-size: 48px; margin-bottom: 15px;"></i>';
+                html += '<div style="font-size: 18px; font-weight: bold;">ספירת מלאי</div>';
+                html += '</div>';
+                
+                // Card 5: מדבקות מיקום
+                html += '<div onclick="ShowTab(6)" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
+                html += '<i class="fa-solid fa-tags" style="font-size: 48px; margin-bottom: 15px;"></i>';
+                html += '<div style="font-size: 18px; font-weight: bold;">מדבקות מיקום</div>';
+                html += '</div>';
+                
+                // Card 6: הודעות
+                html += '<div onclick="ShowTab(4)" style="background: linear-gradient(135deg, #fccb90 0%, #d57eeb 100%); color: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s, box-shadow 0.2s;">';
+                html += '<i class="fa-regular fa-envelope" style="font-size: 48px; margin-bottom: 15px;"></i>';
+                html += '<div style="font-size: 18px; font-weight: bold;">הודעות</div>';
+                html += '</div>';
+                
+                html += '</div>'; // Close grid
+                html += '</div>'; // Close padding container
+                
+                // Add CSS for hover effect
+                html += '<style>';
+                html += '#TabContent0 > div > div > div:hover { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }';
+                html += '</style>';
+                
+                $("#TabContent0").html(html);
             }
 
             function ShowTab(tabNumber, orderId) {
@@ -3404,14 +3602,20 @@
                     startUnreadMessagesCheck();
                 }
 
-                if (tabNumber) {
+                if (tabNumber !== undefined) {
                     CurrentTab = tabNumber;
                 }
                 if (orderId) {
                     window.OrderId = orderId;
                 }
 
-                // עדכון עיצוב הטאבים
+                // Close the hamburger menu
+                $("#menuDropdown").removeClass("show");
+
+                // Update screen name
+                updateScreenName(CurrentTab);
+
+                // עדכון עיצוב הטאבים - not needed anymore with hamburger menu
                 $(".tab-button").css({
                     "background": "#e0e0e0",
                     "color": "#666",
@@ -3429,11 +3633,20 @@
 
                 // עדכון תוכן המסך
                 var content = "";
+                $("#TabContent0").hide();
                 $("#TabContent1").hide();
                 $("#TabContent2").hide();
                 $("#TabContent3").hide();
                 $("#TabContent4").hide();
+                $("#TabContent5").hide();
+                $("#TabContent6").hide();
+                
                 switch (CurrentTab) {
+                    case 0:
+                        // Selection screen - show visual menu cards
+                        $("#TabContent0").show();
+                        createSelectionScreen();
+                        break;
                     case 1:
                         // איפוס OrderId כשחוזרים לטאב הזמנות
                         window.OrderId = "";
@@ -3485,6 +3698,24 @@
                     case 4:
                         $("#TabContent4").show();
                         GetMessages();
+                        break;
+                    case 5:
+                        // ספירת מלאי - placeholder for now
+                        $("#TabContent5").show();
+                        var html5 = '<div style="padding: 20px; text-align: center;">';
+                        html5 += '<div style="font-size: 24px; font-weight: bold; color: #009688; margin-bottom: 20px;">ספירת מלאי</div>';
+                        html5 += '<div style="font-size: 16px; color: #666;">מסך זה בפיתוח</div>';
+                        html5 += '</div>';
+                        $("#TabContent5").html(html5);
+                        break;
+                    case 6:
+                        // מדבקות מיקום - placeholder for now
+                        $("#TabContent6").show();
+                        var html6 = '<div style="padding: 20px; text-align: center;">';
+                        html6 += '<div style="font-size: 24px; font-weight: bold; color: #009688; margin-bottom: 20px;">מדבקות מיקום</div>';
+                        html6 += '<div style="font-size: 16px; color: #666;">מסך זה בפיתוח</div>';
+                        html6 += '</div>';
+                        $("#TabContent6").html(html6);
                         break;
                 }
 
@@ -4402,27 +4633,69 @@
 
 
         <div id="DivOrders" style="display: none;" class="Card">
-            <div onclick="history.go(0);"
-                style="border-radius: 2px; position: absolute; top: 2px; left: 2px; display: flex; justify-content: center; align-items: center; padding: 10px; background: #d9d9d9; font-weight: bold; color: #4a4a4a; cursor: pointer; height: 41px; box-sizing: border-box;">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </div>
+            <!-- Unified Navigation Bar -->
+            <div id="unifiedNav">
+                <div id="topBar">
+                    <!-- Left Actions: Exit, Battery, Refresh -->
+                    <div id="leftActions">
+                        <div class="nav-btn" onclick="history.go(0);" title="יציאה">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </div>
+                        <div class="BatteryStatus nav-btn" onclick="GetBattery()" title="סוללה"></div>
+                        <div class="nav-btn" onclick="ShowTab()" title="רענון">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </div>
+                    </div>
 
-            <div class="BatteryStatus" onclick="GetBattery()"
-                style="position: absolute; top: 2px; left: 42px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: rgb(74, 74, 74); cursor: pointer; height: 41px; box-sizing: border-box; border: 1px solid rgb(213, 213, 213); border-radius: 3px; padding: 5px; flex-direction: column-reverse;">
-            </div>
-            <div onclick="ShowTab()"
-                style="border-radius: 2px; position: absolute; top: 2px; right: 2px; display: flex; justify-content: center; align-items: center; padding: 10px; background: #d9d9d9; font-weight: bold; color: #4a4a4a; cursor: pointer; height: 41px; box-sizing: border-box;">
-                <i class="fa-solid fa-arrows-rotate"></i>
-            </div>
+                    <!-- Center: Screen Name and Employee Name -->
+                    <div id="centerInfo">
+                        <div id="screenName">בחר מסך</div>
+                        <div id="employeeName" class="UserName"></div>
+                    </div>
 
-            <div class="UserName"
-                style="height: 45px; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 20px; color: #646464; ">
+                    <!-- Right Actions: Hamburger Menu and Messages -->
+                    <div id="rightActions">
+                        <div class="nav-btn" id="messagesBtn" onclick="ShowTab(4)" title="הודעות">
+                            <i class="fa-regular fa-envelope"></i>
+                            <span id="UnreadMessagesCount" style="position: absolute; top: 5px; right: 5px; background: #ff0000; color: white; border-radius: 50%; width: 18px; height: 18px; display: none; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;"></span>
+                        </div>
+                        <div class="nav-btn" id="hamburgerMenu" onclick="toggleMenu()" title="תפריט">
+                            <i class="fa-solid fa-bars"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dropdown Menu -->
+                <div id="menuDropdown">
+                    <div class="menu-item" onclick="ShowTab(1); toggleMenu();">
+                        <i class="fa-solid fa-box"></i>
+                        <span>הזמנות</span>
+                    </div>
+                    <div class="menu-item" onclick="ShowTab(2); toggleMenu();">
+                        <i class="fa-solid fa-hand-holding"></i>
+                        <span>ליקוט</span>
+                    </div>
+                    <div class="menu-item" onclick="ShowTab(3); toggleMenu();">
+                        <i class="fa-solid fa-truck"></i>
+                        <span>משלוחים</span>
+                    </div>
+                    <div class="menu-item" onclick="ShowTab(4); toggleMenu();">
+                        <i class="fa-regular fa-envelope"></i>
+                        <span>הודעות</span>
+                    </div>
+                    <div class="menu-item" onclick="ShowTab(5); toggleMenu();">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <span>ספירת מלאי</span>
+                    </div>
+                    <div class="menu-item" onclick="ShowTab(6); toggleMenu();">
+                        <i class="fa-solid fa-tags"></i>
+                        <span>מדבקות מיקום</span>
+                    </div>
+                </div>
             </div>
-
-
-            <!-- <div style="height: 45px;"></div> -->
-            <div style="text-align: center; font-size: 22px; color: rgb(43 47 78); font-weight: 900; direction: rtl; border-top: 1px solid #d9d9d9;"
-                id="Tabs"></div>
+            <div id="TabContent0" style="display:none;">
+                <!-- Selection screen will be created dynamically -->
+            </div>
             <div id="TabContent1" style="display:none;">
                 <div style="padding: 0 10px 20px;">
                     <div style="text-align: center; padding: 50px; font-size: 36px; font-weight: bold; color: #009688;">
@@ -4476,6 +4749,12 @@
 
                 </div>
 
+            </div>
+            <div id="TabContent5" style="display:none;">
+                <!-- Inventory count screen - placeholder -->
+            </div>
+            <div id="TabContent6" style="display:none;">
+                <!-- Location labels screen - placeholder -->
             </div>
         </div>
     </div>
