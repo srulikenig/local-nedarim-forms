@@ -4222,6 +4222,7 @@
                     html += '<div style="background: #f0f0f0; border-radius: 25px; padding: 3px; display: inline-flex; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">';
                     html += '<button id="viewByOrders" onclick="toggleShippingViewMode(\'orders\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ShippingViewMode === 'orders' ? 'white' : '#666') + '; background: ' + (window.ShippingViewMode === 'orders' ? '#009688' : 'transparent') + ';">הזמנות</button>';
                     html += '<button id="viewByProducts" onclick="toggleShippingViewMode(\'products\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ShippingViewMode === 'products' ? 'white' : '#666') + '; background: ' + (window.ShippingViewMode === 'products' ? '#009688' : 'transparent') + ';">כמויות</button>';
+                    html += '<button id="viewByHistory" onclick="toggleShippingViewMode(\'history\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ShippingViewMode === 'history' ? 'white' : '#666') + '; background: ' + (window.ShippingViewMode === 'history' ? '#009688' : 'transparent') + ';">היסטוריה</button>';
                     html += '</div>';
                     html += '</div>';
 
@@ -4312,6 +4313,100 @@
 
                     // עדכון UI ראשוני
                     updateSelectedShipmentsUI(Response.data);
+                    Filter_Search();
+                    Top();
+                }).error(function () {
+                    MySwal("שגיאה בקבלת נתונים. בדוק תקשורת")
+                })
+            }
+
+            // קבלת היסטורית משלוחים
+            function GetOrdersHistory() {
+                $.ajax({
+                    url: `${window.baseUrl}posApi/orders`,
+                    context: Text,
+                    timeout: 16000,
+                    data: { isHistory: 1 },
+                    headers: {
+                        "authorization": UserToken
+                    }
+                }).success(function (Response) {
+                    if (Response.status == 'error') {
+                        MySwal(Response.massege)
+                        return false;
+                    }
+                    
+                    var html = '';
+                    html += '<div style="padding: 0 10px 70px;">';
+                    html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">היסטוריה</div>';
+                    html += '<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">';
+                    html += '<input autocomplete="off" type="search" id="Filter_Search" oninput="Filter_Search()" placeholder="חיפוש לפי מס\' הזמנה" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
+                    html += '</div>';
+
+                    // טוגל בוטון לבחירת סוג התצוגה
+                    html += '<div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">';
+                    html += '<div style="background: #f0f0f0; border-radius: 25px; padding: 3px; display: inline-flex; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">';
+                    html += '<button id="viewByOrders" onclick="toggleShippingViewMode(\'orders\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: #666; background: transparent;">הזמנות</button>';
+                    html += '<button id="viewByProducts" onclick="toggleShippingViewMode(\'products\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: #666; background: transparent;">כמויות</button>';
+                    html += '<button id="viewByHistory" onclick="toggleShippingViewMode(\'history\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: white; background: #009688;">היסטוריה</button>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    html += '<div id="OrdersList">';
+                    if (Response.data.length === 0) {
+                        html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין רשומות היסטוריה</div>';
+                    } else {
+                        for (var i = 0; i < Response.data.length; i++) {
+                            var order = Response.data[i];
+                            // סגנון disabled - רקע אפור ושקיפות
+                            html += '<div class="order-row history-row" data-order-id="' + order.orderId + '" style="display: flex; flex-direction: column; text-align: right; position: relative; border-radius: 5px; margin: 7px auto; background: #f5f5f5; font-size: 15px; box-sizing: border-box; border: 2px solid #e0e0e0; overflow: hidden; min-height: 40px; opacity: 0.7; cursor: not-allowed;">';
+                            html += '<div style="display: flex; align-items: stretch; min-height: 40px;">';
+                            // חלק מיקום (collectionGroupOrder) - צד ימין
+                            html += '<div style="background: #9e9e9e; color: white; display: flex; align-items: stretch; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: auto; position: relative;">';
+                            html += '<span style="margin:auto 0;display:block;width:100%;text-align:center;font-size: 16px; font-weight: bold; padding: 0 2px;">' + (order.collectionGroupOrder || '') + '</span>';
+                            html += '</div>';
+                            // חלק עיקרי
+                            html += '<div style="flex:2; padding: 5px 8px; display: flex; flex-direction: column; justify-content: center; min-width:0;">';
+                            html += '<div style="font-size: 16px;font-weight: 600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color: #757575;">' + order.fullName + '</div>';
+                            html += '<div style="font-size: 14px;color: #999; margin-top: 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">הזמנה: ' + order.nbsOrderId + '</div>';
+                            // כתובת
+                            var address = order.street;
+                            if (order.houseNumber) address += ' ' + order.houseNumber;
+                            if (order.entrance) address += ', כניסה ' + order.entrance;
+                            if (order.floor) address += ', קומה ' + order.floor;
+                            if (order.apartment) address += ', דירה ' + order.apartment;
+                            html += '<div style="font-size: 14px;color: #999; margin-top: 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + address + '</div>';
+                            if (order.phone) {
+                                html += '<div style="font-size: 14px;color: #999; margin-top: 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">טל: ' + order.phone + '</div>';
+                            }
+                            html += '</div>';
+                            html += '</div>'; // סגירת flex הראשי
+                            // חלק הערות בתחתית השורה
+                            var hasNotes = (order.note && order.note.trim() !== "") || (order.notes && Array.isArray(order.notes) && order.notes.length > 0);
+                            if (hasNotes) {
+                                html += '<div style="width:100%;border-top:1px solid #e0e0e0;margin-top:0px;padding-top:5px;display:flex;flex-wrap:wrap;gap:6px 8px;">';
+                                // הערה בודדת (string)
+                                if (order.note && order.note.trim() !== "") {
+                                    html += '<div style="display:inline-block;min-width:32px;max-width:100%;background:#bdbdbd;color:#fff;font-weight:bold;padding:5px 13px;border-radius:50px;font-size:13px;margin-bottom:2px;box-shadow:0 1px 2px #0001;white-space:normal;word-break:break-word;text-align:center;">' + order.note + '</div>';
+                                }
+                                // מערך הערות (notes)
+                                if (order.notes && Array.isArray(order.notes) && order.notes.length > 0) {
+                                    for (var n = 0; n < order.notes.length; n++) {
+                                        var noteStr = order.notes[n];
+                                        if (noteStr && noteStr.trim() !== "") {
+                                            html += '<div style="display:inline-block;min-width:32px;max-width:100%;background:#9e9e9e;color:#fff;font-weight:bold;padding:5px 13px;border-radius:50px;font-size:13px;margin-bottom:2px;box-shadow:0 1px 2px #0001;white-space:normal;word-break:break-word;text-align:center;">' + noteStr + '</div>';
+                                        }
+                                    }
+                                }
+                                html += '</div>';
+                            }
+                            html += '</div>';
+                        }
+                    }
+                    html += '</div>';
+                    html += '</div>';
+                    
+                    $("#TabContent3").html(html);
                     Filter_Search();
                     Top();
                 }).error(function () {
@@ -4478,6 +4573,8 @@
                     GetOrders(); // רענון הנתונים עם הזמנות
                 } else if (mode === 'products') {
                     GetShippingProducts(); // רענון הנתונים עם מוצרי משלוח
+                } else if (mode === 'history') {
+                    GetOrdersHistory(); // רענון הנתונים עם היסטוריה
                 }
             }
 
