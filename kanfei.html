@@ -2025,8 +2025,14 @@
         /* Hamburger Menu Styles */
         #menuDropdown {
             display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
             background: #fff;
             border-bottom: 2px solid #e0e0e0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
         }
 
         #menuDropdown.show {
@@ -2063,30 +2069,36 @@
             color: #333;
         }
 
-        /* Selection Screen Card Styles */
+        /* Selection Screen Card Styles - Clean System Design */
         .selection-card {
-            color: white;
-            border-radius: 12px;
-            padding: 30px 20px;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .selection-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: #f5f5f5;
+            border-color: #009688;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .selection-card i {
-            font-size: 48px;
-            margin-bottom: 15px;
+            font-size: 28px;
+            width: 40px;
+            color: #009688;
+            margin-left: 15px;
         }
 
-        .selection-card div {
-            font-size: 18px;
-            font-weight: bold;
+        .selection-card span {
+            font-size: 17px;
+            font-weight: 600;
+            color: #333;
         }
     </style>
 
@@ -3564,51 +3576,51 @@
                 }
             }
 
-            // Create visual selection screen
+            // Create visual selection screen - Clean system design
             function createSelectionScreen() {
-                var html = '<div style="padding: 20px 10px;">';
-                html += '<div style="text-align: center; font-size: 24px; font-weight: bold; color: #009688; margin-bottom: 30px;">בחר מסך לעבודה</div>';
+                var html = '<div style="padding: 20px 15px;">';
+                html += '<div style="text-align: center; font-size: 20px; font-weight: bold; color: #009688; margin-bottom: 20px;">בחר מסך לעבודה</div>';
                 
-                // Create a grid of cards
-                html += '<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 500px; margin: 0 auto;">';
+                // Create a simple list of menu items (similar to hamburger menu style)
+                html += '<div style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto;">';
                 
-                // Card 1: הזמנות
-                html += '<div class="selection-card" onclick="ShowTab(1)" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">';
+                // Menu item 1: הזמנות
+                html += '<div class="selection-card" onclick="ShowTab(1)">';
                 html += '<i class="fa-solid fa-box"></i>';
-                html += '<div>הזמנות</div>';
+                html += '<span>הזמנות</span>';
                 html += '</div>';
                 
-                // Card 2: ליקוט
-                html += '<div class="selection-card" onclick="ShowTab(2)" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">';
+                // Menu item 2: ליקוט
+                html += '<div class="selection-card" onclick="ShowTab(2)">';
                 html += '<i class="fa-solid fa-hand-holding"></i>';
-                html += '<div>ליקוט</div>';
+                html += '<span>ליקוט</span>';
                 html += '</div>';
                 
-                // Card 3: משלוחים
-                html += '<div class="selection-card" onclick="ShowTab(3)" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">';
+                // Menu item 3: משלוחים
+                html += '<div class="selection-card" onclick="ShowTab(3)">';
                 html += '<i class="fa-solid fa-truck"></i>';
-                html += '<div>משלוחים</div>';
+                html += '<span>משלוחים</span>';
                 html += '</div>';
                 
-                // Card 4: ספירת מלאי
-                html += '<div class="selection-card" onclick="ShowTab(5)" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">';
-                html += '<i class="fa-solid fa-clipboard-list"></i>';
-                html += '<div>ספירת מלאי</div>';
-                html += '</div>';
-                
-                // Card 5: מדבקות מיקום
-                html += '<div class="selection-card" onclick="ShowTab(6)" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">';
-                html += '<i class="fa-solid fa-tags"></i>';
-                html += '<div>מדבקות מיקום</div>';
-                html += '</div>';
-                
-                // Card 6: הודעות
-                html += '<div class="selection-card" onclick="ShowTab(4)" style="background: linear-gradient(135deg, #fccb90 0%, #d57eeb 100%);">';
+                // Menu item 4: הודעות
+                html += '<div class="selection-card" onclick="ShowTab(4)">';
                 html += '<i class="fa-regular fa-envelope"></i>';
-                html += '<div>הודעות</div>';
+                html += '<span>הודעות</span>';
                 html += '</div>';
                 
-                html += '</div>'; // Close grid
+                // Menu item 5: ספירת מלאי
+                html += '<div class="selection-card" onclick="ShowTab(5)">';
+                html += '<i class="fa-solid fa-clipboard-list"></i>';
+                html += '<span>ספירת מלאי</span>';
+                html += '</div>';
+                
+                // Menu item 6: מדבקות מיקום
+                html += '<div class="selection-card" onclick="ShowTab(6)">';
+                html += '<i class="fa-solid fa-tags"></i>';
+                html += '<span>מדבקות מיקום</span>';
+                html += '</div>';
+                
+                html += '</div>'; // Close flex container
                 html += '</div>'; // Close padding container
                 
                 $("#TabContent0").html(html);
@@ -4657,12 +4669,11 @@
             <!-- Unified Navigation Bar -->
             <div id="unifiedNav">
                 <div id="topBar">
-                    <!-- Left Actions: Exit, Battery, Refresh -->
-                    <div id="leftActions">
-                        <div class="nav-btn" onclick="history.go(0);" title="יציאה">
-                            <i class="fa-solid fa-right-from-bracket"></i>
+                    <!-- Right Actions (RTL): Hamburger Menu and Refresh -->
+                    <div id="rightActions">
+                        <div class="nav-btn" id="hamburgerMenu" onclick="toggleMenu()" title="תפריט">
+                            <i class="fa-solid fa-bars"></i>
                         </div>
-                        <div class="BatteryStatus nav-btn" onclick="GetBattery()" title="סוללה"></div>
                         <div class="nav-btn" onclick="ShowTab()" title="רענון">
                             <i class="fa-solid fa-arrows-rotate"></i>
                         </div>
@@ -4674,14 +4685,15 @@
                         <div id="employeeName" class="UserName"></div>
                     </div>
 
-                    <!-- Right Actions: Hamburger Menu and Messages -->
-                    <div id="rightActions">
+                    <!-- Left Actions (RTL): Messages and Exit -->
+                    <div id="leftActions">
+                        <div class="BatteryStatus nav-btn" onclick="GetBattery()" title="סוללה"></div>
                         <div class="nav-btn" id="messagesBtn" onclick="ShowTab(4)" title="הודעות">
                             <i class="fa-regular fa-envelope"></i>
                             <span id="UnreadMessagesCount" style="position: absolute; top: 5px; right: 5px; background: #ff0000; color: white; border-radius: 50%; width: 18px; height: 18px; display: none; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;"></span>
                         </div>
-                        <div class="nav-btn" id="hamburgerMenu" onclick="toggleMenu()" title="תפריט">
-                            <i class="fa-solid fa-bars"></i>
+                        <div class="nav-btn" onclick="history.go(0);" title="יציאה">
+                            <i class="fa-solid fa-right-from-bracket"></i>
                         </div>
                     </div>
                 </div>
