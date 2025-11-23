@@ -3862,12 +3862,23 @@
 
                 // טיפול במקלדת אנדרואיד
                 messageInput.addEventListener("focus", function () {
+                    // הקטנת גובה הקונטיינר והזזת האינפוט למעלה
+                    var screenHeight = window.innerHeight;
+                    scrollableContainer.style.maxHeight = (screenHeight * 0.5 - 200) + 'px';
+                    inputArea.style.bottom = (screenHeight * 0.5) + 'px';
+                    
                     setTimeout(() => {
                         // גלילה של הקונטיינר להודעה האחרונה
                         scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
                         // גלילה של כל העמוד כדי שה-input יהיה נראה
                         this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     }, 350);
+                });
+
+                // החזרת הגובה והמיקום המקורי כשהפוקוס יוצא
+                messageInput.addEventListener("blur", function () {
+                    scrollableContainer.style.maxHeight = 'calc(100vh - 200px)';
+                    inputArea.style.bottom = '0';
                 });
 
                 messageInput.addEventListener("keypress", function (event) {
@@ -3996,17 +4007,9 @@
                         html += '</div>';
                         html += '</div>';
                         
-                        // Buttons for label selection
-                        html += '<div style="display: flex; gap: 10px; justify-content: flex-start;">';
-                        
-                        // 4 labels button
-                        var btn4Style = (selectedCount === 4) ? 'background: #009688; color: #fff;' : 'background: #f5f5f5; color: #666;';
-                        html += '<button onclick="selectLabelCount(\'' + product.id + '\', 4)" style="' + btn4Style + ' border: 1px solid #ddd; border-radius: 6px; padding: 8px 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s;">4 מדבקות</button>';
-                        
-                        // 8 labels button
-                        var btn8Style = (selectedCount === 8) ? 'background: #009688; color: #fff;' : 'background: #f5f5f5; color: #666;';
-                        html += '<button onclick="selectLabelCount(\'' + product.id + '\', 8)" style="' + btn8Style + ' border: 1px solid #ddd; border-radius: 6px; padding: 8px 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s;">8 מדבקות</button>';
-                        
+                        // Input for label count
+                        html += '<div style="display: flex; gap: 10px; align-items: center; justify-content: flex-start;">';
+                        html += '<input type="number" id="labelQty_' + product.id + '" min="1" placeholder="כמה מדבקות?" onchange="selectLabelCount(\'' + product.id + '\')" style="border: 1px solid #ddd; border-radius: 6px; padding: 8px 12px; font-size: 14px; width: 150px; text-align: center;">';
                         html += '</div>';
                         html += '</div>';
                     });
@@ -4019,17 +4022,19 @@
                 updatePrintButton();
             }
 
-            function selectLabelCount(productId, count) {
-                if (selectedLabels[productId] && selectedLabels[productId].count === count) {
-                    // Deselect if clicking the same button again
-                    delete selectedLabels[productId];
-                } else {
-                    selectedLabels[productId] = { count: count };
+            function selectLabelCount(productId) {
+                var count = $("#labelQty_" + productId).val();
+                
+                if (!count || count.trim() === '' || isNaN(count) || parseInt(count) < 1) {
+                    MySwal("נא להזין כמות תקינה של מדבקות");
+                    return;
                 }
                 
-                // Re-render to update button styles
-                var filteredProducts = filterProducts(locationLabelsData, $("#labelFilter_Search").val());
-                renderLocationLabels(filteredProducts);
+                count = parseInt(count);
+                selectedLabels[productId] = { count: count };
+                
+                // Update print button
+                updatePrintButton();
             }
 
             function updatePrintButton() {
@@ -4066,6 +4071,7 @@
                     url: `${window.baseUrl}posApi/printLocationLabels`,
                     method: 'POST',
                     contentType: 'application/json',
+                    global: false,
                     headers: {
                         "authorization": UserToken
                     },
@@ -4128,6 +4134,7 @@
                         "authorization": UserToken
                     },
                     timeout: 60000,
+                    global: false,
                     global: false,
                 }).success(function (Response) {
                     if (Response.status === 'ok' && Response.data) {
