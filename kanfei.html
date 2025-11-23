@@ -4231,7 +4231,8 @@
                     } else {
                         for (var i = 0; i < Response.data.length; i++) {
                             var order = Response.data[i];
-                            html += '<div class="order-row" data-order-id="' + order.orderId + '" style="display: flex; flex-direction: column; text-align: right; position: relative; border-radius: 5px; margin: 7px auto; background: #fffdfa; font-size: 15px; box-sizing: border-box; border: 2px solid #e7e7e7; overflow: hidden; min-height: 40px; transition: background 0.2s, border 0.2s;">';
+                            var isType2 = order.type === 2;
+                            html += '<div class="order-row' + (isType2 ? ' type-2-delivery' : '') + '" data-order-id="' + order.orderId + '" data-order-type="' + (order.type || 1) + '" style="display: flex; flex-direction: column; text-align: right; position: relative; border-radius: 5px; margin: 7px auto; background: #fffdfa; font-size: 15px; box-sizing: border-box; border: 2px solid #e7e7e7; overflow: hidden; min-height: 40px; transition: background 0.2s, border 0.2s;">';
                             html += '<div style="display: flex; align-items: stretch; min-height: 40px;">';
                             // חלק מיקום (collectionGroupOrder) - צד ימין כמו בטאב 1
                             html += '<div style="background: #1976d2; color: white; display: flex; align-items: stretch; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: auto; position: relative;">';
@@ -4252,6 +4253,12 @@
                                 html += '<div style="font-size: 14px;color: #666; margin-top: 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">טל: ' + order.phone + '</div>';
                             }
                             html += '</div>';
+                            // כפתור אישור לtype-2
+                            if (isType2) {
+                                html += '<div style="display: flex; align-items: center; padding: 0 8px;">';
+                                html += '<button class="approve-delivery-btn" data-delivery-id="' + order.orderId + '" style="background: #4caf50; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; white-space: nowrap;">אשר משלוח</button>';
+                                html += '</div>';
+                            }
                             html += '</div>'; // סגירת flex הראשי
                             // חלק הערות בתחתית השורה
                             var hasNotes = (order.note && order.note.trim() !== "") || (order.notes && Array.isArray(order.notes) && order.notes.length > 0);
@@ -4285,8 +4292,8 @@
                         + '</div>';
                     $("#TabContent3").html(html);
 
-                    // סימון שורה בלחיצה
-                    $("#OrdersList .order-row").off("click").on("click", function () {
+                    // סימון שורה בלחיצה - רק עבור type-1
+                    $("#OrdersList .order-row:not(.type-2-delivery)").off("click").on("click", function () {
                         var id = $(this).data('order-id');
                         if (window.SelectedOrders.indexOf(id) === -1) {
                             window.SelectedOrders.push(id);
@@ -4296,6 +4303,13 @@
                         updateSelectedShipmentsUI(Response.data);
                     });
 
+                    // כפתור אישור משלוח לtype-2
+                    $(".approve-delivery-btn").off("click").on("click", function (e) {
+                        e.stopPropagation(); // מניעת הפעלת click על השורה
+                        var deliveryId = $(this).data('delivery-id');
+                        approveDelivery(deliveryId);
+                    });
+
                     // עדכון UI ראשוני
                     updateSelectedShipmentsUI(Response.data);
                     Filter_Search();
@@ -4303,6 +4317,78 @@
                 }).error(function () {
                     MySwal("שגיאה בקבלת נתונים. בדוק תקשורת")
                 })
+            }
+
+            // אישור משלוח עבור type-2
+            function approveDelivery(deliveryId) {
+                swal({
+                    title: 'אישור משלוח',
+                    text: 'הכנס הערת ביצוע (אופציונלי):',
+                    type: 'input',
+                    showCancelButton: true,
+                    confirmButtonColor: '#4caf50',
+                    confirmButtonText: 'אשר משלוח',
+                    cancelButtonText: 'ביטול',
+                    closeOnConfirm: false,
+                    inputPlaceholder: 'לדוגמה: נמסר לשכן'
+                }, function (inputValue) {
+                    if (inputValue === false) return false; // ביטול
+                    
+                    // אישור עם או בלי הערה
+                    var executionNote = inputValue || '';
+                    
+                    swal({
+                        title: 'מאשר משלוח...',
+                        text: '',
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+
+                    $.ajax({
+                        url: `${window.baseUrl}posApi/approveDelivery`,
+                        method: 'POST',
+                        contentType: 'application/json',
+                        headers: {
+                            "authorization": UserToken
+                        },
+                        data: JSON.stringify({ 
+                            deliveryId: deliveryId, 
+                            executionNote: executionNote 
+                        }),
+                        success: function (res) {
+                            if (res.status === 'ok') {
+                                swal({ 
+                                    title: 'המשלוח אושר בהצלחה', 
+                                    text: res.massege, 
+                                    type: 'success', 
+                                    timer: 1800, 
+                                    showConfirmButton: false 
+                                });
+                                // רענון הרשימה
+                                setTimeout(function () {
+                                    GetOrders();
+                                }, 1000);
+                            } else {
+                                swal({ 
+                                    title: 'שגיאה', 
+                                    text: res.massege || 'שגיאה באישור המשלוח', 
+                                    type: 'error', 
+                                    timer: 2500, 
+                                    showConfirmButton: false 
+                                });
+                            }
+                        },
+                        error: function () {
+                            swal({ 
+                                title: 'שגיאה', 
+                                text: 'שגיאה בשליחה לשרת', 
+                                type: 'error', 
+                                timer: 2500, 
+                                showConfirmButton: false 
+                            });
+                        }
+                    });
+                });
             }
 
             // עדכון UI של בחירה וכפתור אישור מרובה למשלוחים
