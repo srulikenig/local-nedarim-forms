@@ -1938,6 +1938,168 @@
             -webkit-user-select: none;
             margin-right: 10px
         }
+
+        /* Unified Navigation Bar Styles */
+        #unifiedNav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #fff;
+            border-bottom: 2px solid #e0e0e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #topBar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            min-height: 45px;
+            background: #f5f5f5;
+        }
+
+        #leftActions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #centerInfo {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        #rightActions {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 3px;
+            background: #d9d9d9;
+            color: #4a4a4a;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #c0c0c0;
+        }
+
+        #hamburgerMenu {
+            background: #009688;
+            color: white;
+        }
+
+        #hamburgerMenu:hover {
+            background: #00796b;
+        }
+
+        #messagesBtn {
+            position: relative;
+        }
+
+        #screenName {
+            font-size: 16px;
+            font-weight: bold;
+            color: #009688;
+        }
+
+        #employeeName {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Hamburger Menu Styles */
+        #menuDropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-bottom: 2px solid #e0e0e0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        #menuDropdown.show {
+            display: block;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #f5f5f5;
+        }
+
+        .menu-item.active {
+            background: #e0f2f1;
+            border-right: 4px solid #009688;
+        }
+
+        .menu-item i {
+            font-size: 20px;
+            width: 30px;
+            color: #009688;
+        }
+
+        .menu-item span {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Selection Screen Card Styles - Clean System Design */
+        .selection-card {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .selection-card:hover {
+            background: #f5f5f5;
+            border-color: #009688;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .selection-card i {
+            font-size: 28px;
+            width: 40px;
+            color: #009688;
+            margin-left: 15px;
+        }
+
+        .selection-card span {
+            font-size: 17px;
+            font-weight: 600;
+            color: #333;
+        }
     </style>
 
     <script>
@@ -3345,8 +3507,8 @@
                 // יצירת הטאבים
                 CreateTabs();
 
-                // הצגת הטאב הראשון כברירת מחדל
-                ShowTab(1);
+                // הצגת מסך הבחירה הראשוני כברירת מחדל
+                ShowTab(0);
             }
 
             // פונקציה לבדיקת מצב המשתמש הנוכחי - ניתן לקרוא מהקונסול
@@ -3383,16 +3545,81 @@
             }
 
             function CreateTabs() {
-                // יצירת HTML של הטאבים
-                var tabsHTML = '<div id="TabsContainer" style="display: flex; width: 100%; border-bottom: 2px solid #e0e0e0; background: #f5f5f5;">';
-                tabsHTML += '<div id="Tab1" class="tab-button" onclick="ShowTab(1)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #009688; color: white; border-bottom: 3px solid #00695c;">הזמנות</div>';
-                tabsHTML += '<div id="Tab2" class="tab-button" onclick="ShowTab(2)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">ליקוט</div>';
-                tabsHTML += '<div id="Tab3" class="tab-button" onclick="ShowTab(3)" style="flex-basis: 30%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent;">משלוחים</div>';
-                tabsHTML += '<div id="Tab4" class="tab-button" onclick="ShowTab(4)" style="flex-basis: 10%; text-align: center; padding: 12px; font-weight: bold; cursor: pointer; background: #e0e0e0; color: #666; border-bottom: 3px solid transparent; position: relative;"><i class="fa-regular fa-envelope"></i><span id="UnreadMessagesCount" style="position: absolute; top: 5px; right: 5px; background: #ff0000; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold;">!</span></div>';
-                tabsHTML += '</div>';
+                // Tabs are now part of the unified navigation - no need to create them dynamically
+                // Just update the employee name
+                $(".UserName").html(UserName);
+            }
 
-                // הוספת הטאבים למסך
-                $("#Tabs").after(tabsHTML);
+            // Toggle hamburger menu
+            function toggleMenu() {
+                var menu = $("#menuDropdown");
+                menu.toggleClass("show");
+            }
+
+            // Update screen name based on current tab
+            function updateScreenName(tabNumber) {
+                var screenNames = {
+                    0: "בחר מסך",
+                    1: "הזמנות",
+                    2: "ליקוט",
+                    3: "משלוחים",
+                    4: "הודעות",
+                    5: "ספירת מלאי",
+                    6: "מדבקות מיקום"
+                };
+                $("#screenName").text(screenNames[tabNumber] || "");
+
+                // Update active menu item
+                $(".menu-item").removeClass("active");
+                if (tabNumber >= 1 && tabNumber <= 6) {
+                    $(".menu-item").eq(tabNumber - 1).addClass("active");
+                }
+            }
+
+            // Create visual selection screen - Clean system design
+            function createSelectionScreen() {
+                var html = '<div style="padding: 20px 15px;">';
+                html += '<div style="text-align: center; font-size: 20px; font-weight: bold; color: #009688; margin-bottom: 20px;">בחר מסך לעבודה</div>';
+                
+                // Create a simple list of menu items (similar to hamburger menu style)
+                html += '<div style="display: flex; flex-direction: column; gap: 10px; max-width: 500px; margin: 0 auto;">';
+                
+                // Menu item 1: הזמנות
+                html += '<div class="selection-card" onclick="ShowTab(1)">';
+                html += '<i class="fa-solid fa-box"></i>';
+                html += '<span>הזמנות</span>';
+                html += '</div>';
+                
+                // Menu item 2: ליקוט
+                html += '<div class="selection-card" onclick="ShowTab(2)">';
+                html += '<i class="fa-solid fa-hand-holding"></i>';
+                html += '<span>ליקוט</span>';
+                html += '</div>';
+                
+                // Menu item 3: משלוחים
+                html += '<div class="selection-card" onclick="ShowTab(3)">';
+                html += '<i class="fa-solid fa-truck"></i>';
+                html += '<span>משלוחים</span>';
+                html += '</div>';
+                
+                // הודעות removed - direct access via top bar button
+                
+                // Menu item 5: ספירת מלאי
+                html += '<div class="selection-card" onclick="ShowTab(5)">';
+                html += '<i class="fa-solid fa-clipboard-list"></i>';
+                html += '<span>ספירת מלאי</span>';
+                html += '</div>';
+                
+                // Menu item 6: מדבקות מיקום
+                html += '<div class="selection-card" onclick="ShowTab(6)">';
+                html += '<i class="fa-solid fa-tags"></i>';
+                html += '<span>מדבקות מיקום</span>';
+                html += '</div>';
+                
+                html += '</div>'; // Close flex container
+                html += '</div>'; // Close padding container
+                
+                $("#TabContent0").html(html);
             }
 
             function ShowTab(tabNumber, orderId) {
@@ -3404,14 +3631,20 @@
                     startUnreadMessagesCheck();
                 }
 
-                if (tabNumber) {
+                if (tabNumber !== undefined) {
                     CurrentTab = tabNumber;
                 }
                 if (orderId) {
                     window.OrderId = orderId;
                 }
 
-                // עדכון עיצוב הטאבים
+                // Close the hamburger menu
+                $("#menuDropdown").removeClass("show");
+
+                // Update screen name
+                updateScreenName(CurrentTab);
+
+                // עדכון עיצוב הטאבים - not needed anymore with hamburger menu
                 $(".tab-button").css({
                     "background": "#e0e0e0",
                     "color": "#666",
@@ -3429,11 +3662,20 @@
 
                 // עדכון תוכן המסך
                 var content = "";
+                $("#TabContent0").hide();
                 $("#TabContent1").hide();
                 $("#TabContent2").hide();
                 $("#TabContent3").hide();
                 $("#TabContent4").hide();
+                $("#TabContent5").hide();
+                $("#TabContent6").hide();
+                
                 switch (CurrentTab) {
+                    case 0:
+                        // Selection screen - show visual menu cards
+                        $("#TabContent0").show();
+                        createSelectionScreen();
+                        break;
                     case 1:
                         // איפוס OrderId כשחוזרים לטאב הזמנות
                         window.OrderId = "";
@@ -3485,6 +3727,16 @@
                     case 4:
                         $("#TabContent4").show();
                         GetMessages();
+                        break;
+                    case 5:
+                        // עדכון מלאי
+                        $("#TabContent5").show();
+                        GetInventoryItems();
+                        break;
+                    case 6:
+                        // מדבקות מיקום
+                        $("#TabContent6").show();
+                        GetLocationLabels();
                         break;
                 }
 
@@ -3687,6 +3939,299 @@
                 });
             }
 
+            // Location Labels Screen Functions
+            var locationLabelsData = []; // Store all products
+            var selectedLabels = {}; // Store selected label counts: {id: {count: 4 or 8}}
+
+            function GetLocationLabels() {
+                // Create the UI structure first
+                var titleHtml = '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">מדבקות מיקום</div>';
+                
+                var searchHtml = '<div style="display: flex; justify-content: center; align-items: center; padding: 0 10px 20px;">';
+                searchHtml += '<input autocomplete="off" type="search" id="labelFilter_Search" oninput="filterLocationLabels()" placeholder="חיפוש לפי שם / מק\"ט / מיקום" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
+                searchHtml += '</div>';
+                
+                $("#TabContent6").html(titleHtml + searchHtml + '<div id="locationLabelsList"></div><div id="locationLabelsPrintButton"></div>');
+                
+                // Fetch data from API
+                $.ajax({
+                    url: `${window.baseUrl}posApi/locationLabels`,
+                    headers: {
+                        "authorization": UserToken
+                    },
+                    timeout: 60000,
+                    global: false,
+                }).success(function (Response) {
+                    if (Response.status === 'ok' && Response.data) {
+                        locationLabelsData = Response.data;
+                        selectedLabels = {}; // Reset selections
+                        renderLocationLabels(locationLabelsData);
+                    } else {
+                        MySwal(Response.massege || "שגיאה בקבלת נתונים");
+                    }
+                }).error(function () {
+                    MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
+                });
+            }
+
+            function renderLocationLabels(products) {
+                var html = '<div style="padding: 0 10px 100px 10px;">';
+                
+                if (products.length === 0) {
+                    html += '<p style="text-align:center;color:#888;padding:20px 0;">אין מוצרים להצגה</p>';
+                } else {
+                    products.forEach(function(product) {
+                        var isSelected = selectedLabels[product.id];
+                        var selectedCount = isSelected ? selectedLabels[product.id].count : 0;
+                        
+                        html += '<div class="location-label-item" data-id="' + product.id + '" style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+                        
+                        // Product info
+                        html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">';
+                        html += '<div style="flex: 1;">';
+                        html += '<div style="font-weight: bold; font-size: 16px; color: #333; margin-bottom: 4px;">' + (product.name || '') + '</div>';
+                        html += '<div style="font-size: 14px; color: #666;">';
+                        html += '<span style="margin-left: 15px;">מק"ט: ' + (product.sku || '') + '</span>';
+                        html += '<span>מיקום: ' + (product.productPlace || '') + '</span>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        
+                        // Buttons for label selection
+                        html += '<div style="display: flex; gap: 10px; justify-content: flex-start;">';
+                        
+                        // 4 labels button
+                        var btn4Style = (selectedCount === 4) ? 'background: #009688; color: #fff;' : 'background: #f5f5f5; color: #666;';
+                        html += '<button onclick="selectLabelCount(\'' + product.id + '\', 4)" style="' + btn4Style + ' border: 1px solid #ddd; border-radius: 6px; padding: 8px 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s;">4 מדבקות</button>';
+                        
+                        // 8 labels button
+                        var btn8Style = (selectedCount === 8) ? 'background: #009688; color: #fff;' : 'background: #f5f5f5; color: #666;';
+                        html += '<button onclick="selectLabelCount(\'' + product.id + '\', 8)" style="' + btn8Style + ' border: 1px solid #ddd; border-radius: 6px; padding: 8px 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s;">8 מדבקות</button>';
+                        
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                }
+                
+                html += '</div>';
+                $("#locationLabelsList").html(html);
+                
+                // Update print button
+                updatePrintButton();
+            }
+
+            function selectLabelCount(productId, count) {
+                if (selectedLabels[productId] && selectedLabels[productId].count === count) {
+                    // Deselect if clicking the same button again
+                    delete selectedLabels[productId];
+                } else {
+                    selectedLabels[productId] = { count: count };
+                }
+                
+                // Re-render to update button styles
+                var filteredProducts = filterProducts(locationLabelsData, $("#labelFilter_Search").val());
+                renderLocationLabels(filteredProducts);
+            }
+
+            function updatePrintButton() {
+                var selectedCount = Object.keys(selectedLabels).length;
+                var buttonHtml = '';
+                
+                if (selectedCount > 0) {
+                    buttonHtml = '<div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100;">';
+                    buttonHtml += '<button onclick="printLocationLabels()" style="background: #009688; color: #fff; border: none; border-radius: 25px; padding: 15px 40px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: all 0.3s;">';
+                    buttonHtml += 'הדפס (' + selectedCount + ')';
+                    buttonHtml += '</button>';
+                    buttonHtml += '</div>';
+                }
+                
+                $("#locationLabelsPrintButton").html(buttonHtml);
+            }
+
+            function printLocationLabels() {
+                if (Object.keys(selectedLabels).length === 0) {
+                    MySwal("לא נבחרו מוצרים להדפסה");
+                    return;
+                }
+                
+                // Prepare data for API
+                var printData = [];
+                for (var id in selectedLabels) {
+                    printData.push({
+                        id: id,
+                        labelCount: selectedLabels[id].count
+                    });
+                }
+                
+                $.ajax({
+                    url: `${window.baseUrl}posApi/printLocationLabels`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        "authorization": UserToken
+                    },
+                    data: JSON.stringify({
+                        labels: printData
+                    }),
+                    timeout: 60000,
+                }).success(function (Response) {
+                    if (Response.status === 'ok') {
+                        MySwal("המדבקות נשלחו להדפסה בהצלחה", undefined, "success");
+                        // Reset selections and refresh
+                        selectedLabels = {};
+                        GetLocationLabels();
+                    } else {
+                        MySwal(Response.massege || "שגיאה בהדפסת המדבקות");
+                    }
+                }).error(function () {
+                    MySwal("שגיאה בהדפסת המדבקות. בדוק תקשורת");
+                });
+            }
+
+            function filterLocationLabels() {
+                var searchTerm = $("#labelFilter_Search").val();
+                var filteredProducts = filterProducts(locationLabelsData, searchTerm);
+                renderLocationLabels(filteredProducts);
+            }
+
+            function filterProducts(products, searchTerm) {
+                if (!searchTerm || searchTerm.trim() === '') {
+                    return products;
+                }
+                
+                searchTerm = searchTerm.toLowerCase();
+                return products.filter(function(product) {
+                    var name = (product.name || '').toLowerCase();
+                    var sku = (product.sku || '').toString().toLowerCase();
+                    var place = (product.productPlace || '').toString().toLowerCase();
+                    
+                    return name.includes(searchTerm) || sku.includes(searchTerm) || place.includes(searchTerm);
+                });
+            }
+
+            // Global variable for inventory data
+            var inventoryItemsData = [];
+
+            function GetInventoryItems() {
+                // Create the UI structure first
+                var titleHtml = '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">עדכון מלאי</div>';
+                
+                var searchHtml = '<div style="display: flex; justify-content: center; align-items: center; padding: 0 10px 20px;">';
+                searchHtml += '<input autocomplete="off" type="search" id="inventoryFilter_Search" oninput="filterInventoryItems()" placeholder="חיפוש לפי שם / מק\"ט / מיקום" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
+                searchHtml += '</div>';
+                
+                $("#TabContent5").html(titleHtml + searchHtml + '<div id="inventoryItemsList"></div>');
+                
+                // Fetch data from API
+                $.ajax({
+                    url: `${window.baseUrl}posApi/inventoryItems`,
+                    headers: {
+                        "authorization": UserToken
+                    },
+                    timeout: 60000,
+                    global: false,
+                }).success(function (Response) {
+                    if (Response.status === 'ok' && Response.data) {
+                        inventoryItemsData = Response.data;
+                        renderInventoryItems(inventoryItemsData);
+                    } else {
+                        MySwal(Response.massege || "שגיאה בקבלת נתונים");
+                    }
+                }).error(function () {
+                    MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
+                });
+            }
+
+            function renderInventoryItems(products) {
+                var html = '<div style="padding: 0 10px 80px 10px;">';
+                
+                if (products.length === 0) {
+                    html += '<p style="text-align:center;color:#888;padding:20px 0;">אין מוצרים להצגה</p>';
+                } else {
+                    products.forEach(function(product) {
+                        html += '<div class="inventory-item" data-id="' + product.id + '" style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+                        
+                        // Product info
+                        html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">';
+                        html += '<div style="flex: 1;">';
+                        html += '<div style="font-weight: bold; font-size: 16px; color: #333; margin-bottom: 4px;">' + (product.name || '') + '</div>';
+                        html += '<div style="font-size: 14px; color: #666;">';
+                        html += '<span style="margin-left: 15px;">מק"ט: ' + (product.sku || '') + '</span>';
+                        html += '<span>מיקום: ' + (product.productPlace || '') + '</span>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        
+                        // Input and button for quantity update
+                        html += '<div style="display: flex; gap: 10px; align-items: center; justify-content: flex-start;">';
+                        html += '<input type="number" id="qty_' + product.id + '" min="0" placeholder="כמות חדשה" style="border: 1px solid #ddd; border-radius: 6px; padding: 8px 12px; font-size: 14px; width: 120px; text-align: center;">';
+                        html += '<button onclick="updateInventoryQuantity(\'' + product.id + '\')" style="background: #009688; color: #fff; border: none; border-radius: 6px; padding: 8px 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s;">אישור</button>';
+                        html += '</div>';
+                        
+                        html += '</div>';
+                    });
+                }
+                
+                html += '</div>';
+                $("#inventoryItemsList").html(html);
+            }
+
+            function updateInventoryQuantity(productId) {
+                var newQuantity = $("#qty_" + productId).val();
+                
+                if (!newQuantity || newQuantity.trim() === '' || isNaN(newQuantity) || parseInt(newQuantity) < 0) {
+                    MySwal("נא להזין כמות תקינה");
+                    return;
+                }
+                
+                newQuantity = parseInt(newQuantity);
+                
+                $.ajax({
+                    url: `${window.baseUrl}posApi/updateInventory`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        "authorization": UserToken
+                    },
+                    data: JSON.stringify({
+                        productId: productId,
+                        newQuantity: newQuantity
+                    }),
+                    timeout: 60000,
+                }).success(function (Response) {
+                    if (Response.status === 'ok') {
+                        MySwal("הכמות עודכנה בהצלחה", undefined, "success");
+                        // Clear the input
+                        $("#qty_" + productId).val('');
+                    } else {
+                        MySwal(Response.message || Response.massege || "שגיאה בעדכון הכמות");
+                    }
+                }).error(function () {
+                    MySwal("שגיאה בעדכון הכמות. בדוק תקשורת");
+                });
+            }
+
+            function filterInventoryItems() {
+                var searchTerm = $("#inventoryFilter_Search").val();
+                var filteredProducts = filterInventoryProducts(inventoryItemsData, searchTerm);
+                renderInventoryItems(filteredProducts);
+            }
+
+            function filterInventoryProducts(products, searchTerm) {
+                if (!searchTerm || searchTerm.trim() === '') {
+                    return products;
+                }
+                
+                searchTerm = searchTerm.toLowerCase();
+                return products.filter(function(product) {
+                    var name = (product.name || '').toLowerCase();
+                    var sku = (product.sku || '').toString().toLowerCase();
+                    var place = (product.productPlace || '').toString().toLowerCase();
+                    
+                    return name.includes(searchTerm) || sku.includes(searchTerm) || place.includes(searchTerm);
+                });
+            }
+
 
             // בדיקת כמות הודעות שלא נקראו
             function CheckUnreadMessages() {
@@ -3868,6 +4413,7 @@
                     html += '<div style="background: #f0f0f0; border-radius: 25px; padding: 3px; display: inline-flex; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">';
                     html += '<button id="viewByOrders" onclick="toggleShippingViewMode(\'orders\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ShippingViewMode === 'orders' ? 'white' : '#666') + '; background: ' + (window.ShippingViewMode === 'orders' ? '#009688' : 'transparent') + ';">הזמנות</button>';
                     html += '<button id="viewByProducts" onclick="toggleShippingViewMode(\'products\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ShippingViewMode === 'products' ? 'white' : '#666') + '; background: ' + (window.ShippingViewMode === 'products' ? '#009688' : 'transparent') + ';">כמויות</button>';
+                    html += '<button id="viewByHistory" onclick="toggleShippingViewMode(\'history\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ShippingViewMode === 'history' ? 'white' : '#666') + '; background: ' + (window.ShippingViewMode === 'history' ? '#009688' : 'transparent') + ';">היסטוריה</button>';
                     html += '</div>';
                     html += '</div>';
 
@@ -3952,13 +4498,17 @@
                     window.SelectedOrders = window.SelectedOrders || [];
                     var html = '';
                     html += '<div style="padding: 0 10px 70px;">';
-                    html += '<input autocomplete="off" type="search" id="Filter_Search" oninput="Filter_Search()" placeholder="חיפוש מספר הזמנה" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
+                    html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">משלוחים</div>';
+                    html += '<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">';
+                    html += '<input autocomplete="off" type="search" id="Filter_Search" oninput="Filter_Search()" placeholder="חיפוש לפי מס\' הזמנה" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
+                    html += '</div>';
 
                     // טוגל בוטון לבחירת סוג התצוגה
                     html += '<div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">';
                     html += '<div style="background: #f0f0f0; border-radius: 25px; padding: 3px; display: inline-flex; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">';
                     html += '<button id="viewByOrders" onclick="toggleShippingViewMode(\'orders\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ShippingViewMode === 'orders' ? 'white' : '#666') + '; background: ' + (window.ShippingViewMode === 'orders' ? '#009688' : 'transparent') + ';">הזמנות</button>';
                     html += '<button id="viewByProducts" onclick="toggleShippingViewMode(\'products\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ShippingViewMode === 'products' ? 'white' : '#666') + '; background: ' + (window.ShippingViewMode === 'products' ? '#009688' : 'transparent') + ';">כמויות</button>';
+                    html += '<button id="viewByHistory" onclick="toggleShippingViewMode(\'history\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: ' + (window.ShippingViewMode === 'history' ? 'white' : '#666') + '; background: ' + (window.ShippingViewMode === 'history' ? '#009688' : 'transparent') + ';">היסטוריה</button>';
                     html += '</div>';
                     html += '</div>';
 
@@ -3968,7 +4518,8 @@
                     } else {
                         for (var i = 0; i < Response.data.length; i++) {
                             var order = Response.data[i];
-                            html += '<div class="order-row" data-order-id="' + order.orderId + '" style="display: flex; flex-direction: column; text-align: right; position: relative; border-radius: 5px; margin: 7px auto; background: #fffdfa; font-size: 15px; box-sizing: border-box; border: 2px solid #e7e7e7; overflow: hidden; min-height: 40px; transition: background 0.2s, border 0.2s;">';
+                            var isType2 = order.type === 2;
+                            html += '<div class="order-row' + (isType2 ? ' type-2-delivery' : '') + '" data-order-id="' + order.orderId + '" data-order-type="' + (order.type || 1) + '" style="display: flex; flex-direction: column; text-align: right; position: relative; border-radius: 5px; margin: 7px auto; background: #fffdfa; font-size: 15px; box-sizing: border-box; border: 2px solid #e7e7e7; overflow: hidden; min-height: 40px; transition: background 0.2s, border 0.2s;">';
                             html += '<div style="display: flex; align-items: stretch; min-height: 40px;">';
                             // חלק מיקום (collectionGroupOrder) - צד ימין כמו בטאב 1
                             html += '<div style="background: #1976d2; color: white; display: flex; align-items: stretch; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: auto; position: relative;">';
@@ -3989,6 +4540,12 @@
                                 html += '<div style="font-size: 14px;color: #666; margin-top: 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">טל: ' + order.phone + '</div>';
                             }
                             html += '</div>';
+                            // כפתור אישור לtype-2
+                            if (isType2) {
+                                html += '<div style="display: flex; align-items: center; padding: 0 8px;">';
+                                html += '<button class="approve-delivery-btn" data-delivery-id="' + order.orderId + '" style="background: #4caf50; color: white; border: none; padding: 8px 16px; border-radius: 4px; font-size: 14px; font-weight: bold; cursor: pointer; white-space: nowrap;">אשר משלוח</button>';
+                                html += '</div>';
+                            }
                             html += '</div>'; // סגירת flex הראשי
                             // חלק הערות בתחתית השורה
                             var hasNotes = (order.note && order.note.trim() !== "") || (order.notes && Array.isArray(order.notes) && order.notes.length > 0);
@@ -4022,8 +4579,8 @@
                         + '</div>';
                     $("#TabContent3").html(html);
 
-                    // סימון שורה בלחיצה
-                    $("#OrdersList .order-row").off("click").on("click", function () {
+                    // סימון שורה בלחיצה - רק עבור type-1
+                    $("#OrdersList .order-row:not(.type-2-delivery)").off("click").on("click", function () {
                         var id = $(this).data('order-id');
                         if (window.SelectedOrders.indexOf(id) === -1) {
                             window.SelectedOrders.push(id);
@@ -4033,6 +4590,13 @@
                         updateSelectedShipmentsUI(Response.data);
                     });
 
+                    // כפתור אישור משלוח לtype-2
+                    $(".approve-delivery-btn").off("click").on("click", function (e) {
+                        e.stopPropagation(); // מניעת הפעלת click על השורה
+                        var deliveryId = $(this).data('delivery-id');
+                        approveDelivery(deliveryId);
+                    });
+
                     // עדכון UI ראשוני
                     updateSelectedShipmentsUI(Response.data);
                     Filter_Search();
@@ -4040,6 +4604,172 @@
                 }).error(function () {
                     MySwal("שגיאה בקבלת נתונים. בדוק תקשורת")
                 })
+            }
+
+            // קבלת היסטורית משלוחים
+            function GetOrdersHistory() {
+                $.ajax({
+                    url: `${window.baseUrl}posApi/orders`,
+                    context: Text,
+                    timeout: 16000,
+                    data: { isHistory: 1 },
+                    headers: {
+                        "authorization": UserToken
+                    }
+                }).success(function (Response) {
+                    if (Response.status == 'error') {
+                        MySwal(Response.massege)
+                        return false;
+                    }
+                    
+                    var html = '';
+                    html += '<div style="padding: 0 10px 70px;">';
+                    html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">היסטוריה</div>';
+                    html += '<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">';
+                    html += '<input autocomplete="off" type="search" id="Filter_Search" oninput="Filter_Search()" placeholder="חיפוש לפי מס\' הזמנה" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
+                    html += '</div>';
+
+                    // טוגל בוטון לבחירת סוג התצוגה
+                    html += '<div style="display: flex; justify-content: center; align-items: center; margin: 10px 0;">';
+                    html += '<div style="background: #f0f0f0; border-radius: 25px; padding: 3px; display: inline-flex; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">';
+                    html += '<button id="viewByOrders" onclick="toggleShippingViewMode(\'orders\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: #666; background: transparent;">הזמנות</button>';
+                    html += '<button id="viewByProducts" onclick="toggleShippingViewMode(\'products\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: #666; background: transparent;">כמויות</button>';
+                    html += '<button id="viewByHistory" onclick="toggleShippingViewMode(\'history\')" style="padding: 8px 16px; border: none; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 0 2px; color: white; background: #009688;">היסטוריה</button>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    html += '<div id="OrdersList">';
+                    if (Response.data.length === 0) {
+                        html += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין רשומות היסטוריה</div>';
+                    } else {
+                        for (var i = 0; i < Response.data.length; i++) {
+                            var order = Response.data[i];
+                            // סגנון disabled - רקע אפור ושקיפות
+                            html += '<div class="order-row history-row" data-order-id="' + order.orderId + '" style="display: flex; flex-direction: column; text-align: right; position: relative; border-radius: 5px; margin: 7px auto; background: #f5f5f5; font-size: 15px; box-sizing: border-box; border: 2px solid #e0e0e0; overflow: hidden; min-height: 40px; opacity: 0.7; cursor: not-allowed;">';
+                            html += '<div style="display: flex; align-items: stretch; min-height: 40px;">';
+                            // חלק מיקום (collectionGroupOrder) - צד ימין
+                            html += '<div style="background: #9e9e9e; color: white; display: flex; align-items: stretch; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: auto; position: relative;">';
+                            html += '<span style="margin:auto 0;display:block;width:100%;text-align:center;font-size: 16px; font-weight: bold; padding: 0 2px;">' + (order.collectionGroupOrder || '') + '</span>';
+                            html += '</div>';
+                            // חלק עיקרי
+                            html += '<div style="flex:2; padding: 5px 8px; display: flex; flex-direction: column; justify-content: center; min-width:0;">';
+                            html += '<div style="font-size: 16px;font-weight: 600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color: #757575;">' + order.fullName + '</div>';
+                            html += '<div style="font-size: 14px;color: #999; margin-top: 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">הזמנה: ' + order.nbsOrderId + '</div>';
+                            // כתובת
+                            var address = order.street;
+                            if (order.houseNumber) address += ' ' + order.houseNumber;
+                            if (order.entrance) address += ', כניסה ' + order.entrance;
+                            if (order.floor) address += ', קומה ' + order.floor;
+                            if (order.apartment) address += ', דירה ' + order.apartment;
+                            html += '<div style="font-size: 14px;color: #999; margin-top: 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + address + '</div>';
+                            if (order.phone) {
+                                html += '<div style="font-size: 14px;color: #999; margin-top: 2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">טל: ' + order.phone + '</div>';
+                            }
+                            html += '</div>';
+                            html += '</div>'; // סגירת flex הראשי
+                            // חלק הערות בתחתית השורה
+                            var hasNotes = (order.note && order.note.trim() !== "") || (order.notes && Array.isArray(order.notes) && order.notes.length > 0);
+                            if (hasNotes) {
+                                html += '<div style="width:100%;border-top:1px solid #e0e0e0;margin-top:0px;padding-top:5px;display:flex;flex-wrap:wrap;gap:6px 8px;">';
+                                // הערה בודדת (string)
+                                if (order.note && order.note.trim() !== "") {
+                                    html += '<div style="display:inline-block;min-width:32px;max-width:100%;background:#bdbdbd;color:#fff;font-weight:bold;padding:5px 13px;border-radius:50px;font-size:13px;margin-bottom:2px;box-shadow:0 1px 2px #0001;white-space:normal;word-break:break-word;text-align:center;">' + order.note + '</div>';
+                                }
+                                // מערך הערות (notes)
+                                if (order.notes && Array.isArray(order.notes) && order.notes.length > 0) {
+                                    for (var n = 0; n < order.notes.length; n++) {
+                                        var noteStr = order.notes[n];
+                                        if (noteStr && noteStr.trim() !== "") {
+                                            html += '<div style="display:inline-block;min-width:32px;max-width:100%;background:#9e9e9e;color:#fff;font-weight:bold;padding:5px 13px;border-radius:50px;font-size:13px;margin-bottom:2px;box-shadow:0 1px 2px #0001;white-space:normal;word-break:break-word;text-align:center;">' + noteStr + '</div>';
+                                        }
+                                    }
+                                }
+                                html += '</div>';
+                            }
+                            html += '</div>';
+                        }
+                    }
+                    html += '</div>';
+                    html += '</div>';
+                    
+                    $("#TabContent3").html(html);
+                    Filter_Search();
+                    Top();
+                }).error(function () {
+                    MySwal("שגיאה בקבלת נתונים. בדוק תקשורת")
+                })
+            }
+
+            // אישור משלוח עבור type-2
+            function approveDelivery(deliveryId) {
+                swal({
+                    title: 'אישור משלוח',
+                    text: 'הכנס הערת ביצוע (אופציונלי):',
+                    type: 'input',
+                    showCancelButton: true,
+                    confirmButtonColor: '#4caf50',
+                    confirmButtonText: 'אשר',
+                    cancelButtonText: 'ביטול',
+                    closeOnConfirm: false,
+                    inputPlaceholder: 'לדוגמה: העביר 200'
+                }, function (inputValue) {
+                    if (inputValue === false) return false; // ביטול
+                    
+                    // אישור עם או בלי הערה
+                    var executionNote = inputValue || '';
+                    
+                    swal({
+                        title: 'מאשר משלוח...',
+                        text: '',
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+
+                    $.ajax({
+                        url: `${window.baseUrl}posApi/approveDelivery`,
+                        method: 'POST',
+                        contentType: 'application/json',
+                        headers: {
+                            "authorization": UserToken
+                        },
+                        data: JSON.stringify({ 
+                            deliveryId: deliveryId, 
+                            executionNote: executionNote 
+                        }),
+                        success: function (res) {
+                            if (res.status === 'ok') {
+                                swal({ 
+                                    title: 'המשלוח אושר בהצלחה', 
+                                    text: res.massege, 
+                                    type: 'success', 
+                                    timer: 1800, 
+                                    showConfirmButton: false 
+                                });
+                                // רענון הרשימה
+                                setTimeout(function () {
+                                    GetOrders();
+                                }, 1000);
+                            } else {
+                                swal({ 
+                                    title: 'שגיאה', 
+                                    text: res.massege || 'שגיאה באישור המשלוח', 
+                                    type: 'error', 
+                                    timer: 2500, 
+                                    showConfirmButton: false 
+                                });
+                            }
+                        },
+                        error: function () {
+                            swal({ 
+                                title: 'שגיאה', 
+                                text: 'שגיאה בשליחה לשרת', 
+                                type: 'error', 
+                                timer: 2500, 
+                                showConfirmButton: false 
+                            });
+                        }
+                    });
+                });
             }
 
             // עדכון UI של בחירה וכפתור אישור מרובה למשלוחים
@@ -4129,6 +4859,8 @@
                     GetOrders(); // רענון הנתונים עם הזמנות
                 } else if (mode === 'products') {
                     GetShippingProducts(); // רענון הנתונים עם מוצרי משלוח
+                } else if (mode === 'history') {
+                    GetOrdersHistory(); // רענון הנתונים עם היסטוריה
                 }
             }
 
@@ -4402,27 +5134,69 @@
 
 
         <div id="DivOrders" style="display: none;" class="Card">
-            <div onclick="history.go(0);"
-                style="border-radius: 2px; position: absolute; top: 2px; left: 2px; display: flex; justify-content: center; align-items: center; padding: 10px; background: #d9d9d9; font-weight: bold; color: #4a4a4a; cursor: pointer; height: 41px; box-sizing: border-box;">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </div>
+            <!-- Unified Navigation Bar -->
+            <div id="unifiedNav">
+                <div id="topBar">
+                    <!-- Right Actions (RTL): Hamburger Menu and Refresh -->
+                    <div id="rightActions">
+                        <div class="nav-btn" id="hamburgerMenu" onclick="toggleMenu()" title="תפריט">
+                            <i class="fa-solid fa-bars"></i>
+                        </div>
+                        <div class="nav-btn" onclick="ShowTab()" title="רענון">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </div>
+                    </div>
 
-            <div class="BatteryStatus" onclick="GetBattery()"
-                style="position: absolute; top: 2px; left: 42px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: rgb(74, 74, 74); cursor: pointer; height: 41px; box-sizing: border-box; border: 1px solid rgb(213, 213, 213); border-radius: 3px; padding: 5px; flex-direction: column-reverse;">
-            </div>
-            <div onclick="ShowTab()"
-                style="border-radius: 2px; position: absolute; top: 2px; right: 2px; display: flex; justify-content: center; align-items: center; padding: 10px; background: #d9d9d9; font-weight: bold; color: #4a4a4a; cursor: pointer; height: 41px; box-sizing: border-box;">
-                <i class="fa-solid fa-arrows-rotate"></i>
-            </div>
+                    <!-- Center: Screen Name and Employee Name -->
+                    <div id="centerInfo">
+                        <div id="screenName">בחר מסך</div>
+                        <div id="employeeName" class="UserName"></div>
+                    </div>
 
-            <div class="UserName"
-                style="height: 45px; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 20px; color: #646464; ">
+                    <!-- Left Actions (RTL): Messages and Exit -->
+                    <div id="leftActions">
+                        <div class="BatteryStatus nav-btn" onclick="GetBattery()" title="סוללה"></div>
+                        <div class="nav-btn" id="messagesBtn" onclick="ShowTab(4)" title="הודעות">
+                            <i class="fa-regular fa-envelope"></i>
+                            <span id="UnreadMessagesCount" style="position: absolute; top: 2px; right: 2px; background: #ff0000; color: white; border-radius: 50%; width: 14px; height: 14px; display: none; font-size: 10px; font-weight: bold; line-height: 14px; text-align: center;"></span>
+                        </div>
+                        <div class="nav-btn" onclick="history.go(0);" title="יציאה">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dropdown Menu -->
+                <div id="menuDropdown">
+                    <div class="menu-item" onclick="ShowTab(1);">
+                        <i class="fa-solid fa-box"></i>
+                        <span>הזמנות</span>
+                    </div>
+                    <div class="menu-item" onclick="ShowTab(2);">
+                        <i class="fa-solid fa-hand-holding"></i>
+                        <span>ליקוט</span>
+                    </div>
+                    <div class="menu-item" onclick="ShowTab(3);">
+                        <i class="fa-solid fa-truck"></i>
+                        <span>משלוחים</span>
+                    </div>
+                    <div class="menu-item" onclick="ShowTab(4);">
+                        <i class="fa-regular fa-envelope"></i>
+                        <span>הודעות</span>
+                    </div>
+                    <div class="menu-item" onclick="ShowTab(5);">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <span>ספירת מלאי</span>
+                    </div>
+                    <div class="menu-item" onclick="ShowTab(6);">
+                        <i class="fa-solid fa-tags"></i>
+                        <span>מדבקות מיקום</span>
+                    </div>
+                </div>
             </div>
-
-
-            <!-- <div style="height: 45px;"></div> -->
-            <div style="text-align: center; font-size: 22px; color: rgb(43 47 78); font-weight: 900; direction: rtl; border-top: 1px solid #d9d9d9;"
-                id="Tabs"></div>
+            <div id="TabContent0" style="display:none;">
+                <!-- Selection screen will be created dynamically -->
+            </div>
             <div id="TabContent1" style="display:none;">
                 <div style="padding: 0 10px 20px;">
                     <div style="text-align: center; padding: 50px; font-size: 36px; font-weight: bold; color: #009688;">
@@ -4438,12 +5212,7 @@
                     טוען רשימת פיזור</div>
             </div>
             <div id="TabContent3" style="display:none;">
-
-                <div style="display: flex; justify-content: center; align-items: center; padding: 0 10px 20px;">
-                    <input autocomplete="off" type="search" id="Filter_Search" oninput="Filter_Search()"
-                        placeholder="חיפוש הזמנה"
-                        style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">
-                </div>
+                <!-- Content is dynamically generated by GetOrders() function -->
 
 
 
@@ -4476,6 +5245,12 @@
 
                 </div>
 
+            </div>
+            <div id="TabContent5" style="display:none;">
+                <!-- Inventory count screen - placeholder -->
+            </div>
+            <div id="TabContent6" style="display:none;">
+                <!-- Location labels screen - placeholder -->
             </div>
         </div>
     </div>
