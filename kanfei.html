@@ -3729,13 +3729,9 @@
                         GetMessages();
                         break;
                     case 5:
-                        // ספירת מלאי - placeholder for now
+                        // עדכון מלאי
                         $("#TabContent5").show();
-                        var html5 = '<div style="padding: 20px; text-align: center;">';
-                        html5 += '<div style="font-size: 24px; font-weight: bold; color: #009688; margin-bottom: 20px;">ספירת מלאי</div>';
-                        html5 += '<div style="font-size: 16px; color: #666;">מסך זה בפיתוח</div>';
-                        html5 += '</div>';
-                        $("#TabContent5").html(html5);
+                        GetInventoryItems();
                         break;
                     case 6:
                         // מדבקות מיקום
@@ -4099,6 +4095,129 @@
             }
 
             function filterProducts(products, searchTerm) {
+                if (!searchTerm || searchTerm.trim() === '') {
+                    return products;
+                }
+                
+                searchTerm = searchTerm.toLowerCase();
+                return products.filter(function(product) {
+                    var name = (product.name || '').toLowerCase();
+                    var sku = (product.sku || '').toString().toLowerCase();
+                    var place = (product.productPlace || '').toString().toLowerCase();
+                    
+                    return name.includes(searchTerm) || sku.includes(searchTerm) || place.includes(searchTerm);
+                });
+            }
+
+            // Global variable for inventory data
+            var inventoryItemsData = [];
+
+            function GetInventoryItems() {
+                // Create the UI structure first
+                var titleHtml = '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">עדכון מלאי</div>';
+                
+                var searchHtml = '<div style="display: flex; justify-content: center; align-items: center; padding: 0 10px 20px;">';
+                searchHtml += '<input autocomplete="off" type="search" id="inventoryFilter_Search" oninput="filterInventoryItems()" placeholder="חיפוש לפי שם / מק\"ט / מיקום" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
+                searchHtml += '</div>';
+                
+                $("#TabContent5").html(titleHtml + searchHtml + '<div id="inventoryItemsList"></div>');
+                
+                // Fetch data from API
+                $.ajax({
+                    url: `${window.baseUrl}posApi/inventoryItems`,
+                    headers: {
+                        "authorization": UserToken
+                    },
+                    timeout: 60000,
+                    global: false,
+                }).success(function (Response) {
+                    if (Response.status === 'ok' && Response.data) {
+                        inventoryItemsData = Response.data;
+                        renderInventoryItems(inventoryItemsData);
+                    } else {
+                        MySwal(Response.massege || "שגיאה בקבלת נתונים");
+                    }
+                }).error(function () {
+                    MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
+                });
+            }
+
+            function renderInventoryItems(products) {
+                var html = '<div style="padding: 0 10px 80px 10px;">';
+                
+                if (products.length === 0) {
+                    html += '<p style="text-align:center;color:#888;padding:20px 0;">אין מוצרים להצגה</p>';
+                } else {
+                    products.forEach(function(product) {
+                        html += '<div class="inventory-item" data-id="' + product.id + '" style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+                        
+                        // Product info
+                        html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">';
+                        html += '<div style="flex: 1;">';
+                        html += '<div style="font-weight: bold; font-size: 16px; color: #333; margin-bottom: 4px;">' + (product.name || '') + '</div>';
+                        html += '<div style="font-size: 14px; color: #666;">';
+                        html += '<span style="margin-left: 15px;">מק"ט: ' + (product.sku || '') + '</span>';
+                        html += '<span>מיקום: ' + (product.productPlace || '') + '</span>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        
+                        // Input and button for quantity update
+                        html += '<div style="display: flex; gap: 10px; align-items: center; justify-content: flex-start;">';
+                        html += '<input type="number" id="qty_' + product.id + '" min="0" placeholder="כמות חדשה" style="border: 1px solid #ddd; border-radius: 6px; padding: 8px 12px; font-size: 14px; width: 120px; text-align: center;">';
+                        html += '<button onclick="updateInventoryQuantity(\'' + product.id + '\')" style="background: #009688; color: #fff; border: none; border-radius: 6px; padding: 8px 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s;">אישור</button>';
+                        html += '</div>';
+                        
+                        html += '</div>';
+                    });
+                }
+                
+                html += '</div>';
+                $("#inventoryItemsList").html(html);
+            }
+
+            function updateInventoryQuantity(productId) {
+                var newQuantity = $("#qty_" + productId).val();
+                
+                if (!newQuantity || newQuantity.trim() === '' || isNaN(newQuantity) || parseInt(newQuantity) < 0) {
+                    MySwal("נא להזין כמות תקינה");
+                    return;
+                }
+                
+                newQuantity = parseInt(newQuantity);
+                
+                $.ajax({
+                    url: `${window.baseUrl}posApi/updateInventory`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        "authorization": UserToken
+                    },
+                    data: JSON.stringify({
+                        productId: productId,
+                        newQuantity: newQuantity
+                    }),
+                    timeout: 60000,
+                }).success(function (Response) {
+                    if (Response.status === 'ok') {
+                        MySwal("הכמות עודכנה בהצלחה", undefined, "success");
+                        // Clear the input
+                        $("#qty_" + productId).val('');
+                    } else {
+                        MySwal(Response.message || Response.massege || "שגיאה בעדכון הכמות");
+                    }
+                }).error(function () {
+                    MySwal("שגיאה בעדכון הכמות. בדוק תקשורת");
+                });
+            }
+
+            function filterInventoryItems() {
+                var searchTerm = $("#inventoryFilter_Search").val();
+                var filteredProducts = filterInventoryProducts(inventoryItemsData, searchTerm);
+                renderInventoryItems(filteredProducts);
+            }
+
+            function filterInventoryProducts(products, searchTerm) {
                 if (!searchTerm || searchTerm.trim() === '') {
                     return products;
                 }
