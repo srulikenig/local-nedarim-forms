@@ -3738,13 +3738,9 @@
                         $("#TabContent5").html(html5);
                         break;
                     case 6:
-                        // מדבקות מיקום - placeholder for now
+                        // מדבקות מיקום
                         $("#TabContent6").show();
-                        var html6 = '<div style="padding: 20px; text-align: center;">';
-                        html6 += '<div style="font-size: 24px; font-weight: bold; color: #009688; margin-bottom: 20px;">מדבקות מיקום</div>';
-                        html6 += '<div style="font-size: 16px; color: #666;">מסך זה בפיתוח</div>';
-                        html6 += '</div>';
-                        $("#TabContent6").html(html6);
+                        GetLocationLabels();
                         break;
                 }
 
@@ -3944,6 +3940,176 @@
                     }
                 }).error(function () {
                     MySwal("שגיאה בשליחת ההודעה. בדוק תקשורת");
+                });
+            }
+
+            // Location Labels Screen Functions
+            var locationLabelsData = []; // Store all products
+            var selectedLabels = {}; // Store selected label counts: {id: {count: 4 or 8}}
+
+            function GetLocationLabels() {
+                // Create the UI structure first
+                var titleHtml = '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">מדבקות מיקום</div>';
+                
+                var searchHtml = '<div style="display: flex; justify-content: center; align-items: center; padding: 0 10px 20px;">';
+                searchHtml += '<input autocomplete="off" type="search" id="labelFilter_Search" oninput="filterLocationLabels()" placeholder="חיפוש לפי שם / מק\"ט / מיקום" style="border: 1px solid rgb(212, 212, 212);outline-color: rgb(217 217 217);padding: 6px;font-size: 16px;background: rgb(255, 255, 255);text-align: center;margin-left: 6px;width: 211px;border-radius: 5px;height: 35px;">';
+                searchHtml += '</div>';
+                
+                $("#TabContent6").html(titleHtml + searchHtml + '<div id="locationLabelsList"></div><div id="locationLabelsPrintButton"></div>');
+                
+                // Fetch data from API
+                $.ajax({
+                    url: `${window.baseUrl}posApi/locationLabels`,
+                    headers: {
+                        "authorization": UserToken
+                    },
+                    timeout: 60000,
+                    global: false,
+                }).success(function (Response) {
+                    if (Response.status === 'ok' && Response.data) {
+                        locationLabelsData = Response.data;
+                        selectedLabels = {}; // Reset selections
+                        renderLocationLabels(locationLabelsData);
+                    } else {
+                        MySwal(Response.massege || "שגיאה בקבלת נתונים");
+                    }
+                }).error(function () {
+                    MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
+                });
+            }
+
+            function renderLocationLabels(products) {
+                var html = '<div style="padding: 0 10px 100px 10px;">';
+                
+                if (products.length === 0) {
+                    html += '<p style="text-align:center;color:#888;padding:20px 0;">אין מוצרים להצגה</p>';
+                } else {
+                    products.forEach(function(product) {
+                        var isSelected = selectedLabels[product.id];
+                        var selectedCount = isSelected ? selectedLabels[product.id].count : 0;
+                        
+                        html += '<div class="location-label-item" data-id="' + product.id + '" style="background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+                        
+                        // Product info
+                        html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">';
+                        html += '<div style="flex: 1;">';
+                        html += '<div style="font-weight: bold; font-size: 16px; color: #333; margin-bottom: 4px;">' + (product.name || '') + '</div>';
+                        html += '<div style="font-size: 14px; color: #666;">';
+                        html += '<span style="margin-left: 15px;">מק"ט: ' + (product.sku || '') + '</span>';
+                        html += '<span>מיקום: ' + (product.productPlace || '') + '</span>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                        
+                        // Buttons for label selection
+                        html += '<div style="display: flex; gap: 10px; justify-content: flex-start;">';
+                        
+                        // 4 labels button
+                        var btn4Style = (selectedCount === 4) ? 'background: #009688; color: #fff;' : 'background: #f5f5f5; color: #666;';
+                        html += '<button onclick="selectLabelCount(\'' + product.id + '\', 4)" style="' + btn4Style + ' border: 1px solid #ddd; border-radius: 6px; padding: 8px 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s;">4 מדבקות</button>';
+                        
+                        // 8 labels button
+                        var btn8Style = (selectedCount === 8) ? 'background: #009688; color: #fff;' : 'background: #f5f5f5; color: #666;';
+                        html += '<button onclick="selectLabelCount(\'' + product.id + '\', 8)" style="' + btn8Style + ' border: 1px solid #ddd; border-radius: 6px; padding: 8px 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s;">8 מדבקות</button>';
+                        
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                }
+                
+                html += '</div>';
+                $("#locationLabelsList").html(html);
+                
+                // Update print button
+                updatePrintButton();
+            }
+
+            function selectLabelCount(productId, count) {
+                if (selectedLabels[productId] && selectedLabels[productId].count === count) {
+                    // Deselect if clicking the same button again
+                    delete selectedLabels[productId];
+                } else {
+                    selectedLabels[productId] = { count: count };
+                }
+                
+                // Re-render to update button styles
+                var filteredProducts = filterProducts(locationLabelsData, $("#labelFilter_Search").val());
+                renderLocationLabels(filteredProducts);
+            }
+
+            function updatePrintButton() {
+                var selectedCount = Object.keys(selectedLabels).length;
+                var buttonHtml = '';
+                
+                if (selectedCount > 0) {
+                    buttonHtml = '<div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 100;">';
+                    buttonHtml += '<button onclick="printLocationLabels()" style="background: #009688; color: #fff; border: none; border-radius: 25px; padding: 15px 40px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: all 0.3s;">';
+                    buttonHtml += 'הדפס (' + selectedCount + ')';
+                    buttonHtml += '</button>';
+                    buttonHtml += '</div>';
+                }
+                
+                $("#locationLabelsPrintButton").html(buttonHtml);
+            }
+
+            function printLocationLabels() {
+                if (Object.keys(selectedLabels).length === 0) {
+                    MySwal("לא נבחרו מוצרים להדפסה");
+                    return;
+                }
+                
+                // Prepare data for API
+                var printData = [];
+                for (var id in selectedLabels) {
+                    printData.push({
+                        id: id,
+                        labelCount: selectedLabels[id].count
+                    });
+                }
+                
+                $.ajax({
+                    url: `${window.baseUrl}posApi/printLocationLabels`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        "authorization": UserToken
+                    },
+                    data: JSON.stringify({
+                        labels: printData
+                    }),
+                    timeout: 60000,
+                }).success(function (Response) {
+                    if (Response.status === 'ok') {
+                        MySwal("המדבקות נשלחו להדפסה בהצלחה", undefined, "success");
+                        // Reset selections and refresh
+                        selectedLabels = {};
+                        GetLocationLabels();
+                    } else {
+                        MySwal(Response.massege || "שגיאה בהדפסת המדבקות");
+                    }
+                }).error(function () {
+                    MySwal("שגיאה בהדפסת המדבקות. בדוק תקשורת");
+                });
+            }
+
+            function filterLocationLabels() {
+                var searchTerm = $("#labelFilter_Search").val();
+                var filteredProducts = filterProducts(locationLabelsData, searchTerm);
+                renderLocationLabels(filteredProducts);
+            }
+
+            function filterProducts(products, searchTerm) {
+                if (!searchTerm || searchTerm.trim() === '') {
+                    return products;
+                }
+                
+                searchTerm = searchTerm.toLowerCase();
+                return products.filter(function(product) {
+                    var name = (product.name || '').toLowerCase();
+                    var sku = (product.sku || '').toString().toLowerCase();
+                    var place = (product.productPlace || '').toString().toLowerCase();
+                    
+                    return name.includes(searchTerm) || sku.includes(searchTerm) || place.includes(searchTerm);
                 });
             }
 
