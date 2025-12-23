@@ -205,52 +205,207 @@
             }
 
             var userId = window.CurrentUserId || '';
+            
+            // קבלת כל ההזמנות שצריך לסגור
+            var ordersToClose = {};
+            
+            // אם יש orderId ספציפי - רק הזמנה אחת
+            if (orderId) {
+                ordersToClose[orderId] = { orderId: orderId, lastName: '' };
+            } else {
+                // אין orderId - צריך לקחת מהמוצרים שחזרו מהאנדפוינט
+                var allProducts = (window.CurrentProductsInProgress || []).concat(window.CurrentProductsCompleted || []);
+                
+                if (allProducts.length === 0) {
+                    swal({ title: 'שגיאה', text: 'לא נמצאו הזמנות לסגירה', type: 'error', timer: 2000, showConfirmButton: false });
+                    return;
+                }
+                
+                // קיבוץ לפי orderId
+                for (var i = 0; i < allProducts.length; i++) {
+                    var prod = allProducts[i];
+                    if (prod.orderId && !ordersToClose[prod.orderId]) {
+                        ordersToClose[prod.orderId] = {
+                            orderId: prod.orderId,
+                            lastName: prod.lastName || ''
+                        };
+                    }
+                }
+            }
+            
+            var orderIds = Object.keys(ordersToClose);
+            
+            // אם אין הזמנות
+            if (orderIds.length === 0) {
+                swal({ title: 'שגיאה', text: 'לא נמצאו הזמנות לסגירה', type: 'error', timer: 2000, showConfirmButton: false });
+                return;
+            }
+            
+            // אם יש רק הזמנה אחת - פופאפ פשוט
+            if (orderIds.length === 1) {
+                var singleOrderId = orderIds[0];
+                var orderName = ordersToClose[singleOrderId].lastName;
+                
+                swal({
+                    title: 'סגירת הזמנה',
+                    text: (orderName ? 'הזמנה: ' + orderName + '\n\n' : '') + 'כמה ארגזים יש להזמנה?',
+                    type: 'input',
+                    inputPlaceholder: 'הזן מספר ארגזים',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ff5722',
+                    confirmButtonText: 'אישור',
+                    cancelButtonText: 'ביטול',
+                    closeOnConfirm: false,
+                    inputValue: '1'
+                }, function (inputValue) {
+                    // בדיקה אם המשתמש ביטל
+                    if (inputValue === false) return;
 
-            // שאלת אישור לפני סגירת ההזמנה
+                    // בדיקת תקינות הקלט
+                    var boxesCount = inputValue ? inputValue.trim() : '';
+                    if (!boxesCount || isNaN(boxesCount) || parseInt(boxesCount) <= 0) {
+                        swal.showInputError('יש להזין מספר תקין של ארגזים');
+                        return false;
+                    }
+
+                    // הכנת המערך לשליחה
+                    var ordersData = [{
+                        orderId: singleOrderId,
+                        boxes: parseInt(boxesCount)
+                    }];
+                    
+                    sendCloseOrderRequest(ordersData);
+                });
+            } else {
+                // יש מספר הזמנות - צריך פופאפ מותאם אישית
+                showMultipleOrdersBoxesPopup(ordersToClose);
+            }
+        }
+        
+        // פונקציה להצגת פופאפ למספר הזמנות
+        function showMultipleOrdersBoxesPopup(ordersToClose) {
+            var orderIds = Object.keys(ordersToClose);
+            
+            // יצירת overlay
+            var overlay = $('<div id="customBoxesOverlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; display:flex; align-items:center; justify-content:center;"></div>');
+            
+            // בניית תוכן הפופאפ
+            var popupHtml = '<div style="background:white; border-radius:10px; padding:20px; max-width:500px; width:90%; max-height:80vh; overflow-y:auto; direction:rtl;">';
+            popupHtml += '<div style="font-size:20px; font-weight:bold; color:#333; margin-bottom:15px; text-align:center;">סגירת ' + orderIds.length + ' הזמנות</div>';
+            popupHtml += '<div style="margin-bottom:20px; font-size:16px; font-weight:bold; color:#666;">הזן כמות ארגזים לכל הזמנה:</div>';
+            
+            for (var i = 0; i < orderIds.length; i++) {
+                var orderId = orderIds[i];
+                var orderInfo = ordersToClose[orderId];
+                var displayName = orderInfo.lastName || orderId;
+                
+                popupHtml += '<div style="margin-bottom:15px; padding:12px; background:#f5f5f5; border-radius:5px;">';
+                popupHtml += '<div style="font-weight:bold; margin-bottom:8px; color:#333; font-size:15px;">' + displayName + '</div>';
+                popupHtml += '<input type="number" id="boxes_' + orderId + '" class="boxes-input" min="1" value="1" style="width:100%; padding:10px; border:2px solid #ddd; border-radius:5px; font-size:18px; box-sizing:border-box; text-align:center;" placeholder="מספר ארגזים">';
+                popupHtml += '</div>';
+            }
+            
+            // כפתורים
+            popupHtml += '<div style="display:flex; gap:10px; margin-top:20px;">';
+            popupHtml += '<button id="cancelBoxesBtn" style="flex:1; padding:12px; background:#9e9e9e; color:white; border:none; border-radius:5px; font-size:16px; font-weight:bold; cursor:pointer;">ביטול</button>';
+            popupHtml += '<button id="confirmBoxesBtn" style="flex:1; padding:12px; background:#ff5722; color:white; border:none; border-radius:5px; font-size:16px; font-weight:bold; cursor:pointer;">סגור הזמנות</button>';
+            popupHtml += '</div>';
+            popupHtml += '</div>';
+            
+            overlay.html(popupHtml);
+            $('body').append(overlay);
+            
+            // התמקדות בשדה הראשון
+            setTimeout(function() {
+                $('#boxes_' + orderIds[0]).focus();
+            }, 100);
+            
+            // טיפול בלחיצה על ביטול
+            $('#cancelBoxesBtn').click(function() {
+                $('#customBoxesOverlay').remove();
+            });
+            
+            // טיפול בלחיצה על אישור
+            $('#confirmBoxesBtn').click(function() {
+                // איסוף הנתונים מהשדות
+                var ordersData = [];
+                var hasError = false;
+                var errorMsg = '';
+                
+                for (var i = 0; i < orderIds.length; i++) {
+                    var orderId = orderIds[i];
+                    var inputValue = $('#boxes_' + orderId).val();
+                    var boxesCount = parseInt(inputValue);
+                    
+                    if (!inputValue || isNaN(boxesCount) || boxesCount <= 0) {
+                        hasError = true;
+                        errorMsg = 'יש להזין מספר תקין של ארגזים לכל ההזמנות';
+                        $('#boxes_' + orderId).css('border-color', '#f44336');
+                    } else {
+                        $('#boxes_' + orderId).css('border-color', '#ddd');
+                        ordersData.push({
+                            orderId: orderId,
+                            boxes: boxesCount
+                        });
+                    }
+                }
+                
+                if (hasError) {
+                    swal({ title: 'שגיאה', text: errorMsg, type: 'error', timer: 2000, showConfirmButton: false });
+                    return;
+                }
+                
+                // הסרת הפופאפ ושליחה לשרת
+                $('#customBoxesOverlay').remove();
+                sendCloseOrderRequest(ordersData);
+            });
+            
+            // סגירה בלחיצה על הרקע
+            overlay.click(function(e) {
+                if (e.target === this) {
+                    $(this).remove();
+                }
+            });
+        }
+        
+        // פונקציה לשליחת בקשת סגירה לשרת
+        function sendCloseOrderRequest(ordersData) {
             swal({
-                title: 'אישור סגירת הזמנה',
-                text: 'האם אתה בטוח שברצונך לסגור את ההזמנה?',
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ff5722',
-                confirmButtonText: 'אישור',
-                cancelButtonText: 'ביטול',
-                closeOnConfirm: false
-            }, function (isConfirm) {
-                if (isConfirm) {
-                    // אם אישר - מתחילים את תהליך הסגירה
-                    swal({
-                        title: 'סוגר הזמנה...',
-                        text: '',
-                        showConfirmButton: false,
-                        allowOutsideClick: false
-                    });
+                title: 'סוגר הזמנות...',
+                text: '',
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
 
-                    $.ajax({
-                        url: `${window.baseUrl}posApi/closeOrder`,
-                        method: 'POST',
-                        contentType: 'application/json',
-                        headers: {
-                            "authorization": UserToken
-                        },
-                        data: JSON.stringify({ orderId: orderId }),
-                        success: function (res) {
-                            console.log('***', res);
+            $.ajax({
+                url: `${window.baseUrl}posApi/closeOrder`,
+                method: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    "authorization": UserToken
+                },
+                data: JSON.stringify({ orders: ordersData }),
+                success: function (res) {
+                    console.log('***', res);
 
-                            if (res.status === 'ok') {
-                                swal({ title: 'ההזמנה נסגרה', text: res.massege, type: 'success', timer: 1800, showConfirmButton: false });
-                                // רענון הרשימה
-                                setTimeout(function () {
-                                    ShowTab(1);
-                                }, 1000);
-                            } else {
-                                swal({ title: 'שגיאה', text: res.massege || 'שגיאה בסגירת ההזמנה', type: 'error', timer: 2500, showConfirmButton: false });
-                            }
-                        },
-                        error: function () {
-                            swal({ title: 'שגיאה', text: 'שגיאה בשליחה לשרת', type: 'error', timer: 2500, showConfirmButton: false });
-                        }
-                    });
+                    if (res.status === 'ok') {
+                        swal({ 
+                            title: ordersData.length > 1 ? 'ההזמנות נסגרו' : 'ההזמנה נסגרה', 
+                            text: res.massege, 
+                            type: 'success', 
+                            timer: 1800, 
+                            showConfirmButton: false 
+                        });
+                        // רענון הרשימה
+                        setTimeout(function () {
+                            ShowTab(1);
+                        }, 1000);
+                    } else {
+                        swal({ title: 'שגיאה', text: res.massege || 'שגיאה בסגירת ההזמנה', type: 'error', timer: 2500, showConfirmButton: false });
+                    }
+                },
+                error: function () {
+                    swal({ title: 'שגיאה', text: 'שגיאה בשליחה לשרת', type: 'error', timer: 2500, showConfirmButton: false });
                 }
             });
         }
@@ -4527,10 +4682,24 @@
                             var isType2 = order.type === 2;
                             html += '<div class="order-row' + (isType2 ? ' type-2-delivery' : '') + '" data-order-id="' + order.orderId + '" data-order-type="' + (order.type || 1) + '" style="display: flex; flex-direction: column; text-align: right; position: relative; border-radius: 5px; margin: 7px auto; background: #fffdfa; font-size: 15px; box-sizing: border-box; border: 2px solid #e7e7e7; overflow: hidden; min-height: 40px; transition: background 0.2s, border 0.2s;">';
                             html += '<div style="display: flex; align-items: stretch; min-height: 40px;">';
-                            // חלק מיקום (collectionGroupOrder) - צד ימין כמו בטאב 1
-                            html += '<div style="background: #1976d2; color: white; display: flex; align-items: stretch; justify-content: center; min-width: 40px; font-weight: bold; font-size: 16px; height: auto; position: relative;">';
-                            html += '<span style="margin:auto 0;display:block;width:100%;text-align:center;font-size: 16px; font-weight: bold; padding: 0 2px;">' + (order.collectionGroupOrder || '') + '</span>';
+                            // חלק מיקום וארגזים - צד ימין
+                            html += '<div style="display: flex; flex-direction: column; min-width: 40px; background: #1976d2;">';
+                            
+                            // חלק עליון - מספר מיקום
+                            html += '<div style="flex: 1; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; padding: 2px;">';
+                            html += '<span style="font-size: 16px; font-weight: bold;">' + (order.collectionGroupOrder || '') + '</span>';
                             html += '</div>';
+                                                        
+                            // חלק תחתון - כמות ארגזים (אם קיים)
+                            if (order.boxes && order.boxes > 0) {
+                                html += '<div style="flex: 1; background: #ff9800; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; border-top: 1px solid rgba(255,255,255,0.3); padding: 2px;">';
+                                html += '<span style="font-size: 18px; line-height: 1;">' + order.boxes + '</span>';
+                                html += '<span style="font-size: 9px; opacity: 0.9;">ארגז</span>';
+                                html += '</div>';
+                            }
+                            
+                            html += '</div>';
+                            
                             // חלק עיקרי
                             html += '<div style="flex:2; padding: 5px 8px; display: flex; flex-direction: column; justify-content: center; min-width:0;">';
                             html += '<div style="font-size: 16px;font-weight: 600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + order.fullName + '</div>';
