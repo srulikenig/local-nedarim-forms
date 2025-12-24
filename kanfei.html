@@ -256,7 +256,7 @@
                     confirmButtonText: 'אישור',
                     cancelButtonText: 'ביטול',
                     closeOnConfirm: false,
-                    inputValue: '1'
+                    inputValue: ''
                 }, function (inputValue) {
                     // בדיקה אם המשתמש ביטל
                     if (inputValue === false) return;
@@ -301,7 +301,7 @@
                 
                 popupHtml += '<div style="margin-bottom:15px; padding:12px; background:#f5f5f5; border-radius:5px;">';
                 popupHtml += '<div style="font-weight:bold; margin-bottom:8px; color:#333; font-size:15px;">' + displayName + '</div>';
-                popupHtml += '<input type="number" id="boxes_' + orderId + '" class="boxes-input" min="1" value="1" style="width:100%; padding:10px; border:2px solid #ddd; border-radius:5px; font-size:18px; box-sizing:border-box; text-align:center;" placeholder="מספר ארגזים">';
+                popupHtml += '<input type="number" id="boxes_' + orderId + '" class="boxes-input" min="1" value="" style="width:100%; padding:10px; border:2px solid #ddd; border-radius:5px; font-size:18px; box-sizing:border-box; text-align:center;" placeholder="מספר ארגזים">';
                 popupHtml += '</div>';
             }
             
