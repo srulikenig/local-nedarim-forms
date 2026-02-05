@@ -627,6 +627,8 @@
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "Type": "Koteret", "Text": "פרטי מוסד" }
+                
+                , { "Type": "Div", "ElementId": "modiinIllitNotice", "Text": "<div style='background-color: #d4edda; border: 2px solid #28a745; color: #155724; padding: 15px; margin: 10px 20px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: bold; display: none;'>✓ לתושבי מודיעין עילית אין חובה לעדכן שיוך למוסדות או קהילה.</div>" }
                 , { "ElementId": "studiesInKollels", "fieldName": "לומד בכוללים שע\"י מוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
                 , { "ElementId": "kollelInstitutionBranchId", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field16", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
                 , {
@@ -2629,8 +2631,16 @@
             var isBogerYGChecked = $("#isAtarashYeshivaGraduate").is(':checked');
             var isChildInAteretChecked = $("#hasChildrenInAtarashInstitutions").is(':checked');
             var isInTzevetChecked = $("#isAtarashYeshivaStaff").is(':checked');
+           
+            var currentCity = $("#cityId").val() || '';
+            var isModiinIllit = currentCity.trim() === 'מודיעין עילית';
 
-            // בדיקה שלפחות אחד מהם מסומן
+            // אם זה תושב מודיעין עילית, הוא לא חייב לסמן כלום
+            if (isModiinIllit) {
+                return { valid: true };
+            }
+
+            // בדיקה שלפחות אחד מהם מסומן (רק למי שלא מודיעין עילית)
             if (!isAvrechKollelChecked && !isBogerYGChecked && !isChildInAteretChecked && !isInTzevetChecked) {
                 return {
                     valid: false,
@@ -2707,6 +2717,9 @@
             
             <!-- הודעה על אפשרות רישום באתר -->
             <div id="WebsiteInfoMessage" style="display: none; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 2px solid #2196f3; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);">
+                <div style="display: inline-block; background-color: #2196f3; color: white; padding: 8px 16px; border-radius: 20px; margin-bottom: 12px; font-size: 14px; font-weight: bold;">
+                    💡 מידע חשוב
+                </div>
                 <div style="color: #1565c0; font-size: 16px; font-weight: bold; margin-bottom: 8px; line-height: 1.5;">
                     לידיעתכם ניתן לבצע רישום ועדכון פרטים
                     <br>
@@ -3842,6 +3855,16 @@
             });
         }
 
+
+            // מאזין לשינוי בעיר להצגת הודעה לתושבי מודיעין עילית
+            $("#cityId").on('change input', function() {
+                var currentCity = $(this).val() || '';
+                if (currentCity.trim() === 'מודיעין עילית') {
+                    $("#modiinIllitNotice").show();
+                } else {
+                    $("#modiinIllitNotice").hide();
+                }
+            });
         // פונקציה להגדרת שדות תלויים
         function setupConditionalFields() {
             // הסתרת שדות תלויים בתחילה
@@ -3852,6 +3875,16 @@
             $("#childrenContainer").hide();
             $("#atarashStaffHusbandInstitutionBranchIdDiv").hide();
             $("#atarashStaffWifeInstitutionBranchIdDiv").hide();
+
+            // מאזין לשינוי בעיר להצגת הודעה לתושבי מודיעין עילית
+            $("#cityId").on('change input', function() {
+                var currentCity = $(this).val() || '';
+                if (currentCity.trim() === 'מודיעין עילית') {
+                    $("#modiinIllitNotice").show();
+                } else {
+                    $("#modiinIllitNotice").hide();
+                }
+            });
 
             // הוספת מאזינים לצ'קבוקסים
             $("#studiesInKollels").change(function () {
@@ -3930,6 +3963,12 @@
 
         // פונקציה להפעלת טריגרים של שדות תלויים אחרי טעינת נתונים
         function triggerConditionalFieldsAfterDataLoad() {
+            // בדיקה והצגת הודעה לתושבי מודיעין עילית
+            var currentCity = $("#cityId").val() || '';
+            if (currentCity.trim() === 'מודיעין עילית') {
+                $("#modiinIllitNotice").show();
+            }
+
             // בדיקה והפעלת טריגרים לצ'קבוקסים שמסומנים
             if ($("#studiesInKollels").is(':checked')) {
                 $("#kollelInstitutionBranchIdDiv").show();
