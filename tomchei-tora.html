@@ -615,13 +615,14 @@
                 , { "ElementId": "cityId", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field11", "Br": false, "Send": true }
                 , { "ElementId": "streetId", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": true, "DbName": "Field12", "Br": false, "Send": true }
                 , { "ElementId": "neighborhoodId", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": true, "DbName": "Field13", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
-                , { "ElementId": "buildingNumber", "MaxLength": 10, "Width": 20, "fieldName": "מספר בניין", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
+                , { "ElementId": "buildingNumber", "MaxLength": 10, "Width": 20, "fieldName": "מספר בניין", "Type": "Tel", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
                 , { "ElementId": "entrance", "MaxLength": 10, "Width": 20, "fieldName": "כניסה", "Type": "Select", "Mandatory": false, "DbName": "Field29", "Br": false, "Send": true, "SelectVal": "בחר כניסה,א,ב,ג,ד,ה" }
                 , { "Type": "Div", "ElementId": "distributionPointNote", "Text": "<div style='background-color: #f1f5f9; border: 1px solid #e2e8f0; color: #475569; padding: 10px; margin: 10px 20px; border-radius: 6px; text-align: center; font-size: 12px; width: 90%;'>בפתיחת המערכת תוכלו לעדכן נקודת חלוקה.</div>" }
 
                 , { "Type": "Koteret", "Text": "פרטי ילדים" }
                 , { "ElementId": "childrenAtHome", "MaxLength": 2, "Width": 25, "fieldName": "ילדים בבית", "Type": "Tel", "Mandatory": false, "DbName": "Field24", "Br": false, "Send": true }
                 , { "ElementId": "childrenMarried", "MaxLength": 2, "Width": 25, "fieldName": "ילדים נשואים", "Type": "Tel", "Mandatory": false, "DbName": "Field25", "Br": false, "Send": true }
+                , { "ElementId": "totalChildren", "MaxLength": 3, "Width": 25, "fieldName": "סה״כ ילדים", "Type": "Tel", "Mandatory": false, "DbName": "Field26", "Br": false, "Send": true, "ReadOnly": true }
 
 
                 , { "Type": "Margin", "Height": "25" }
@@ -697,7 +698,6 @@
 
         }
 
-        // Base URL for API endpoints (change here only)
         var BASE_HOST_URL = "https://t-api.srulik.me";
         var BASE_API_URL = BASE_HOST_URL + "/nedarim";
 
@@ -1007,6 +1007,19 @@
                 var value = $(this).val().replace(/[^0-9]/g, '');
                 $(this).val(value);
                 lookupCommunityName(value);
+            });
+
+            // חישוב אוטומטי של סה"כ ילדים
+            function calculateTotalChildren() {
+                var childrenAtHome = parseInt($('#childrenAtHome').val()) || 0;
+                var childrenMarried = parseInt($('#childrenMarried').val()) || 0;
+                var total = childrenAtHome + childrenMarried;
+                $('#totalChildren').val(total);
+            }
+
+            // הוספת מאזיני אירועים לחישוב הסך הכל
+            $(document).on('input', '#childrenAtHome, #childrenMarried', function() {
+                calculateTotalChildren();
             });
         });
 
@@ -2171,6 +2184,14 @@
             else if (JsonElement.Type == "Text" || JsonElement.Type == "Tel") {
                 var OnInput = "";
                 var inputType = JsonElement.Type;
+                var readOnlyAttr = "";
+                var readOnlyStyle = "";
+
+                // תמיכה בשדות ReadOnly
+                if (JsonElement.ReadOnly === true) {
+                    readOnlyAttr = 'readonly="readonly"';
+                    readOnlyStyle = 'background-color: #f0f0f0; cursor: not-allowed;';
+                }
 
                 if (JsonElement.ElementId == "TizkoretTime") {
                     inputType = "time";
@@ -2183,7 +2204,7 @@
                     }
                 }
 
-                elementHtml = '<div style="width:' + (JsonElement.Width || 40) + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:' + marginTop + ';margin-right:' + marginRight + ';">' + Lbl + '<input class="TextBox" dir="' + dir + '" autocomplete="off" type="' + inputType + '" style="width:90%" maxlength="' + (JsonElement.MaxLength || 50) + '" id="' + elementId + '" onfocus="ScrollUp(this)" ' + OnInput + '/></div>';
+                elementHtml = '<div style="width:' + (JsonElement.Width || 40) + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:' + marginTop + ';margin-right:' + marginRight + ';">' + Lbl + '<input class="TextBox" dir="' + dir + '" autocomplete="off" type="' + inputType + '" style="width:90%;' + readOnlyStyle + '" maxlength="' + (JsonElement.MaxLength || 50) + '" id="' + elementId + '" onfocus="ScrollUp(this)" ' + OnInput + ' ' + readOnlyAttr + '/></div>';
             }
             else if (JsonElement.Type == "Radio") {
                 var Br = "";
@@ -2775,11 +2796,11 @@
                     זקוקים לעזרה?
                 </div>
                 <p style="margin: 10px 0; color: #2c3e50; font-size: 16px; line-height: 1.5; font-weight: 500;">
-                    לכל בעיה ברישום "בלבד" ניתן לפנות למייל
-                    <span
-                        style="color: #4a90e2; font-weight: bold; text-decoration: underline;">ttnp9686@gmail.com</span>
+                    לכל בעיה ניתן לפנות:
                     <br />
-                    או בהודעה לגבאי במערכת נדרים פלוס
+                    מייל: <span style="color: #4a90e2; font-weight: bold; text-decoration: underline;">tomchei@tomcheitora.org.il</span>
+                    <br />
+                    טלפון: <span style="color: #4a90e2; font-weight: bold;">073-8881871</span>
                 </p>
 
             </div>
