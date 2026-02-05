@@ -627,8 +627,8 @@
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "Type": "Koteret", "Text": "פרטי מוסד" }
-                
-                , { "Type": "Div", "ElementId": "modiinIllitNotice", "Text": "<div style='background-color: #d4edda; border: 2px solid #28a745; color: #155724; padding: 15px; margin: 10px 20px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: bold; display: none;'>✓ לתושבי מודיעין עילית אין חובה לעדכן שיוך למוסדות או קהילה.</div>" }
+                , { "Type": "Div", "ElementId": "modiinIllitNotice", "Text": "<div style='background-color: #d4edda; border: 2px solid #28a745; color: #155724; padding: 15px; margin: 10px 20px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: bold;'>✓ לתושבי מודיעין עילית אין חובה לעדכן שיוך למוסדות או קהילה.</div>" }
+
                 , { "ElementId": "studiesInKollels", "fieldName": "לומד בכוללים שע\"י מוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
                 , { "ElementId": "kollelInstitutionBranchId", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field16", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
                 , {
@@ -698,7 +698,7 @@
         }
 
         // Base URL for API endpoints (change here only)
-        var BASE_HOST_URL = "https://t-api.srulik.me";
+        var BASE_HOST_URL = "http://localhost:3060";
         var BASE_API_URL = BASE_HOST_URL + "/nedarim";
 
 
@@ -3855,16 +3855,6 @@
             });
         }
 
-
-            // מאזין לשינוי בעיר להצגת הודעה לתושבי מודיעין עילית
-            $("#cityId").on('change input', function() {
-                var currentCity = $(this).val() || '';
-                if (currentCity.trim() === 'מודיעין עילית') {
-                    $("#modiinIllitNotice").show();
-                } else {
-                    $("#modiinIllitNotice").hide();
-                }
-            });
         // פונקציה להגדרת שדות תלויים
         function setupConditionalFields() {
             // הסתרת שדות תלויים בתחילה
@@ -3875,16 +3865,6 @@
             $("#childrenContainer").hide();
             $("#atarashStaffHusbandInstitutionBranchIdDiv").hide();
             $("#atarashStaffWifeInstitutionBranchIdDiv").hide();
-
-            // מאזין לשינוי בעיר להצגת הודעה לתושבי מודיעין עילית
-            $("#cityId").on('change input', function() {
-                var currentCity = $(this).val() || '';
-                if (currentCity.trim() === 'מודיעין עילית') {
-                    $("#modiinIllitNotice").show();
-                } else {
-                    $("#modiinIllitNotice").hide();
-                }
-            });
 
             // הוספת מאזינים לצ'קבוקסים
             $("#studiesInKollels").change(function () {
@@ -4074,6 +4054,13 @@
                     var selectedCity = $cityField.val().trim();
 
                     console.log("City changed to:", selectedCity);
+
+                    // בדיקה והצגת הודעה לתושבי מודיעין עילית
+                    if (selectedCity === 'מודיעין עילית') {
+                        $("#modiinIllitNotice").show();
+                    } else {
+                        $("#modiinIllitNotice").hide();
+                    }
 
                     // בדיקה אם יש אופציות שכונות לעיר הנבחרת
                     if (neighborhoodOptions[selectedCity] && neighborhoodOptions[selectedCity].length > 0) {
