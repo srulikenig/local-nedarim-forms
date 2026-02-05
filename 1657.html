@@ -462,6 +462,56 @@
                 , { "ElementId": "CityChulEm", "MaxLength": 50, "Width": 40, "fieldName": "עיר | חו\"ל", "fieldNameShow": "עיר", "Type": "Text", "Mandatory": true, "Br": false }
                 , { "ElementId": "AddressChulEm", "MaxLength": 50, "Width": 90, "fieldName": "כתובת | חו\"ל", "fieldNameShow": "כתובת", "Type": "Text", "Mandatory": true, "Br": false }
                 , { "Type": "DivClose" }
+                
+                // סעיף מעוניין בהצעות עבודה
+                , { "Type": "Koteret", "Text": "הצעות עבודה" }
+                , { "Type": "SubKoteret2", "Text": "שימו לב, כדי שנוכל להתאים עבודות, נא למלא את הפרטים באופן מדויק.<br/>כלל הבקשות לעבודה נמחקות אחת לחצי שנה (בר\"ח תמוז ובר\"ח שבט).<br/>אם עדיין רלוונטי – יש למלא שוב." }
+                , { "ElementId": "IsLookingForJob", "fieldName": "מעוניין בהצעות עבודה", "Type": "CheckBox", "Mandatory": false, "Br": true, "DbName": "Field82" }
+                
+                , { "Type": "DivOpen", "ElementId": "DivJobSearch", "Text": "", "Style": "display:none" }
+                , { 
+                    "ElementId": "JobType", "MaxLength": 50, "Width": 90, "fieldName": "סוג העבודה המבוקשת", "Type": "Radio", "Mandatory": true, "DbName": "Field83", "Br": true, "RadioBt": [
+                        { "Text": "עבודות מזדמנות לתקורות" }
+                        , { "Text": "עבודות מזדמנות כעצמאי" }
+                        , { "Text": "עבודה קבועה – מלאה / חלקית" }
+                    ]
+                }
+                
+                // עבודות מזדמנות (שכיר)
+                , { "Type": "DivOpen", "ElementId": "DivJobTemp", "Text": "", "Style": "display:none" }
+                , { "ElementId": "PrimaryOccupationTemp", "MaxLength": 100, "Width": 90, "fieldName": "תחום עיסוק", "Type": "Text", "Mandatory": true, "DbName": "Field84", "Br": true }
+                , { "Type": "DivClose" }
+                
+                // עבודות מזדמנות (עצמאי)
+                , { "Type": "DivOpen", "ElementId": "DivJobFreelance", "Text": "", "Style": "display:none" }
+                , { "ElementId": "PrimaryOccupationFreelance", "MaxLength": 100, "Width": 90, "fieldName": "תחום עיסוק", "Type": "Text", "Mandatory": true, "DbName": "Field85", "Br": false }
+                , { "ElementId": "YearsOfExperienceFreelance", "MaxLength": 2, "Width": 40, "fieldName": "שנות ניסיון", "Type": "Tel", "Mandatory": true, "DbName": "Field86", "Br": true }
+                , { "Type": "DivClose" }
+                
+                // עבודה קבועה
+                , { "Type": "DivOpen", "ElementId": "DivJobPermanent", "Text": "", "Style": "display:none" }
+                , { "Type": "SubKoteret", "Text": "תחום עיסוק ראשי" }
+                , { "ElementId": "PrimaryOccupation", "MaxLength": 100, "Width": 90, "fieldName": "תחום עיסוק", "Type": "Text", "Mandatory": true, "DbName": "Field87", "Br": true }
+                , { "ElementId": "HasPrimaryExperience", "fieldName": "יש ניסיון?", "Type": "CheckBox", "Mandatory": false, "Br": true, "DbName": "Field88" }
+                , { "Type": "DivOpen", "ElementId": "DivPrimaryExperience", "Text": "", "Style": "display:none" }
+                , { "ElementId": "PrimaryExperienceYears", "MaxLength": 2, "Width": 40, "fieldName": "שנות ניסיון", "Type": "Tel", "Mandatory": true, "DbName": "Field89", "Br": false }
+                , { "ElementId": "PrimaryExperiencePlace", "MaxLength": 100, "Width": 90, "fieldName": "היכן?", "Type": "Text", "Mandatory": true, "DbName": "Field90", "Br": true }
+                , { "Type": "DivClose" }
+                
+                , { "Type": "SubKoteret", "Text": "תחום עיסוק משני (אופציונלי)" }
+                , { "ElementId": "SecondaryOccupation", "MaxLength": 100, "Width": 90, "fieldName": "תחום עיסוק משני", "Type": "Text", "Mandatory": false, "DbName": "Field91", "Br": true }
+                , { "ElementId": "HasSecondaryExperience", "fieldName": "יש ניסיון?", "Type": "CheckBox", "Mandatory": false, "Br": true, "DbName": "Field92" }
+                , { "Type": "DivOpen", "ElementId": "DivSecondaryExperience", "Text": "", "Style": "display:none" }
+                , { "ElementId": "SecondaryExperienceYears", "MaxLength": 2, "Width": 40, "fieldName": "שנות ניסיון", "Type": "Tel", "Mandatory": true, "DbName": "Field93", "Br": false }
+                , { "ElementId": "SecondaryExperiencePlace", "MaxLength": 100, "Width": 90, "fieldName": "היכן?", "Type": "Text", "Mandatory": true, "DbName": "Field94", "Br": true }
+                , { "Type": "DivClose" }
+                , { "Type": "DivClose" }
+                
+                , { "ElementId": "JobSearchNotes", "MaxLength": 500, "Width": 90, "fieldName": "הערות", "Type": "TextArea", "Mandatory": false, "DbName": "Field95", "Br": true }
+                
+                , { "Type": "SubKoteret2", "Text": "מומלץ לשלוח קובץ קו\"ח למייל:<br/>a0794692127@gmail.com" }
+                , { "Type": "DivClose" }
+                
                 //, { "Type": "Koteret", "Text": "חתונת בן מורינו ראש הישיבה הגרש\"ב שליט\"א" }
                 //, { "Type": "SubKoteret", "Text": "ההסעות הלוך יצאו מהערים בשעה 20:30-21:00" }
                 //, { "Type": "SubKoteret", "Text": "חזור בשעה 01:00" }
@@ -491,6 +541,9 @@
             { "SnifName": "מחזור ו'" },
             { "SnifName": "מחזור ז'" },
             { "SnifName": "מחזור ח'" },
+            { "SnifName": "מחזור ט'" },
+            { "SnifName": "מחזור י'" },
+            { "SnifName": 'מחזור י"א' }
         ]
 
 
@@ -783,6 +836,71 @@
                 }
             });
 
+            // לוגיקה להצעות עבודה
+            $('#DivJobSearch').hide();
+            $('#DivJobTemp').hide();
+            $('#DivJobFreelance').hide();
+            $('#DivJobPermanent').hide();
+            $('#DivPrimaryExperience').hide();
+            $('#DivSecondaryExperience').hide();
+            
+            $('#IsLookingForJob').change(function () {
+                if ($(this).is(':checked')) {
+                    $('#DivJobSearch').show();
+                } else {
+                    $('#DivJobSearch').hide();
+                    // ניקוי כל השדות
+                    $('input[name=JobType]').prop('checked', false);
+                    $('#DivJobTemp, #DivJobFreelance, #DivJobPermanent').hide();
+                    $('#PrimaryOccupationTemp, #PrimaryOccupationFreelance, #YearsOfExperienceFreelance').val('');
+                    $('#PrimaryOccupation, #PrimaryExperienceYears, #PrimaryExperiencePlace').val('');
+                    $('#SecondaryOccupation, #SecondaryExperienceYears, #SecondaryExperiencePlace').val('');
+                    $('#JobSearchNotes').val('');
+                    $('#HasPrimaryExperience, #HasSecondaryExperience').prop('checked', false);
+                }
+            });
+            
+            $('input[type=radio][name=JobType]').change(function () {
+                var jobType = $('input[name=JobType]:checked').val();
+                $('#DivJobTemp, #DivJobFreelance, #DivJobPermanent').hide();
+                $('#PrimaryOccupationTemp, #PrimaryOccupationFreelance, #YearsOfExperienceFreelance').val('');
+                $('#PrimaryOccupation, #PrimaryExperienceYears, #PrimaryExperiencePlace').val('');
+                $('#SecondaryOccupation, #SecondaryExperienceYears, #SecondaryExperiencePlace').val('');
+                $('#HasPrimaryExperience, #HasSecondaryExperience').prop('checked', false);
+                $('#DivPrimaryExperience, #DivSecondaryExperience').hide();
+                
+                if (jobType == "עבודות מזדמנות לתקורות") {
+                    $('#DivJobTemp').show();
+                    $('#PrimaryOccupationTemp').focus();
+                } else if (jobType == "עבודות מזדמנות כעצמאי") {
+                    $('#DivJobFreelance').show();
+                    $('#PrimaryOccupationFreelance').focus();
+                } else if (jobType == "עבודה קבועה – מלאה / חלקית") {
+                    $('#DivJobPermanent').show();
+                    $('#PrimaryOccupation').focus();
+                }
+            });
+            
+            $('#HasPrimaryExperience').change(function () {
+                if ($(this).is(':checked')) {
+                    $('#DivPrimaryExperience').show();
+                    $('#PrimaryExperienceYears').focus();
+                } else {
+                    $('#DivPrimaryExperience').hide();
+                    $('#PrimaryExperienceYears, #PrimaryExperiencePlace').val('');
+                }
+            });
+            
+            $('#HasSecondaryExperience').change(function () {
+                if ($(this).is(':checked')) {
+                    $('#DivSecondaryExperience').show();
+                    $('#SecondaryExperienceYears').focus();
+                } else {
+                    $('#DivSecondaryExperience').hide();
+                    $('#SecondaryExperienceYears, #SecondaryExperiencePlace').val('');
+                }
+            });
+
             $('#Darkon1Div').hide();
             $('#citizenshipDiv').hide();
             $('#CuntryNameDiv').hide();
@@ -1013,7 +1131,7 @@
 
             $.ajax({
 
-                url: "https://us-central1-d-eliezer.cloudfunctions.net/nedarim?method=1&zihuy=" + encodeURIComponent(ZeoutTxt) + "&ezrachut=" + encodeURIComponent(Zihuy1) + "&taarichLeida=" + encodeURIComponent($("#PassCheckText").val()),
+                url: "https://us-central1-tomchei-tora2.cloudfunctions.net/nedarimBogrim?method=1&zihuy=" + encodeURIComponent(ZeoutTxt) + "&ezrachut=" + encodeURIComponent(Zihuy1) + "&taarichLeida=" + encodeURIComponent($("#PassCheckText").val()),
                 data: "",
                 type: 'GET',
                 context: Text,
@@ -1191,7 +1309,7 @@
                 }
 
             }).error(function () {
-                EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת נראה שהכתובת https://us-central1-d-eliezer.cloudfunctions.net חסומה אצלכם. בכדי שהמערכת תוכל לפעול צריך לפתוח את הכתובת הזו.")
+                EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת נראה שהכתובת https://us-central1-tomchei-tora2.cloudfunctions.net חסומה אצלכם. בכדי שהמערכת תוכל לפעול צריך לפתוח את הכתובת הזו.")
                 $("#ZeoutCheckWait").hide();
                 $("#ZeoutCheckSave").show();
 
