@@ -23,6 +23,256 @@
 
     <title>טופס - נדרים פלוס</title>
 
+    <!--
+    <style>
+
+                                                if (!zeout) {
+                                                    LoginSwal("נא להקיש מספר זהות", "ZeoutCheckText");
+                                                    return false;
+                                                }
+                                                if (!$.isNumeric(zeout) || zeout.length !== 9) {
+                                                    LoginSwal("מספר זהות לא תקין", "ZeoutCheckText");
+                                                    return false;
+                                                }
+                                                if (!phone) {
+                                                    LoginSwal("נא להזין מספר טלפון", "PhoneCheckText");
+                                                    return false;
+                                                }
+                                                var phoneValue = phone.replace(/-/g, "");
+                                                if (!$.isNumeric(phoneValue) || phoneValue.length < 9 || phoneValue.length > 10) {
+                                                    LoginSwal("מספר טלפון לא תקין (9-10 ספרות)", "PhoneCheckText");
+                                                    return false;
+                                                }
+
+                                                $("#ZeoutCheckSave").hide();
+                                                $("#SendOtpDiv").hide();
+                                                $("#ZeoutCheckWaitText").text("שולח קוד אימות...");
+                                                $("#ZeoutCheckWait").show();
+
+                                                $.ajax({
+                                                    url: BASE_API_URL + "/nedarimForm-sendOtp",
+                                                    type: "POST",
+                                                    var otpSent = false;
+
+                                                    function sendOtp() {
+                                                        var zeout = $("#ZeoutCheckText").val();
+                                                        var phone = $("#PhoneCheckText").val();
+
+                                                        if (!zeout) {
+                                                            LoginSwal("נא להקיש מספר זהות", "ZeoutCheckText");
+                                                            return false;
+                                                        }
+                                                        if (!$.isNumeric(zeout) || zeout.length !== 9) {
+                                                            LoginSwal("מספר זהות לא תקין", "ZeoutCheckText");
+                                                            return false;
+                                                        }
+                                                        if (!phone) {
+                                                            LoginSwal("נא להזין מספר טלפון", "PhoneCheckText");
+                                                            return false;
+                                                        }
+                                                        var phoneValue = phone.replace(/-/g, "");
+                                                        if (!$.isNumeric(phoneValue) || phoneValue.length < 9 || phoneValue.length > 10) {
+                                                            LoginSwal("מספר טלפון לא תקין (9-10 ספרות)", "PhoneCheckText");
+                                                            return false;
+                                                        }
+
+                                                        $("#ZeoutCheckSave").hide();
+                                                        $("#SendOtpDiv").hide();
+                                                        $("#ZeoutCheckWaitText").text("שולח קוד אימות...");
+                                                        $("#ZeoutCheckWait").show();
+
+                                                        $.ajax({
+                                                            url: BASE_API_URL + "/nedarimForm-sendOtp",
+                                                            type: "POST",
+                                                            var otpSent = false;
+
+                                                            function sendOtp() {
+                                                                var zeout = $("#ZeoutCheckText").val();
+                                                                var phone = $("#PhoneCheckText").val();
+
+                                                                if (!zeout) {
+                                                                    LoginSwal("נא להקיש מספר זהות", "ZeoutCheckText");
+                                                                    return false;
+                                                                }
+                                                                if (!$.isNumeric(zeout) || zeout.length !== 9) {
+                                                                    LoginSwal("מספר זהות לא תקין", "ZeoutCheckText");
+                                                                    return false;
+                                                                }
+                                                                if (!phone) {
+                                                                    LoginSwal("נא להזין מספר טלפון", "PhoneCheckText");
+                                                                    return false;
+                                                                }
+                                                                var phoneValue = phone.replace(/-/g, "");
+                                                                if (!$.isNumeric(phoneValue) || phoneValue.length < 9 || phoneValue.length > 10) {
+                                                                    LoginSwal("מספר טלפון לא תקין (9-10 ספרות)", "PhoneCheckText");
+                                                                    return false;
+                                                                }
+
+                                                                $("#ZeoutCheckSave").hide();
+                                                                $("#SendOtpDiv").hide();
+                                                                $("#ZeoutCheckWaitText").text("שולח קוד אימות...");
+                                                                $("#ZeoutCheckWait").show();
+
+                                                                $.ajax({
+                                                                    url: BASE_API_URL + "/nedarimForm-sendOtp",
+                                                                    type: "POST",
+                                                                    data: JSON.stringify({ idNumber: zeout, phone: phoneValue }),
+                                                                    contentType: "application/json; charset=utf-8",
+                                                                    timeout: 30000,
+                                                                }).success(function () {
+                                                                    otpSent = true;
+                                                                    $("#OtpCheckDiv").show();
+                                                                    $("#ZeoutCheckWait").hide();
+                                                                    $("#SendOtpDiv").show();
+                                                                    $("#ZeoutCheckSave").show();
+                                                                    $("#OtpCheckText").focus();
+                                                                }).error(function () {
+                                                                    otpSent = false;
+                                                                    $("#ZeoutCheckWait").hide();
+                                                                    $("#SendOtpDiv").show();
+                                                                    $("#ZeoutCheckSave").show();
+                                                                    LoginSwal("שגיאה בשליחת הקוד. נסה שוב", "SendOtpBt");
+                                                                });
+                                                            }
+
+                                                            // אופציות שכונות לפי עיר
+                                                            var neighborhoodOptions = {};
+                                                                    type: 'GET',
+                                                                    timeout: 60000,
+                                                                }).success(function (JsonData) {
+                                                                    // שמירת נתוני המשפחה במשתנה הגלובלי
+                                                                    GlobalFamilyData = JsonData;
+
+                                                                    // מילוי האינפוטים לפי הנתונים שהתקבלו מהשרת
+                                                                    if (JsonData && typeof JsonData === 'object') {
+                                                                        if (JsonData.status != "success") {
+                                                                            // אם הסטטוס לא הצליח, הצג הודעת שגיאה
+                                                                            MySwal("שגיאה: " + JsonData.message, "ZeoutCheckText");
+                                                                            // טיפול בשגיאה
+                                                                            $("#ZeoutCheckSave").show();
+                                                                            $("#SendOtpDiv").show();
+                                                                            $("#ZeoutCheckWait").hide();
+                                                                            return;
+                                                                        }
+                                                                        // עדכון אופציות הסלקטים אם קיימות
+                                                                        if (JsonData.selectOptions) {
+                                                                            console.log("Received selectOptions from server:", JsonData.selectOptions);
+                                                                            updateSelectOptionsFromServer(JsonData);
+                                                                        }
+
+                                                                        // הגדרת אופציות לסלקטים
+                                                                        setupSelectOptions();
+
+                                                                        // מילוי שדות המשפחה
+                                                                        if (JsonData.family && typeof JsonData.family === 'object') {
+                                                                            for (var fieldName in JsonData.family) {
+                                                                                var $field = $('#' + fieldName);
+                                                                                if ($field.length > 0) {
+                                                                                    var fieldValue = JsonData.family[fieldName];
+
+                                                                                    // טיפול בסוגי שדות שונים
+                                                                                    if ($field.is('select')) {
+                                                                                        console.log("Updating select field:", fieldName, "with value:", fieldValue);
+                                                                                        $field.val(fieldValue);
+                                                                                    } else if ($field.is('input[type=\"checkbox\"]')) {
+                                                                                        $field.prop('checked', fieldValue === true || fieldValue === 'true' || fieldValue === 1 || fieldValue === '1');
+                                                                                    } else if ($field.is('input[type=\"radio\"]')) {
+                                                                                        $('input[name=\"' + fieldName + '\"][value=\"' + fieldValue + '\"]').prop('checked', true);
+                                                                                    } else if ($field.is('input') || $field.is('textarea')) {
+                                                                                        $field.val(fieldValue);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            var studyTypeValue = JsonData.family.kollelStudyTypeId || JsonData.family.kolelType;
+                                                                            if (studyTypeValue == "יום שלם") {
+                                                                                $('#kollelStudyTypeId_Radio0').prop('checked', true);
+                                                                            } else if (studyTypeValue == "חצי יום") {
+                                                                                $('#kollelStudyTypeId_Radio1').prop('checked', true);
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    $("#cityId").trigger('change');
+
+                                                                    //השהיה קצרה לטעינת שכונה
+                                                                    setTimeout(function () {
+                                                                        var neighborhoodValue = JsonData.family.neighborhoodId || JsonData.family.shchuna;
+                                                                        if (neighborhoodValue) {
+                                                                            $("#neighborhoodId").val(neighborhoodValue);
+                                                                        }
+                                                                    }, 200)
+
+                                                                    // בכל מקרה ממשיכים לטופס
+
+                                                                    // הגדרת מעקב אחר שדות חדשים בקבוצות
+                                                                    setupGroupFieldsWatcher();
+
+                                                                    // הגדרת הסתרה/הצגה של שדות תלויים
+                                                                    setupConditionalFields();
+
+                                                                    // הפעלה ידנית של טריגרים לצ'קבוקסים שנטענו עם נתונים
+                                                                    triggerConditionalFieldsAfterDataLoad();
+
+                                                                    //הגדרת רשימת הערים
+                                                                    listCityGetAllCity({
+                                                                        CityId: '#cityId',
+                                                                        StreetId: '#streetId',
+                                                                        Auto_Focus_After_City_Selection: true,
+                                                                        list_Citys: [],
+                                                                        CityDefault: JsonData.family.cityId || JsonData.family.city || "",
+                                                                    })
+
+                                                                    // הסתרת מסך הכניסה והצגת הטופס
+                                                                    $("#ZeoutCheck").hide();
+                                                                    $("#ZeoutCheckWait").hide();
+
+                                                                    if (JsonData.family && JsonData.family.status && JsonData.family.status != 0 && JsonData.family.status != 4) {
+                                                                        $("#ZeoutCheckSave").show();
+                                                                        $("#AllMainForm").show();
+                                                                        if (JsonData.family.status == 1) {
+                                                                            $("#alertStatus1").show();
+                                                                        } if (JsonData.family.status == 2) {
+                                                                            $("#alertStatus2").show();
+                                                                        }
+                                                                    } else if (JsonData.family && JsonData.family.status == 4) {
+                                                                        $("#Status4Div").show(); // הצגת מסך הכניסה
+                                                                    } else {
+                                                                        $("#NotRegisteredDiv").show(); // הצגת מסך הכניסה
+                                                                    }
+                                                                }).error(function () {
+                                                                    // טיפול בשגיאה
+                                                                    $("#ZeoutCheckSave").show();
+                                                                    $("#SendOtpDiv").show();
+                                                                    $("#ZeoutCheckWait").hide();
+                                                                });
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+        .group-row input[type="tel"],
+        .group-row select {
+            margin-top: 5px;
+        }
+
+        .group-buttons {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .group-buttons .Bt {
+            margin: 0 5px;
+            min-width: 120px;
+        }
+        */
+    </style>
+    -->
     <style>
         * {
             font-family: 'Assistant', Arial, sans-serif;
@@ -67,7 +317,6 @@
             display: inline-block;
         }
 
-
         .SelectValLbl {
             border-style: solid;
             width: 90%;
@@ -98,7 +347,6 @@
             -webkit-user-select: none;
         }
 
-
         li {
             text-align: right;
             padding: 0px 0px 0px 25px;
@@ -112,8 +360,6 @@
             padding: 0px 0px 0px 25px;
             font-size: 17px;
         }
-
-
 
         textarea:focus,
         input[type=text]:focus,
@@ -137,7 +383,6 @@
             cursor: pointer;
         }
 
-
         .modal {
             display: none;
             position: fixed;
@@ -151,7 +396,6 @@
             background-color: rgba(0, 0, 0, 0.5);
             -webkit-overflow-scrolling: touch;
         }
-
 
         .modal-content {
             background-color: #fefefe;
@@ -198,7 +442,6 @@
             font-size: 14px;
         }
 
-
         table {
             border-collapse: collapse;
             border: 1px solid #d7cece;
@@ -213,10 +456,8 @@
         .TableKoteret {
             text-align: center;
             padding-right: 20px;
-            /*background-color: aliceblue;*/
             font-size: 25px;
             color: steelblue;
-            /*lightslategrey*/
             font-weight: normal;
         }
 
@@ -231,7 +472,6 @@
             margin-right: 10px
         }
 
-        /* עיצוב קבוצות שדות */
         .group-fields-container {
             margin: 20px;
             border: 2px solid #f7bb4d;
@@ -355,40 +595,42 @@
         var Json = {
             "FormElements": [
 
-                { "Type": "Koteret", "Text": "פרטים אישיים" }
-                , { "ElementId": "zehut", "MaxLength": 9, "Width": 40, "fieldName": "תעודת זהות", "Type": "Tel", "Mandatory": true, "DbName": "Field1", "Br": true, "Send": true }
-                , { "ElementId": "firstName", "MaxLength": 50, "Width": 40, "Bold": false, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true, "DbName": "Field2", "Style": "", "Br": false, "Send": true }
-                , { "ElementId": "lastName", "MaxLength": 50, "Width": 40, "fieldName": "שם משפחה", "Type": "Text", "Mandatory": true, "DbName": "Field3", "Br": false, "Send": true }
-                , { "ElementId": "birthDate", "MaxLength": 10, "Width": 40, "fieldName": "תאריך לידה", "fieldNameShow": "תאריך לידה<br/>בתבנית: 25/05/1990", "Type": "Tel", "Mandatory": true, "DbName": "Field4", "Br": false, "Date": true, "Send": true }
+                { "Type": "Koteret", "Text": "פרטי משפחה" }
+                , { "ElementId": "familyName", "MaxLength": 50, "Width": 40, "fieldName": "שם משפחה", "Type": "Text", "Mandatory": true, "DbName": "Field1", "Br": false, "Send": true }
+                , { "ElementId": "homePhoneNumber", "MaxLength": 11, "Width": 40, "fieldName": "טלפון בית", "Type": "Tel", "Mandatory": false, "DbName": "Field2", "Br": false, "Send": true }
 
-                , { "Type": "Koteret", "Text": "פרטי קשר" }
-                , { "ElementId": "phone", "MaxLength": 11, "Width": 40, "fieldName": "טלפון", "Type": "Tel", "Mandatory": true, "DbName": "Field5", "Br": false, "Send": true }
-                , { "ElementId": "mobile", "MaxLength": 11, "Width": 40, "fieldName": "פלאפון", "Type": "Tel", "Mandatory": true, "DbName": "Field6", "Br": false, "Send": true }
-                , { "ElementId": "mobile2", "MaxLength": 11, "Width": 40, "fieldName": "פלאפון נוסף", "Type": "Tel", "Mandatory": false, "DbName": "Field7", "Br": false, "Send": true }
-                , { "ElementId": "email", "MaxLength": 50, "Width": 60, "fieldName": "אימייל", "Type": "Text", "Mandatory": true, "DbName": "Field8", "Br": false, "Send": true }
-                , { "ElementId": "email2", "MaxLength": 50, "Width": 60, "fieldName": "אימייל נוסף", "Type": "Text", "Mandatory": false, "DbName": "Field9", "Br": false, "Send": true }
+                , { "Type": "Koteret", "Text": "פרטי הבעל" }
+                , { "ElementId": "husbandFirstName", "MaxLength": 50, "Width": 40, "fieldName": "שם פרטי בעל", "Type": "Text", "Mandatory": false, "DbName": "Field3", "Br": false, "Send": true }
+                , { "ElementId": "husbandIdNumber", "MaxLength": 15, "Width": 40, "fieldName": "ת.ז. בעל", "Type": "Tel", "Mandatory": false, "DbName": "Field4", "Br": false, "Send": true }
+                , { "ElementId": "husbandPhoneNumber", "MaxLength": 11, "Width": 40, "fieldName": "פלאפון בעל", "Type": "Tel", "Mandatory": false, "DbName": "Field5", "Br": false, "Send": true }
+                , { "ElementId": "husbandEmail", "MaxLength": 50, "Width": 60, "fieldName": "אימייל בעל", "Type": "Text", "Mandatory": false, "DbName": "Field6", "Br": false, "Send": true }
+
+                , { "Type": "Koteret", "Text": "פרטי האישה" }
+                , { "ElementId": "wifeFirstName", "MaxLength": 50, "Width": 40, "fieldName": "שם פרטי אישה", "Type": "Text", "Mandatory": false, "DbName": "Field7", "Br": false, "Send": true }
+                , { "ElementId": "wifeIdNumber", "MaxLength": 15, "Width": 40, "fieldName": "ת.ז. אישה", "Type": "Tel", "Mandatory": false, "DbName": "Field8", "Br": false, "Send": true }
+                , { "ElementId": "wifePhoneNumber", "MaxLength": 11, "Width": 40, "fieldName": "פלאפון אישה", "Type": "Tel", "Mandatory": false, "DbName": "Field9", "Br": false, "Send": true }
+                , { "ElementId": "wifeEmail", "MaxLength": 50, "Width": 60, "fieldName": "אימייל אישה", "Type": "Text", "Mandatory": false, "DbName": "Field10", "Br": false, "Send": true }
 
                 , { "Type": "Koteret", "Text": "כתובת" }
-                , { "ElementId": "city", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field10", "Br": false, "Send": true }
-                , { "ElementId": "street", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": true, "DbName": "Field11", "Br": false, "Send": true }
-                , { "ElementId": "shchuna", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": true, "DbName": "Field12", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
-                , { "ElementId": "building", "MaxLength": 10, "Width": 20, "fieldName": "בניין", "Type": "Text", "Mandatory": false, "DbName": "Field13", "Br": false, "Send": true }
-                , { "ElementId": "apartment", "MaxLength": 10, "Width": 20, "fieldName": "דירה", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
+                , { "ElementId": "cityId", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field11", "Br": false, "Send": true }
+                , { "ElementId": "streetId", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": true, "DbName": "Field12", "Br": false, "Send": true }
+                , { "ElementId": "neighborhoodId", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": true, "DbName": "Field13", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
+                , { "ElementId": "buildingNumber", "MaxLength": 10, "Width": 20, "fieldName": "מספר בניין", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
                 , { "ElementId": "entrance", "MaxLength": 10, "Width": 20, "fieldName": "כניסה", "Type": "Select", "Mandatory": false, "DbName": "Field29", "Br": false, "Send": true, "SelectVal": "בחר כניסה,א,ב,ג,ד,ה" }
+                , { "Type": "Div", "ElementId": "distributionPointNote", "Text": "<div style='background-color: #f1f5f9; border: 1px solid #e2e8f0; color: #475569; padding: 10px; margin: 10px 20px; border-radius: 6px; text-align: center; font-size: 12px; width: 90%;'>בפתיחת המערכת תוכלו לעדכן נקודת חלוקה.</div>" }
 
                 , { "Type": "Koteret", "Text": "פרטי ילדים" }
                 , { "ElementId": "childrenAtHome", "MaxLength": 2, "Width": 25, "fieldName": "ילדים בבית", "Type": "Tel", "Mandatory": false, "DbName": "Field24", "Br": false, "Send": true }
                 , { "ElementId": "childrenMarried", "MaxLength": 2, "Width": 25, "fieldName": "ילדים נשואים", "Type": "Tel", "Mandatory": false, "DbName": "Field25", "Br": false, "Send": true }
-                , { "ElementId": "childrenTotal", "MaxLength": 2, "Width": 25, "fieldName": "סה\"כ", "Type": "Tel", "Mandatory": false, "DbName": "Field26", "Br": false, "Send": true }
 
 
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "Type": "Koteret", "Text": "פרטי מוסד" }
-                , { "ElementId": "isAvrechKollel", "fieldName": "לומד בכוללים שע\"י מוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
-                , { "ElementId": "kolel", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field16", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
+                , { "ElementId": "studiesInKollels", "fieldName": "לומד בכוללים שע\"י מוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
+                , { "ElementId": "kollelInstitutionBranchId", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field16", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
                 , {
-                    "ElementId": "kolelType", "MaxLength": 50, "Width": 90, "fieldName": "סוג הלימוד", "Type": "Radio", "Mandatory": true, "DbName": "Field30", "Br": false, "Send": true, "RadioBt": [
+                    "ElementId": "kollelStudyTypeId", "MaxLength": 50, "Width": 90, "fieldName": "סוג הלימוד", "Type": "Radio", "Mandatory": true, "DbName": "Field30", "Br": false, "Send": true, "RadioBt": [
                         { "Text": "יום שלם" },
                         { "Text": "חצי יום" }
                     ]
@@ -397,32 +639,39 @@
 
                 , { "Type": "Margin", "Height": "25" }
 
-                , { "ElementId": "isBogerYG", "fieldName": "בוגר ישיבה גדולה - עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field17", "Width": 70, "Br": false, "Send": true }
-                , { "ElementId": "YGMachzor", "MaxLength": 50, "Width": 50, "fieldName": "בחר מחזור", "Type": "Select", "Mandatory": false, "DbName": "Field18", "Br": false, "Send": true, "SelectVal": "בחר מחזור,קיבוץ,מחזור א,מחזור ב,מחזור ג,מחזור ד,מחזור ה,מחזור ו,מחזור ז,מחזור ח,מחזור ט,מחזור י" }
+                , { "ElementId": "isAtarashYeshivaGraduate", "fieldName": "בוגר ישיבה גדולה - עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field17", "Width": 70, "Br": false, "Send": true }
+                , { "ElementId": "atarashYeshivaCycleId", "MaxLength": 50, "Width": 50, "fieldName": "בחר מחזור", "Type": "Select", "Mandatory": false, "DbName": "Field18", "Br": false, "Send": true, "SelectVal": "בחר מחזור,קיבוץ,מחזור א,מחזור ב,מחזור ג,מחזור ד,מחזור ה,מחזור ו,מחזור ז,מחזור ח,מחזור ט,מחזור י" }
                 , { "Type": "Margin", "Height": "25" }
 
-                , { "ElementId": "isChildInAteret", "fieldName": "הורה לילדים במוסדות עטרת שלמה?", "Type": "CheckBox", "Mandatory": false, "DbName": "Field19", "Width": 70, "Br": false, "Send": true }
+                , { "ElementId": "hasChildrenInAtarashInstitutions", "fieldName": "הורה לילדים במוסדות עטרת שלמה?", "Type": "CheckBox", "Mandatory": false, "DbName": "Field19", "Width": 70, "Br": false, "Send": true }
 
                 , {
                     "Type": "GroupFields", "ElementId": "children", "fieldName": "פרטי ילדים", "DbName": "Field20", "MaxRows": 10, "DefaultRows": 0, "Mandatory": false, "Send": true, "Fields": [
-                        { "ElementId": "childName", "MaxLength": 50, "Width": 30, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true },
-                        { "ElementId": "childZehut", "MaxLength": 9, "Width": 30, "fieldName": "מספר זהות", "Type": "Tel", "Mandatory": true },
-                        { "ElementId": "childBirthDate", "MaxLength": 10, "Width": 30, "fieldName": "תאריך לידה לועזי", "fieldNameShow": "תאריך לידה לועזי<br/>בתבנית: 25/05/1990", "Type": "Tel", "Mandatory": true, "Date": true },
-                        { "ElementId": "childMosadType", "Width": 30, "fieldName": "מוסד", "Type": "Select", "Mandatory": false, "Br": true, "Send": true, "SelectVal": "בחר מוסד" },
-                        { "ElementId": "childMosad", "Width": 30, "fieldName": "סניף", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר סניף" },
-                        { "ElementId": "childClass", "Width": 30, "fieldName": "כיתה/שיעור", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר כיתה/שיעור" },
+                        { "ElementId": "firstName", "MaxLength": 50, "Width": 30, "fieldName": "שם פרטי", "Type": "Text", "Mandatory": true },
+                        { "ElementId": "idNumber", "MaxLength": 9, "Width": 30, "fieldName": "מספר זהות", "Type": "Tel", "Mandatory": true },
+                        { "ElementId": "birthDate", "MaxLength": 10, "Width": 30, "fieldName": "תאריך לידה לועזי", "fieldNameShow": "תאריך לידה לועזי<br/>בתבנית: 25/05/1990", "Type": "Tel", "Mandatory": true, "Date": true },
+                        { "ElementId": "institutionTypeId", "Width": 30, "fieldName": "מוסד", "Type": "Select", "Mandatory": false, "Br": true, "Send": true, "SelectVal": "בחר מוסד" },
+                        { "ElementId": "institutionBranchId", "Width": 30, "fieldName": "סניף", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר סניף" },
+                        { "ElementId": "classId", "Width": 30, "fieldName": "כיתה/שיעור", "Type": "Select", "Mandatory": false, "Br": false, "Send": true, "SelectVal": "בחר כיתה/שיעור" },
                         { "Type": "Div", "Text": "שימו לב למלא לפי שנה\"ל תשפ\"ו", "Width": 90, "Style": "text-align: center; color: #ff6a00; font-size: 14px; margin-top: 10px; font-weight: bold; padding: 5px; border-top: 1px solid #f7bb4d; margin: 10px 20px;", "ElementId": "divChildrenNote", "fieldName": "divChildrenNote" }
                     ]
                 }
 
                 , { "Type": "Margin", "Height": "25" }
 
-                , { "ElementId": "isInTzevet", "fieldName": "צוות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field21", "Width": 70, "Br": false, "Send": true }
-                , { "ElementId": "tzevetInMosad", "MaxLength": 50, "Width": 50, "fieldName": "עובד במוסד", "Type": "Select", "Mandatory": false, "DbName": "Field22", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
+                , { "ElementId": "isAtarashYeshivaStaff", "fieldName": "צוות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field21", "Width": 70, "Br": false, "Send": true }
+                , { "ElementId": "atarashStaffHusbandInstitutionBranchId", "MaxLength": 50, "Width": 50, "fieldName": "מקום עבודה בעל", "Type": "Select", "Mandatory": false, "DbName": "Field22", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
+                , { "ElementId": "atarashStaffWifeInstitutionBranchId", "MaxLength": 50, "Width": 50, "fieldName": "מקום עבודה אישה", "Type": "Select", "Mandatory": false, "DbName": "Field32", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
 
                 , { "Type": "Margin", "Height": "25" }
 
-                , { "ElementId": "note", "MaxLength": 700, "Width": 90, "fieldName": "הערות", "Type": "textarea", "Rows": 3, "Mandatory": false, "DbName": "Field23", "Br": false, "Send": true }
+                , { "Type": "Koteret", "Text": "קהילה" }
+                , { "ElementId": "communityId", "MaxLength": 10, "Width": 40, "fieldName": "מספר קהילה", "Type": "Tel", "Mandatory": false, "DbName": "Field31", "Br": false, "Send": true }
+                , { "Type": "Div", "ElementId": "communityNameDisplay", "Text": "<div id='communityNameText' style='margin: 6px 20px 0; color: #2c3e50; font-size: 14px; font-weight: bold; display:none;'> </div>" }
+
+                , { "Type": "Margin", "Height": "25" }
+
+                , { "ElementId": "note", "MaxLength": 700, "Width": 90, "fieldName": "הערות", "Type": "textarea", "Rows": 3, "Mandatory": false, "DbName": "Field23", "Br": false, "Send": true, "Hidden": true }
 
                 , { "Type": "Margin", "Height": "25" }
 
@@ -442,9 +691,13 @@
             "MosadId": "7014477", //0
             "MainLogo": "", // Files/Pic/000_logo.jpg
             "MainTitle": "טופס עדכון פרטים לתלמידי מוסדות עטרת שלמה",
-            "SpecialCheck": "Phone:Field5,Field6,Field7;Date:Field4" //Phone:Field; Date:Field; MasavPayment "CreditCardPayment" //Zeout:Field; //Mail:Field8; //CreditCardToken:Max //CheckDouble: //Bank:Field90,Field91,Field92 //CopyMail: //Tokef:Field8
+            "SpecialCheck": "Phone:Field2,Field5,Field9" //Phone:Field; Date:Field; MasavPayment "CreditCardPayment" //Zeout:Field; //Mail:Field8; //CreditCardToken:Max //CheckDouble: //Bank:Field90,Field91,Field92 //CopyMail: //Tokef:Field8
 
         }
+
+        // Base URL for API endpoints (change here only)
+        var BASE_HOST_URL = "https://t-api.srulik.me";
+        var BASE_API_URL = BASE_HOST_URL + "/nedarim";
 
 
         var MasofId = ''
@@ -644,11 +897,8 @@
 
             $("#MainForm").html(MainForm);
 
-            AutoFillMail("email")
-            AutoFillMail("email2")
-
-            // הגדרת חישוב אוטומטי של סה"כ ילדים
-            setupChildrenCalculation();
+            AutoFillMail("husbandEmail")
+            AutoFillMail("wifeEmail")
 
             // הגדרת התראה לקבוצת הילדים
             setupChildrenNotice();
@@ -693,7 +943,7 @@
             // הגדרת פונקציית callback עבור בחירת עיר - תופעל אוטומטית כשבוחרים עיר מהפופאפ
             window["FunctionAfetrSelectCity"] = function () {
                 // הפעלת עדכון השכונות אחרי בחירת עיר
-                $("#city").trigger('change');
+                $("#cityId").trigger('change');
             };
 
 
@@ -722,76 +972,39 @@
 
 
 
-            // טיפול בעיצוב תאריך לידה
-            $("#birthDate").on('input', function () {
-                var TempDate = $(this).val().replace(/\//g, "");
-                if ($.isNumeric(TempDate)) {
-                    if (TempDate.length >= 4) {
-                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2, 2) + "/" + TempDate.substr(4);
-                    } else if (TempDate.length >= 2) {
-                        TempDate = TempDate.substr(0, 2) + "/" + TempDate.substr(2);
-                    }
-                    $(this).val(TempDate);
-                }
-            });
-
-
-
+            
             //ISRAEL - העברתי להערה כדי להימנע מבדיקת גירסה
             // Check_Tofes_Version("AllMainForm")
             $("#WaitDiv2").hide();
+            
+            // הצגת הודעה אם אין MasofId
+            if (!MasofId || MasofId === '') {
+                $("#WebsiteInfoMessage").show();
+            }
+            
             $("#ZeoutCheck").show(); // הצגת מסך הכניסה
             $("#AllMainForm").hide(); // הסתרת הטופס הראשי
             //---
 
-            // טיפול בפורמט תאריך לידה במסך הכניסה
-            $("#PassCheckText").attr("dir", "ltr");
-            $('#PassCheckText').keyup(function () {
-                var newInput = document.getElementById("PassCheckText");
-                newInput.addEventListener('keydown', function (e) {
-                    if (e.which !== 8) {
-                        var numChars = e.target.value.length;
-                        if (numChars === 2 || numChars === 5) {
-                            var thisVal = e.target.value;
-                            thisVal += '/';
-                            e.target.value = thisVal;
-                        }
-                    }
-                });
+            // קלט מספרי בלבד - ת.ז., טלפון, OTP
+            $('#ZeoutCheckText, #PhoneCheckText, #OtpCheckText').on('input', function () {
+                var value = $(this).val();
+                var numbersOnly = value.replace(/[^0-9]/g, '');
+                $(this).val(numbersOnly);
             });
 
-            // טיפול בשינוי בין ת.ז. לדרכון
-            $('input[name=Zihuy1]').change(function () {
-                var selectedValue = $('input[name=Zihuy1]:checked').val();
-                if (selectedValue == "chutz") {
-                    $("#ZeoutCheckKoteret").text("מספר דרכון:");
-                    $("#ZeoutCheckTextDiv").hide();
-                    $("#DarkonCheckTextDiv").show();
-                    $("#ZeoutCheckText").val("");
-                    $("#DarkonCheckText").focus();
-                } else {
-                    $("#ZeoutCheckKoteret").text("תעודת זהות:");
-                    $("#DarkonCheckTextDiv").hide();
-                    $("#ZeoutCheckTextDiv").show();
-                    $("#DarkonCheckText").val("");
-                    $("#ZeoutCheckText").focus();
+            $('#ZeoutCheckText').on('blur', function () {
+                var value = $(this).val().replace(/[^0-9]/g, '');
+                if (value && value.length < 9) {
+                    value = value.padStart(9, '0');
                 }
+                $(this).val(value);
             });
 
-            // הגדרת קלט רק מספרים לשדה הדרכון
-            $('#DarkonCheckText').on('input', function () {
-                var value = $(this).val();
-                // הסרת כל מה שלא ספרות
-                var numbersOnly = value.replace(/[^0-9]/g, '');
-                $(this).val(numbersOnly);
-            });
-
-            // הגדרת קלט רק מספרים לשדה תעודת זהות
-            $('#ZeoutCheckText').on('input', function () {
-                var value = $(this).val();
-                // הסרת כל מה שלא ספרות
-                var numbersOnly = value.replace(/[^0-9]/g, '');
-                $(this).val(numbersOnly);
+            $('#communityId').on('input', function () {
+                var value = $(this).val().replace(/[^0-9]/g, '');
+                $(this).val(value);
+                lookupCommunityName(value);
             });
         });
 
@@ -809,6 +1022,8 @@
 
         // משתנה גלובלי לשמירת נתוני המשפחה מהשרת
         var GlobalFamilyData = null;
+        var LoginIdNumber = '';
+        var LoginPhoneNumber = '';
 
         // משתנה גלובלי לשמירת אופציות הסלקטים מהשרת
         var GlobalSelectOptions = null;
@@ -1079,6 +1294,20 @@
             if (serverData && serverData.selectOptions) {
                 GlobalSelectOptions = serverData.selectOptions;
 
+                if (serverData.selectOptions.neighborhoods) {
+                    neighborhoodOptions = {};
+                    for (var i = 0; i < serverData.selectOptions.neighborhoods.length; i++) {
+                        var n = serverData.selectOptions.neighborhoods[i];
+                        if (!n || !n.cityName) {
+                            continue;
+                        }
+                        if (!neighborhoodOptions[n.cityName]) {
+                            neighborhoodOptions[n.cityName] = [];
+                        }
+                        neighborhoodOptions[n.cityName].push(n); // שמירת האובייקט המלא במקום רק label
+                    }
+                }
+
                 // עדכון המערך המקומי עם הנתונים מהשרת
                 if (serverData.selectOptions.childInstitutions) {
                     selectOptions.childInstitutions = serverData.selectOptions.childInstitutions;
@@ -1091,6 +1320,9 @@
                 }
                 if (serverData.selectOptions.tzevetInMosad) {
                     selectOptions.tzevetInMosad = serverData.selectOptions.tzevetInMosad;
+                }
+                if (serverData.selectOptions.kollelStudyTypes) {
+                    selectOptions.kollelStudyTypes = serverData.selectOptions.kollelStudyTypes;
                 }
 
                 // עדכון כל הסלקטים הקיימים עם הנתונים החדשים
@@ -1221,23 +1453,9 @@
 
         }
 
-        // פונקציה להגדרת חישוב אוטומטי של סה"כ ילדים
-        function setupChildrenCalculation() {
-            // הגדרת שדה הסה"כ כ-disabled
-            $("#childrenTotal").prop('disabled', true);
-
-            // הוספת מאזיני אירועים לשדות ילדים בבית וילדים נשואים
-            $("#childrenAtHome, #childrenMarried").on('input', function () {
-                calculateChildrenTotal();
-            });
-
-            // חישוב ראשוני
-            calculateChildrenTotal();
-        }
-
         // פונקציה להוספת התראה לקבוצת הילדים
         function setupChildrenNotice() {
-            $("#isChildInAteret").on('change', function () {
+            $("#hasChildrenInAtarashInstitutions").on('change', function () {
                 toggleChildrenNotice();
             });
         }
@@ -1247,7 +1465,7 @@
             var childrenContainer = $("#childrenContainer");
             var noticeId = "childrenNotice";
 
-            if ($("#isChildInAteret").is(':checked')) {
+            if ($("#hasChildrenInAtarashInstitutions").is(':checked')) {
                 // אם הצ'קבוקס מסומן ועדיין לא קיימת ההתראה
                 if ($("#" + noticeId).length === 0) {
                     var noticeHtml = '<div id="' + noticeId + '" style="background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 10px; margin: 10px 0; border-radius: 5px; text-align: center; font-weight: bold; font-size: 16px;">שימו לב בחירת כיתת הלימוד הינה לפי שנה"ל תשפ"ו</div>';
@@ -1261,18 +1479,7 @@
             }
         }
 
-        // פונקציה לחישוב סה"כ ילדים
-        function calculateChildrenTotal() {
-            var childrenAtHome = parseInt($("#childrenAtHome").val()) || 0;
-            var childrenMarried = parseInt($("#childrenMarried").val()) || 0;
-            var total = childrenAtHome + childrenMarried;
-
-            $("#childrenTotal").val(total > 0 ? total : '');
-        }
-
-
-
-
+        
 
 
         function SendData() {
@@ -1287,37 +1494,62 @@
             $("#WaitDiv").show()
 
             // בדיקת תקינות אימיילים
-            if ($("#email").val() !== "") {
-                if (Validate_Email($("#email").val()) == false) {
-                    MySwal("אימייל לא תקין", "email"); return false;
+            if ($("#husbandEmail").val() !== "") {
+                if (Validate_Email($("#husbandEmail").val()) == false) {
+                    MySwal("אימייל בעל לא תקין", "husbandEmail"); return false;
                 }
             }
 
-            if ($("#email2").val() !== "") {
-                if (Validate_Email($("#email2").val()) == false) {
-                    MySwal("אימייל נוסף לא תקין", "email2"); return false;
+            if ($("#wifeEmail").val() !== "") {
+                if (Validate_Email($("#wifeEmail").val()) == false) {
+                    MySwal("אימייל אישה לא תקין", "wifeEmail"); return false;
                 }
             }
 
             // בדיקת תקינות טלפונים
-            if ($("#phone").val() !== "") {
-                var phoneValue = $("#phone").val().replace(/-/g, "");
+            if ($("#homePhoneNumber").val() !== "") {
+                var phoneValue = $("#homePhoneNumber").val().replace(/-/g, "");
                 if ($.isNumeric(phoneValue) == false || phoneValue.length < 9 || phoneValue.length > 10) {
-                    MySwal("מספר טלפון לא תקין (9-10 ספרות)", "phone"); return false;
+                    MySwal("מספר טלפון לא תקין (9-10 ספרות)", "homePhoneNumber"); return false;
                 }
             }
 
-            if ($("#mobile").val() !== "") {
-                var mobileValue = $("#mobile").val().replace(/-/g, "");
+            if ($("#husbandPhoneNumber").val() !== "") {
+                var mobileValue = $("#husbandPhoneNumber").val().replace(/-/g, "");
                 if ($.isNumeric(mobileValue) == false || mobileValue.length < 9 || mobileValue.length > 10) {
-                    MySwal("מספר פלאפון לא תקין (9-10 ספרות)", "mobile"); return false;
+                    MySwal("מספר פלאפון בעל לא תקין (9-10 ספרות)", "husbandPhoneNumber"); return false;
                 }
             }
 
-            if ($("#mobile2").val() !== "") {
-                var mobile2Value = $("#mobile2").val().replace(/-/g, "");
+            if ($("#wifePhoneNumber").val() !== "") {
+                var mobile2Value = $("#wifePhoneNumber").val().replace(/-/g, "");
                 if ($.isNumeric(mobile2Value) == false || mobile2Value.length < 9 || mobile2Value.length > 10) {
-                    MySwal("מספר פלאפון נוסף לא תקין (9-10 ספרות)", "mobile2"); return false;
+                    MySwal("מספר פלאפון אישה לא תקין (9-10 ספרות)", "wifePhoneNumber"); return false;
+                }
+            }
+
+            var loginPhone = (LoginPhoneNumber || '').replace(/[^0-9]/g, '');
+            var loginId = (LoginIdNumber || '').replace(/[^0-9]/g, '');
+            if (loginId && loginId.length < 9) {
+                loginId = loginId.padStart(9, '0');
+            }
+
+            var homePhone = $("#homePhoneNumber").val().replace(/[^0-9]/g, '');
+            var husbandPhone = $("#husbandPhoneNumber").val().replace(/[^0-9]/g, '');
+            var wifePhone = $("#wifePhoneNumber").val().replace(/[^0-9]/g, '');
+            var husbandId = $("#husbandIdNumber").val().replace(/[^0-9]/g, '');
+            var wifeId = $("#wifeIdNumber").val().replace(/[^0-9]/g, '');
+
+            if (GlobalFamilyData && GlobalFamilyData.family) {
+                if (loginPhone && loginPhone !== homePhone && loginPhone !== husbandPhone && loginPhone !== wifePhone) {
+                    MySwal("אחד מהטלפונים חייב להיות הטלפון שאיתו בוצע הזיהוי", "homePhoneNumber"); return false;
+                }
+            } else {
+                if (loginId && loginId !== husbandId && loginId !== wifeId) {
+                    MySwal("תעודת הזהות שהזנת בכניסה חייבת להופיע בבעל או באישה", "husbandIdNumber"); return false;
+                }
+                if (loginPhone && loginPhone !== homePhone && loginPhone !== husbandPhone && loginPhone !== wifePhone) {
+                    MySwal("הטלפון שהזנת בכניסה חייב להופיע בטלפון בית/בעל/אישה", "homePhoneNumber"); return false;
                 }
             }
 
@@ -1552,36 +1784,37 @@
         function sendToFirstServer(PostData) {
             // מיפוי השדות מ-Field לשמות טבעיים
             var fieldMapping = {
-                'Field1': 'zehut',
-                'Field2': 'firstName',
-                'Field3': 'lastName',
-                'Field4': 'birthDate',
-                'Field5': 'phone',
-                'Field6': 'mobile',
-                'Field7': 'mobile2',
-                'Field8': 'email',
-                'Field9': 'email2',
-                'Field10': 'city',
-                'Field11': 'street',
-                'Field12': 'shchuna',
-                'Field13': 'building',
-                'Field14': 'apartment',
-                'Field15': 'isAvrechKollel',
-                'Field16': 'kolel',
-                'Field17': 'isBogerYG',
-                'Field18': 'YGMachzor',
-                'Field19': 'isChildInAteret',
+                'Field1': 'familyName',
+                'Field2': 'homePhoneNumber',
+                'Field3': 'husbandFirstName',
+                'Field4': 'husbandIdNumber',
+                'Field5': 'husbandPhoneNumber',
+                'Field6': 'husbandEmail',
+                'Field7': 'wifeFirstName',
+                'Field8': 'wifeIdNumber',
+                'Field9': 'wifePhoneNumber',
+                'Field10': 'wifeEmail',
+                'Field11': 'cityId',
+                'Field12': 'streetId',
+                'Field13': 'neighborhoodId',
+                'Field14': 'buildingNumber',
+                'Field15': 'studiesInKollels',
+                'Field16': 'kollelInstitutionBranchId',
+                'Field17': 'isAtarashYeshivaGraduate',
+                'Field18': 'atarashYeshivaCycleId',
+                'Field19': 'hasChildrenInAtarashInstitutions',
                 'Field20': 'children',
-                'Field21': 'isInTzevet',
-                'Field22': 'tzevetInMosad',
+                'Field21': 'isAtarashYeshivaStaff',
+                'Field22': 'atarashStaffHusbandInstitutionBranchId',
                 'Field23': 'note',
                 'Field24': 'childrenAtHome',
                 'Field25': 'childrenMarried',
-                'Field26': 'childrenTotal',
                 'Field27': 'noCommitment',
                 'Field28': 'approveMarketing',
                 'Field29': 'entrance',
-                'Field30': 'kolelType'
+                'Field30': 'kollelStudyTypeId',
+                'Field31': 'communityId',
+                'Field32': 'atarashStaffWifeInstitutionBranchId'
             };
 
             // יצירת אובייקט JSON לשרת הראשון
@@ -1605,8 +1838,8 @@
                         var mappedKey = fieldMapping[key];
                         if (mappedKey) {
                             // טיפול מיוחד בשדות boolean
-                            if (mappedKey === 'isAvrechKollel' || mappedKey === 'isBogerYG' ||
-                                mappedKey === 'isChildInAteret' || mappedKey === 'isInTzevet') {
+                            if (mappedKey === 'studiesInKollels' || mappedKey === 'isAtarashYeshivaGraduate' ||
+                                mappedKey === 'hasChildrenInAtarashInstitutions' || mappedKey === 'isAtarashYeshivaStaff') {
                                 stage1Data[mappedKey] = (value === 'מסומן');
                             }
                             // טיפול מיוחד בנתוני ילדים - המרה מ-JSON לאובייקט
@@ -1623,9 +1856,35 @@
                                 }
                             }
                             // טיפול מיוחד בסלקטים - שליחת value במקום label
-                            else if (mappedKey === 'kolel' || mappedKey === 'YGMachzor' || mappedKey === 'tzevetInMosad') {
+                            else if (mappedKey === 'kollelInstitutionBranchId' || mappedKey === 'atarashYeshivaCycleId' || mappedKey === 'atarashStaffHusbandInstitutionBranchId' || mappedKey === 'atarashStaffWifeInstitutionBranchId') {
                                 // הערך כבר value (לא label) כי הסלקטים שלנו עכשיו מחזירים value
-                                stage1Data[mappedKey] = (value === 'null' || value === '') ? null : value;
+                                stage1Data[mappedKey] = (value === 'null' || value === '') ? null : Number(value);
+                            }
+                            else if (mappedKey === 'kollelStudyTypeId') {
+                                var studyTypeId = null;
+                                if (value && value !== 'null' && GlobalSelectOptions && GlobalSelectOptions.kollelStudyTypes) {
+                                    for (var k = 0; k < GlobalSelectOptions.kollelStudyTypes.length; k++) {
+                                        var opt = GlobalSelectOptions.kollelStudyTypes[k];
+                                        if (String(opt.label) === String(value)) {
+                                            studyTypeId = opt.value;
+                                            break;
+                                        }
+                                    }
+                                }
+                                stage1Data[mappedKey] = studyTypeId !== null ? Number(studyTypeId) : null;
+                            }
+                            else if (mappedKey === 'neighborhoodId') {
+                                var neighborhoodId = null;
+                                if (value && value !== 'null' && GlobalSelectOptions && GlobalSelectOptions.neighborhoods) {
+                                    for (var k = 0; k < GlobalSelectOptions.neighborhoods.length; k++) {
+                                        var opt = GlobalSelectOptions.neighborhoods[k];
+                                        if (String(opt.label) === String(value)) {
+                                            neighborhoodId = opt.value;
+                                            break;
+                                        }
+                                    }
+                                }
+                                stage1Data[mappedKey] = neighborhoodId !== null ? Number(neighborhoodId) : null;
                             }
                             // שדות רגילים
                             else {
@@ -1636,8 +1895,16 @@
                 }
             }
 
+            delete stage1Data.note;
+            delete stage1Data.noCommitment;
+            delete stage1Data.approveMarketing;
+
+            stage1Data.loginIdNumber = (LoginIdNumber || '').toString();
+            stage1Data.loginPhoneNumber = (LoginPhoneNumber || '').toString();
+            stage1Data.otp = ($('#OtpCheckText').val() || '').toString().replace(/\D/g, '');
+
             $.ajax({
-                url: "https://us-central1-tomchei-tora2.cloudfunctions.net/nedarimForm-saveFamily",
+                url: BASE_API_URL + "/save-family",
                 type: "POST",
                 data: JSON.stringify(stage1Data),
                 contentType: "application/json; charset=utf-8",
@@ -1695,36 +1962,36 @@
             var processedPostData = originalPostData;
 
             // המרת סלקטים מ-value ל-label לשרת השני
-            // המרת kolel
-            var kolelRegex = /Field15=([^&]*)/;
+            // המרת kollelInstitutionBranchId
+            var kolelRegex = /Field16=([^&]*)/;
             var kolelMatch = processedPostData.match(kolelRegex);
             if (kolelMatch && kolelMatch[1]) {
                 var kolelValue = decodeURIComponent(kolelMatch[1]);
                 var kolelLabel = getLabelByValue('kolelim', kolelValue);
-                processedPostData = processedPostData.replace(kolelRegex, "Field15=" + encodeURIComponent(kolelLabel));
+                processedPostData = processedPostData.replace(kolelRegex, "Field16=" + encodeURIComponent(kolelLabel));
             }
 
-            // המרת YGMachzor
-            var ygRegex = /Field17=([^&]*)/;
+            // המרת atarashYeshivaCycleId
+            var ygRegex = /Field18=([^&]*)/;
             var ygMatch = processedPostData.match(ygRegex);
             if (ygMatch && ygMatch[1]) {
                 var ygValue = decodeURIComponent(ygMatch[1]);
                 var ygLabel = getLabelByValue('YGMachzorim', ygValue);
-                processedPostData = processedPostData.replace(ygRegex, "Field17=" + encodeURIComponent(ygLabel));
+                processedPostData = processedPostData.replace(ygRegex, "Field18=" + encodeURIComponent(ygLabel));
             }
 
-            // המרת tzevetInMosad
-            var tzevetRegex = /Field21=([^&]*)/;
+            // המרת atarashStaffHusbandInstitutionBranchId
+            var tzevetRegex = /Field22=([^&]*)/;
             var tzevetMatch = processedPostData.match(tzevetRegex);
             if (tzevetMatch && tzevetMatch[1]) {
                 var tzevetValue = decodeURIComponent(tzevetMatch[1]);
                 var tzevetLabel = getLabelByValue('tzevetInMosad', tzevetValue);
-                processedPostData = processedPostData.replace(tzevetRegex, "Field21=" + encodeURIComponent(tzevetLabel));
+                processedPostData = processedPostData.replace(tzevetRegex, "Field22=" + encodeURIComponent(tzevetLabel));
             }
 
-            // חיפוש ועיבוד שדה הילדים (Field19) - המרת values ל-labels
-            var field19Regex = /Field19=([^&]*)/;
-            var match = processedPostData.match(field19Regex);
+            // חיפוש ועיבוד שדה הילדים (Field20) - המרת values ל-labels
+            var field20Regex = /Field20=([^&]*)/;
+            var match = processedPostData.match(field20Regex);
 
             if (match && match[1]) {
                 try {
@@ -1742,17 +2009,17 @@
                         var row = [];
 
                         // יצירת שורה עם המרת values ל-labels
-                        if (child.childBirthDate) row.push(child.childBirthDate);
-                        if (child.childMosadType) {
-                            var institutionLabel = getChildInstitutionLabelByValue(child.childMosadType);
+                        if (child.birthDate) row.push(child.birthDate);
+                        if (child.institutionTypeId) {
+                            var institutionLabel = getChildInstitutionLabelByValue(child.institutionTypeId);
                             row.push(institutionLabel);
                         }
-                        if (child.childMosad) {
-                            var branchLabel = getChildBranchLabelByValue(child.childMosadType, child.childMosad);
+                        if (child.institutionBranchId) {
+                            var branchLabel = getChildBranchLabelByValue(child.institutionTypeId, child.institutionBranchId);
                             row.push(branchLabel);
                         }
-                        if (child.childClass) {
-                            var classLabel = getChildClassLabelByValue(child.childMosadType, child.childClass);
+                        if (child.classId) {
+                            var classLabel = getChildClassLabelByValue(child.institutionTypeId, child.classId);
                             row.push(classLabel);
                         }
 
@@ -1764,7 +2031,7 @@
 
                     // החלפת הערך המקורי בפורמט החדש
                     var newEncodedValue = encodeURIComponent(tableFormat);
-                    processedPostData = processedPostData.replace(field19Regex, "Field19=" + newEncodedValue);
+                    processedPostData = processedPostData.replace(field20Regex, "Field20=" + newEncodedValue);
 
                 } catch (e) {
                     console.log('Error processing children data for second server:', e);
@@ -2056,7 +2323,7 @@
             var data = [];
 
             // אם זה קבוצת ילדים והצ'קבוקס לא מסומן, החזר מערך ריק
-            if (groupId === 'children' && !$("#isChildInAteret").is(':checked')) {
+            if (groupId === 'children' && !$("#hasChildrenInAtarashInstitutions").is(':checked')) {
                 return JSON.stringify([]);
             }
 
@@ -2092,7 +2359,7 @@
             var config = GroupFieldsConfig[groupId];
 
             // בדיקה מיוחדת עבור קבוצת ילדים - אם הצ'קבוקס לא מסומן, אין צורך בבדיקה
-            if (groupId === 'children' && !$("#isChildInAteret").is(':checked')) {
+            if (groupId === 'children' && !$("#hasChildrenInAtarashInstitutions").is(':checked')) {
                 return { valid: true };
             }
 
@@ -2161,7 +2428,7 @@
         // פונקציה לבדיקת שלמות נתוני ילדים
         function validateChildrenData() {
             // בדיקה אם הצ'קבוקס של ילדים מסומן
-            if (!$("#isChildInAteret").is(':checked')) {
+            if (!$("#hasChildrenInAtarashInstitutions").is(':checked')) {
                 return { valid: true }; // אם הצ'קבוקס לא מסומן, אין צורך בבדיקה
             }
 
@@ -2194,7 +2461,7 @@
                         var value = $('#' + fieldId).val() || '';
 
                         // בדיקת שדות חובה
-                        if (field.Mandatory || field.ElementId === 'childName' || field.ElementId === 'childZehut' || field.ElementId === 'childBirthDate') {
+                        if (field.Mandatory || field.ElementId === 'firstName' || field.ElementId === 'idNumber' || field.ElementId === 'birthDate') {
                             if (value.trim() === '' || value === '') {
                                 return {
                                     valid: false,
@@ -2207,7 +2474,7 @@
                         // בדיקות ספציפיות לסוגי שדות
                         // הוסרה בדיקת תקינות ת.ז. לילדים לפי בקשה
 
-                        if (field.ElementId === 'childBirthDate' && value.trim() !== '') {
+                        if (field.ElementId === 'birthDate' && value.trim() !== '') {
                             if (value.length !== 10 || value.split('/').length !== 3) {
                                 return {
                                     valid: false,
@@ -2264,43 +2531,44 @@
         // פונקציה לבדיקת תקינות סלקטים
         function validateSelectFields() {
             // בדיקת סלקט קולל - אם צ'קבוקס מסומן וסלקט לא נבחר
-            if ($("#isAvrechKollel").is(':checked')) {
-                var kolelValue = $("#kolel").val();
+            if ($("#studiesInKollels").is(':checked')) {
+                var kolelValue = $("#kollelInstitutionBranchId").val();
                 if (!kolelValue || kolelValue === "") {
                     return {
                         valid: false,
                         message: 'יש לבחור מוסד מהרשימה',
-                        fieldId: 'kolel'
+                        fieldId: 'kollelInstitutionBranchId'
                     };
                 }
             }
 
             // בדיקת סלקט מחזור ישיבה גדולה - אם צ'קבוקס מסומן וסלקט לא נבחר
-            if ($("#isBogerYG").is(':checked')) {
-                var machzorValue = $("#YGMachzor").val();
+            if ($("#isAtarashYeshivaGraduate").is(':checked')) {
+                var machzorValue = $("#atarashYeshivaCycleId").val();
                 if (!machzorValue || machzorValue === "") {
                     return {
                         valid: false,
                         message: 'יש לבחור מחזור מהרשימה',
-                        fieldId: 'YGMachzor'
+                        fieldId: 'atarashYeshivaCycleId'
                     };
                 }
             }
 
             // בדיקת סלקט צוות - אם צ'קבוקס מסומן וסלקט לא נבחר
-            if ($("#isInTzevet").is(':checked')) {
-                var tzevetValue = $("#tzevetInMosad").val();
-                if (!tzevetValue || tzevetValue === "") {
+            if ($("#isAtarashYeshivaStaff").is(':checked')) {
+                var tzevetHusbandValue = $("#atarashStaffHusbandInstitutionBranchId").val();
+                var tzevetWifeValue = $("#atarashStaffWifeInstitutionBranchId").val();
+                if ((!tzevetHusbandValue || tzevetHusbandValue === "") && (!tzevetWifeValue || tzevetWifeValue === "")) {
                     return {
                         valid: false,
                         message: 'יש לבחור מוסד מהרשימה',
-                        fieldId: 'tzevetInMosad'
+                        fieldId: 'atarashStaffHusbandInstitutionBranchId'
                     };
                 }
             }
 
             // בדיקת סלקטים של ילדים - אם צ'קבוקס ילדים מסומן
-            if ($("#isChildInAteret").is(':checked')) {
+            if ($("#hasChildrenInAtarashInstitutions").is(':checked')) {
                 var config = GroupFieldsConfig['children'];
                 if (config) {
                     for (var rowIndex = 0; rowIndex < config.currentRows; rowIndex++) {
@@ -2320,15 +2588,15 @@
 
                         // אם יש נתונים בשורה, בדוק את הסלקטים
                         if (hasAnyData) {
-                            var mosadValue = $('#children_childMosadType_' + rowIndex).val();
-                            var snifValue = $('#children_childMosad_' + rowIndex).val();
-                            var classValue = $('#children_childClass_' + rowIndex).val();
+                            var mosadValue = $('#children_institutionTypeId_' + rowIndex).val();
+                            var snifValue = $('#children_institutionBranchId_' + rowIndex).val();
+                            var classValue = $('#children_classId_' + rowIndex).val();
 
                             if (!mosadValue || mosadValue === "") {
                                 return {
                                     valid: false,
                                     message: 'יש לבחור מוסד עבור ילד מספר ' + (rowIndex + 1),
-                                    fieldId: 'children_childMosadType_' + rowIndex
+                                    fieldId: 'children_institutionTypeId_' + rowIndex
                                 };
                             }
 
@@ -2336,7 +2604,7 @@
                                 return {
                                     valid: false,
                                     message: 'יש לבחור סניף עבור ילד מספר ' + (rowIndex + 1),
-                                    fieldId: 'children_childMosad_' + rowIndex
+                                    fieldId: 'children_institutionBranchId_' + rowIndex
                                 };
                             }
 
@@ -2344,7 +2612,7 @@
                                 return {
                                     valid: false,
                                     message: 'יש לבחור כיתה/שיעור עבור ילד מספר ' + (rowIndex + 1),
-                                    fieldId: 'children_childClass_' + rowIndex
+                                    fieldId: 'children_classId_' + rowIndex
                                 };
                             }
                         }
@@ -2357,10 +2625,10 @@
 
         // פונקציה לבדיקה שלפחות אחד מארבעת הצ'קבוקסים הראשיים מסומן
         function validateMainCheckboxes() {
-            var isAvrechKollelChecked = $("#isAvrechKollel").is(':checked');
-            var isBogerYGChecked = $("#isBogerYG").is(':checked');
-            var isChildInAteretChecked = $("#isChildInAteret").is(':checked');
-            var isInTzevetChecked = $("#isInTzevet").is(':checked');
+            var isAvrechKollelChecked = $("#studiesInKollels").is(':checked');
+            var isBogerYGChecked = $("#isAtarashYeshivaGraduate").is(':checked');
+            var isChildInAteretChecked = $("#hasChildrenInAtarashInstitutions").is(':checked');
+            var isInTzevetChecked = $("#isAtarashYeshivaStaff").is(':checked');
 
             // בדיקה שלפחות אחד מהם מסומן
             if (!isAvrechKollelChecked && !isBogerYGChecked && !isChildInAteretChecked && !isInTzevetChecked) {
@@ -2376,13 +2644,13 @@
         // פונקציה לאימות שדות תלויים
         function validateConditionalFields() {
             // בדיקה שאם מסמנים "לומד בכוללים", חובה לבחור "סוג הלימוד"
-            if ($("#isAvrechKollel").is(':checked')) {
-                var kolelTypeSelected = $('input[name=kolelType]:checked').val();
+            if ($("#studiesInKollels").is(':checked')) {
+                var kolelTypeSelected = $('input[name=kollelStudyTypeId]:checked').val();
                 if (!kolelTypeSelected) {
                     return {
                         valid: false,
                         message: 'חובה לבחור סוג הלימוד כאשר מסמנים "לומד בכוללים"',
-                        fieldId: 'kolelType_Radio0'
+                        fieldId: 'kollelStudyTypeId_Radio0'
                     };
                 }
             }
@@ -2436,47 +2704,52 @@
         <!-- מסך כניסה -->
         <div id="ZeoutCheck"
             style="border-radius: 7px; margin-top: 20px; padding: 13px; width: 330px; margin: 30px auto; display: none;">
-            <div id="Zihuy1" style="vertical-align:top;text-align: center;margin: auto;">
-                <label for="Zihuy1" class="fieldName" style=""><span id="Span_Zihuy1"
-                        style="color:indianred;"></span></label><br>
-                <div id="Zihuy1_RadioLbl0" style="display:inline-block">
-                    <label class="RadioBtLbl" for="Zihuy1_Radio0" style="border:none">
-                        <input id="Zihuy1_Radio0" type="radio" name="Zihuy1" value="israel" checked>
-                        <span id="Zihuy1_RadioLblShow0">ת.ז.</span>
-                    </label>
+            
+            <!-- הודעה על אפשרות רישום באתר -->
+            <div id="WebsiteInfoMessage" style="display: none; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 2px solid #2196f3; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);">
+                <div style="color: #1565c0; font-size: 16px; font-weight: bold; margin-bottom: 8px; line-height: 1.5;">
+                    לידיעתכם ניתן לבצע רישום ועדכון פרטים
+                    <br>
+                    גם באתר שלנו בכתובת:
                 </div>
-                <div id="Zihuy1_RadioLbl1" style="display:inline-block">
-                    <label class="RadioBtLbl" for="Zihuy1_Radio1" style="border:none">
-                        <input id="Zihuy1_Radio1" type="radio" name="Zihuy1" value="chutz">
-                        <span id="Zihuy1_RadioLblShow1">דרכון</span>
-                    </label>
-                </div>
+                <a href="https://tomcheitora.org.il/" target="_blank" style="display: inline-block; color: #0d47a1; font-size: 18px; font-weight: bold; text-decoration: none; background-color: white; padding: 10px 20px; border-radius: 8px; margin-top: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    tomcheitora.org.il
+                </a>
             </div>
-
+            
             <div style="margin: 10px 0px; color: #285f7b; font-size: 16px; text-align: center; margin-bottom: 10px"
                 id="ZeoutCheckKoteret">
                 תעודת זהות:</div>
             <div style="text-align:center" id="ZeoutCheckTextDiv">
-                <input id="ZeoutCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off" maxlength="9"
-                    style="width: 80%; text-align: center; font-size: x-large; font-weight: bold">
-            </div>
-            <div style="text-align:center;display:none" id="DarkonCheckTextDiv">
-                <div style="margin-bottom: 5px; color: #666; font-size: 14px;">נא לכתוב רק את הספרות בלי אותיות</div>
-                <input id="DarkonCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off" maxlength="11"
+                <input id="ZeoutCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off" maxlength="15"
                     style="width: 80%; text-align: center; font-size: x-large; font-weight: bold">
             </div>
 
-            <div style="margin: 10px 0px; color: #285f7b; font-size: 16px; text-align: center; margin-bottom: 0px"
-                id="PassCheckKoteret1">תאריך לידה:<br />(לדוג' 01/01/2021)</div>
-            <div style="text-align:center;margin-bottom: 30px;" id="PassCheckTextDiv">
-                <input id="PassCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off" maxlength="10"
+            <div style="margin: 10px 0px; color: #285f7b; font-size: 16px; text-align: center; margin-bottom: 10px"
+                id="PhoneCheckKoteret">מספר טלפון:</div>
+            <div style="text-align:center" id="PhoneCheckTextDiv">
+                <input id="PhoneCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off" maxlength="11"
+                    style="width:80%; text-align:center;font-size:x-large;font-weight:bold">
+            </div>
+
+            <div style="text-align:center;margin-bottom: 10px; display:none" id="OtpCheckDiv">
+                <div style="margin: 10px 0px; color: #285f7b; font-size: 16px; text-align: center;">קוד אימות (OTP):</div>
+                <input id="OtpCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off"
                     style="width:80%; text-align:center;font-size:x-large;font-weight:bold">
             </div>
 
             <div style="text-align: center;">
-                <div style="text-align:center;margin:10px;display: inline-block;" id="ZeoutCheckSave">
+                <div style="text-align:center;margin:10px;display: inline-block;" id="SendOtpDiv">
+                    <input class="Bt" style="margin:0px;background-color: #38c232;" type="button"
+                        id="SendOtpBt" value="שלח קוד" onclick="sendOtp()">
+                </div>
+                <div style="text-align:center;margin:10px;display: none;" id="ResendOtpDiv">
+                    <input class="Bt" style="margin:0px;background-color: #38c232;font-size: 12px;padding: 6px 10px;min-width: 0;" type="button"
+                        id="ResendOtpBt" value="שליחה חוזרת" onclick="sendOtp()">
+                </div>
+                <div style="text-align:center;margin:10px;display: none;" id="ZeoutCheckSave">
                     <input class="Bt" style="margin:0px;background-color: cadetblue;" type="button"
-                        id="ZeoutCheckSaveBt" value="אישור" onclick="Stage1()">
+                        id="ZeoutCheckSaveBt" value="אימות" onclick="Stage1()">
                 </div>
             </div>
             <div style="text-align:center;margin:10px;color:#808080;display:none" id="ZeoutCheckWait">
@@ -2739,6 +3012,7 @@
             }, 50);
         }
 
+        /*
         // פונקציית מסך כניסה
         function Stage1() {
             $("#ZeoutCheckSave").hide();
@@ -2851,28 +3125,26 @@
                                 }
                             }
                         }
-                        if (JsonData.family.kolelType == "יום שלם") {
-                            $('#kolelType_Radio0').prop('checked', true);
-                        } else if (JsonData.family.kolelType == "חצי יום") {
-                            $('#kolelType_Radio1').prop('checked', true);
+                        var studyTypeValue = JsonData.family.kollelStudyTypeId || JsonData.family.kolelType;
+                        if (studyTypeValue == "יום שלם") {
+                            $('#kollelStudyTypeId_Radio0').prop('checked', true);
+                        } else if (studyTypeValue == "חצי יום") {
+                            $('#kollelStudyTypeId_Radio1').prop('checked', true);
                         }
                     }
                 }
 
-                $("#city").trigger('change');
+                $("#cityId").trigger('change');
 
-                //השהיה קצרה
+                //השהיה קצרה לטעינת שכונה
                 setTimeout(function () {
-                    $("#shchuna").val(JsonData.family.shchuna)
-                }, 100)
+                    var neighborhoodValue = JsonData.family.neighborhoodId || JsonData.family.shchuna;
+                    if (neighborhoodValue) {
+                        $("#neighborhoodId").val(neighborhoodValue);
+                    }
+                }, 200)
 
                 // בכל מקרה ממשיכים לטופס
-                // שמירת הערכים בשדות המתאימים
-                $("#zehut").val(ZeoutTxt).attr('disabled', 'disabled');
-                $("#birthDate").val(KidDate).attr('disabled', 'disabled');
-
-
-
                 // הגדרת מעקב אחר שדות חדשים בקבוצות
                 setupGroupFieldsWatcher();
 
@@ -2884,11 +3156,11 @@
 
                 //הגדרת רשימת הערים
                 listCityGetAllCity({
-                    CityId: '#city',
-                    StreetId: '#street',
+                    CityId: '#cityId',
+                    StreetId: '#streetId',
                     Auto_Focus_After_City_Selection: true,
                     list_Citys: [],
-                    CityDefault: JsonData.family.city || "",
+                    CityDefault: JsonData.family.cityId || JsonData.family.city || "",
                 })
 
                 // הסתרת מסך הכניסה והצגת הטופס
@@ -2914,6 +3186,274 @@
                 $("#ZeoutCheckWait").hide();
             });
 
+        }
+
+        */
+        // OTP login flow (overrides legacy Stage1)
+        var otpSent = false;
+
+        function setLoginInputsDisabled(disabled) {
+            $("#ZeoutCheckText, #PhoneCheckText").prop("disabled", disabled).prop("readonly", disabled);
+        }
+
+        function toggleOtpActions(showSend, showResend) {
+            $("#SendOtpDiv").toggle(!!showSend);
+            $("#ResendOtpDiv").toggle(!!showResend);
+        }
+
+        function sendOtp() {
+            var zeout = $("#ZeoutCheckText").val();
+            var phone = $("#PhoneCheckText").val();
+
+            if (!zeout) {
+                LoginSwal("נא להקיש מספר זהות", "ZeoutCheckText");
+                return false;
+            }
+            if (!$.isNumeric(zeout) || zeout.length !== 9) {
+                LoginSwal("מספר זהות לא תקין", "ZeoutCheckText");
+                return false;
+            }
+            if (!phone) {
+                LoginSwal("נא להזין מספר טלפון", "PhoneCheckText");
+                return false;
+            }
+            var phoneValue = phone.replace(/-/g, "");
+            if (!$.isNumeric(phoneValue) || phoneValue.length < 9 || phoneValue.length > 10) {
+                LoginSwal("מספר טלפון לא תקין (9-10 ספרות)", "PhoneCheckText");
+                return false;
+            }
+
+            $("#ZeoutCheckSave").hide();
+            toggleOtpActions(false, false);
+            $("#ZeoutCheckWaitText").text("שולח קוד אימות...");
+            $("#ZeoutCheckWait").show();
+
+            $.ajax({
+                url: BASE_API_URL + "/send-otp",
+                type: "POST",
+                data: JSON.stringify({ idNumber: zeout, phone: phoneValue }),
+                contentType: "application/json; charset=utf-8",
+                timeout: 30000,
+            }).success(function (response) {
+                LoginIdNumber = zeout;
+                LoginPhoneNumber = phoneValue;
+                if (response && response.status && response.status !== "success") {
+                    $("#ZeoutCheckWait").hide();
+                    setLoginInputsDisabled(false);
+                    toggleOtpActions(true, false);
+                    $("#ZeoutCheckSave").hide();
+                    LoginSwal(response.message || "שגיאה בשליחת הקוד", "SendOtpBt");
+                    return;
+                }
+                otpSent = true;
+                setLoginInputsDisabled(true);
+                $("#OtpCheckDiv").show();
+                $("#ZeoutCheckWait").hide();
+                toggleOtpActions(false, true);
+                $("#ZeoutCheckSave").show();
+                $("#OtpCheckText").focus();
+            }).error(function (xhr) {
+                var wasOtpSent = otpSent;
+                otpSent = wasOtpSent;
+                $("#ZeoutCheckWait").hide();
+                if (!wasOtpSent) {
+                    setLoginInputsDisabled(false);
+                    toggleOtpActions(true, false);
+                    $("#ZeoutCheckSave").hide();
+                } else {
+                    toggleOtpActions(false, true);
+                    $("#ZeoutCheckSave").show();
+                }
+                var apiMessage = (xhr && xhr.responseJSON && xhr.responseJSON.message)
+                    || (xhr && xhr.responseText)
+                    || "שגיאה בשליחת הקוד. נסה שוב";
+                LoginSwal(apiMessage, "SendOtpBt");
+            });
+        }
+
+        function Stage1() {
+            var zeout = $("#ZeoutCheckText").val();
+            var phone = $("#PhoneCheckText").val();
+            var otp = ($("#OtpCheckText").val() || "").replace(/\D/g, "");
+            $("#OtpCheckText").val(otp);
+
+            LoginIdNumber = zeout;
+            LoginPhoneNumber = phone.replace(/-/g, "");
+
+            if (!otpSent) {
+                LoginSwal("יש לשלוח קוד אימות תחילה", "SendOtpBt");
+                return false;
+            }
+            if (!otp) {
+                LoginSwal("נא להזין קוד אימות", "OtpCheckText");
+                return false;
+            }
+
+            $("#ZeoutCheckSave").hide();
+            toggleOtpActions(false, false);
+            $("#ZeoutCheckWaitText").text("מאמת קוד...");
+            $("#ZeoutCheckWait").show();
+
+            $.ajax({
+                url: BASE_API_URL + "/verify-otp",
+                type: "POST",
+                data: JSON.stringify({ idNumber: zeout, phone: phone.replace(/-/g, ""), otp: otp }),
+                contentType: "application/json; charset=utf-8",
+                timeout: 30000,
+            }).success(function (verifyResponse) {
+                if (verifyResponse && verifyResponse.status && verifyResponse.status !== "success") {
+                    $("#ZeoutCheckWait").hide();
+                    toggleOtpActions(false, true);
+                    $("#ZeoutCheckSave").show();
+                    LoginSwal(verifyResponse.message || "קוד אימות לא תקין", "OtpCheckText");
+                    return;
+                }
+                applyFamilyResponse(verifyResponse);
+            }).error(function () {
+                $("#ZeoutCheckWait").hide();
+                toggleOtpActions(false, true);
+                $("#ZeoutCheckSave").show();
+                LoginSwal("שגיאה באימות הקוד", "OtpCheckText");
+            });
+        }
+
+        function fetchFamilyData(zeout, phone) {
+            $("#ZeoutCheckWaitText").text("נא להמתין... מביא נתונים");
+
+            $.ajax({
+                url: BASE_API_URL + "/get-family?method=1&zehut=" + encodeURIComponent(zeout) + "&phone=" + encodeURIComponent(phone),
+                data: "",
+                type: 'GET',
+                timeout: 60000,
+            }).success(function (JsonData) {
+                applyFamilyResponse(JsonData);
+            }).error(function () {
+                $("#ZeoutCheckSave").show();
+                toggleOtpActions(false, true);
+                $("#ZeoutCheckWait").hide();
+            });
+        }
+
+        function applyFamilyResponse(JsonData) {
+            GlobalFamilyData = JsonData;
+
+            if (JsonData && typeof JsonData === 'object') {
+                if (JsonData.status != "success") {
+                    MySwal("שגיאה: " + JsonData.message, "ZeoutCheckText");
+                    $("#ZeoutCheckSave").show();
+                    toggleOtpActions(false, true);
+                    $("#ZeoutCheckWait").hide();
+                    return;
+                }
+                if (JsonData.selectOptions) {
+                    console.log("Received selectOptions from server:", JsonData.selectOptions);
+                    updateSelectOptionsFromServer(JsonData);
+                }
+
+                setupSelectOptions();
+
+                if (JsonData.family && typeof JsonData.family === 'object') {
+                    for (var fieldName in JsonData.family) {
+                        var $field = $('#' + fieldName);
+                        if ($field.length > 0) {
+                            var fieldValue = JsonData.family[fieldName];
+
+                            if ($field.is('select')) {
+                                console.log("Updating select field:", fieldName, "with value:", fieldValue);
+                                $field.val(fieldValue);
+                            } else if ($field.is('input[type=\"checkbox\"]')) {
+                                $field.prop('checked', fieldValue === true || fieldValue === 'true' || fieldValue === 1 || fieldValue === '1');
+                            } else if ($field.is('input[type=\"radio\"]')) {
+                                $('input[name=\"' + fieldName + '\"][value=\"' + fieldValue + '\"]').prop('checked', true);
+                            } else if ($field.is('input') || $field.is('textarea')) {
+                                $field.val(fieldValue);
+                            }
+                        }
+                    }
+
+                    if (JsonData.family.cityName) {
+                        $('#cityId').val(JsonData.family.cityName);
+                    }
+                    if (JsonData.family.streetName) {
+                        $('#streetId').val(JsonData.family.streetName);
+                    }
+                    if (JsonData.family.communityId && JsonData.family.communityName) {
+                        $('#communityNameText').text(JsonData.family.communityName).show();
+                    } else {
+                        $('#communityNameText').hide();
+                    }
+
+                    $('#husbandIdNumber, #wifeIdNumber').prop('readonly', true).prop('disabled', true);
+
+                    var studyTypeValue = JsonData.family.kollelStudyTypeId || JsonData.family.kolelType;
+                    if ($.isNumeric(studyTypeValue) && GlobalSelectOptions && GlobalSelectOptions.kollelStudyTypes) {
+                        var matched = GlobalSelectOptions.kollelStudyTypes.filter(function (opt) {
+                            return opt.value == studyTypeValue;
+                        });
+                        if (matched.length > 0) {
+                            studyTypeValue = matched[0].label;
+                        }
+                    }
+                    if (studyTypeValue == "יום שלם") {
+                        $('#kollelStudyTypeId_Radio0').prop('checked', true);
+                    } else if (studyTypeValue == "חצי יום") {
+                        $('#kollelStudyTypeId_Radio1').prop('checked', true);
+                    }
+                } else {
+                    $('#husbandIdNumber, #wifeIdNumber').prop('readonly', false).prop('disabled', false);
+
+                    if (LoginIdNumber) {
+                        if (!$('#husbandIdNumber').val()) {
+                            $('#husbandIdNumber').val(LoginIdNumber);
+                        } else if (!$('#wifeIdNumber').val()) {
+                            $('#wifeIdNumber').val(LoginIdNumber);
+                        }
+                    }
+
+                    if (LoginPhoneNumber) {
+                        if (!$('#homePhoneNumber').val()) {
+                            $('#homePhoneNumber').val(LoginPhoneNumber);
+                        } else if (!$('#husbandPhoneNumber').val()) {
+                            $('#husbandPhoneNumber').val(LoginPhoneNumber);
+                        } else if (!$('#wifePhoneNumber').val()) {
+                            $('#wifePhoneNumber').val(LoginPhoneNumber);
+                        }
+                    }
+                }
+            }
+
+            $("#cityId").trigger('change');
+
+            setTimeout(function () {
+                if (JsonData.family) {
+                    var neighborhoodValue = JsonData.family.neighborhoodId || JsonData.family.shchuna;
+                    if (neighborhoodValue) {
+                        $("#neighborhoodId").val(neighborhoodValue);
+                    }
+                }
+            }, 200)
+
+            setupGroupFieldsWatcher();
+            setupConditionalFields();
+            triggerConditionalFieldsAfterDataLoad();
+
+            listCityGetAllCity({
+                CityId: '#cityId',
+                StreetId: '#streetId',
+                Auto_Focus_After_City_Selection: true,
+                list_Citys: [],
+                CityDefault: (JsonData.family && (JsonData.family.cityName || JsonData.family.cityId || JsonData.family.city)) || "",
+            })
+
+            $("#ZeoutCheck").hide();
+            $("#ZeoutCheckWait").hide();
+
+            $("#NotRegisteredDiv").hide();
+            $("#Status4Div").hide();
+            $("#alertStatus1").hide();
+            $("#alertStatus2").hide();
+            $("#ZeoutCheckSave").show();
+            $("#AllMainForm").show();
         }
 
         // פונקציה להגדרת אופציות הסלקטים
@@ -2973,7 +3513,7 @@
 
 
             // אתחול סלקטי מוסדות שכבר קיימים
-            $('select[id^="children_childMosadType_"]').each(function () {
+            $('select[id^="children_institutionTypeId_"]').each(function () {
                 var $select = $(this);
 
                 $select.empty();
@@ -2984,8 +3524,8 @@
             });
 
             // הסתרת סלקטי סניפים וכיתות בהתחלה (לא המוסדות!)
-            $('select[id^="children_childMosad_"]:not([id*="Type"])').parent().hide();
-            $('select[id^="children_childClass"]').parent().hide();
+            $('select[id^="children_institutionBranchId_"]:not([id*="Type"])').parent().hide();
+            $('select[id^="children_classId"]').parent().hide();
         }
 
         // פונקציה כללית לעדכון סלקטים של ילדים
@@ -3023,10 +3563,10 @@
 
         // פונקציה לעדכון סניפים לפי מוסד נבחר
         function updateChildBranches(institutionSelectId) {
-            var rowIndex = institutionSelectId.split('_')[2]; // children_childMosadType_0 -> 0
+            var rowIndex = institutionSelectId.split('_')[2]; // children_institutionTypeId_0 -> 0
             var selectedInstitution = $('#' + institutionSelectId).val();
-            var branchSelectId = 'children_childMosad_' + rowIndex;
-            var classSelectId = 'children_childClass_' + rowIndex;
+            var branchSelectId = 'children_institutionBranchId_' + rowIndex;
+            var classSelectId = 'children_classId_' + rowIndex;
 
             // איפוס וסטור סלקט כיתות
             $('#' + classSelectId).empty().append('<option value="">בחר כיתה/שיעור</option>');
@@ -3036,7 +3576,7 @@
                 // חיפוש המוסד במערך לפי value
                 var institution = null;
                 for (var i = 0; i < selectOptions.childInstitutions.length; i++) {
-                    if (selectOptions.childInstitutions[i].value === selectedInstitution) {
+                    if (String(selectOptions.childInstitutions[i].value) === String(selectedInstitution)) {
                         institution = selectOptions.childInstitutions[i];
                         break;
                     }
@@ -3104,7 +3644,7 @@
                     });
                 }
             }
-            updateAllChildrenSelectsWithValueLabel("children_childMosadType", optionsToUse);
+            updateAllChildrenSelectsWithValueLabel("children_institutionTypeId", optionsToUse);
         }
 
         // פונקציה גנרית לעדכון כל הסלקטים עם אופציות חדשות
@@ -3116,15 +3656,16 @@
 
             // עדכון סלקטים אחרים
             if (selectOptions.kolelim && selectOptions.kolelim.length > 0) {
-                updateSelectOptions("#kolel", selectOptions.kolelim);
+                updateSelectOptions("#kollelInstitutionBranchId", selectOptions.kolelim);
             }
 
             if (selectOptions.YGMachzorim && selectOptions.YGMachzorim.length > 0) {
-                updateSelectOptions("#YGMachzor", selectOptions.YGMachzorim);
+                updateSelectOptions("#atarashYeshivaCycleId", selectOptions.YGMachzorim);
             }
 
             if (selectOptions.tzevetInMosad && selectOptions.tzevetInMosad.length > 0) {
-                updateSelectOptions("#tzevetInMosad", selectOptions.tzevetInMosad);
+                updateSelectOptions("#atarashStaffHusbandInstitutionBranchId", selectOptions.tzevetInMosad);
+                updateSelectOptions("#atarashStaffWifeInstitutionBranchId", selectOptions.tzevetInMosad);
             }
 
             // // גיבוי - אם יש נתונים גלובליים, השתמש בהם
@@ -3144,9 +3685,9 @@
 
         // פונקציה להגדרת event listeners עבור שורת ילד חדשה
         function setupChildRowEventListeners(rowIndex) {
-            var institutionSelectId = 'children_childMosadType_' + rowIndex;
-            var branchSelectId = 'children_childMosad_' + rowIndex;
-            var classSelectId = 'children_childClass_' + rowIndex;
+            var institutionSelectId = 'children_institutionTypeId_' + rowIndex;
+            var branchSelectId = 'children_institutionBranchId_' + rowIndex;
+            var classSelectId = 'children_classId_' + rowIndex;
 
             // וידוא שהסלקט קיים לפני האתחול
             var $institutionSelect = $('#' + institutionSelectId);
@@ -3187,7 +3728,7 @@
             });
 
             // הוספת פורמט תאריך לשדה תאריך לידה
-            var birthDateId = 'children_childBirthDate_' + rowIndex;
+            var birthDateId = 'children_birthDate_' + rowIndex;
             $('#' + birthDateId).off('input').on('input', function () {
                 var TempDate = $(this).val().replace(/\//g, "");
                 if ($.isNumeric(TempDate)) {
@@ -3304,39 +3845,40 @@
         // פונקציה להגדרת שדות תלויים
         function setupConditionalFields() {
             // הסתרת שדות תלויים בתחילה
-            $("#kolelDiv").hide();
-            $("#kolelType").hide();
+            $("#kollelInstitutionBranchIdDiv").hide();
+            $("#kollelStudyTypeId").hide();
             $("#kolelAlert").hide();
-            $("#YGMachzorDiv").hide();
+            $("#atarashYeshivaCycleIdDiv").hide();
             $("#childrenContainer").hide();
-            $("#tzevetInMosadDiv").hide();
+            $("#atarashStaffHusbandInstitutionBranchIdDiv").hide();
+            $("#atarashStaffWifeInstitutionBranchIdDiv").hide();
 
             // הוספת מאזינים לצ'קבוקסים
-            $("#isAvrechKollel").change(function () {
+            $("#studiesInKollels").change(function () {
                 if ($(this).is(':checked')) {
-                    $("#kolelDiv").show();
-                    $("#kolelType").show();
+                    $("#kollelInstitutionBranchIdDiv").show();
+                    $("#kollelStudyTypeId").show();
                     $("#kolelAlert").show();
                 } else {
-                    $("#kolelDiv").hide();
-                    $("#kolelType").hide();
+                    $("#kollelInstitutionBranchIdDiv").hide();
+                    $("#kollelStudyTypeId").hide();
                     $("#kolelAlert").hide();
-                    $("#kolel").val(""); // איפוס הערך
+                    $("#kollelInstitutionBranchId").val(""); // איפוס הערך
                     // איפוס הרדיו בוטונים
-                    $('input[name=kolelType]').prop('checked', false);
+                    $('input[name=kollelStudyTypeId]').prop('checked', false);
                 }
             });
 
-            $("#isBogerYG").change(function () {
+            $("#isAtarashYeshivaGraduate").change(function () {
                 if ($(this).is(':checked')) {
-                    $("#YGMachzorDiv").show();
+                    $("#atarashYeshivaCycleIdDiv").show();
                 } else {
-                    $("#YGMachzorDiv").hide();
-                    $("#YGMachzor").val(""); // איפוס הערך
+                    $("#atarashYeshivaCycleIdDiv").hide();
+                    $("#atarashYeshivaCycleId").val(""); // איפוס הערך
                 }
             });
 
-            $("#isChildInAteret").change(function () {
+            $("#hasChildrenInAtarashInstitutions").change(function () {
                 if ($(this).is(':checked')) {
                     $("#childrenContainer").show();
 
@@ -3373,12 +3915,15 @@
                 }
             });
 
-            $("#isInTzevet").change(function () {
+            $("#isAtarashYeshivaStaff").change(function () {
                 if ($(this).is(':checked')) {
-                    $("#tzevetInMosadDiv").show();
+                    $("#atarashStaffHusbandInstitutionBranchIdDiv").show();
+                    $("#atarashStaffWifeInstitutionBranchIdDiv").show();
                 } else {
-                    $("#tzevetInMosadDiv").hide();
-                    $("#tzevetInMosad").val(""); // איפוס הערך
+                    $("#atarashStaffHusbandInstitutionBranchIdDiv").hide();
+                    $("#atarashStaffWifeInstitutionBranchIdDiv").hide();
+                    $("#atarashStaffHusbandInstitutionBranchId").val(""); // איפוס הערך
+                    $("#atarashStaffWifeInstitutionBranchId").val(""); // איפוס הערך
                 }
             });
         }
@@ -3386,17 +3931,17 @@
         // פונקציה להפעלת טריגרים של שדות תלויים אחרי טעינת נתונים
         function triggerConditionalFieldsAfterDataLoad() {
             // בדיקה והפעלת טריגרים לצ'קבוקסים שמסומנים
-            if ($("#isAvrechKollel").is(':checked')) {
-                $("#kolelDiv").show();
-                $("#kolelType").show();
+            if ($("#studiesInKollels").is(':checked')) {
+                $("#kollelInstitutionBranchIdDiv").show();
+                $("#kollelStudyTypeId").show();
                 $("#kolelAlert").show();
             }
 
-            if ($("#isBogerYG").is(':checked')) {
-                $("#YGMachzorDiv").show();
+            if ($("#isAtarashYeshivaGraduate").is(':checked')) {
+                $("#atarashYeshivaCycleIdDiv").show();
             }
 
-            if ($("#isChildInAteret").is(':checked')) {
+            if ($("#hasChildrenInAtarashInstitutions").is(':checked')) {
                 $("#childrenContainer").show();
 
                 // אתחול הסלקטים לשורות הקיימות
@@ -3417,8 +3962,9 @@
                 }, 200);
             }
 
-            if ($("#isInTzevet").is(':checked')) {
-                $("#tzevetInMosadDiv").show();
+            if ($("#isAtarashYeshivaStaff").is(':checked')) {
+                $("#atarashStaffHusbandInstitutionBranchIdDiv").show();
+                $("#atarashStaffWifeInstitutionBranchIdDiv").show();
             }
         }
 
@@ -3450,19 +3996,19 @@
                         $field.val(childData[fieldName]);
 
                         // אם זה סלקט של מוסד, יש להפעיל את האירוע שלו
-                        if (fieldName === 'childMosadType') {
+                        if (fieldName === 'institutionTypeId') {
                             // שימוש ב-closure נכון
                             (function (currentIndex, currentChildData) {
                                 setTimeout(function () {
-                                    updateChildBranches('children_childMosadType_' + currentIndex);
+                                    updateChildBranches('children_institutionTypeId_' + currentIndex);
 
                                     // טעינת ערכי סניף וכיתה לאחר עדכון האופציות
                                     setTimeout(function () {
-                                        if (currentChildData.childMosad) {
-                                            $('#children_childMosad_' + currentIndex).val(currentChildData.childMosad);
+                                        if (currentChildData.institutionBranchId) {
+                                            $('#children_institutionBranchId_' + currentIndex).val(currentChildData.institutionBranchId);
                                         }
-                                        if (currentChildData.childClass) {
-                                            $('#children_childClass_' + currentIndex).val(currentChildData.childClass);
+                                        if (currentChildData.classId) {
+                                            $('#children_classId_' + currentIndex).val(currentChildData.classId);
                                         }
                                     }, 100);
                                 }, 200 + (currentIndex * 50)); // מרווח נוסף לכל ילד
@@ -3478,11 +4024,11 @@
         // פונקציה להגדרת שדה השכונות התלוי בעיר
         function setupNeighborhoodField() {
             // מאזין לשינוי בשדה העיר - עם setTimeout לוודא שהערך עודכן
-            $("#city").on('change input', function () {
+            $("#cityId").on('change input', function () {
                 console.log("City field changed, updating neighborhoods...");
                 var $cityField = $(this);
-                var $shchunaSelect = $("#shchuna");
-                var $shchunaDiv = $("#shchunaDiv");
+                var $shchunaSelect = $("#neighborhoodId");
+                var $shchunaDiv = $("#neighborhoodIdDiv");
 
                 // השהיה קצרה כדי לוודא שהערך עודכן במידה ויש עיכוב
                 setTimeout(function () {
@@ -3500,7 +4046,7 @@
 
                         for (var i = 0; i < neighborhoodOptions[selectedCity].length; i++) {
                             var neighborhood = neighborhoodOptions[selectedCity][i];
-                            $shchunaSelect.append('<option value="' + neighborhood + '">' + neighborhood + '</option>');
+                            $shchunaSelect.append('<option value="' + neighborhood.value + '">' + neighborhood.label + '</option>');
                         }
 
                         // הצגת שדה השכונות עם שינוי הסגנון
@@ -3516,10 +4062,31 @@
 
             // גם בדיקה ראשונית אם כבר יש ערך בשדה העיר
             setTimeout(function () {
-                if ($("#city").val()) {
-                    $("#city").trigger('change');
+                if ($("#cityId").val()) {
+                    $("#cityId").trigger('change');
                 }
             }, 100);
+        }
+
+        function lookupCommunityName(communityCode) {
+            if (!communityCode) {
+                $('#communityNameText').hide();
+                return;
+            }
+
+            $.ajax({
+                url: BASE_HOST_URL + "/globals/communities/" + encodeURIComponent(communityCode) + "/name",
+                type: "GET",
+                timeout: 15000,
+            }).success(function (data) {
+                if (data && data.name) {
+                    $('#communityNameText').text(data.name).show();
+                } else {
+                    $('#communityNameText').text('קהילה לא קיימת').show();
+                }
+            }).error(function () {
+                $('#communityNameText').text('קהילה לא קיימת').show();
+            });
         }
 
     </script>
