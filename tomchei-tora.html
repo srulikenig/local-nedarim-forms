@@ -628,7 +628,7 @@
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "Type": "Koteret", "Text": "פרטי מוסד" }
-                , { "Type": "Div", "ElementId": "modiinIllitNotice", "Text": "<div style='background-color: #d4edda; border: 2px solid #28a745; color: #155724; padding: 15px; margin: 10px 20px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: bold;'>✓ לתושבי מודיעין עילית אין חובה לעדכן שיוך למוסדות או קהילה.</div>" }
+                , { "Type": "Div", "ElementId": "modiinIllitNotice", "Text": "<div style='background-color: #d4edda; border: 2px solid #28a745; color: #155724; padding: 15px; margin: 10px 20px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: bold;'>✓ תושבי מודיעין עילית שלא שייכים למוסדות, דלגו על סעיפים שיוך למוסדות או קהילה.</div>" }
 
                 , { "ElementId": "studiesInKollels", "fieldName": "לומד בכוללים שע\"י מוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
                 , { "ElementId": "kollelInstitutionBranchId", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field16", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
@@ -693,11 +693,12 @@
             "PreData": false,
             "MosadId": "7014477", //0
             "MainLogo": "", // Files/Pic/000_logo.jpg
-            "MainTitle": "טופס עדכון פרטים לתלמידי מוסדות עטרת שלמה",
+            "MainTitle": "טופס עדכון פרטים לתלמידי מוסדות עטרת שלמה וזכאים",
             "SpecialCheck": "Phone:Field2,Field5,Field9" //Phone:Field; Date:Field; MasavPayment "CreditCardPayment" //Zeout:Field; //Mail:Field8; //CreditCardToken:Max //CheckDouble: //Bank:Field90,Field91,Field92 //CopyMail: //Tokef:Field8
 
         }
 
+        // Base URL for API endpoints (change here only)
         var BASE_HOST_URL = "https://t-api.srulik.me";
         var BASE_API_URL = BASE_HOST_URL + "/nedarim";
 
@@ -2738,9 +2739,6 @@
             
             <!-- הודעה על אפשרות רישום באתר -->
             <div id="WebsiteInfoMessage" style="display: none; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 2px solid #2196f3; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);">
-                <div style="display: inline-block; background-color: #2196f3; color: white; padding: 8px 16px; border-radius: 20px; margin-bottom: 12px; font-size: 14px; font-weight: bold;">
-                    💡 מידע חשוב
-                </div>
                 <div style="color: #1565c0; font-size: 16px; font-weight: bold; margin-bottom: 8px; line-height: 1.5;">
                     לידיעתכם ניתן לבצע רישום ועדכון פרטים
                     <br>
@@ -2944,7 +2942,7 @@
                     <li>המערכת פועלת בצורה אוטומטית ומילוי פרטים שגויים עלול לגרום לעוגמת נפש עבורכם ואף למחיקה אוטומטית
                         מהמערכת.</li>
                     <li>מכיוון שיתכנו עדיפויות שונות וכן מכיוון שהמערכת אוטומטית ומסונכרנת עם פרטי התלמידים במוסדות, ע"כ
-                        יש למלאות את הפרטים של כלל הזכאים ממשפחתכם כולל כמה ילדים מאותו מוסד.</li>
+                        יש למלא את הפרטים של כלל הזכאים ממשפחתכם כולל כמה ילדים מאותו מוסד.</li>
                     <li>שימו לב למלא את הפרטים לפי שנה"ל תשפ"ו</li>
                 </ul>
 
