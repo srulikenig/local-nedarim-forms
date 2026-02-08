@@ -3270,6 +3270,7 @@
                 LoginIdNumber = zeout;
                 LoginPhoneNumber = phoneValue;
                 if (response && response.status && response.status !== "success") {
+                    otpSent = false;
                     $("#ZeoutCheckWait").hide();
                     setLoginInputsDisabled(false);
                     toggleOtpActions(true, false);
@@ -3285,17 +3286,11 @@
                 $("#ZeoutCheckSave").show();
                 $("#OtpCheckText").focus();
             }).error(function (xhr) {
-                var wasOtpSent = otpSent;
-                otpSent = wasOtpSent;
+                otpSent = false;
                 $("#ZeoutCheckWait").hide();
-                if (!wasOtpSent) {
-                    setLoginInputsDisabled(false);
-                    toggleOtpActions(true, false);
-                    $("#ZeoutCheckSave").hide();
-                } else {
-                    toggleOtpActions(false, true);
-                    $("#ZeoutCheckSave").show();
-                }
+                setLoginInputsDisabled(false);
+                toggleOtpActions(true, false);
+                $("#ZeoutCheckSave").hide();
                 var apiMessage = (xhr && xhr.responseJSON && xhr.responseJSON.message)
                     || (xhr && xhr.responseText)
                     || "שגיאה בשליחת הקוד. נסה שוב";
