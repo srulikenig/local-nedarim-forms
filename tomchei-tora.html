@@ -615,19 +615,20 @@
                 , { "ElementId": "cityId", "MaxLength": 50, "Width": 40, "fieldName": "עיר", "Type": "Text", "Mandatory": true, "DbName": "Field11", "Br": false, "Send": true }
                 , { "ElementId": "streetId", "MaxLength": 50, "Width": 40, "fieldName": "רחוב", "Type": "Text", "Mandatory": true, "DbName": "Field12", "Br": false, "Send": true }
                 , { "ElementId": "neighborhoodId", "MaxLength": 50, "Width": 40, "fieldName": "שכונה", "Type": "Select", "Mandatory": true, "DbName": "Field13", "Br": false, "Send": true, "SelectVal": "בחר שכונה" }
-                , { "ElementId": "buildingNumber", "MaxLength": 10, "Width": 20, "fieldName": "מספר בניין", "Type": "Text", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
+                , { "ElementId": "buildingNumber", "MaxLength": 10, "Width": 20, "fieldName": "מספר בניין", "Type": "Tel", "Mandatory": false, "DbName": "Field14", "Br": false, "Send": true }
                 , { "ElementId": "entrance", "MaxLength": 10, "Width": 20, "fieldName": "כניסה", "Type": "Select", "Mandatory": false, "DbName": "Field29", "Br": false, "Send": true, "SelectVal": "בחר כניסה,א,ב,ג,ד,ה" }
                 , { "Type": "Div", "ElementId": "distributionPointNote", "Text": "<div style='background-color: #f1f5f9; border: 1px solid #e2e8f0; color: #475569; padding: 10px; margin: 10px 20px; border-radius: 6px; text-align: center; font-size: 12px; width: 90%;'>בפתיחת המערכת תוכלו לעדכן נקודת חלוקה.</div>" }
 
                 , { "Type": "Koteret", "Text": "פרטי ילדים" }
                 , { "ElementId": "childrenAtHome", "MaxLength": 2, "Width": 25, "fieldName": "ילדים בבית", "Type": "Tel", "Mandatory": false, "DbName": "Field24", "Br": false, "Send": true }
                 , { "ElementId": "childrenMarried", "MaxLength": 2, "Width": 25, "fieldName": "ילדים נשואים", "Type": "Tel", "Mandatory": false, "DbName": "Field25", "Br": false, "Send": true }
+                , { "ElementId": "totalChildren", "MaxLength": 3, "Width": 25, "fieldName": "סה״כ ילדים", "Type": "Tel", "Mandatory": false, "DbName": "Field26", "Br": false, "Send": true, "ReadOnly": true }
 
 
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "Type": "Koteret", "Text": "פרטי מוסד" }
-                , { "Type": "Div", "ElementId": "modiinIllitNotice", "Text": "<div style='background-color: #d4edda; border: 2px solid #28a745; color: #155724; padding: 15px; margin: 10px 20px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: bold;'>✓ לתושבי מודיעין עילית אין חובה לעדכן שיוך למוסדות או קהילה.</div>" }
+                , { "Type": "Div", "ElementId": "modiinIllitNotice", "Text": "<div style='background-color: #d4edda; border: 2px solid #28a745; color: #155724; padding: 15px; margin: 10px 20px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: bold;'>✓ תושבי מודיעין עילית שלא שייכים למוסדות, דלגו על סעיפים שיוך למוסדות או קהילה.</div>" }
 
                 , { "ElementId": "studiesInKollels", "fieldName": "לומד בכוללים שע\"י מוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
                 , { "ElementId": "kollelInstitutionBranchId", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field16", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
@@ -677,6 +678,8 @@
 
                 , { "Type": "Margin", "Height": "25" }
 
+                , { "ElementId": "termsOfUseApproval", "fieldName": "אני מאשר את התקנות ותנאי השימוש המפורטים באתר", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field33", "Width": 90, "Send": true }
+
                 , { "ElementId": "noCommitment", "fieldName": "אין במילוי טופס זה משום התחייבות של ארגון תומכי תורה לספק שום שירות או תמורה", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field27", "Width": 90, "Send": true }
 
                 , { "ElementId": "approveMarketing", "fieldName": "בעת מילוי הטופס הינכם מאשרים קבלת דיוור וכן הודעות טלפוניות הן מתומכי תורה והן ממוסדות עטרת שלמה", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field28", "Width": 90, "Send": true }
@@ -692,7 +695,7 @@
             "PreData": false,
             "MosadId": "7014477", //0
             "MainLogo": "", // Files/Pic/000_logo.jpg
-            "MainTitle": "טופס עדכון פרטים לתלמידי מוסדות עטרת שלמה",
+            "MainTitle": "טופס עדכון פרטים לתלמידי מוסדות עטרת שלמה וזכאים",
             "SpecialCheck": "Phone:Field2,Field5,Field9" //Phone:Field; Date:Field; MasavPayment "CreditCardPayment" //Zeout:Field; //Mail:Field8; //CreditCardToken:Max //CheckDouble: //Bank:Field90,Field91,Field92 //CopyMail: //Tokef:Field8
 
         }
@@ -1007,6 +1010,19 @@
                 var value = $(this).val().replace(/[^0-9]/g, '');
                 $(this).val(value);
                 lookupCommunityName(value);
+            });
+
+            // חישוב אוטומטי של סה"כ ילדים
+            function calculateTotalChildren() {
+                var childrenAtHome = parseInt($('#childrenAtHome').val()) || 0;
+                var childrenMarried = parseInt($('#childrenMarried').val()) || 0;
+                var total = childrenAtHome + childrenMarried;
+                $('#totalChildren').val(total);
+            }
+
+            // הוספת מאזיני אירועים לחישוב הסך הכל
+            $(document).on('input', '#childrenAtHome, #childrenMarried', function() {
+                calculateTotalChildren();
             });
         });
 
@@ -1816,7 +1832,8 @@
                 'Field29': 'entrance',
                 'Field30': 'kollelStudyTypeId',
                 'Field31': 'communityId',
-                'Field32': 'atarashStaffWifeInstitutionBranchId'
+                'Field32': 'atarashStaffWifeInstitutionBranchId',
+                'Field33': 'termsOfUseApproval'
             };
 
             // יצירת אובייקט JSON לשרת הראשון
@@ -1841,8 +1858,11 @@
                         if (mappedKey) {
                             // טיפול מיוחד בשדות boolean
                             if (mappedKey === 'studiesInKollels' || mappedKey === 'isAtarashYeshivaGraduate' ||
-                                mappedKey === 'hasChildrenInAtarashInstitutions' || mappedKey === 'isAtarashYeshivaStaff') {
+                                mappedKey === 'hasChildrenInAtarashInstitutions' || mappedKey === 'isAtarashYeshivaStaff' || mappedKey === 'termsOfUseApproval' || mappedKey === 'messagingApproval' || mappedKey === 'noObligationApproval' || mappedKey === 'approveMarketing' || mappedKey === 'noCommitment') {
                                 stage1Data[mappedKey] = (value === 'מסומן');
+                                if (mappedKey === 'termsOfUseApproval') {
+                                    stage1Data['privacyPolicyApproval'] = (value === 'מסומן'); 
+                                }
                             }
                             // טיפול מיוחד בנתוני ילדים - המרה מ-JSON לאובייקט
                             else if (mappedKey === 'children') {
@@ -1867,7 +1887,7 @@
                                 if (value && value !== 'null' && GlobalSelectOptions && GlobalSelectOptions.kollelStudyTypes) {
                                     for (var k = 0; k < GlobalSelectOptions.kollelStudyTypes.length; k++) {
                                         var opt = GlobalSelectOptions.kollelStudyTypes[k];
-                                        if (String(opt.label) === String(value)) {
+                                        if (String(opt.label).trim() === String(value).trim()) {
                                             studyTypeId = opt.value;
                                             break;
                                         }
@@ -1898,8 +1918,8 @@
             }
 
             delete stage1Data.note;
-            delete stage1Data.noCommitment;
-            delete stage1Data.approveMarketing;
+            // delete stage1Data.noCommitment;
+            // delete stage1Data.approveMarketing;
 
             stage1Data.loginIdNumber = (LoginIdNumber || '').toString();
             stage1Data.loginPhoneNumber = (LoginPhoneNumber || '').toString();
@@ -2171,6 +2191,14 @@
             else if (JsonElement.Type == "Text" || JsonElement.Type == "Tel") {
                 var OnInput = "";
                 var inputType = JsonElement.Type;
+                var readOnlyAttr = "";
+                var readOnlyStyle = "";
+
+                // תמיכה בשדות ReadOnly
+                if (JsonElement.ReadOnly === true) {
+                    readOnlyAttr = 'readonly="readonly"';
+                    readOnlyStyle = 'background-color: #f0f0f0; cursor: not-allowed;';
+                }
 
                 if (JsonElement.ElementId == "TizkoretTime") {
                     inputType = "time";
@@ -2183,7 +2211,7 @@
                     }
                 }
 
-                elementHtml = '<div style="width:' + (JsonElement.Width || 40) + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:' + marginTop + ';margin-right:' + marginRight + ';">' + Lbl + '<input class="TextBox" dir="' + dir + '" autocomplete="off" type="' + inputType + '" style="width:90%" maxlength="' + (JsonElement.MaxLength || 50) + '" id="' + elementId + '" onfocus="ScrollUp(this)" ' + OnInput + '/></div>';
+                elementHtml = '<div style="width:' + (JsonElement.Width || 40) + '%;display:inline-block;vertical-align:bottom;text-align:right;margin-top:' + marginTop + ';margin-right:' + marginRight + ';">' + Lbl + '<input class="TextBox" dir="' + dir + '" autocomplete="off" type="' + inputType + '" style="width:90%;' + readOnlyStyle + '" maxlength="' + (JsonElement.MaxLength || 50) + '" id="' + elementId + '" onfocus="ScrollUp(this)" ' + OnInput + ' ' + readOnlyAttr + '/></div>';
             }
             else if (JsonElement.Type == "Radio") {
                 var Br = "";
@@ -2717,9 +2745,6 @@
             
             <!-- הודעה על אפשרות רישום באתר -->
             <div id="WebsiteInfoMessage" style="display: none; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 2px solid #2196f3; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center; box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);">
-                <div style="display: inline-block; background-color: #2196f3; color: white; padding: 8px 16px; border-radius: 20px; margin-bottom: 12px; font-size: 14px; font-weight: bold;">
-                    💡 מידע חשוב
-                </div>
                 <div style="color: #1565c0; font-size: 16px; font-weight: bold; margin-bottom: 8px; line-height: 1.5;">
                     לידיעתכם ניתן לבצע רישום ועדכון פרטים
                     <br>
@@ -2749,6 +2774,11 @@
                 <div style="margin: 10px 0px; color: #285f7b; font-size: 16px; text-align: center;">קוד אימות (OTP):</div>
                 <input id="OtpCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off"
                     style="width:80%; text-align:center;font-size:x-large;font-weight:bold">
+                <p style="color: #2c3e50; font-size: 14px; margin-top: 10px;">
+                    הקישו את 6 הספרות האחרונות של המספר שמחייג אליכם
+                    <br/>
+                    ניתן גם לענות לשיחה ולשמוע את הקוד
+                </p>
             </div>
 
             <div style="text-align: center;">
@@ -2775,11 +2805,11 @@
                     זקוקים לעזרה?
                 </div>
                 <p style="margin: 10px 0; color: #2c3e50; font-size: 16px; line-height: 1.5; font-weight: 500;">
-                    לכל בעיה ברישום "בלבד" ניתן לפנות למייל
-                    <span
-                        style="color: #4a90e2; font-weight: bold; text-decoration: underline;">ttnp9686@gmail.com</span>
+                    לכל בעיה ניתן לפנות:
                     <br />
-                    או בהודעה לגבאי במערכת נדרים פלוס
+                    מייל: <span style="color: #4a90e2; font-weight: bold; text-decoration: underline;">tomchei@tomcheitora.org.il</span>
+                    <br />
+                    טלפון: <span style="color: #4a90e2; font-weight: bold;">073-8881871</span>
                 </p>
 
             </div>
@@ -2923,7 +2953,7 @@
                     <li>המערכת פועלת בצורה אוטומטית ומילוי פרטים שגויים עלול לגרום לעוגמת נפש עבורכם ואף למחיקה אוטומטית
                         מהמערכת.</li>
                     <li>מכיוון שיתכנו עדיפויות שונות וכן מכיוון שהמערכת אוטומטית ומסונכרנת עם פרטי התלמידים במוסדות, ע"כ
-                        יש למלאות את הפרטים של כלל הזכאים ממשפחתכם כולל כמה ילדים מאותו מוסד.</li>
+                        יש למלא את הפרטים של כלל הזכאים ממשפחתכם כולל כמה ילדים מאותו מוסד.</li>
                     <li>שימו לב למלא את הפרטים לפי שנה"ל תשפ"ו</li>
                 </ul>
 
@@ -3204,6 +3234,8 @@
         */
         // OTP login flow (overrides legacy Stage1)
         var otpSent = false;
+        var resendTimer = null;
+        var resendCooldown = 0;
 
         function setLoginInputsDisabled(disabled) {
             $("#ZeoutCheckText, #PhoneCheckText").prop("disabled", disabled).prop("readonly", disabled);
@@ -3217,6 +3249,8 @@
         function sendOtp() {
             var zeout = $("#ZeoutCheckText").val();
             var phone = $("#PhoneCheckText").val();
+
+            if (resendCooldown > 0) return;
 
             if (!zeout) {
                 LoginSwal("נא להקיש מספר זהות", "ZeoutCheckText");
@@ -3251,6 +3285,7 @@
                 LoginIdNumber = zeout;
                 LoginPhoneNumber = phoneValue;
                 if (response && response.status && response.status !== "success") {
+                    otpSent = false;
                     $("#ZeoutCheckWait").hide();
                     setLoginInputsDisabled(false);
                     toggleOtpActions(true, false);
@@ -3263,25 +3298,44 @@
                 $("#OtpCheckDiv").show();
                 $("#ZeoutCheckWait").hide();
                 toggleOtpActions(false, true);
+                startResendTimer();
                 $("#ZeoutCheckSave").show();
                 $("#OtpCheckText").focus();
             }).error(function (xhr) {
-                var wasOtpSent = otpSent;
-                otpSent = wasOtpSent;
+                otpSent = false;
                 $("#ZeoutCheckWait").hide();
-                if (!wasOtpSent) {
-                    setLoginInputsDisabled(false);
-                    toggleOtpActions(true, false);
-                    $("#ZeoutCheckSave").hide();
-                } else {
-                    toggleOtpActions(false, true);
-                    $("#ZeoutCheckSave").show();
-                }
+                setLoginInputsDisabled(false);
+                toggleOtpActions(true, false);
+                $("#ZeoutCheckSave").hide();
                 var apiMessage = (xhr && xhr.responseJSON && xhr.responseJSON.message)
                     || (xhr && xhr.responseText)
                     || "שגיאה בשליחת הקוד. נסה שוב";
                 LoginSwal(apiMessage, "SendOtpBt");
             });
+        }
+
+        function startResendTimer() {
+             resendCooldown = 40;
+             updateResendButton();
+             if (resendTimer) clearInterval(resendTimer);
+             resendTimer = setInterval(function() {
+                 resendCooldown--;
+                 updateResendButton();
+                 if (resendCooldown <= 0) {
+                     clearInterval(resendTimer);
+                 }
+             }, 1000);
+        }
+
+        function updateResendButton() {
+            var btn = $("#ResendOtpBt");
+            if (resendCooldown > 0) {
+                btn.val("שליחה חוזרת בעוד " + resendCooldown + " שניות");
+                btn.prop("disabled", true).css("opacity", "0.6").css("cursor", "default");
+            } else {
+                btn.val("שליחה חוזרת");
+                btn.prop("disabled", false).css("opacity", "1").css("cursor", "pointer");
+            }
         }
 
         function Stage1() {
@@ -3406,6 +3460,9 @@
                         if (matched.length > 0) {
                             studyTypeValue = matched[0].label;
                         }
+                    }
+                    if (studyTypeValue && typeof studyTypeValue === 'string') {
+                        studyTypeValue = studyTypeValue.trim();
                     }
                     if (studyTypeValue == "יום שלם") {
                         $('#kollelStudyTypeId_Radio0').prop('checked', true);
