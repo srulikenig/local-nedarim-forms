@@ -678,6 +678,8 @@
 
                 , { "Type": "Margin", "Height": "25" }
 
+                , { "ElementId": "termsOfUseApproval", "fieldName": "אני מאשר את התקנות ותנאי השימוש המפורטים באתר", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field33", "Width": 90, "Send": true }
+
                 , { "ElementId": "noCommitment", "fieldName": "אין במילוי טופס זה משום התחייבות של ארגון תומכי תורה לספק שום שירות או תמורה", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field27", "Width": 90, "Send": true }
 
                 , { "ElementId": "approveMarketing", "fieldName": "בעת מילוי הטופס הינכם מאשרים קבלת דיוור וכן הודעות טלפוניות הן מתומכי תורה והן ממוסדות עטרת שלמה", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field28", "Width": 90, "Send": true }
@@ -699,7 +701,7 @@
         }
 
         // Base URL for API endpoints (change here only)
-        var BASE_HOST_URL = "https://t-api.srulik.me";
+        var BASE_HOST_URL = "https://api-2.tomcheitora.org.il";
         var BASE_API_URL = BASE_HOST_URL + "/nedarim";
 
 
@@ -1830,7 +1832,8 @@
                 'Field29': 'entrance',
                 'Field30': 'kollelStudyTypeId',
                 'Field31': 'communityId',
-                'Field32': 'atarashStaffWifeInstitutionBranchId'
+                'Field32': 'atarashStaffWifeInstitutionBranchId',
+                'Field33': 'termsOfUseApproval'
             };
 
             // יצירת אובייקט JSON לשרת הראשון
@@ -1855,8 +1858,11 @@
                         if (mappedKey) {
                             // טיפול מיוחד בשדות boolean
                             if (mappedKey === 'studiesInKollels' || mappedKey === 'isAtarashYeshivaGraduate' ||
-                                mappedKey === 'hasChildrenInAtarashInstitutions' || mappedKey === 'isAtarashYeshivaStaff') {
+                                mappedKey === 'hasChildrenInAtarashInstitutions' || mappedKey === 'isAtarashYeshivaStaff' || mappedKey === 'termsOfUseApproval' || mappedKey === 'messagingApproval' || mappedKey === 'noObligationApproval' || mappedKey === 'approveMarketing' || mappedKey === 'noCommitment') {
                                 stage1Data[mappedKey] = (value === 'מסומן');
+                                if (mappedKey === 'termsOfUseApproval') {
+                                    stage1Data['privacyPolicyApproval'] = (value === 'מסומן'); 
+                                }
                             }
                             // טיפול מיוחד בנתוני ילדים - המרה מ-JSON לאובייקט
                             else if (mappedKey === 'children') {
@@ -1881,7 +1887,7 @@
                                 if (value && value !== 'null' && GlobalSelectOptions && GlobalSelectOptions.kollelStudyTypes) {
                                     for (var k = 0; k < GlobalSelectOptions.kollelStudyTypes.length; k++) {
                                         var opt = GlobalSelectOptions.kollelStudyTypes[k];
-                                        if (String(opt.label) === String(value)) {
+                                        if (String(opt.label).trim() === String(value).trim()) {
                                             studyTypeId = opt.value;
                                             break;
                                         }
@@ -1912,8 +1918,8 @@
             }
 
             delete stage1Data.note;
-            delete stage1Data.noCommitment;
-            delete stage1Data.approveMarketing;
+            // delete stage1Data.noCommitment;
+            // delete stage1Data.approveMarketing;
 
             stage1Data.loginIdNumber = (LoginIdNumber || '').toString();
             stage1Data.loginPhoneNumber = (LoginPhoneNumber || '').toString();
@@ -2768,6 +2774,11 @@
                 <div style="margin: 10px 0px; color: #285f7b; font-size: 16px; text-align: center;">קוד אימות (OTP):</div>
                 <input id="OtpCheckText" class="TextBox" type="tel" dir="ltr" autocomplete="off"
                     style="width:80%; text-align:center;font-size:x-large;font-weight:bold">
+                <p style="color: #2c3e50; font-size: 14px; margin-top: 10px;">
+                    הקישו את 6 הספרות האחרונות של המספר שמחייג אליכם
+                    <br/>
+                    ניתן גם לענות לשיחה ולשמוע את הקוד
+                </p>
             </div>
 
             <div style="text-align: center;">
@@ -3223,6 +3234,8 @@
         */
         // OTP login flow (overrides legacy Stage1)
         var otpSent = false;
+        var resendTimer = null;
+        var resendCooldown = 0;
 
         function setLoginInputsDisabled(disabled) {
             $("#ZeoutCheckText, #PhoneCheckText").prop("disabled", disabled).prop("readonly", disabled);
@@ -3236,6 +3249,8 @@
         function sendOtp() {
             var zeout = $("#ZeoutCheckText").val();
             var phone = $("#PhoneCheckText").val();
+
+            if (resendCooldown > 0) return;
 
             if (!zeout) {
                 LoginSwal("נא להקיש מספר זהות", "ZeoutCheckText");
@@ -3283,6 +3298,7 @@
                 $("#OtpCheckDiv").show();
                 $("#ZeoutCheckWait").hide();
                 toggleOtpActions(false, true);
+                startResendTimer();
                 $("#ZeoutCheckSave").show();
                 $("#OtpCheckText").focus();
             }).error(function (xhr) {
@@ -3296,6 +3312,30 @@
                     || "שגיאה בשליחת הקוד. נסה שוב";
                 LoginSwal(apiMessage, "SendOtpBt");
             });
+        }
+
+        function startResendTimer() {
+             resendCooldown = 40;
+             updateResendButton();
+             if (resendTimer) clearInterval(resendTimer);
+             resendTimer = setInterval(function() {
+                 resendCooldown--;
+                 updateResendButton();
+                 if (resendCooldown <= 0) {
+                     clearInterval(resendTimer);
+                 }
+             }, 1000);
+        }
+
+        function updateResendButton() {
+            var btn = $("#ResendOtpBt");
+            if (resendCooldown > 0) {
+                btn.val("שליחה חוזרת בעוד " + resendCooldown + " שניות");
+                btn.prop("disabled", true).css("opacity", "0.6").css("cursor", "default");
+            } else {
+                btn.val("שליחה חוזרת");
+                btn.prop("disabled", false).css("opacity", "1").css("cursor", "pointer");
+            }
         }
 
         function Stage1() {
@@ -3420,6 +3460,9 @@
                         if (matched.length > 0) {
                             studyTypeValue = matched[0].label;
                         }
+                    }
+                    if (studyTypeValue && typeof studyTypeValue === 'string') {
+                        studyTypeValue = studyTypeValue.trim();
                     }
                     if (studyTypeValue == "יום שלם") {
                         $('#kollelStudyTypeId_Radio0').prop('checked', true);
