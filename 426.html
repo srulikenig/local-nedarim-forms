@@ -2791,7 +2791,6 @@
                 objToSend.kidsMarried = $("#kidsMarried").val() || "";
                 objToSend.registeredAsMarried = $('input[name=MarrigeQ]:checked').val() == "כן";
                 objToSend.heMarriedDate = $("#BDEMarrige").val() || "";
-                objToSend.ishurKizuzDatotRishumNisuin = $("#NoteMarrige").is(":checked") ? true : false;
                 objToSend.city = $("#City").val() || "";
                 objToSend.street = $("#Street").val() || "";
                 objToSend.binyan = $("#Home").val() || "";
@@ -2856,8 +2855,8 @@
 
                 objToSend.city = $("#City").val();
                 objToSend.vaad = $("#VAAD").val();
-                objToSend.heMarriedDate = $("#BDEMarrige").val();
-                objToSend.note = $("#note").val();
+                objToSend.heMarriedDate = $("#BDEMarrige").val() || "";
+                objToSend.note = $("#Note").val();
 
             } else if (formStatus == 3) {
 
@@ -3309,7 +3308,4 @@
 
 
 </body>
-
-<!-- Mirrored from matara.pro/nedarimplus/Forms/426.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 09 Mar 2025 00:36:21 GMT -->
-
 </html>
