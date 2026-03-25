@@ -3650,6 +3650,7 @@
             window.FcCurrentItems = [];
             window.FcWeightUpdates = {};
             window.FcPickLastSearch = null;
+            window.FcReadySelected = {};
 
             // מערכת מעקב אחר פעילות משתמש לבדיקת הודעות
             window.LastUserActivity = Date.now();
@@ -3726,7 +3727,8 @@
                     5: "ספירת מלאי",
                     6: "מדבקות מיקום",
                     7: "דג ועוף משלוחים",
-                    8: "דג ועוף ליקוט"
+                    8: "דג ועוף ליקוט",
+                    9: "דג ועוף מוכנים"
                 };
                 $("#screenName").text(screenNames[tabNumber] || "");
 
@@ -3788,6 +3790,12 @@
                 html += '<i class="fa-solid fa-box-open"></i>';
                 html += '<span>דג ועוף ליקוט</span>';
                 html += '</div>';
+
+                // Menu item 9: דג ועוף מוכנים
+                html += '<div class="selection-card" onclick="ShowTab(9)">';
+                html += '<i class="fa-solid fa-list-check"></i>';
+                html += '<span>דג ועוף מוכנים</span>';
+                html += '</div>';
                 
                 html += '</div>'; // Close flex container
                 html += '</div>'; // Close padding container
@@ -3844,6 +3852,7 @@
                 $("#TabContent6").hide();
                 $("#TabContent7").hide();
                 $("#TabContent8").hide();
+                $("#TabContent9").hide();
                 
                 switch (CurrentTab) {
                     case 0:
@@ -3920,6 +3929,10 @@
                     case 8:
                         $("#TabContent8").show();
                         InitFcPickScreen();
+                        break;
+                    case 9:
+                        $("#TabContent9").show();
+                        GetFcReadyDeliveries();
                         break;
                 }
 
@@ -5133,6 +5146,7 @@
                 html += '<div style="font-size:13px;color:#666;margin-top:4px;display:flex;gap:10px;flex-wrap:wrap;">'
                     + '<span>מסלול: ' + (order.routeNumber || '-') + '</span>'
                     + '<span>פריטים: ' + (order.itemsCount || 0) + '</span>'
+                    + '<span>שקיות: ' + (order.bagsCount || 0) + '</span>'
                     + '<span>יתרה: ' + (order.balanceToPay || 0) + '</span>'
                     + '</div>';
                 html += noteHtml;
@@ -5150,19 +5164,17 @@
                 html += '<div style="text-align:right;">';
                 html += '<div style="margin-bottom:8px;">הערת עובד:</div>';
                 html += '<input id="fcEmployeeNote" type="text" style="width:100%;padding:6px;border:1px solid #ccc;border-radius:4px;" />';
-                html += '<div style="margin:10px 0 6px;">סכום בגביה בדלת:</div>';
-                html += '<input id="fcPaidAtDoorAmount" type="number" min="0" step="0.01" style="width:100%;padding:6px;border:1px solid #ccc;border-radius:4px;" placeholder="0" />';
-                html += '<div style="margin:10px 0 6px;">אמצעי תשלום:</div>';
-                html += '<select id="fcPaymentMethod" style="width:100%;padding:6px;border:1px solid #ccc;border-radius:4px;">'
-                    + '<option value="">בחר</option>'
-                    + '<option value="cash">מזומן</option>'
-                    + '<option value="check">צ׳ק</option>'
-                    + '<option value="vouchers">שוברים</option>'
-                    + '<option value="card">כרטיס</option>'
-                    + '</select>';
-                html += '<div style="margin:10px 0 6px;">הערת תשלום:</div>';
-                html += '<input id="fcPaymentNote" type="text" style="width:100%;padding:6px;border:1px solid #ccc;border-radius:4px;" />';
-                html += '<div style="margin-top:8px;color:#666;font-size:12px;">יתרה לתשלום: ' + (order.balanceToPay || 0) + '</div>';
+
+                html += '<div style="margin:12px 0 6px;font-weight:bold;">תשלומים</div>';
+                html += '<div id="fcPaymentsList" style="display:flex;flex-direction:column;gap:8px;"></div>';
+                html += '<div style="display:flex;justify-content:flex-start;margin-top:8px;">'
+                    + '<button type="button" id="fcAddPaymentRow" style="background:#e0e0e0;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;font-weight:bold;">הוסף תשלום</button>'
+                    + '</div>';
+
+                html += '<div style="margin-top:10px;color:#666;font-size:12px;">'
+                    + 'סה"כ תשלומים: <span id="fcPaymentsTotal">0</span>'
+                    + ' | יתרה לאחר תשלום: <span id="fcPaymentsRemaining">' + (order.balanceToPay || 0) + '</span>'
+                    + '</div>';
                 html += '</div>';
 
                 swal({
@@ -5178,29 +5190,39 @@
                     if (res === false) return false;
 
                     var employeeNote = $("#fcEmployeeNote").val() || '';
-                    var amountRaw = $("#fcPaidAtDoorAmount").val();
-                    var paidAtDoorAmount = amountRaw === '' ? 0 : parseFloat(amountRaw);
-                    var paymentMethod = $("#fcPaymentMethod").val() || '';
-                    var paymentNote = $("#fcPaymentNote").val() || '';
+                    var payments = [];
+                    var hasInvalidRow = false;
 
-                    if (isNaN(paidAtDoorAmount) || paidAtDoorAmount < 0) {
-                        MySwal("סכום לא תקין");
+                    $("#fcPaymentsList .fc-payment-row").each(function () {
+                        var amountVal = $(this).find('.fc-payment-amount').val();
+                        var methodVal = $(this).find('.fc-payment-method').val();
+                        var noteVal = $(this).find('.fc-payment-note').val();
+
+                        var isRowEmpty = (amountVal === '' || amountVal === null) && !methodVal && !noteVal;
+                        if (isRowEmpty) {
+                            return;
+                        }
+
+                        var amountNum = parseFloat(amountVal);
+                        if (isNaN(amountNum) || amountNum <= 0) {
+                            hasInvalidRow = true;
+                            return;
+                        }
+                        if (!methodVal) {
+                            hasInvalidRow = true;
+                            return;
+                        }
+
+                        payments.push({
+                            amount: amountNum,
+                            method: methodVal,
+                            note: noteVal || ''
+                        });
+                    });
+
+                    if (hasInvalidRow) {
+                        MySwal("יש שורות תשלום לא תקינות");
                         return false;
-                    }
-
-                    if (paidAtDoorAmount > 0) {
-                        if (order.paymentPlan && order.paymentPlan !== 'pay_at_door') {
-                            MySwal("ניתן להזין סכום בדלת רק בהזמנות משלם בדלת");
-                            return false;
-                        }
-                        if (paidAtDoorAmount > (order.balanceToPay || 0)) {
-                            MySwal("סכום בדלת גבוה מהיתרה לתשלום");
-                            return false;
-                        }
-                        if (!paymentMethod) {
-                            MySwal("נא לבחור אמצעי תשלום");
-                            return false;
-                        }
                     }
 
                     swal({
@@ -5213,13 +5235,8 @@
                     var payload = {
                         orderId: order.orderId,
                         employeeNote: employeeNote,
-                        paidAtDoorAmount: paidAtDoorAmount
+                        payments: payments
                     };
-
-                    if (paidAtDoorAmount > 0) {
-                        payload.paymentMethod = paymentMethod;
-                        payload.paymentNote = paymentNote;
-                    }
 
                     $.ajax({
                         url: `${window.baseUrl}posApi/fcApproveDelivery`,
@@ -5239,6 +5256,7 @@
                                 showConfirmButton: false
                             });
                             setTimeout(function () {
+                                GetOrders();
                                 GetFcDeliveries();
                             }, 1000);
                         } else {
@@ -5260,6 +5278,176 @@
                         });
                     });
                 });
+
+                setTimeout(function () {
+                    function updatePaymentsTotals() {
+                        var total = 0;
+                        $("#fcPaymentsList .fc-payment-amount").each(function () {
+                            var val = parseFloat($(this).val());
+                            if (!isNaN(val) && val > 0) {
+                                total += val;
+                            }
+                        });
+                        $("#fcPaymentsTotal").text(total.toFixed(2));
+                        var remaining = (order.balanceToPay || 0) - total;
+                        $("#fcPaymentsRemaining").text(remaining.toFixed(2));
+                    }
+
+                    function addPaymentRow() {
+                        var rowHtml = '';
+                        rowHtml += '<div class="fc-payment-row" style="display:grid;grid-template-columns:90px 120px 1fr auto;gap:6px;align-items:center;">';
+                        rowHtml += '<input class="fc-payment-amount" type="number" min="0" step="0.01" placeholder="סכום" style="border:1px solid #d4d4d4;padding:6px;border-radius:4px;text-align:center;" />';
+                        rowHtml += '<select class="fc-payment-method" style="border:1px solid #d4d4d4;padding:6px;border-radius:4px;">'
+                            + '<option value="">אמצעי</option>'
+                            + '<option value="cash">מזומן</option>'
+                            + '<option value="check">צ\'ק</option>'
+                            + '<option value="vouchers">שוברים</option>'
+                            + '<option value="card">כרטיס</option>'
+                            + '</select>';
+                        rowHtml += '<input class="fc-payment-note" type="text" placeholder="הערה" style="border:1px solid #d4d4d4;padding:6px;border-radius:4px;" />';
+                        rowHtml += '<button type="button" class="fc-remove-payment" style="background:#f44336;color:white;border:none;padding:6px 10px;border-radius:4px;cursor:pointer;">X</button>';
+                        rowHtml += '</div>';
+
+                        $("#fcPaymentsList").append(rowHtml);
+                        updatePaymentsTotals();
+                    }
+
+                    $("#fcAddPaymentRow").off("click").on("click", function () {
+                        addPaymentRow();
+                    });
+
+                    $("#fcPaymentsList").on("input change", ".fc-payment-amount, .fc-payment-method", function () {
+                        updatePaymentsTotals();
+                    });
+
+                    $("#fcPaymentsList").on("click", ".fc-remove-payment", function () {
+                        $(this).closest('.fc-payment-row').remove();
+                        updatePaymentsTotals();
+                    });
+
+                    addPaymentRow();
+                    updatePaymentsTotals();
+                }, 0);
+            }
+
+            function GetFcReadyDeliveries() {
+                var html = '';
+                html += '<div style="padding: 0 10px 70px;">';
+                html += '<div style="text-align: center; font-size: 18px; font-weight: bold; color: #009688; margin: 10px 0;">דג ועוף מוכנים למשלוח</div>';
+                html += '<div style="display:flex;align-items:center;gap:8px;margin:8px 0;">';
+                html += '<input type="checkbox" id="fcReadySelectAll" />';
+                html += '<label for="fcReadySelectAll" style="font-size:14px;color:#666;">בחר הכל</label>';
+                html += '</div>';
+                html += '<div id="FcReadyDeliveriesList"></div>';
+                html += '</div>';
+
+                html += '<div id="FcReadyDeliveriesBar" style="position:fixed;bottom:0;left:0;width:100%;z-index:10;">'
+                    + '<div style="max-width:500px;width:95%;margin:auto;position:relative;background:#ffffff;padding:8px 10px;box-sizing:border-box;border-top:2px solid #cbcbcb;text-align:center;">'
+                    + '<button id="FcReadyAssignBtn" style="width:100%;background:#8bc34a;color:#4a4a4a;border:none;padding:10px 12px;border-radius:4px;font-size:14px;font-weight:bold;cursor:pointer;">אשר למשלוח</button>'
+                    + '</div>'
+                    + '</div>';
+
+                $("#TabContent9").html(html);
+
+                $.ajax({
+                    url: `${window.baseUrl}posApi/fcReadyDeliveries`,
+                    context: Text,
+                    timeout: 16000,
+                    headers: {
+                        "authorization": UserToken
+                    }
+                }).success(function (Response) {
+                    if (Response.status === 'error') {
+                        MySwal(Response.massege);
+                        return false;
+                    }
+
+                    var deliveries = Response.data || [];
+                    window.FcReadySelected = {};
+
+                    var listHtml = '';
+                    if (deliveries.length === 0) {
+                        listHtml += '<div style="text-align:center; color:#bdbdbd; font-size:15px; padding:10px 0;">אין הזמנות מוכנות</div>';
+                    } else {
+                        for (var i = 0; i < deliveries.length; i++) {
+                            listHtml += renderFcReadyDeliveryRow(deliveries[i]);
+                        }
+                    }
+                    $("#FcReadyDeliveriesList").html(listHtml);
+
+                    $("#fcReadySelectAll").off("change").on("change", function () {
+                        var checked = $(this).is(':checked');
+                        $(".fc-ready-checkbox").prop('checked', checked);
+                        deliveries.forEach(function (d) {
+                            window.FcReadySelected[d.orderId] = checked;
+                        });
+                    });
+
+                    $(".fc-ready-checkbox").off("change").on("change", function () {
+                        var orderId = $(this).data('order-id');
+                        window.FcReadySelected[orderId] = $(this).is(':checked');
+                        var allChecked = $(".fc-ready-checkbox").length > 0 && $(".fc-ready-checkbox:checked").length === $(".fc-ready-checkbox").length;
+                        $("#fcReadySelectAll").prop('checked', allChecked);
+                    });
+
+                    $("#FcReadyAssignBtn").off("click").on("click", function () {
+                        var selectedIds = deliveries
+                            .filter(function (d) { return window.FcReadySelected[d.orderId]; })
+                            .map(function (d) { return d.orderId; });
+
+                        if (selectedIds.length === 0) {
+                            MySwal("לא נבחרו הזמנות");
+                            return;
+                        }
+
+                        $.ajax({
+                            url: `${window.baseUrl}posApi/fcAssignReadyDeliveries`,
+                            method: 'POST',
+                            contentType: 'application/json',
+                            headers: {
+                                "authorization": UserToken
+                            },
+                            data: JSON.stringify({ orderIds: selectedIds }),
+                            timeout: 16000
+                        }).success(function (res) {
+                            if (res.status === 'error') {
+                                MySwal(res.massege);
+                                return false;
+                            }
+
+                            MySwal(res.massege || "הזמנות עודכנו", undefined, "success");
+                            GetFcReadyDeliveries();
+                            GetFcDeliveries();
+                        }).error(function () {
+                            MySwal("שגיאה בביצוע הפעולה. בדוק תקשורת");
+                        });
+                    });
+                }).error(function () {
+                    MySwal("שגיאה בקבלת נתונים. בדוק תקשורת");
+                });
+            }
+
+            function renderFcReadyDeliveryRow(order) {
+                var address = (order.customerAddress || '').trim();
+                var html = '';
+                html += '<div class="fc-ready-row" style="display:flex;align-items:stretch;gap:8px;text-align:right;border-radius:5px;margin:7px auto;background:#fffdfa;font-size:15px;box-sizing:border-box;border:2px solid #e7e7e7;overflow:hidden;padding:6px 8px;">';
+                html += '<div style="display:flex;align-items:center;">';
+                html += '<input type="checkbox" class="fc-ready-checkbox" data-order-id="' + order.orderId + '" />';
+                html += '</div>';
+                html += '<div style="background:#607d8b;color:white;display:flex;align-items:center;justify-content:center;min-width:50px;font-weight:bold;font-size:16px;border-radius:4px;">' + (order.deliveryNumber || '') + '</div>';
+                html += '<div style="flex:1;display:flex;flex-direction:column;justify-content:center;min-width:0;">';
+                html += '<div style="font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + (order.customerName || '') + '</div>';
+                html += '<div style="font-size:14px;color:#666;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">טל: ' + (order.customerPhone || '') + '</div>';
+                html += '<div style="font-size:14px;color:#666;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + address + '</div>';
+                html += '<div style="font-size:13px;color:#666;margin-top:4px;display:flex;gap:10px;flex-wrap:wrap;">'
+                    + '<span>מסלול: ' + (order.routeNumber || '-') + '</span>'
+                    + '<span>פריטים: ' + (order.itemsCount || 0) + '</span>'
+                    + '<span>שקיות: ' + (order.bagsCount || 0) + '</span>'
+                    + '<span>יתרה: ' + (order.balanceToPay || 0) + '</span>'
+                    + '</div>';
+                html += '</div>';
+                html += '</div>';
+                return html;
             }
 
             function InitFcPickScreen() {
@@ -5358,6 +5546,7 @@
                     summaryHtml += '<div style="font-weight:bold;color:#333;">הזמנה: ' + (order.deliveryNumber || order.pickupNumber || '') + '</div>';
                     summaryHtml += '<div style="color:#666;font-size:13px;margin-top:4px;">סטטוס: ' + (order.status || '') + ' | מסלול: ' + (order.routeNumber || '-') + '</div>';
                     summaryHtml += '<div style="color:#666;font-size:13px;margin-top:4px;">יתרה לתשלום: ' + (order.balanceToPay || 0) + '</div>';
+                    summaryHtml += '<div style="color:#666;font-size:13px;margin-top:4px;">שקיות: ' + (order.bagsCount || 0) + '</div>';
                     if (order.note) {
                         summaryHtml += '<div style="margin-top:6px;background:#fff3e0;border:1px solid #ffe0b2;padding:6px 10px;border-radius:5px;font-size:13px;color:#e65100;">' + order.note + '</div>';
                     }
@@ -5870,6 +6059,10 @@
                         <i class="fa-solid fa-box-open"></i>
                         <span>דג ועוף ליקוט</span>
                     </div>
+                    <div class="menu-item" onclick="ShowTab(9);">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>דג ועוף מוכנים</span>
+                    </div>
                 </div>
             </div>
             <div id="TabContent0" style="display:none;">
@@ -5935,6 +6128,9 @@
             </div>
             <div id="TabContent8" style="display:none;">
                 <!-- Fish & Chicken picking screen - placeholder -->
+            </div>
+            <div id="TabContent9" style="display:none;">
+                <!-- Fish & Chicken ready deliveries screen - placeholder -->
             </div>
         </div>
     </div>
