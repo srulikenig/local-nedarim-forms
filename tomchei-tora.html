@@ -2671,19 +2671,6 @@
                                    communityNameText.indexOf('לא קיימת') === -1 &&
                                    communityNameText.trim() !== '';
 
-            // אם זה תושב מודיעין עילית או יש קהילה תקינה, הוא לא חייב לסמן כלום
-            if (isModiinIllit || hasValidCommunity) {
-                return { valid: true };
-            }
-
-            // בדיקה שלפחות אחד מהם מסומן (רק למי שלא מודיעין עילית ואין קהילה תקינה)
-            if (!isAvrechKollelChecked && !isBogerYGChecked && !isChildInAteretChecked && !isInTzevetChecked) {
-                return {
-                    valid: false,
-                    message: 'חובה לסמן לפחות אחת מהאפשרויות: לומד במוסדות עטרת שלמה / בוגר ישיבה גדולה / הורה לילדים במוסדות עטרת שלמה / איש צוות בעטרת שלמה, או להזין קהילה תקינה'
-                };
-            }
-
             return { valid: true };
         }
 
