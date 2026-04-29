@@ -630,6 +630,9 @@
                 , { "Type": "Koteret", "Text": "פרטי מוסד" }
                 , { "Type": "Div", "ElementId": "modiinIllitNotice", "Text": "<div style='background-color: #d4edda; border: 2px solid #28a745; color: #155724; padding: 15px; margin: 10px 20px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: bold;'>✓ תושבי מודיעין עילית שלא שייכים למוסדות, דלגו על סעיפים שיוך למוסדות או קהילה.</div>" }
 
+                , { "ElementId": "isAtarashMember", "fieldName": "משתייך למוסדות עטרת שלמה?", "Type": "CheckBox", "Mandatory": false, "Width": 90, "Br": false }
+                , { "Type": "DivOpen", "ElementId": "atarashMemberSection", "Text": "" }
+
                 , { "ElementId": "studiesInKollels", "fieldName": "לומד בכוללים שע\"י מוסדות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field15", "Width": 70, "Br": false, "Send": true }
                 , { "ElementId": "kollelInstitutionBranchId", "MaxLength": 50, "Width": 50, "fieldName": "בחר מוסד", "Type": "Select", "Mandatory": false, "DbName": "Field16", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
                 , {
@@ -665,6 +668,8 @@
                 , { "ElementId": "isAtarashYeshivaStaff", "fieldName": "צוות עטרת שלמה", "Type": "CheckBox", "Mandatory": false, "DbName": "Field21", "Width": 70, "Br": false, "Send": true }
                 , { "ElementId": "atarashStaffHusbandInstitutionBranchId", "MaxLength": 50, "Width": 50, "fieldName": "מקום עבודה בעל", "Type": "Select", "Mandatory": false, "DbName": "Field22", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
                 , { "ElementId": "atarashStaffWifeInstitutionBranchId", "MaxLength": 50, "Width": 50, "fieldName": "מקום עבודה אישה", "Type": "Select", "Mandatory": false, "DbName": "Field32", "Br": false, "Send": true, "SelectVal": "בחר מוסד" }
+
+                , { "Type": "DivClose" }
 
                 , { "Type": "Margin", "Height": "25" }
 
@@ -3909,6 +3914,23 @@
 
         // פונקציה להגדרת שדות תלויים
         function setupConditionalFields() {
+            // הסתרת קטע המוסדות כולו בתחילה
+            $("#atarashMemberSection").hide();
+
+            // מאזין לצ'קבוקס הראשי של שיוך למוסדות
+            $("#isAtarashMember").off('change').on('change', function () {
+                if ($(this).is(':checked')) {
+                    $("#atarashMemberSection").show();
+                } else {
+                    $("#atarashMemberSection").hide();
+                    // איפוס כל הצ'קבוקסים של המוסדות ותת-השדות שלהם
+                    $("#studiesInKollels").prop('checked', false).trigger('change');
+                    $("#isAtarashYeshivaGraduate").prop('checked', false).trigger('change');
+                    $("#hasChildrenInAtarashInstitutions").prop('checked', false).trigger('change');
+                    $("#isAtarashYeshivaStaff").prop('checked', false).trigger('change');
+                }
+            });
+
             // הסתרת שדות תלויים בתחילה
             $("#kollelInstitutionBranchIdDiv").hide();
             $("#kollelStudyTypeId").hide();
@@ -4036,6 +4058,15 @@
             if ($("#isAtarashYeshivaStaff").is(':checked')) {
                 $("#atarashStaffHusbandInstitutionBranchIdDiv").show();
                 $("#atarashStaffWifeInstitutionBranchIdDiv").show();
+            }
+
+            // אם יש קשר למוסדות - הצגת הקטע כולו וסימון הצ'קבוקס הראשי
+            if ($("#studiesInKollels").is(':checked') ||
+                $("#isAtarashYeshivaGraduate").is(':checked') ||
+                $("#hasChildrenInAtarashInstitutions").is(':checked') ||
+                $("#isAtarashYeshivaStaff").is(':checked')) {
+                $("#isAtarashMember").prop('checked', true);
+                $("#atarashMemberSection").show();
             }
         }
 
