@@ -628,7 +628,7 @@
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "Type": "Koteret", "Text": "פרטי מוסד" }
-                , { "Type": "Div", "ElementId": "modiinIllitNotice", "Text": "<div style='background-color: #d4edda; border: 2px solid #28a745; color: #155724; padding: 15px; margin: 10px 20px; border-radius: 8px; text-align: center; font-size: 16px; font-weight: bold;'>✓ תושבי מודיעין עילית שלא שייכים למוסדות, דלגו על סעיפים שיוך למוסדות או קהילה.</div>" }
+                , { "Type": "Div", "ElementId": "institutionsNotice", "Text": "<div style='background-color: #d4edda; border: 2px solid #28a745; color: #155724; padding: 15px; margin: 10px 20px; border-radius: 8px; text-align: center; font-size: 15px; font-weight: bold;'>שימו לב - המכירות פתוחות לכלל הציבור - אך אם יש שיוך למוסדות או לקהילה רלוונטית - יש למלא כדי לקבל את המקסימום</div>" }
 
                 , { "ElementId": "isAtarashMember", "fieldName": "משתייך למוסדות עטרת שלמה?", "Type": "CheckBox", "Mandatory": false, "Width": 90, "Br": false }
                 , { "Type": "DivOpen", "ElementId": "atarashMemberSection", "Text": "" }
@@ -674,8 +674,11 @@
                 , { "Type": "Margin", "Height": "25" }
 
                 , { "Type": "Koteret", "Text": "קהילה" }
-                , { "ElementId": "communityId", "MaxLength": 10, "Width": 40, "fieldName": "מספר קהילה", "Type": "Tel", "Mandatory": false, "DbName": "Field31", "Br": false, "Send": true }
+                , { "ElementId": "isInCommunity", "fieldName": "משתייך לקהילה?", "Type": "CheckBox", "Mandatory": false, "Width": 90, "Br": false }
+                , { "Type": "DivOpen", "ElementId": "communitySection", "Text": "" }
+                , { "ElementId": "communityId", "MaxLength": 10, "Width": 40, "fieldName": "מספר קהילה", "Type": "Tel", "Mandatory": false, "DbName": "Field31", "Br": false }
                 , { "Type": "Div", "ElementId": "communityNameDisplay", "Text": "<div id='communityNameText' style='margin: 6px 20px 0; color: #2c3e50; font-size: 14px; font-weight: bold; display:none;'> </div>" }
+                , { "Type": "DivClose" }
 
                 , { "Type": "Margin", "Height": "25" }
 
@@ -683,9 +686,9 @@
 
                 , { "Type": "Margin", "Height": "25" }
 
-                , { "ElementId": "termsOfUseApproval", "fieldName": "אני מאשר את התקנות ותנאי השימוש המפורטים באתר", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field33", "Width": 90, "Send": true }
+                , { "ElementId": "termsOfUseApproval", "fieldName": "אני מאשר את התקנות ותנאי השימוש המפורטים באתר תומכי תורה", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field33", "Width": 90, "Send": true }
 
-                , { "ElementId": "noCommitment", "fieldName": "אין במילוי טופס זה משום התחייבות של ארגון תומכי תורה לספק שום שירות או תמורה", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field27", "Width": 90, "Send": true }
+                , { "ElementId": "noCommitment", "fieldName": "הרישום מהווה בקשת הצטרפות בלבד; הזכאות להזמנה בפועל תאושר באופן פרטני על ידי המערכת", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field27", "Width": 90, "Send": true }
 
                 , { "ElementId": "approveMarketing", "fieldName": "בעת מילוי הטופס הינכם מאשרים קבלת דיוור וכן הודעות טלפוניות הן מתומכי תורה והן ממוסדות עטרת שלמה", "Type": "CheckBox", "Bold": true, "Mandatory": true, "Br": false, "DbName": "Field28", "Width": 90, "Send": true }
 
@@ -3931,6 +3934,20 @@
                 }
             });
 
+            // הסתרת קטע הקהילה בתחילה
+            $("#communitySection").hide();
+
+            // מאזין לצ'קבוקס קהילה
+            $("#isInCommunity").off('change').on('change', function () {
+                if ($(this).is(':checked')) {
+                    $("#communitySection").show();
+                } else {
+                    $("#communitySection").hide();
+                    $("#communityId").val("");
+                    $("#communityNameText").hide().text(' ');
+                }
+            });
+
             // הסתרת שדות תלויים בתחילה
             $("#kollelInstitutionBranchIdDiv").hide();
             $("#kollelStudyTypeId").hide();
@@ -4019,9 +4036,9 @@
         function triggerConditionalFieldsAfterDataLoad() {
             // בדיקה והצגת הודעה לתושבי מודיעין עילית
             var currentCity = $("#cityId").val() || '';
-            if (currentCity.trim() === 'מודיעין עילית') {
-                $("#modiinIllitNotice").show();
-            }
+            // if (currentCity.trim() === 'מודיעין עילית') {
+            //     $("#modiinIllitNotice").show();
+            // }
 
             // בדיקה והפעלת טריגרים לצ'קבוקסים שמסומנים
             if ($("#studiesInKollels").is(':checked')) {
@@ -4067,6 +4084,12 @@
                 $("#isAtarashYeshivaStaff").is(':checked')) {
                 $("#isAtarashMember").prop('checked', true);
                 $("#atarashMemberSection").show();
+            }
+
+            // אם יש קהילה - סימון הצ'קבוקס והצגת השדה
+            if ($("#communityId").val()) {
+                $("#isInCommunity").prop('checked', true);
+                $("#communitySection").show();
             }
         }
 
@@ -4139,11 +4162,11 @@
                     console.log("City changed to:", selectedCity);
 
                     // בדיקה והצגת הודעה לתושבי מודיעין עילית
-                    if (selectedCity === 'מודיעין עילית') {
-                        $("#modiinIllitNotice").show();
-                    } else {
-                        $("#modiinIllitNotice").hide();
-                    }
+                    // if (selectedCity === 'מודיעין עילית') {
+                    //     $("#modiinIllitNotice").show();
+                    // } else {
+                    //     $("#modiinIllitNotice").hide();
+                    // }
 
                     // בדיקה אם יש אופציות שכונות לעיר הנבחרת
                     if (neighborhoodOptions[selectedCity] && neighborhoodOptions[selectedCity].length > 0) {
