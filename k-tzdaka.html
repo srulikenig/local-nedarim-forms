@@ -1,0 +1,3291 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SYSTEM_MAPPING.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> or <div class="page"></div> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body dir="rtl">
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="מיפוי-מערכת-ניהול-הצדקה---מיפוי-לקוח">מיפוי מערכת ניהול קופה של צדקה קרית חסידים - מיפוי לקוח</h1>
+<blockquote>
+<p>מסמך זה מתאר את כל המסכים, הפונקציונליות, הטפסים והפעולות הקיימות במערכת.
+<strong>תאריך כתיבה:</strong> מאי 2026</p>
+</blockquote>
+<hr>
+<h2 id="תוכן-עניינים">תוכן עניינים</h2>
+<ol>
+<li><a href="#1-%D7%9B%D7%A0%D7%99%D7%A1%D7%94-%D7%9C%D7%9E%D7%A2%D7%A8%D7%9B%D7%AA">כניסה למערכת (Login)</a></li>
+<li><a href="#2-%D7%93%D7%A9%D7%91%D7%95%D7%A8%D7%93">דשבורד (Dashboard)</a></li>
+<li><a href="#3-%D7%A0%D7%99%D7%94%D7%95%D7%9C-%D7%9E%D7%A9%D7%A4%D7%97%D7%95%D7%AA">ניהול משפחות (Families)</a></li>
+<li><a href="#4-%D7%9E%D7%A9%D7%A4%D7%97%D7%95%D7%AA-%D7%9E%D7%97%D7%95%D7%A7%D7%95%D7%AA">משפחות מחוקות (Deleted Families)</a></li>
+<li><a href="#5-%D7%9B%D7%9C-%D7%94%D7%91%D7%A7%D7%A9%D7%95%D7%AA---%D7%A0%D7%99%D7%94%D7%95%D7%9C-%D7%9E%D7%9C%D7%90">כל הבקשות - ניהול מלא (BakashotAllData)</a></li>
+<li><a href="#6-%D7%9B%D7%9C-%D7%94%D7%AA%D7%9E%D7%99%D7%9B%D7%95%D7%AA---%D7%A0%D7%99%D7%94%D7%95%D7%9C-%D7%9E%D7%9C%D7%90">כל התמיכות - ניהול מלא (TmichotAllData)</a></li>
+<li><a href="#7-%D7%AA%D7%A0%D7%95%D7%A2%D7%95%D7%AA-%D7%91%D7%A0%D7%A7">תנועות בנק (BankTransaction)</a></li>
+<li><a href="#8-%D7%9E%D7%A2%D7%A7%D7%91-%D7%A6%D7%A7%D7%99%D7%9D">מעקב צ'קים (ChecksTracking)</a></li>
+<li><a href="#9-%D7%AA%D7%96%D7%A8%D7%99%D7%9D-%D7%9B%D7%9C%D7%9C%D7%99">תזרים כללי (Tazrim Klali)</a></li>
+<li><a href="#10-%D7%A1%D7%A4%D7%A7%D7%99%D7%9D">ספקים (Sapakim)</a></li>
+<li><a href="#11-%D7%AA%D7%A8%D7%95%D7%9E%D7%95%D7%AA">תרומות (Donations)</a></li>
+<li><a href="#12-%D7%A7%D7%95%D7%A4%D7%95%D7%AA">קופות (Kupot)</a></li>
+<li><a href="#13-%D7%94%D7%96%D7%9E%D7%A0%D7%95%D7%AA-%D7%99%D7%93-%D7%AA%D7%95%D7%9E%D7%9A">הזמנות יד תומך (YadTomech)</a></li>
+<li><a href="#14-%D7%94%D7%95%D7%A8%D7%90%D7%95%D7%AA-%D7%A7%D7%91%D7%A2">הוראות קבע (HoraotKeva)</a></li>
+<li><a href="#15-%D7%AA%D7%A0%D7%95%D7%A2%D7%95%D7%AA-%D7%93%D7%95%D7%A0%D7%95%D7%A8%D7%99">תנועות דונורי (DonaryTransactions)</a></li>
+<li><a href="#16-%D7%AA%D7%96%D7%A8%D7%99%D7%9D-%D7%AA%D7%A9%D7%9C%D7%95%D7%9E%D7%99%D7%9D">תזרים תשלומים (PaymentsFlow)</a></li>
+<li><a href="#17-%D7%AA%D7%95%D7%A8%D7%9E%D7%99%D7%9D">תורמים (Donors)</a></li>
+<li><a href="#18-%D7%9E%D7%A7%D7%91%D7%9C%D7%99-%D7%97%D7%92%D7%99%D7%9D">מקבלי חגים (MekablimChagim)</a></li>
+<li><a href="#19-%D7%9E%D7%9B%D7%95%D7%91%D7%93%D7%99%D7%9D">מכובדים (Mechubadim)</a></li>
+<li><a href="#20-%D7%92%D7%95%D7%91%D7%99%D7%9D">גובים (Govim)</a></li>
+<li><a href="#21-%D7%9C%D7%95%D7%97-%D7%A9%D7%A0%D7%94">לוח שנה (Calendar)</a></li>
+<li><a href="#22-%D7%A4%D7%A7%D7%A1%D7%99%D7%9D">פקסים (Faxes)</a></li>
+<li><a href="#23-%D7%A7%D7%9E%D7%A4%D7%99%D7%99%D7%A0%D7%99%D7%9D">קמפיינים (Campaigns)</a></li>
+<li><a href="#24-%D7%9E%D7%A9%D7%99%D7%9E%D7%95%D7%AA">משימות (Tasks)</a></li>
+<li><a href="#25-%D7%A0%D7%99%D7%94%D7%95%D7%9C-%D7%9E%D7%A9%D7%AA%D7%9E%D7%A9%D7%99%D7%9D">ניהול משתמשים (UserManagement)</a></li>
+<li><a href="#26-%D7%98%D7%91%D7%9C%D7%90%D7%95%D7%AA-%D7%9E%D7%A2%D7%A8%D7%9B%D7%AA">טבלאות מערכת (SystemTables)</a></li>
+<li><a href="#27-%D7%A2%D7%93%D7%9B%D7%95%D7%9F-%D7%9E%D7%90%D7%A7%D7%A1%D7%9C">עדכון מאקסל (UpdatesExcel)</a></li>
+<li><a href="#28-%D7%A2%D7%93%D7%9B%D7%95%D7%A0%D7%99-%D7%99%D7%9E%D7%95%D7%AA">עדכוני ימות (Yemot Updates)</a></li>
+<li><a href="#29-%D7%AA%D7%99%D7%A7%D7%95%D7%9F-%D7%A0%D7%AA%D7%95%D7%A0%D7%99-%D7%9E%D7%A9%D7%A4%D7%97%D7%95%D7%AA">תיקון נתוני משפחות (FixFamiliesData)</a></li>
+<li><a href="#30-%D7%A4%D7%95%D7%A8%D7%99%D7%9D-2024">פורים 2024 (Purim2024)</a></li>
+</ol>
+<hr>
+<h2 id="פופאפ-משפחה---מרכזי">פופאפ משפחה - מרכזי</h2>
+<blockquote>
+<p>כמעט כל מסך במערכת פותח את <strong>פופאפ המשפחה</strong> בלחיצה על עריכה. זהו הפופאפ המרכזי והמורכב ביותר במערכת. הוא מורכב מ-<strong>7 טאבים</strong>:</p>
+</blockquote>
+<h3 id="טאב-1---פרטים-details">טאב 1 - פרטים (Details)</h3>
+<p><strong>אפשרויות בכותרת הפופאפ:</strong></p>
+<ul>
+<li>כפתור <strong>שמירה</strong> – שומר שינויים</li>
+<li>כפתור <strong>אישור פרטים</strong> – מאשר עדכון (מופיע רק אם יש שינויים)</li>
+<li>כפתור <strong>מחיקה</strong> – מחיקה רכה (isDeleted=true)</li>
+<li>כפתור <strong>שחזור</strong> – מופיע רק אם המשפחה מחוקה</li>
+</ul>
+<p><strong>שדות פרטי הורים:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>משפחה</td>
+<td>טקסט</td>
+<td>שם משפחה</td>
+</tr>
+<tr>
+<td>מצב משפחתי</td>
+<td>רשימה</td>
+<td>נשוי, גרוש, אלמן, רווק...</td>
+</tr>
+<tr>
+<td>שם אב</td>
+<td>טקסט</td>
+<td>שם ראש המשפחה</td>
+</tr>
+<tr>
+<td>זהות אב</td>
+<td>טקסט</td>
+<td>עם ולידציה על פורמט</td>
+</tr>
+<tr>
+<td>זהות אב דרקון</td>
+<td>צ'קבוקס</td>
+<td>מסמן שמדובר בדרכון</td>
+</tr>
+<tr>
+<td>שם אם</td>
+<td>טקסט</td>
+<td>מוצג רק אם מצב = נשוי</td>
+</tr>
+<tr>
+<td>זהות אם</td>
+<td>טקסט</td>
+<td>עם ולידציה, מוצג רק אם נשוי</td>
+</tr>
+<tr>
+<td>זהות אם דרקון</td>
+<td>צ'קבוקס</td>
+<td>מסמן דרכון, מוצג רק אם נשוי</td>
+</tr>
+</tbody>
+</table>
+<p><strong>שדות כתובת:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>רחוב</td>
+<td>טקסט/רשימה</td>
+<td>חיפוש מרשימת רחובות</td>
+</tr>
+<tr>
+<td>בנין</td>
+<td>טקסט</td>
+<td></td>
+</tr>
+<tr>
+<td>דירה</td>
+<td>טקסט</td>
+<td></td>
+</tr>
+<tr>
+<td>כניסה</td>
+<td>טקסט</td>
+<td>מוצג רק בתנאי מסוים</td>
+</tr>
+<tr>
+<td>קומה</td>
+<td>טקסט</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>שדות פרטי יצירת קשר:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>טלפון</td>
+<td>טקסט</td>
+<td>ולידציה על פורמט</td>
+</tr>
+<tr>
+<td>טלפון נייד</td>
+<td>טקסט</td>
+<td>ולידציה על פורמט</td>
+</tr>
+<tr>
+<td>טלפון נייד 2</td>
+<td>טקסט</td>
+<td>ולידציה על פורמט</td>
+</tr>
+<tr>
+<td>אימייל</td>
+<td>טקסט</td>
+<td>ולידציה על פורמט email</td>
+</tr>
+</tbody>
+</table>
+<p><strong>שדות פרטים נוספים:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>קהילה</td>
+<td>רשימה</td>
+<td>מרשימת קהילות</td>
+</tr>
+<tr>
+<td>בית כנסת</td>
+<td>רשימה</td>
+<td>מרשימת בתי כנסת</td>
+</tr>
+<tr>
+<td>קטגוריה</td>
+<td>רשימה מרובה</td>
+<td>ניתן לבחור מספר קטגוריות</td>
+</tr>
+<tr>
+<td>סטטוס הוראת קבע</td>
+<td>רשימה</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>אזור מתכווץ - נתונים נוספים:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>תאריך לידה אב</td>
+<td>תאריך</td>
+<td></td>
+</tr>
+<tr>
+<td>ילדים בבית</td>
+<td>מספר</td>
+<td></td>
+</tr>
+<tr>
+<td>ילדים נשואים</td>
+<td>מספר</td>
+<td></td>
+</tr>
+<tr>
+<td>ילדים נשואים ב-5 שנים אחרונות</td>
+<td>מספר</td>
+<td></td>
+</tr>
+<tr>
+<td>סה&quot;כ ילדים</td>
+<td>מחושב</td>
+<td></td>
+</tr>
+<tr>
+<td>בנק</td>
+<td>מספר</td>
+<td></td>
+</tr>
+<tr>
+<td>סניף</td>
+<td>מספר</td>
+<td></td>
+</tr>
+<tr>
+<td>חשבון</td>
+<td>טקסט</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>אזור מתכווץ - הכנסות והוצאות:</strong></p>
+<p><em>הכנסות הורים:</em></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>עיסוק אב (ראשי)</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>מקום עיסוק אב</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>עיסוק אב 2</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>מקום עיסוק אב 2</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>שכר אב</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>עיסוק אם</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>שכר אם</td>
+<td>מטבע</td>
+</tr>
+</tbody>
+</table>
+<p><em>הכנסות נוספות:</em></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>הכנסות קיצביות (קצבאות)</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>הכנסות הוצאת חוק</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>הכנסות סיוע דירה</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>הכנסות נכות</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>הכנסות קופת חולים</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>הכנסות תמיכה משפחה</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>שכר נוסף</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>פירוט שכר נוסף</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td><strong>סה&quot;כ הכנסות</strong></td>
+<td><strong>מחושב (ירוק)</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>הוצאות:</em></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>הוצאות חינוך</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>הוצאות דיור</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>הוצאות חריגות</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>פירוט הוצאות חריגות</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>הוצאות חונכים</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td><strong>סה&quot;כ הוצאות</strong></td>
+<td><strong>מחושב (אדום)</strong></td>
+</tr>
+<tr>
+<td><strong>הכנסה לנפש</strong></td>
+<td><strong>מחושב (אדום)</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>מזון ומחיה:</em></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מזון כרטיס</td>
+<td>צ'קבוקס</td>
+</tr>
+<tr>
+<td>מזון כרטיס קהילה</td>
+<td>מוצג בתנאי</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ולידציות בשמירה:</strong></p>
+<ul>
+<li>חובה: שם משפחה</li>
+<li>ולידציה פורמט: טלפון, ת&quot;ז, אימייל</li>
+<li>אם אין מינימום מידע מזהה (ת&quot;ז + טלפון) – מוצגת אזהרה</li>
+<li><strong>זיהוי כפילויות:</strong> בדיקה אוטומטית לפי ת&quot;ז, טלפון, כתובת, אימייל. אם נמצאת כפילות – מוצגת התרעה עם קישור לטיפול</li>
+</ul>
+<p><strong>בשמירה:</strong></p>
+<ul>
+<li>משפחה חדשה → יצירת מסמך + היסטוריה</li>
+<li>משפחה קיימת → עדכון + רישום שינויים ב-familiesHistory</li>
+</ul>
+<hr>
+<h3 id="טאב-2---תמיכות-tmichotbakasha">טאב 2 - תמיכות (Tmichot/Bakasha)</h3>
+<p><strong>מטרה:</strong> הגשה וניהול בקשות תמיכה עבור המשפחה הספציפית</p>
+<p><strong>פעולות עם בקשות:</strong></p>
+<ul>
+<li>ניווט בין בקשות (קודמת/הבאה) עם מונה &quot;1/5&quot;</li>
+</ul>
+<p><strong>טופס הגשת בקשה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+<th>חובה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>תאריך בקשה</td>
+<td>תאריך</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>שם מבקש</td>
+<td>טקסט</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>קטגוריה</td>
+<td>רשימה</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>סכום</td>
+<td>מטבע</td>
+<td>לא</td>
+</tr>
+<tr>
+<td>תיאור בקשה</td>
+<td>טקסט ארוך</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>מסמכים מצורפים</td>
+<td>העלאת קבצים</td>
+<td>לא</td>
+</tr>
+</tbody>
+</table>
+<p><strong>אישור בקשה (לאחר הגשה):</strong></p>
+<ul>
+<li>כפתור <strong>&quot;אישור הבקשה&quot;</strong> → פתיחת אזור הוספת תמיכות</li>
+<li>כפתור <strong>&quot;דחיית הבקשה&quot;</strong> → הגדרת סטטוס=3 (נדחה)</li>
+<li>כפתור <strong>&quot;בקשה חדשה&quot;</strong> → יצירת בקשה חדשה</li>
+</ul>
+<p><strong>הוספת תמיכות בבקשה:</strong></p>
+<ul>
+<li>כפתור <strong>&quot;הוספת תמיכה&quot;</strong> – הוספת שורת תמיכה</li>
+<li>כפתור <strong>&quot;הוספת תמיכה חודשית&quot;</strong> – פתיחת פופאפ לתמיכה חוזרת</li>
+</ul>
+<p><em>לכל תמיכה שדות:</em></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+<th>הוצג בתנאי</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>תאריך תמיכה</td>
+<td>תאריך</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>סכום</td>
+<td>מטבע</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>צורת העברה</td>
+<td>רשימה (1=צ'ק, 2=העברה בנקאית)</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>הערה</td>
+<td>טקסט</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>תאריך פרעון</td>
+<td>תאריך</td>
+<td>רק אם צ'ק</td>
+</tr>
+<tr>
+<td>בנק</td>
+<td>מספר</td>
+<td>רק אם העברה בנקאית</td>
+</tr>
+<tr>
+<td>סניף</td>
+<td>מספר</td>
+<td>רק אם העברה בנקאית</td>
+</tr>
+<tr>
+<td>חשבון</td>
+<td>טקסט</td>
+<td>רק אם העברה בנקאית</td>
+</tr>
+<tr>
+<td>מספר צ'ק</td>
+<td>טקסט</td>
+<td>רק אם צ'ק</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="טאב-3---לוג-שינויים-change-log">טאב 3 - לוג שינויים (Change Log)</h3>
+<ul>
+<li>מציג היסטוריה של כל השינויים שנעשו במשפחה</li>
+<li>כל רשומה מציגה: שם משתמש + תאריך/שעה, ורשת שדות שהשתנו עם ערך ישן וחדש</li>
+</ul>
+<hr>
+<h3 id="טאבים-נוספים-4-7">טאבים נוספים (4-7)</h3>
+<blockquote>
+<p>טאבים נוספים בפופאפ המשפחה (לא תועד מלא – ייתכן שיש מידע נוסף בקוד):</p>
+</blockquote>
+<ul>
+<li>טאב 4 ואילך – מידע נוסף על המשפחה (הערות, תשלומים, קבלות ועוד)</li>
+</ul>
+<hr>
+<hr>
+<h2 id="1-כניסה-למערכת">1. כניסה למערכת</h2>
+<p><strong>מסך:</strong> <code>/login</code></p>
+<p><strong>מטרה:</strong> אימות משתמשים לכניסה למערכת</p>
+<p><strong>תצוגה:</strong></p>
+<ul>
+<li>רקע מלא עם תמונת background</li>
+<li>לוגו ארגוני (200x200)</li>
+<li>כותרת: &quot;ברוך הבא!!&quot;</li>
+<li>כפתור כניסה עם גוגל</li>
+</ul>
+<p><strong>פעולות:</strong></p>
+<ul>
+<li><strong>&quot;כניסה עם חשבון גוגל&quot;</strong> – פתיחת popup של OAuth גוגל → אימות → ניווט לעמוד הבית</li>
+<li>בכניסה לעמוד – ניתוק אוטומטי של כל session קיים</li>
+</ul>
+<p><strong>שגיאות:</strong></p>
+<ul>
+<li>אם המשתמש אינו מורשה – הודעת שגיאה: &quot;משתמש לא מורשה – לפרטים צור קשר עם מנהל האתר&quot; (10 שניות)</li>
+</ul>
+<p><strong>הרשאות:</strong></p>
+<ul>
+<li><code>admin</code> – גישה לכל המסכים</li>
+<li><code>ksafim</code> – גישה למסך תנועות בנק בלבד</li>
+</ul>
+<hr>
+<h2 id="2-דשבורד">2. דשבורד</h2>
+<p><strong>מסך:</strong> <code>/</code> (עמוד הבית)</p>
+<p><strong>מטרה:</strong> מבט עליון על מצב המערכת</p>
+<p><strong>כרטיסי סטטיסטיקות (לחיצה מנווטת לעמוד המתאים):</strong></p>
+<table>
+<thead>
+<tr>
+<th>כרטיס</th>
+<th>תוכן</th>
+<th>ניווט ל</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>משפחות פעילות</td>
+<td>ספירת משפחות פעילות</td>
+<td><code>/families</code></td>
+</tr>
+<tr>
+<td>בקשות ממתינות לאישור</td>
+<td>ספירת בקשות בסטטוס 1</td>
+<td><code>/bakashot-all-data</code></td>
+</tr>
+<tr>
+<td>תמיכות לטיפול</td>
+<td>ספירת תמיכות בסטטוס 1 (עד היום)</td>
+<td><code>/tmichot-all-data</code></td>
+</tr>
+<tr>
+<td>תמיכות למסירה</td>
+<td>ספירת תמיכות בסטטוס 2 (עד היום)</td>
+<td><code>/tmichot-all-data</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>אזור הערות אחרונות:</strong></p>
+<ul>
+<li>רשימה של הערות אחרונות מכלל המשפחות</li>
+<li>עד 20 הערות לעמוד</li>
+<li>ניווט קדימה/אחורה בין עמודים</li>
+<li>כל הערה מציגה: שם משפחה, תוכן ההערה, יוצר ותאריך</li>
+</ul>
+<hr>
+<h2 id="3-ניהול-משפחות">3. ניהול משפחות</h2>
+<p><strong>מסך:</strong> <code>/families</code></p>
+<p><strong>מטרה:</strong> ניהול מלא של כל המשפחות הפעילות במערכת</p>
+<h3 id="טבלה-ראשית">טבלה ראשית</h3>
+<p><strong>עמודות:</strong></p>
+<table>
+<thead>
+<tr>
+<th>עמודה</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>בחירה (checkbox)</td>
+<td>לפעולות מרובות</td>
+</tr>
+<tr>
+<td>עריכה (אייקון)</td>
+<td>פתיחת פופאפ משפחה</td>
+</tr>
+<tr>
+<td>משפחה</td>
+<td>שם משפחה</td>
+</tr>
+<tr>
+<td>שם אב</td>
+<td>שם ראש המשפחה</td>
+</tr>
+<tr>
+<td>זהות אב</td>
+<td>מספר ת&quot;ז</td>
+</tr>
+<tr>
+<td>שם אם</td>
+<td></td>
+</tr>
+<tr>
+<td>זהות אם</td>
+<td></td>
+</tr>
+<tr>
+<td>רחוב</td>
+<td></td>
+</tr>
+<tr>
+<td>בנין</td>
+<td></td>
+</tr>
+<tr>
+<td>דירה</td>
+<td></td>
+</tr>
+<tr>
+<td>קומה</td>
+<td></td>
+</tr>
+<tr>
+<td>טלפון</td>
+<td></td>
+</tr>
+<tr>
+<td>טלפון נייד</td>
+<td></td>
+</tr>
+<tr>
+<td>טלפון נייד 2</td>
+<td></td>
+</tr>
+<tr>
+<td>ילדים בבית</td>
+<td></td>
+</tr>
+<tr>
+<td>ילדים נשואים</td>
+<td></td>
+</tr>
+<tr>
+<td>סה&quot;כ ילדים</td>
+<td>מחושב</td>
+</tr>
+<tr>
+<td>מצב משפחתי</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס הוראת קבע</td>
+<td></td>
+</tr>
+<tr>
+<td>עדכון אחרון</td>
+<td>תאריך</td>
+</tr>
+<tr>
+<td>עדכון אחרון ע&quot;י</td>
+<td>שם משתמש</td>
+</tr>
+</tbody>
+</table>
+<h3 id="כלי-חיפוש-וסינון">כלי חיפוש וסינון</h3>
+<p><strong>חיפוש מהיר:</strong> שדה גלובלי שמסנן בזמן הקלדה</p>
+<p><strong>סינון מתקדם:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה סינון</th>
+<th>סוג</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>משפחה</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>שם אב</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>זהות אב</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>מצב משפחתי</td>
+<td>רשימה</td>
+</tr>
+<tr>
+<td>רחוב</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>בנין</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>דירה</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>קומה</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>תאריך עדכון (טווח)</td>
+<td>מ-תאריך / עד-תאריך</td>
+</tr>
+<tr>
+<td>עדכון אחרון ע&quot;י</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>סה&quot;כ ילדים (טווח)</td>
+<td>מ/עד</td>
+</tr>
+<tr>
+<td>ילדים בבית (טווח)</td>
+<td>מ/עד</td>
+</tr>
+<tr>
+<td>מילוי הכנסות</td>
+<td>כן/לא</td>
+</tr>
+<tr>
+<td>קטגוריה</td>
+<td>רשימה מרובה</td>
+</tr>
+<tr>
+<td>קהילה</td>
+<td>רשימה</td>
+</tr>
+<tr>
+<td>בית כנסת</td>
+<td>רשימה</td>
+</tr>
+<tr>
+<td>סטטוס הוראת קבע</td>
+<td>רשימה</td>
+</tr>
+</tbody>
+</table>
+<h3 id="כפתורי-פעולה-בכותרת">כפתורי פעולה בכותרת</h3>
+<table>
+<thead>
+<tr>
+<th>כפתור</th>
+<th>פעולה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>הוספת משפחה</strong></td>
+<td>פתיחת פופאפ משפחה חדש</td>
+</tr>
+<tr>
+<td><strong>רענון עמוד</strong></td>
+<td>טעינה מחדש של הנתונים</td>
+</tr>
+<tr>
+<td><strong>בחירת עמודות</strong></td>
+<td>פופאפ לבחירה אילו עמודות מוצגות</td>
+</tr>
+<tr>
+<td><strong>יצוא לאקסל</strong></td>
+<td>ייצוא הנתונים המסוננים עם העמודות שנבחרו</td>
+</tr>
+<tr>
+<td><strong>שליחת צינתוק</strong></td>
+<td>אשף ליצירת קמפיין בימות המשיח</td>
+</tr>
+</tbody>
+</table>
+<h3 id="פעולות-מרובות-כאשר-שורות-מסומנות">פעולות מרובות (כאשר שורות מסומנות)</h3>
+<table>
+<thead>
+<tr>
+<th>פעולה</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>הפקת אקסל</strong></td>
+<td>ייצוא המשפחות שנבחרו בלבד</td>
+</tr>
+<tr>
+<td><strong>תמיכה - [שם חג]</strong></td>
+<td>הוספת המשפחות שנבחרו לרשימת התמיכות לחג האחרון</td>
+</tr>
+<tr>
+<td><strong>הוספת קטגוריה</strong></td>
+<td>פתיחת popup לבחירת קטגוריה → הוספה לכל הנבחרים</td>
+</tr>
+<tr>
+<td><strong>הסרת קטגוריה</strong></td>
+<td>פתיחת popup לבחירת קטגוריה → הסרה מכל הנבחרים</td>
+</tr>
+</tbody>
+</table>
+<h3 id="אשף-שליחת-צינתוק-3-שלבים">אשף שליחת צינתוק (3 שלבים)</h3>
+<p><strong>שלב 1 – הגדרת קמפיין:</strong></p>
+<p><em>קמפיין חדש:</em></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שם קמפיין</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>כלול טלפון ראשי</td>
+<td>צ'קבוקס</td>
+</tr>
+<tr>
+<td>כלול טלפון נייד</td>
+<td>צ'קבוקס</td>
+</tr>
+<tr>
+<td>כלול טלפון נייד 2</td>
+<td>צ'קבוקס</td>
+</tr>
+<tr>
+<td>כפתור: הוספת קמפיין במערכת ימות המשיח</td>
+<td>פעולה</td>
+</tr>
+</tbody>
+</table>
+<p><em>קמפיין קיים:</em></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>בחר קמפיין</td>
+<td>רשימה</td>
+</tr>
+<tr>
+<td>בחירת טלפונים</td>
+<td>צ'קבוקסים</td>
+</tr>
+<tr>
+<td>הוספת מספרים לרשימה / איפוס רשימה</td>
+<td>כפתורים</td>
+</tr>
+</tbody>
+</table>
+<p><strong>שלב 2 – אישור:</strong></p>
+<ul>
+<li>&quot;האם תרצה לשלוח גם צינתוק?&quot; עם אפשרויות:
+<ul>
+<li>&quot;כן – צינתוק עם הקלטה&quot;</li>
+<li>&quot;צינתוק בלי הקלטה&quot;</li>
+<li>&quot;לא, רק רציתי לעדכן רשימת תפוצה&quot;</li>
+</ul>
+</li>
+</ul>
+<p><strong>שלב 3 – אישור שליחה</strong></p>
+<hr>
+<h2 id="4-משפחות-מחוקות">4. משפחות מחוקות</h2>
+<p><strong>מסך:</strong> <code>/deleted-families</code></p>
+<p><strong>מטרה:</strong> ארכיון משפחות שנמחקו (מחיקה רכה)</p>
+<p><strong>תצוגה:</strong> זהה למסך משפחות, עם סינון אוטומטי ל-<code>isDeleted == true</code></p>
+<p><strong>חיפוש מצומצם:</strong></p>
+<ul>
+<li>משפחה, שם אב, זהות אב</li>
+<li>תאריך עדכון (טווח)</li>
+<li>ילדים בבית (טווח)</li>
+</ul>
+<p><strong>פעולות:</strong></p>
+<ul>
+<li><strong>הוספת משפחה</strong> – פתיחת פופאפ משפחה חדש</li>
+<li><strong>יצוא לאקסל</strong></li>
+<li><strong>עריכה</strong> (אייקון בשורה) – פתיחת פופאפ משפחה, עם אפשרות <strong>שחזור</strong></li>
+</ul>
+<hr>
+<h2 id="5-כל-הבקשות---ניהול-מלא">5. כל הבקשות - ניהול מלא</h2>
+<p><strong>מסך:</strong> <code>/bakashot-all-data</code></p>
+<p><strong>מטרה:</strong> ניהול מלא של כל הבקשות בכל הסטטוסים</p>
+<h3 id="סרגל-סטטוסים">סרגל סטטוסים</h3>
+<table>
+<thead>
+<tr>
+<th>סטטוס</th>
+<th>צבע</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ממתין לאישור (1)</td>
+<td>כתום</td>
+<td></td>
+</tr>
+<tr>
+<td>מאושר (2)</td>
+<td>כחול</td>
+<td></td>
+</tr>
+<tr>
+<td>נדחה (3)</td>
+<td>אדום</td>
+<td></td>
+</tr>
+<tr>
+<td>הושלם (4)</td>
+<td>ירוק</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="עמודות-ברירת-מחדל">עמודות ברירת מחדל:</h3>
+<p>תאריך בקשה, שם משפחה, שם אב, כתובת מלאה, טלפונים, שם מבקש, תיאור בקשה, סכום מבוקש, נוצר ע&quot;י</p>
+<h3 id="כלי-חיפוש">כלי חיפוש:</h3>
+<ul>
+<li>טווח תאריכים (מ/עד)</li>
+<li>שדה חיפוש גלובלי</li>
+</ul>
+<h3 id="כפתורי-פעולה">כפתורי פעולה:</h3>
+<ul>
+<li><strong>רענון</strong> – טעינה מחדש + עדכון ספירות</li>
+<li><strong>בחירת עמודות</strong> – בחירת עמודות מוצגות</li>
+<li><strong>ייצוא לאקסל</strong></li>
+</ul>
+<h3 id="פעולות-בשורה">פעולות בשורה:</h3>
+<table>
+<thead>
+<tr>
+<th>כפתור</th>
+<th>פעולה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>אייקון מתנה (Gift)</td>
+<td>פתיחת פופאפ פרטי בקשה מלא</td>
+</tr>
+<tr>
+<td>אייקון קבוצה (Groups)</td>
+<td>פתיחת פופאפ משפחה</td>
+</tr>
+</tbody>
+</table>
+<h3 id="פופאפ-פרטי-בקשה-bakashawrapper">פופאפ פרטי בקשה (BakashaWrapper)</h3>
+<p><strong>ניווט:</strong> קדימה/אחורה בין בקשות של אותה משפחה (&quot;בקשה 1 מתוך 3&quot;)</p>
+<p><strong>תצוגה שמאל (60%):</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שם משפחה</td>
+<td></td>
+</tr>
+<tr>
+<td>כתובת</td>
+<td></td>
+</tr>
+<tr>
+<td>טלפון</td>
+<td></td>
+</tr>
+<tr>
+<td>תאריך בקשה</td>
+<td></td>
+</tr>
+<tr>
+<td>שם מבקש</td>
+<td></td>
+</tr>
+<tr>
+<td>סכום מבוקש</td>
+<td>מפורמט כמטבע</td>
+</tr>
+<tr>
+<td>קטגוריה</td>
+<td></td>
+</tr>
+<tr>
+<td>נוצר ע&quot;י</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס בקשה</td>
+<td></td>
+</tr>
+<tr>
+<td>תיאור בקשה</td>
+<td>טקסט מלא</td>
+</tr>
+</tbody>
+</table>
+<p><strong>תצוגה ימין (40%):</strong> מסמכים מצורפים לבקשה</p>
+<p><strong>כפתורי פעולה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>כפתור</th>
+<th>מוצג כאשר</th>
+<th>פעולה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>אישור הבקשה + הוספת תמיכות</strong></td>
+<td>תמיד</td>
+<td>פתיחת טופס הוספת תמיכות</td>
+</tr>
+<tr>
+<td><strong>ביטול כל התמיכות</strong></td>
+<td>סטטוס=2</td>
+<td>ביטול כל התמיכות + דיאלוג אישור</td>
+</tr>
+<tr>
+<td><strong>דחיית הבקשה</strong></td>
+<td>סטטוס=1</td>
+<td>הגדרת סטטוס=3</td>
+</tr>
+<tr>
+<td><strong>העברה להמתנה</strong></td>
+<td>סטטוס=3 או 2</td>
+<td>החזרה לסטטוס המתאים</td>
+</tr>
+</tbody>
+</table>
+<p><strong>טבלת תמיכות קשורות</strong> (מוצגת אם יש תמיכות):</p>
+<ul>
+<li>עמודות: אייקון עריכה + פרטי תמיכה + סטטוס</li>
+</ul>
+<h3 id="טופס-הוספת-תמיכות-addtmichot">טופס הוספת תמיכות (AddTmichot)</h3>
+<p>ראה פירוט בטאב 2 של פופאפ משפחה לעיל.</p>
+<p><strong>סיכום:</strong> &quot;סה&quot;כ מאושר: [סכום] ₪ ב-[מספר] תשלומים&quot;</p>
+<p><strong>כפתור שליחה:</strong> &quot;אישור הבקשה&quot; (ירוק, גדול) – נטרל עד שכל שדות חובה מולאו</p>
+<hr>
+<h2 id="6-כל-התמיכות---ניהול-מלא">6. כל התמיכות - ניהול מלא</h2>
+<p><strong>מסך:</strong> <code>/tmichot-all-data</code></p>
+<p><strong>מטרה:</strong> ניהול מלא של כל התמיכות בכל הסטטוסים</p>
+<h3 id="סרגל-סטטוסים-1">סרגל סטטוסים</h3>
+<table>
+<thead>
+<tr>
+<th>סטטוס</th>
+<th>צבע</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מאושר (1)</td>
+<td>כתום</td>
+</tr>
+<tr>
+<td>מוכן (2)</td>
+<td>כחול</td>
+</tr>
+<tr>
+<td>נמסר (3)</td>
+<td>ירוק</td>
+</tr>
+<tr>
+<td>מבוטל (4)</td>
+<td>אדום</td>
+</tr>
+</tbody>
+</table>
+<h3 id="עמודות">עמודות:</h3>
+<p>שם משפחה, שם אב, כתובת, טלפונים, תאריך תמיכה, תאריך פרעון, סכום, צורת תמיכה, מספר צ'ק, הערה</p>
+<h3 id="כלי-חיפוש-1">כלי חיפוש:</h3>
+<ul>
+<li>טווח תאריכי תמיכה</li>
+<li>צורת תמיכה (רשימה)</li>
+<li>חיפוש גלובלי</li>
+</ul>
+<h3 id="פעולות-בשורה-1">פעולות בשורה:</h3>
+<table>
+<thead>
+<tr>
+<th>כפתור</th>
+<th>פעולה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>אייקון מתנה</td>
+<td>פתיחת עריכת תמיכה (EditTmicha)</td>
+</tr>
+<tr>
+<td>אייקון קבוצה</td>
+<td>פתיחת פופאפ משפחה</td>
+</tr>
+<tr>
+<td>אייקון טלפון (חיוג)</td>
+<td>הוספת הערה &quot;התקשרתי עכשיו [שם משתמש] [שעה+תאריך]&quot;</td>
+</tr>
+<tr>
+<td>אייקון טלפון (פספוס)</td>
+<td>הוספת הערה &quot;לא ענה [שם משתמש] [שעה+תאריך]&quot;</td>
+</tr>
+</tbody>
+</table>
+<h3 id="פעולות-מרובות-כשיש-בחירה">פעולות מרובות (כשיש בחירה):</h3>
+<ul>
+<li><strong>עריכת נבחרים</strong> – עריכה בצובר (EditTmicha מרובה)</li>
+</ul>
+<h3 id="פופאפ-עריכת-תמיכה-edittmicha">פופאפ עריכת תמיכה (EditTmicha)</h3>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>חובה</th>
+<th>תנאי</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>תאריך תמיכה</td>
+<td>כן</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>תאריך פרעון</td>
+<td>לא</td>
+<td>רק אם צ'ק</td>
+</tr>
+<tr>
+<td>סכום</td>
+<td>כן</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>צורת תמיכה</td>
+<td>כן</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>בנק/סניף/חשבון</td>
+<td>לא</td>
+<td>רק אם העברה בנקאית</td>
+</tr>
+<tr>
+<td>מספר צ'ק</td>
+<td>לא</td>
+<td>רק אם צ'ק (ועריכה בודדת)</td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>לא</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>הערות</td>
+<td>לא</td>
+<td>תמיד</td>
+</tr>
+</tbody>
+</table>
+<p><strong>אזהרת ולידציה:</strong> אם צ'ק + סטטוס=מוכן ללא תאריך פרעון ומספר צ'ק → כפתור שמירה מנוטרל</p>
+<h3 id="סיכום">סיכום:</h3>
+<ul>
+<li>סיכום לפי סוג תמיכה: [מספר] [שם סוג] בסך [סכום]</li>
+<li>אם יש שורות מסומנות – סיכום רק על הנבחרים</li>
+</ul>
+<hr>
+<h2 id="7-תנועות-בנק">7. תנועות בנק</h2>
+<p><strong>מסך:</strong> <code>/bank-transaction</code></p>
+<p><strong>מטרה:</strong> מעקב ועיבוד תנועות בנק, הפקת קבלות וניהול מסמכים</p>
+<h3 id="טבלה-ראשית-1">טבלה ראשית:</h3>
+<table>
+<thead>
+<tr>
+<th>עמודה</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>בחירה</td>
+<td>רב-בחירה</td>
+</tr>
+<tr>
+<td>עריכה</td>
+<td>פופאפ עריכת תנועה</td>
+</tr>
+<tr>
+<td>אסמכתא</td>
+<td>מספר מסמך</td>
+</tr>
+<tr>
+<td>תאריך</td>
+<td>תאריך התנועה</td>
+</tr>
+<tr>
+<td>סכום</td>
+<td>אדום אם שלילי</td>
+</tr>
+<tr>
+<td>תיאור/הערה</td>
+<td></td>
+</tr>
+<tr>
+<td>קטגוריה</td>
+<td></td>
+</tr>
+<tr>
+<td>קובץ</td>
+<td>העלאה/צפייה</td>
+</tr>
+<tr>
+<td>הפקת קבלה</td>
+<td>לתנועות חיוביות</td>
+</tr>
+</tbody>
+</table>
+<h3 id="כלי-חיפוש-2">כלי חיפוש:</h3>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>ברירת מחדל</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מ-תאריך</td>
+<td>חודש אחורה</td>
+</tr>
+<tr>
+<td>עד-תאריך</td>
+<td>היום</td>
+</tr>
+<tr>
+<td>אסמכתא</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>קטגוריה</td>
+<td>רשימה</td>
+</tr>
+<tr>
+<td>קבצים</td>
+<td>הכל / עם קבצים / ללא קבצים</td>
+</tr>
+<tr>
+<td>הערות</td>
+<td>הכל / עם הערות / ללא הערות</td>
+</tr>
+<tr>
+<td>חיפוש גלובלי</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="פעולות">פעולות:</h3>
+<table>
+<thead>
+<tr>
+<th>פעולה</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>עריכת תנועה</td>
+<td>קטגוריה + הערה + שנה + קובץ</td>
+</tr>
+<tr>
+<td>עריכת נבחרים</td>
+<td>עריכה בצובר לנבחרים</td>
+</tr>
+<tr>
+<td>העלאת קובץ</td>
+<td>צירוף מסמך לתנועה</td>
+</tr>
+<tr>
+<td>צפייה בקובץ</td>
+<td>פתיחת קובץ ב-iframe</td>
+</tr>
+<tr>
+<td>הפקת קבלה</td>
+<td>אשף יצירת קבלה/חשבונית</td>
+</tr>
+<tr>
+<td>סנכרון בנק</td>
+<td>סנכרון עם שרת חיצוני</td>
+</tr>
+</tbody>
+</table>
+<h3 id="פופאפ-הפקת-קבלה-addinvoice">פופאפ הפקת קבלה (AddInvoice):</h3>
+<p><strong>בחירת אמצעי תשלום:</strong></p>
+<ul>
+<li>צ'ק / העברה בנקאית</li>
+</ul>
+<p><strong>שדות כלליים:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>סכום</td>
+<td>מטבע</td>
+</tr>
+<tr>
+<td>תאריך תשלום</td>
+<td>תאריך</td>
+</tr>
+<tr>
+<td>תאריך מסמך</td>
+<td>תאריך</td>
+</tr>
+</tbody>
+</table>
+<p><strong>פרטי תורם:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>בחירת תורם קיים</td>
+<td>autocomplete</td>
+</tr>
+<tr>
+<td>יצירת תורם חדש</td>
+<td>מעבר לטופס</td>
+</tr>
+<tr>
+<td>שם תורם</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>אימייל</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>ת&quot;ז (9 ספרות)</td>
+<td>טקסט עם ולידציה</td>
+</tr>
+<tr>
+<td>כתובת</td>
+<td>טקסט</td>
+</tr>
+<tr>
+<td>טלפון</td>
+<td>טקסט</td>
+</tr>
+</tbody>
+</table>
+<p><strong>שדות לפי אמצעי תשלום:</strong></p>
+<p><em>העברה בנקאית:</em></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שם בנק</td>
+</tr>
+<tr>
+<td>סניף</td>
+</tr>
+<tr>
+<td>חשבון</td>
+</tr>
+</tbody>
+</table>
+<p><em>צ'ק:</em></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שם בנק</td>
+</tr>
+<tr>
+<td>סניף בנק</td>
+</tr>
+<tr>
+<td>מספר צ'ק</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-מעקב-צקים">8. מעקב צ'קים</h2>
+<p><strong>מסך:</strong> <code>/checks-tracking</code></p>
+<p><strong>מטרה:</strong> מעקב אחר צ'קים שניתנו כתמיכה ומצב פרעונם</p>
+<h3 id="סרגל-סטטוס">סרגל סטטוס:</h3>
+<ul>
+<li>סה&quot;כ צ'קים | שולמו | לא שולמו | סכום כולל</li>
+</ul>
+<h3 id="עמודות-1">עמודות:</h3>
+<table>
+<thead>
+<tr>
+<th>עמודה</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>עריכה משפחה</td>
+<td>פתיחת פופאפ משפחה</td>
+</tr>
+<tr>
+<td>שם משפחה</td>
+<td></td>
+</tr>
+<tr>
+<td>שם אב</td>
+<td></td>
+</tr>
+<tr>
+<td>כתובת</td>
+<td></td>
+</tr>
+<tr>
+<td>טלפונים</td>
+<td></td>
+</tr>
+<tr>
+<td>תאריך תמיכה</td>
+<td></td>
+</tr>
+<tr>
+<td>תאריך פרעון</td>
+<td></td>
+</tr>
+<tr>
+<td>סכום</td>
+<td></td>
+</tr>
+<tr>
+<td>מספר צ'ק</td>
+<td></td>
+</tr>
+<tr>
+<td>הערה</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>&quot;שולם&quot; (ירוק) / &quot;ממתין&quot; (כתום) – לחיצה להחלפת סטטוס</td>
+</tr>
+</tbody>
+</table>
+<h3 id="כלי-חיפוש-3">כלי חיפוש:</h3>
+<ul>
+<li>מ-תאריך פרעון / עד-תאריך פרעון</li>
+<li>סטטוס: הכל / ממתין / שולם</li>
+<li>חיפוש גלובלי</li>
+</ul>
+<h3 id="פעולות-1">פעולות:</h3>
+<ul>
+<li><strong>לחיצה על סטטוס</strong> – מסמן כ&quot;שולם&quot; (שומר תאריך תשלום) או מחזיר ל&quot;ממתין&quot;</li>
+<li><strong>ייצוא לאקסל</strong></li>
+</ul>
+<hr>
+<h2 id="9-תזרים-כללי">9. תזרים כללי</h2>
+<p><strong>מסך:</strong> <code>/tazrim-klali</code></p>
+<p><strong>מטרה:</strong> ניהול תנועות כספיות כלליות לא-בנקאיות, מחולק ל-3 קטגוריות</p>
+<h3 id="3-טאבי-קטגוריות">3 טאבי קטגוריות:</h3>
+<ol>
+<li><strong>סכום קטן / זכות כיסא</strong> – מזומן קטן</li>
+<li><strong>סכום גדול / מוכן</strong> – כסף גדול/מוכן</li>
+<li><strong>תווי מזון</strong> – שוברי מזון</li>
+</ol>
+<h3 id="עמודות-2">עמודות:</h3>
+<ul>
+<li>עריכה, עמודות דינמיות לפי הגדרות, קובץ (העלאה/צפייה ב-iframe)</li>
+</ul>
+<h3 id="פעולות-2">פעולות:</h3>
+<table>
+<thead>
+<tr>
+<th>פעולה</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>עריכת תנועה</td>
+<td>פתיחת EditPeula</td>
+</tr>
+<tr>
+<td>העלאת קובץ</td>
+<td>צירוף מסמך</td>
+</tr>
+<tr>
+<td>מעבר בין קטגוריות</td>
+<td>מסנן לפי קטגוריה</td>
+</tr>
+<tr>
+<td>ייצוא לאקסל</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="פופאפ-הוספתעריכת-תנועה-addpeulaeditpeula">פופאפ הוספת/עריכת תנועה (AddPeula/EditPeula):</h3>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>חובה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>סוג תנועה</td>
+<td>כן (נקבע מראש)</td>
+</tr>
+<tr>
+<td>סכום</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>תאריך (לא עתידי)</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>קטגוריה</td>
+<td>לא</td>
+</tr>
+<tr>
+<td>הערה</td>
+<td>לא</td>
+</tr>
+<tr>
+<td>קובץ</td>
+<td>לא</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="10-ספקים">10. ספקים</h2>
+<p><strong>מסך:</strong> <code>/sapakim</code></p>
+<p><strong>מטרה:</strong> ניהול יחסי ספקים, התחייבויות ותשלומים</p>
+<h3 id="4-טאבים">4 טאבים:</h3>
+<h4 id="טאב-1---ספקים-קטגוריות">טאב 1 - ספקים (קטגוריות)</h4>
+<ul>
+<li>טבלת ספקים עם עמודות דינמיות</li>
+<li><strong>סה&quot;כ לתשלום</strong> מוצג בכותרת</li>
+<li>עריכת ספק → פתיחת פופאפ ספק (XL)</li>
+</ul>
+<h4 id="טאב-2---התחייבויות">טאב 2 - התחייבויות</h4>
+<ul>
+<li>טבלת התחייבויות לספקים</li>
+<li><strong>מציג:</strong> ספק, סכום, תאריך יעד, סטטוס תשלום</li>
+<li><strong>פעולות:</strong>
+<ul>
+<li>עריכת התחייבות (AddOrUpdate)</li>
+<li>הוספת תשלום (AddOrUpdateTashloum)</li>
+<li>לחיצה על אייקון תשלום → פתיחת טופס תשלום</li>
+</ul>
+</li>
+</ul>
+<p><strong>פופאפ עריכת התחייבות:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ספק</td>
+</tr>
+<tr>
+<td>סכום</td>
+</tr>
+<tr>
+<td>תאריך יעד</td>
+</tr>
+<tr>
+<td>תיאור/הערה</td>
+</tr>
+</tbody>
+</table>
+<p><strong>פופאפ הוספת תשלום:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>סכום (ממולא מראש)</td>
+</tr>
+<tr>
+<td>תאריך תשלום</td>
+</tr>
+<tr>
+<td>סכום בפועל</td>
+</tr>
+<tr>
+<td>אמצעי תשלום</td>
+</tr>
+<tr>
+<td>הערות</td>
+</tr>
+</tbody>
+</table>
+<h4 id="טאב-3---תשלומים">טאב 3 - תשלומים</h4>
+<ul>
+<li>רישום תשלומים בפועל שבוצעו</li>
+<li><strong>עמודות:</strong> תאריך תשלום, ספק, סכום, אמצעי תשלום, מספר אסמכתא</li>
+</ul>
+<h4 id="טאב-4---סיכוםבונוס">טאב 4 - סיכום/בונוס</h4>
+<ul>
+<li>מקום שמור לסיכומים וחישובי בונוס</li>
+</ul>
+<hr>
+<h2 id="11-תרומות">11. תרומות</h2>
+<p><strong>מסך:</strong> <code>/donations</code></p>
+<p><strong>מטרה:</strong> רישום ומעקב תרומות (בשלבי פיתוח)</p>
+<h3 id="פופאפ-הוספת-תרומה-adddonation">פופאפ הוספת תרומה (AddDonation):</h3>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>סוג</th>
+<th>חובה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>תאריך</td>
+<td>תאריך</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>פרויקט תרומה</td>
+<td>טקסט</td>
+<td>לא</td>
+</tr>
+<tr>
+<td>שם גבאי</td>
+<td>טקסט</td>
+<td>לא</td>
+</tr>
+<tr>
+<td>שם תורם</td>
+<td>טקסט</td>
+<td>לא</td>
+</tr>
+<tr>
+<td>כתובת תורם</td>
+<td>טקסט</td>
+<td>לא</td>
+</tr>
+<tr>
+<td>אימייל תורם</td>
+<td>טקסט</td>
+<td>לא</td>
+</tr>
+<tr>
+<td><strong>שטרות</strong></td>
+<td>מטבע</td>
+<td>לא</td>
+</tr>
+<tr>
+<td><strong>דולרים</strong></td>
+<td>מטבע</td>
+<td>לא</td>
+</tr>
+<tr>
+<td><strong>צ'קים</strong></td>
+<td>מטבע</td>
+<td>לא</td>
+</tr>
+<tr>
+<td><strong>העברה</strong></td>
+<td>מטבע</td>
+<td>לא</td>
+</tr>
+<tr>
+<td><strong>אחר</strong></td>
+<td>מטבע</td>
+<td>לא</td>
+</tr>
+<tr>
+<td><strong>כרטיס אשראי</strong></td>
+<td>מטבע</td>
+<td>לא</td>
+</tr>
+<tr>
+<td>סוגי כרטיס</td>
+<td>טקסט</td>
+<td>מוצג אם אשראי &gt; 0</td>
+</tr>
+<tr>
+<td><strong>סה&quot;כ</strong></td>
+<td>מחושב</td>
+<td>–</td>
+</tr>
+<tr>
+<td>הערות</td>
+<td>טקסט</td>
+<td>לא</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="12-קופות">12. קופות</h2>
+<p><strong>מסך:</strong> <code>/kupot</code></p>
+<p><strong>מטרה:</strong> ניהול קופות (חנויות וכספות) ומעקב יתרות</p>
+<h3 id="2-טאבים">2 טאבים:</h3>
+<h4 id="טאב-1---עדכון-סכומים">טאב 1 - עדכון סכומים</h4>
+<p><strong>פאנל שמאל (25%):</strong> רשימת קרה + ניווט קדימה/אחורה</p>
+<p><strong>פאנל ימין (75%):</strong></p>
+<ul>
+<li>בחירת קמפיין ראשי</li>
+<li>כפתור &quot;הוספת קמפיין&quot;</li>
+<li>פרטי הקופה שנבחרה</li>
+</ul>
+<p><strong>פופאפ הוספת קמפיין:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שם קמפיין</td>
+</tr>
+<tr>
+<td>קטגוריה ראשית</td>
+</tr>
+<tr>
+<td>יעד תקציב</td>
+</tr>
+</tbody>
+</table>
+<h4 id="טאב-2---רשימת-קופות">טאב 2 - רשימת קופות</h4>
+<p><strong>עמודה שמאל – חנויות:</strong></p>
+<ul>
+<li>טבלת חנויות + כפתור הוספה</li>
+</ul>
+<p><strong>עמודה ימין – כספות:</strong></p>
+<ul>
+<li>טבלת כספות + כפתור הוספה</li>
+</ul>
+<p><strong>פופאפ הוספה/עריכת קופה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שם (חובה)</td>
+</tr>
+<tr>
+<td>סוג (חנות/כספת)</td>
+</tr>
+<tr>
+<td>מיקום</td>
+</tr>
+<tr>
+<td>יתרה נוכחית</td>
+</tr>
+<tr>
+<td>תיאור/הערה</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="13-הזמנות-יד-תומך">13. הזמנות יד תומך</h2>
+<p><strong>מסך:</strong> <code>/yad-tomech</code></p>
+<p><strong>מטרה:</strong> ניהול הזמנות שמגיעות מארגון יד תומך</p>
+<p><strong>עמודות:</strong> מספר הזמנה, ספק, תאריך, סכום, סטטוס, הערות</p>
+<p><strong>פעולות:</strong></p>
+<ul>
+<li><strong>עריכת הזמנה</strong> – פתיחת פופאפ</li>
+</ul>
+<p><strong>פופאפ עריכת הזמנה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>סכום לתשלום (חובה)</td>
+</tr>
+<tr>
+<td>הערה</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="14-הוראות-קבע">14. הוראות קבע</h2>
+<p><strong>מסך:</strong> <code>/horaot-keva</code></p>
+<p><strong>מטרה:</strong> ניהול הוראות קבע (תשלומים חוזרים)</p>
+<p><strong>עמודות:</strong> מספר הוראה, שם נושה, סכום, תדירות, סטטוס</p>
+<p><strong>מצבי שורה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>מצב</th>
+<th>פעולה זמינה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>מקושר למשפחה</td>
+<td>כפתור עריכת פרטי משפחה</td>
+</tr>
+<tr>
+<td>לא מקושר</td>
+<td>כפתור שיוך להוראת קבע</td>
+</tr>
+</tbody>
+</table>
+<p><strong>פופאפ שיוך למשפחה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>חיפוש וייחור משפחה</td>
+</tr>
+<tr>
+<td>אישור שיוך</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="15-תנועות-דונורי">15. תנועות דונורי</h2>
+<p><strong>מסך:</strong> <code>/donary-transactions</code></p>
+<p><strong>מטרה:</strong> מעקב תרומות שעברו דרך פלטפורמת Donary</p>
+<h3 id="עמודות-3">עמודות:</h3>
+<table>
+<thead>
+<tr>
+<th>עמודה</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>בחירה</td>
+<td>רב-בחירה</td>
+</tr>
+<tr>
+<td>תאריך</td>
+<td></td>
+</tr>
+<tr>
+<td>4 ספרות אחרונות</td>
+<td>של הכרטיס</td>
+</tr>
+<tr>
+<td>סכום</td>
+<td></td>
+</tr>
+<tr>
+<td>אמצעי תשלום</td>
+<td></td>
+</tr>
+<tr>
+<td>שם תורם / אימייל</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס קובץ</td>
+<td>האם הועלתה קבלה</td>
+</tr>
+<tr>
+<td>קובץ</td>
+<td>העלאה / צפייה</td>
+</tr>
+<tr>
+<td>הפקת קבלה</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="כלי-חיפוש-4">כלי חיפוש:</h3>
+<ul>
+<li>מ-תאריך / עד-תאריך (ברירת מחדל: חודש אחורה – היום)</li>
+<li>4 ספרות אחרונות של כרטיס</li>
+<li>סינון קבלות (עם/ללא)</li>
+<li>חיפוש גלובלי</li>
+</ul>
+<h3 id="פעולות-מרובות">פעולות מרובות:</h3>
+<table>
+<thead>
+<tr>
+<th>פעולה</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שיוך בצובר (BulkAssignment)</td>
+<td>שיוך עסקאות לנמענים</td>
+</tr>
+<tr>
+<td>הפקת קבלות מרובות</td>
+<td>AddInvoiceMulti</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="16-תזרים-תשלומים">16. תזרים תשלומים</h2>
+<p><strong>מסך:</strong> <code>/payments-flow</code></p>
+<p><strong>מטרה:</strong> מעקב תזרים תשלומים מהוראות קבע</p>
+<p><strong>עמודות דינמיות:</strong> מספר הוראה, שם נושה, סכום, תאריך תשלום, סטטוס, תדירות, אמצעי תשלום</p>
+<p><strong>פעולות:</strong></p>
+<ul>
+<li>עריכת תשלום</li>
+<li>חיפוש, רענון, ייצוא לאקסל</li>
+</ul>
+<hr>
+<h2 id="17-תורמים">17. תורמים</h2>
+<p><strong>מסך:</strong> <code>/donors</code></p>
+<p><strong>מטרה:</strong> ניהול ספריית תורמים להפקת קבלות וחשבוניות</p>
+<p><strong>תצוגה:</strong> טבלה או טופס (בהוספה/עריכה)</p>
+<p><strong>עמודות בטבלה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>עמודה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>עריכה</td>
+</tr>
+<tr>
+<td>שם תורם</td>
+</tr>
+<tr>
+<td>אימייל</td>
+</tr>
+<tr>
+<td>טלפון</td>
+</tr>
+<tr>
+<td>ת&quot;ז</td>
+</tr>
+<tr>
+<td>כתובת</td>
+</tr>
+<tr>
+<td>פרטי בנק (שם, סניף, חשבון)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>חיפוש:</strong> סינון בזמן אמת לפי כל שדה</p>
+<p><strong>פופאפ הוספה/עריכת תורם:</strong></p>
+<p><em>פרטים אישיים:</em></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>חובה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שם</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>אימייל</td>
+<td>לא</td>
+</tr>
+<tr>
+<td>ת&quot;ז (9 ספרות)</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>כתובת</td>
+<td>לא</td>
+</tr>
+<tr>
+<td>טלפון</td>
+<td>לא</td>
+</tr>
+</tbody>
+</table>
+<p><em>פרטי בנק:</em></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שם בנק</td>
+</tr>
+<tr>
+<td>סניף בנק</td>
+</tr>
+<tr>
+<td>חשבון בנק</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="18-מקבלי-חגים">18. מקבלי חגים</h2>
+<p><strong>מסך:</strong> <code>/mekablim-chagim</code></p>
+<p><strong>מטרה:</strong> ניהול משפחות המקבלות תמיכה לחגים, עם ניהול רמות תמיכה</p>
+<h3 id="כלי-ניהול">כלי ניהול:</h3>
+<table>
+<thead>
+<tr>
+<th>כפתור</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>בחירת חג</td>
+<td>בחירת החג הרלוונטי</td>
+</tr>
+<tr>
+<td>מצב מנהל</td>
+<td>החלפת מצב (מוגן בסיסמה &quot;1234&quot;)</td>
+</tr>
+<tr>
+<td>הצגת סכומים</td>
+<td>הצגה/הסתרת סכומי תמיכה</td>
+</tr>
+<tr>
+<td>ייצוא לאקסל</td>
+<td>עם שטוח תמיכות (שורה לכל תמיכה)</td>
+</tr>
+<tr>
+<td>בחירת עמודות</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="עמודות-4">עמודות:</h3>
+<table>
+<thead>
+<tr>
+<th>עמודה</th>
+<th>גלוי במצב</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>בחירה</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>עריכת משפחה</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>שם משפחה</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>פרטי אב</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>כתובת</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>טלפונים</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td>מספר ילדים</td>
+<td>תמיד</td>
+</tr>
+<tr>
+<td><strong>עמודת תמיכות</strong></td>
+<td>תמיד (סכומים רק במצב מנהל)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="עמודת-תמיכות-supportsmanager">עמודת תמיכות (SupportsManager):</h3>
+<p><strong>במצב מנהל – עריכה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>סכום</td>
+</tr>
+<tr>
+<td>סטטוס שליחה</td>
+</tr>
+<tr>
+<td>אמצעי תשלום</td>
+</tr>
+<tr>
+<td>רמה</td>
+</tr>
+<tr>
+<td>הערה</td>
+</tr>
+<tr>
+<td>כפתור הוספה / מחיקה</td>
+</tr>
+</tbody>
+</table>
+<p><strong>פעולות מרובות (כאשר שורות נבחרות):</strong>
+טופס הוספת תמיכה לכל הנבחרים:</p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>סכום</td>
+</tr>
+<tr>
+<td>סטטוס שליחה</td>
+</tr>
+<tr>
+<td>אמצעי תשלום</td>
+</tr>
+<tr>
+<td>רמה</td>
+</tr>
+<tr>
+<td>הערה</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="19-מכובדים">19. מכובדים</h2>
+<p><strong>מסך:</strong> <code>/mechubadim</code></p>
+<p><strong>מטרה:</strong> ניהול משפחות מכובדות לחגים</p>
+<p>דומה למסך מקבלי חגים, עם פחות אפשרויות עריכה – עריכה בודדת לכל משפחה ללא עריכה בצובר.</p>
+<hr>
+<h2 id="20-גובים">20. גובים</h2>
+<p><strong>מסך:</strong> <code>/govim</code></p>
+<p><strong>מטרה:</strong> ניהול קמפיינים של גבייה וצוות גובים</p>
+<h3 id="3-טאבים">3 טאבים:</h3>
+<h4 id="טאב-1---עדכון-סכומים-sethatramotdata">טאב 1 - עדכון סכומים (SetHatramotData)</h4>
+<p><strong>בקרות:</strong></p>
+<ul>
+<li><strong>סוג גובים:</strong> &quot;גובים&quot; / &quot;גבאי שמחם&quot;</li>
+<li><strong>בחירת קמפיין/תקופה</strong> (dropdown ראשי)</li>
+<li><strong>תצוגת פריטים נבחרים:</strong> בניין (עם אייקון), גובים (עם אייקונים), כפתורי מחיקה</li>
+<li><strong>כפתור אישור שיוך</strong></li>
+</ul>
+<p><strong>טבלת בניינים:</strong></p>
+<table>
+<thead>
+<tr>
+<th>עמודה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שם בניין (רחוב + מספר)</td>
+</tr>
+<tr>
+<td>סכום גדול (כסף גדול)</td>
+</tr>
+<tr>
+<td>סכום קטן (כסף קטן)</td>
+</tr>
+<tr>
+<td>אשראי/ערב</td>
+</tr>
+<tr>
+<td>סה&quot;כ M (גדול+קטן)</td>
+</tr>
+<tr>
+<td>סה&quot;כ כולל</td>
+</tr>
+<tr>
+<td>הגיע למשרד</td>
+</tr>
+</tbody>
+</table>
+<h4 id="טאב-2---עדכון-גובים-setgovimbinyanim">טאב 2 - עדכון גובים (SetGovimBinyanim)</h4>
+<p><strong>זרימת עבודה:</strong> בחר בניין → בחר גובים → אישור שיוך</p>
+<p><strong>עמודה שמאל – בניינים:</strong> טבלת בניינים הניתנת לבחירה</p>
+<p><strong>עמודה ימין – משפחות/גובים:</strong> טבלת משפחות עם בחירה מרובה</p>
+<p><strong>מאפיינים:</strong></p>
+<ul>
+<li>מעקב שיוכים קודמים</li>
+<li>רשומת היסטוריה לכל שינוי</li>
+</ul>
+<h4 id="טאב-3---עדכון-מכשירי-דונורי-donarydevices">טאב 3 - עדכון מכשירי דונורי (DonaryDevices)</h4>
+<p><strong>מטרה:</strong> שיוך מכשירי דונורי לבניינים</p>
+<p><strong>פופאפ עריכה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>בחירת מכשיר (רשימה)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="21-לוח-שנה">21. לוח שנה</h2>
+<p><strong>מסך:</strong> <code>/calendar</code></p>
+<p><strong>מטרה:</strong> הצגת לוח שנה של ארגוני</p>
+<p><strong>תצוגה:</strong> Google Calendar משובץ (iframe) ב-800px גובה, קריאה בלבד</p>
+<hr>
+<h2 id="22-פקסים">22. פקסים</h2>
+<p><strong>מסך:</strong> <code>/faxes</code></p>
+<p><strong>מטרה:</strong> ניהול מסמכי פקס – קישור לקבצי PDF לפרופילי משפחות</p>
+<h3 id="2-טאבים-1">2 טאבים:</h3>
+<h4 id="טאב-1---פקסים-חדשים">טאב 1 - פקסים חדשים</h4>
+<p><strong>פאנל שמאל (1/3) – קבצים:</strong></p>
+<ul>
+<li>רשימת קבצי פקס שלא קושרו עדיין</li>
+<li><strong>ניווט:</strong> קדימה/אחורה + מונה (&quot;1/10&quot;)</li>
+<li><strong>מידע:</strong> מספר טלפון, תאריך ושעת קבלה</li>
+<li><strong>פעולות לכל קובץ:</strong>
+<ul>
+<li>⭐ סימון כמועדף</li>
+<li>🗑️ מחיקה</li>
+<li>↗️ פתיחה בטאב חדש</li>
+<li>📤 העלאת קבצי PDF חדשים</li>
+</ul>
+</li>
+<li><strong>תצוגת קובץ:</strong> PDF viewer + נגן אודיו</li>
+</ul>
+<p><strong>פאנל ימין (2/3) – טבלת משפחות:</strong></p>
+<ul>
+<li>כל המשפחות עם חיפוש/סינון</li>
+<li><strong>שדות חיפוש:</strong> שם משפחה, שם אב, ת&quot;ז, תאריך עדכון, ילדים בבית</li>
+<li><strong>פעולות:</strong>
+<ul>
+<li>לחיצה על שורת משפחה → קישור הפקס למשפחה עם הערה אופציונלית</li>
+<li>הוספת משפחה חדשה</li>
+</ul>
+</li>
+</ul>
+<h4 id="טאב-2---פקסים-מעודכנים">טאב 2 - פקסים מעודכנים</h4>
+<p><strong>פאנל שמאל (2/3) – פקסים מקושרים:</strong></p>
+<ul>
+<li>טבלת פקסים שכבר קושרו למשפחות</li>
+<li>⭐ סימון כמועדף</li>
+<li>לחיצה על שורה → הצגת קובץ בפאנל ימין</li>
+</ul>
+<p><strong>פאנל ימין (1/3) – תצוגת קובץ:</strong></p>
+<ul>
+<li>PDF viewer / נגן אודיו</li>
+<li>מרוקן כאשר לא נבחר קובץ</li>
+</ul>
+<hr>
+<h2 id="23-קמפיינים">23. קמפיינים</h2>
+<p><strong>מסך:</strong> <code>/campaign</code></p>
+<p><strong>מטרה:</strong> ניהול וביצוע קמפיינים קוליים ו-SMS במערכת ימות המשיח</p>
+<p><strong>עמודות:</strong> פרטי קמפיין, תפריט פעולות</p>
+<p><strong>תפריט פעולות לכל קמפיין:</strong></p>
+<table>
+<thead>
+<tr>
+<th>פעולה</th>
+<th>הערות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>קמפיין קולי</strong></td>
+<td>מופעל רק אם יש הקלטה</td>
+</tr>
+<tr>
+<td><strong>קמפיין צינתוק</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>פופאפ ניהול שלוחה 9 (Shlucha9):</strong></p>
+<ul>
+<li><strong>תצוגת Chips</strong> של קמפיינים שמוגדרים בשלוחה 9
+<ul>
+<li>כל chip: שם קמפיין + סטטוס (&quot;רשום&quot;/&quot;כולם&quot;) + מחיקה</li>
+</ul>
+</li>
+<li><strong>הוספת קמפיין:</strong> dropdown + צ'קבוקס &quot;רק רשומים&quot; + כפתור הוספה</li>
+<li><strong>כפתור שמירה:</strong> שמירת הגדרות בשרת</li>
+</ul>
+<hr>
+<h2 id="24-משימות">24. משימות</h2>
+<p><strong>מסך:</strong> <code>/tasks</code></p>
+<p><strong>מטרה:</strong> מערכת ניהול משימות פנים-ארגוניות עם שיחות</p>
+<h3 id="פריסה-3-עמודות">פריסה (3 עמודות):</h3>
+<h4 id="עמודה-1-2512--סוגי-משימות">עמודה 1 (2.5/12) – סוגי משימות</h4>
+<ul>
+<li>רשימת סוגי משימות עם אייקון, צבע, שם ותיאור</li>
+<li><strong>כפתור הוספה</strong> (פינה עליונה)</li>
+<li>לחיצה על סוג → סינון המשימות</li>
+</ul>
+<h4 id="עמודה-2-3512--רשימת-משימות">עמודה 2 (3.5/12) – רשימת משימות</h4>
+<ul>
+<li><strong>חיפוש</strong> לפי כותרת/תיאור/יוצר</li>
+<li><strong>קבוצות לפי סטטוס:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>סטטוס</th>
+<th>צבע</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>פתוחות</td>
+<td>אדום</td>
+</tr>
+<tr>
+<td>בטיפול</td>
+<td>כתום</td>
+</tr>
+<tr>
+<td>הושלמו</td>
+<td>ירוק</td>
+</tr>
+<tr>
+<td>בוטלו</td>
+<td>אפור</td>
+</tr>
+</tbody>
+</table>
+<p><strong>לכל משימה:</strong></p>
+<ul>
+<li>כותרת, תיאור מקוצר</li>
+<li>סטטוס + עדיפות (גבוה=אדום, בינוני=כתום, נמוך=ירוק)</li>
+<li>תאריך יעד, שם יוצר</li>
+<li>כפתורי: עריכה, העלה/הורד עדיפות</li>
+<li>גבול כחול שמאל = יש הודעות חדשות</li>
+</ul>
+<h4 id="עמודה-3-612--שיחה">עמודה 3 (6/12) – שיחה</h4>
+<ul>
+<li>הצגת ההודעות כ-chat (שלי ימין, אחרים שמאל)</li>
+<li>שם כותב + תאריך/שעה חכם (היום/אתמול/תאריך)</li>
+<li>שדה קלט: Enter = שלח, Shift+Enter = שורה חדשה</li>
+<li><strong>עדכון אוטומטי</strong> כל 30 שניות</li>
+</ul>
+<h3 id="פופאפים">פופאפים:</h3>
+<p><strong>פופאפ הוספת/עריכת סוג משימה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>חובה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שם</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>תיאור</td>
+<td>לא</td>
+</tr>
+<tr>
+<td>צבע</td>
+<td>לא (ברירת מחדל: כחול)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>פופאפ הוספת/עריכת משימה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>חובה</th>
+<th>הוצג בעריכה בלבד</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>כותרת</td>
+<td>כן</td>
+<td></td>
+</tr>
+<tr>
+<td>תיאור</td>
+<td>כן</td>
+<td></td>
+</tr>
+<tr>
+<td>עדיפות</td>
+<td>כן</td>
+<td></td>
+</tr>
+<tr>
+<td>סטטוס</td>
+<td>כן</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="25-ניהול-משתמשים">25. ניהול משתמשים</h2>
+<p><strong>מסך:</strong> <code>/users</code></p>
+<p><strong>מטרה:</strong> ניהול חשבונות משתמשים ורמות הרשאה</p>
+<p><strong>תצוגה:</strong> Grid של כרטיסי משתמשים</p>
+<p><strong>כל כרטיס מציג:</strong></p>
+<ul>
+<li>אווטאר עם ראשי תיבות</li>
+<li>שם מלא</li>
+<li>כתובת אימייל</li>
+<li>הרשאה</li>
+<li>כניסה אחרונה</li>
+<li>נוצר ע&quot;י + תאריך יצירה</li>
+</ul>
+<p><strong>כרטיס &quot;הוספת משתמש&quot;:</strong></p>
+<p><strong>פופאפ הוספת משתמש:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>חובה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>שם פרטי</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>שם משפחה</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>אימייל</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>הרשאה</td>
+<td>כן (רשימה)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>מאפיינים:</strong></p>
+<ul>
+<li>מניעת אימייל כפול</li>
+<li>המרת אימייל לאותיות קטנות</li>
+<li>רישום מי יצר את המשתמש</li>
+</ul>
+<hr>
+<h2 id="26-טבלאות-מערכת">26. טבלאות מערכת</h2>
+<p><strong>מסך:</strong> <code>/system-tables</code></p>
+<p><strong>מטרה:</strong> עריכת טבלאות עזר (lookup tables) שמשמשות רשימות בכל המערכת</p>
+<p><strong>דוגמאות לטבלאות:</strong> בתי כנסת, קהילות, מצב משפחתי, קטגוריות, ועוד</p>
+<p><strong>כל טאב/טבלה:</strong></p>
+<ul>
+<li>חיפוש, רענון</li>
+<li>עמודות: תווית, ערך, עריכה (עיפרון), מחיקה (פח)</li>
+</ul>
+<p><strong>פופאפ עריכה/הוספה:</strong></p>
+<ul>
+<li>שדות לפי הטבלה הספציפית</li>
+<li>שמירה</li>
+</ul>
+<hr>
+<h2 id="27-עדכון-מאקסל">27. עדכון מאקסל</h2>
+<p><strong>מסך:</strong> <code>/update-families-excel</code></p>
+<p><strong>מטרה:</strong> ייבוא ועדכון נתוני משפחות מקובץ Excel, עם ולידציה וטיפול בכפילויות</p>
+<h3 id="4-שלבים-stepper">4 שלבים (Stepper):</h3>
+<h4 id="שלב-1---העלאת-קובץ">שלב 1 - העלאת קובץ</h4>
+<ul>
+<li>כפתור &quot;העלאת קובץ משפחות&quot; (עם קובץ)</li>
+<li>כפתור &quot;הורדת תבנית קובץ&quot; (Google Sheets)</li>
+<li>המשך מופעל רק לאחר העלאה</li>
+</ul>
+<h4 id="שלב-2---בדיקת-שגיאות">שלב 2 - בדיקת שגיאות</h4>
+<p><strong>סרגל סינון שגיאות:</strong></p>
+<table>
+<thead>
+<tr>
+<th>סוג שגיאה</th>
+<th>צבע</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>כל השגיאות</td>
+<td>אדום</td>
+</tr>
+<tr>
+<td>שגיאות ת&quot;ז</td>
+<td></td>
+</tr>
+<tr>
+<td>שגיאות טלפון</td>
+<td></td>
+</tr>
+<tr>
+<td>שגיאות כתובת</td>
+<td></td>
+</tr>
+<tr>
+<td>כפילויות</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>עמודות:</strong> פרטי משפחה + אינדיקטור צבע + עריכה/מחיקה</p>
+<p><strong>פעולות:</strong> תיקון שורה בודדת (EditRow), מחיקת שורה</p>
+<h4 id="שלב-3---סקירת-רשימה-לפני-ייבוא">שלב 3 - סקירת רשימה לפני ייבוא</h4>
+<p><strong>סרגל סינון:</strong></p>
+<table>
+<thead>
+<tr>
+<th>סטטוס</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>הכל</td>
+<td></td>
+</tr>
+<tr>
+<td>שגיאות</td>
+<td></td>
+</tr>
+<tr>
+<td>עדכונים תקינים</td>
+<td></td>
+</tr>
+<tr>
+<td>עדכונים בעייתיים</td>
+<td></td>
+</tr>
+<tr>
+<td>משפחות חדשות</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>פעולות:</strong> עריכה/מחיקה לפני ייבוא סופי</p>
+<h4 id="שלב-4---עיבוד">שלב 4 - עיבוד</h4>
+<ul>
+<li><strong>בזמן עיבוד:</strong> ספינר + &quot;אל תצא עד הסיום&quot;</li>
+<li><strong>בהצלחה:</strong> ✅ + &quot;המשפחות עודכנו בהצלחה&quot;</li>
+</ul>
+<h3 id="פופאפ-עריכת-שורה-editrow">פופאפ עריכת שורה (EditRow):</h3>
+<ul>
+<li><strong>עמודה שמאל:</strong> עריכת השורה הראשית</li>
+<li><strong>עמודה ימין</strong> (אם יש כפילויות): ניווט בין כפילויות פוטנציאליות (קריאה בלבד)</li>
+</ul>
+<hr>
+<h2 id="28-עדכוני-ימות">28. עדכוני ימות</h2>
+<p><strong>מסך:</strong> <code>/yemot</code></p>
+<p><strong>מטרה:</strong> צפייה בעדכוני מידע שהגיעו ממערכת ימות המשיח</p>
+<h3 id="2-טאבים-2">2 טאבים:</h3>
+<ol>
+<li><strong>תקינים</strong> – עדכונים שהצליחו (מ-familiesHistory שנוצרו ע&quot;י &quot;yemot&quot;)</li>
+<li><strong>שגויים</strong> – עדכונים שנכשלו (מ-worngYemot)</li>
+</ol>
+<p><strong>עמודות:</strong> שדות שעודכנו (שכר, הוצאות חינוך, הוצאות דיור, ועוד) + תאריך</p>
+<hr>
+<h2 id="29-תיקון-נתוני-משפחות">29. תיקון נתוני משפחות</h2>
+<p><strong>מסך:</strong> <code>/fix-data</code></p>
+<p><strong>מטרה:</strong> זיהוי ותיקון שגיאות איכות נתונים וכפילויות</p>
+<h3 id="טאבים-דינמיים-נוצרים-לפי-הנתונים">טאבים דינמיים (נוצרים לפי הנתונים):</h3>
+<h4 id="טאב-שגיאות">טאב שגיאות:</h4>
+<p><strong>סוגי שגיאות שנבדקות:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שגיאה</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>כתובת חסרה</td>
+<td>ללא רחוב/בנין</td>
+</tr>
+<tr>
+<td>קוד רחוב לא תקין</td>
+<td></td>
+</tr>
+<tr>
+<td>שם = &quot;הקלטה&quot;</td>
+<td>placeholder לא הוחלף</td>
+</tr>
+<tr>
+<td>ת&quot;ז לא תקינה</td>
+<td>(אלא אם מסומן כדרקון)</td>
+</tr>
+<tr>
+<td>טלפון לא תקין</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="טאב-כפילויות">טאב כפילויות:</h4>
+<p><strong>סוגי כפילויות:</strong></p>
+<table>
+<thead>
+<tr>
+<th>סוג</th>
+<th>תיאור</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>כתובת זהה</td>
+<td>רחוב + בנין + דירה + כניסה</td>
+</tr>
+<tr>
+<td>כתובת + שם</td>
+<td>רחוב + בנין + דירה + שם משפחה</td>
+</tr>
+<tr>
+<td>ת&quot;ז כפולה</td>
+<td>ת&quot;ז אב או ת&quot;ז אם</td>
+</tr>
+<tr>
+<td>טלפון כפול</td>
+<td>כל שדות הטלפון</td>
+</tr>
+</tbody>
+</table>
+<p><strong>רמות חומרה:</strong></p>
+<ul>
+<li>רמה 2 = התאמה אחת</li>
+<li>רמה 3 = מספר התאמות</li>
+</ul>
+<p><strong>פעולות:</strong></p>
+<ul>
+<li><strong>עריכה</strong> – תיקון שגיאה / פתיחת פופאפ כפילויות</li>
+</ul>
+<hr>
+<h2 id="30-פורים-2024">30. פורים 2024</h2>
+<p><strong>מסך:</strong> <code>/purim2024</code> ו-<code>/purim2024-answer</code></p>
+<h3 id="מסך-שאלות-purim2024">מסך שאלות (<code>/purim2024</code>):</h3>
+<p><strong>מטרה:</strong> ניהול שאלות טריוויה לפורים</p>
+<p><strong>עמודות:</strong> תאריך, מספר שאלה, אפשרויות תשובה, תשובה נכונה</p>
+<p><strong>פופאפ הוספה/עריכה:</strong></p>
+<table>
+<thead>
+<tr>
+<th>שדה</th>
+<th>חובה</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>תאריך</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>מספר שאלה</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>אפשרויות</td>
+<td>כן</td>
+</tr>
+<tr>
+<td>תשובה נכונה</td>
+<td>כן</td>
+</tr>
+</tbody>
+</table>
+<h3 id="מסך-תשובות-purim2024-answer">מסך תשובות (<code>/purim2024-answer</code>):</h3>
+<p><strong>מטרה:</strong> צפייה בתשובות שנשלחו + ייצוא</p>
+<p><strong>עמודות:</strong> תאריך, שם עונה, תשובה, ציון</p>
+<p><strong>פעולות:</strong> ייצוא לאקסל</p>
+<hr>
+<h2 id="סיכום-כללי">סיכום כללי</h2>
+<table>
+<thead>
+<tr>
+<th>מסך</th>
+<th>קטגוריה</th>
+<th>פעולות עיקריות</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login</td>
+<td>אימות</td>
+<td>כניסה עם גוגל</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>סיכום</td>
+<td>סטטיסטיקות + הערות</td>
+</tr>
+<tr>
+<td>Families</td>
+<td>ניהול משפחות</td>
+<td>CRUD מלא + ייצוא + קמפיינים</td>
+</tr>
+<tr>
+<td>Deleted Families</td>
+<td>ניהול משפחות</td>
+<td>צפייה + שחזור</td>
+</tr>
+<tr>
+<td>BakashotAllData</td>
+<td>תמיכות</td>
+<td>ניהול מלא + אישור/דחייה</td>
+</tr>
+<tr>
+<td>TmichotAllData</td>
+<td>תמיכות</td>
+<td>ניהול מלא + מעקב שיחות</td>
+</tr>
+<tr>
+<td>BankTransaction</td>
+<td>כספים</td>
+<td>תנועות + קבלות</td>
+</tr>
+<tr>
+<td>ChecksTracking</td>
+<td>כספים</td>
+<td>מעקב פרעון</td>
+</tr>
+<tr>
+<td>TazrimKlali</td>
+<td>כספים</td>
+<td>מזומן כללי</td>
+</tr>
+<tr>
+<td>Sapakim</td>
+<td>כספים</td>
+<td>ספקים + תשלומים</td>
+</tr>
+<tr>
+<td>Donations</td>
+<td>כספים</td>
+<td>תרומות (בפיתוח)</td>
+</tr>
+<tr>
+<td>Kupot</td>
+<td>כספים</td>
+<td>קופות ויתרות</td>
+</tr>
+<tr>
+<td>YadTomech</td>
+<td>כספים</td>
+<td>הזמנות חיצוניות</td>
+</tr>
+<tr>
+<td>HoraotKeva</td>
+<td>כספים</td>
+<td>קבע + שיוך למשפחות</td>
+</tr>
+<tr>
+<td>DonaryTransactions</td>
+<td>כספים</td>
+<td>דונורי + קבלות</td>
+</tr>
+<tr>
+<td>PaymentsFlow</td>
+<td>כספים</td>
+<td>תזרים תשלומים</td>
+</tr>
+<tr>
+<td>Donors</td>
+<td>כספים</td>
+<td>ספריית תורמים</td>
+</tr>
+<tr>
+<td>MekablimChagim</td>
+<td>חגים</td>
+<td>קבלת תמיכות חג</td>
+</tr>
+<tr>
+<td>Mechubadim</td>
+<td>חגים</td>
+<td>מכובדים</td>
+</tr>
+<tr>
+<td>Govim</td>
+<td>גבייה</td>
+<td>קמפיינים + שיוך גובים</td>
+</tr>
+<tr>
+<td>Calendar</td>
+<td>כללי</td>
+<td>לוח שנה גוגל</td>
+</tr>
+<tr>
+<td>Faxes</td>
+<td>תקשורת</td>
+<td>ניהול פקסים</td>
+</tr>
+<tr>
+<td>Campaigns</td>
+<td>תקשורת</td>
+<td>קמפיינים קוליים</td>
+</tr>
+<tr>
+<td>Tasks</td>
+<td>ניהול</td>
+<td>משימות + שיחות</td>
+</tr>
+<tr>
+<td>UserManagement</td>
+<td>הגדרות</td>
+<td>ניהול משתמשים</td>
+</tr>
+<tr>
+<td>SystemTables</td>
+<td>הגדרות</td>
+<td>טבלאות עזר</td>
+</tr>
+<tr>
+<td>UpdatesExcel</td>
+<td>עדכונים</td>
+<td>ייבוא מאקסל</td>
+</tr>
+<tr>
+<td>Yemot</td>
+<td>עדכונים</td>
+<td>עדכוני ימות המשיח</td>
+</tr>
+<tr>
+<td>FixFamiliesData</td>
+<td>תחזוקה</td>
+<td>תיקון נתונים + כפילויות</td>
+</tr>
+<tr>
+<td>Purim2024</td>
+<td>אחר</td>
+<td>שאלות + תשובות פורים</td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>
