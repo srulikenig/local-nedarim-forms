@@ -355,6 +355,248 @@ code {
 </style>
 
 <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+<style>
+/* ===== LAYOUT ===== */
+html { scroll-behavior: smooth; }
+
+body {
+  background: #f8f9fc;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: row; /* RTL: first child appears on the right */
+  align-items: flex-start;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  padding: 0 24px 60px 12px;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  padding: 12px 8px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #d0d7e3;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  margin-right: 0;
+  margin-left: 20px;
+  font-size: 13px;
+}
+
+.sidebar-title {
+  font-weight: bold;
+  font-size: 14px;
+  padding: 4px 8px 10px 8px;
+  border-bottom: 3px solid #1a73e8;
+  margin-bottom: 8px;
+  color: #1a73e8;
+}
+
+.sidebar a {
+  display: block;
+  padding: 4px 8px;
+  color: #333;
+  text-decoration: none;
+  border-radius: 4px;
+  line-height: 1.5;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar a:hover {
+  background: #e8f0fe;
+  color: #1a73e8;
+}
+
+.sidebar a.active {
+  background: #1a73e8;
+  color: #fff;
+  font-weight: bold;
+}
+
+.sidebar .sidebar-sub {
+  padding-right: 12px;
+}
+
+.sidebar .sidebar-sub a {
+  font-size: 12px;
+  color: #555;
+  padding: 3px 8px;
+}
+
+.sidebar .sidebar-sub a:hover {
+  background: #e8f0fe;
+  color: #1a73e8;
+}
+
+.sidebar .sidebar-sub a.active {
+  background: #1558b0;
+  color: #fff;
+}
+
+.sidebar-section-label {
+  font-size: 10.5px;
+  font-weight: bold;
+  color: #999;
+  padding: 10px 8px 3px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+/* ===== SCREEN HEADINGS (h2) ===== */
+.main-content h2 {
+  font-size: 1.45em;
+  font-weight: 700;
+  color: #1a73e8;
+  border-right: 5px solid #1a73e8;
+  padding-right: 12px;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+  background: linear-gradient(to left, #e8f0fe 0%, transparent 60%);
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 0 6px 6px 0;
+}
+
+/* popup family heading inside tabs – keep it smaller */
+.popup-tab-panel h3 {
+  color: #1558b0;
+  font-size: 1.05em;
+  margin-top: 1.2em;
+  border-bottom: 1px solid #c5d5f0;
+  padding-bottom: 4px;
+}
+
+/* ===== H3 SECTION HEADINGS ===== */
+.main-content > h3,
+.main-content h3:not(.popup-tab-panel h3) {
+  color: #444;
+  font-size: 1em;
+  border-right: 3px solid #fbbc04;
+  padding-right: 8px;
+}
+
+/* ===== TABLES ===== */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 13.5px;
+}
+
+table thead tr {
+  background: #1a73e8;
+  color: #fff;
+}
+
+table thead th {
+  padding: 8px 10px;
+  text-align: right;
+  font-weight: 600;
+}
+
+table tbody tr:nth-child(even) {
+  background: #f0f4ff;
+}
+
+table tbody tr:hover {
+  background: #ddeeff;
+}
+
+table tbody td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #e2e8f4;
+}
+
+/* ===== BLOCKQUOTES ===== */
+blockquote {
+  background: #e8f0fe !important;
+  border-color: #1a73e8 !important;
+  border-right: 4px solid #1a73e8;
+  border-left: none;
+  padding: 10px 16px;
+  border-radius: 0 6px 6px 0;
+  color: #333;
+}
+
+/* ===== HR ===== */
+hr {
+  border: none;
+  border-top: 2px solid #e2e8f4;
+  margin: 24px 0;
+}
+
+/* ===== STRONG LABELS ===== */
+p > strong:first-child {
+  color: #1558b0;
+}
+
+/* ===== POPUP FAMILY TABS ===== */
+.popup-tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 2px solid #1a73e8;
+  margin: 12px 0 0 0;
+  padding-bottom: 0;
+}
+
+.popup-tab-btn {
+  padding: 7px 16px;
+  border: 1px solid #c5d5f0;
+  border-bottom: none;
+  background: #f0f4ff;
+  cursor: pointer;
+  border-radius: 6px 6px 0 0;
+  font-size: 13px;
+  color: #1558b0;
+  transition: background 0.15s;
+  font-weight: 500;
+}
+
+.popup-tab-btn:hover {
+  background: #ddeeff;
+}
+
+.popup-tab-btn.active {
+  background: #1a73e8;
+  color: #fff;
+  border-color: #1a73e8;
+  font-weight: bold;
+}
+
+.popup-tab-panel {
+  display: none;
+  padding: 16px 12px;
+  border: 1px solid #c5d5f0;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  margin-bottom: 16px;
+  background: #fff;
+}
+
+.popup-tab-panel.active {
+  display: block;
+}
+
+.popup-tab-panel > hr:last-child {
+  display: none;
+}
+</style>
 </head>
 <body dir="rtl">
   <script>
@@ -365,6 +607,58 @@ code {
           : 'default'
     });
   </script>
+
+<div class="page-wrapper">
+
+<!-- ===== SIDEBAR ===== -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-title">תוכן עניינים</div>
+
+  <div class="sidebar-section-label">פופאפ מרכזי</div>
+  <a href="#פופאפ-משפחה---מרכזי">פופאפ משפחה</a>
+  <div class="sidebar-sub">
+    <a href="#popup-tab-1">פרטים (Details)</a>
+    <a href="#popup-tab-2">תמיכות</a>
+    <a href="#popup-tab-3">לוג שינויים</a>
+    <a href="#popup-tab-4">טאבים 4–7</a>
+  </div>
+
+  <div class="sidebar-section-label">מסכים</div>
+  <a href="#1-כניסה-למערכת">1. כניסה למערכת</a>
+  <a href="#2-דשבורד">2. דשבורד</a>
+  <a href="#3-ניהול-משפחות">3. ניהול משפחות</a>
+  <a href="#4-משפחות-מחוקות">4. משפחות מחוקות</a>
+  <a href="#5-כל-הבקשות---ניהול-מלא">5. כל הבקשות</a>
+  <a href="#6-כל-התמיכות---ניהול-מלא">6. כל התמיכות</a>
+  <a href="#7-תנועות-בנק">7. תנועות בנק</a>
+  <a href="#8-מעקב-צקים">8. מעקב צ'קים</a>
+  <a href="#9-תזרים-כללי">9. תזרים כללי</a>
+  <a href="#10-ספקים">10. ספקים</a>
+  <a href="#11-תרומות">11. תרומות</a>
+  <a href="#12-קופות">12. קופות</a>
+  <a href="#13-הזמנות-יד-תומך">13. הזמנות יד תומך</a>
+  <a href="#14-הוראות-קבע">14. הוראות קבע</a>
+  <a href="#15-תנועות-דונורי">15. תנועות דונורי</a>
+  <a href="#16-תזרים-תשלומים">16. תזרים תשלומים</a>
+  <a href="#17-תורמים">17. תורמים</a>
+  <a href="#18-מקבלי-חגים">18. מקבלי חגים</a>
+  <a href="#19-מכובדים">19. מכובדים</a>
+  <a href="#20-גובים">20. גובים</a>
+  <a href="#21-לוח-שנה">21. לוח שנה</a>
+  <a href="#22-פקסים">22. פקסים</a>
+  <a href="#23-קמפיינים">23. קמפיינים</a>
+  <a href="#24-משימות">24. משימות</a>
+  <a href="#25-ניהול-משתמשים">25. ניהול משתמשים</a>
+  <a href="#26-טבלאות-מערכת">26. טבלאות מערכת</a>
+  <a href="#27-עדכון-מאקסל">27. עדכון מאקסל</a>
+  <a href="#28-עדכוני-ימות">28. עדכוני ימות</a>
+  <a href="#29-תיקון-נתוני-משפחות">29. תיקון נתוני משפחות</a>
+  <a href="#30-פורים-2024">30. פורים 2024</a>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main-content">
+
 <h1 id="מיפוי-מערכת-ניהול-הצדקה---מיפוי-לקוח">מיפוי מערכת ניהול קופה של צדקה קרית חסידים - מיפוי לקוח</h1>
 <blockquote>
 <p>מסמך זה מתאר את כל המסכים, הפונקציונליות, הטפסים והפעולות הקיימות במערכת.
@@ -409,7 +703,14 @@ code {
 <blockquote>
 <p>כמעט כל מסך במערכת פותח את <strong>פופאפ המשפחה</strong> בלחיצה על עריכה. זהו הפופאפ המרכזי והמורכב ביותר במערכת. הוא מורכב מ-<strong>7 טאבים</strong>:</p>
 </blockquote>
-<h3 id="טאב-1---פרטים-details">טאב 1 - פרטים (Details)</h3>
+<div class="popup-tab-container">
+<div class="popup-tab-bar">
+  <button class="popup-tab-btn active" onclick="switchPopupTab(this, 'popup-tab-1')">פרטים (Details)</button>
+  <button class="popup-tab-btn" onclick="switchPopupTab(this, 'popup-tab-2')">תמיכות</button>
+  <button class="popup-tab-btn" onclick="switchPopupTab(this, 'popup-tab-3')">לוג שינויים</button>
+  <button class="popup-tab-btn" onclick="switchPopupTab(this, 'popup-tab-4')">טאבים 4–7</button>
+</div>
+<div id="popup-tab-1" class="popup-tab-panel active">
 <p><strong>אפשרויות בכותרת הפופאפ:</strong></p>
 <ul>
 <li>כפתור <strong>שמירה</strong> – שומר שינויים</li>
@@ -448,7 +749,7 @@ code {
 <td>עם ולידציה על פורמט</td>
 </tr>
 <tr>
-<td>זהות אב דרקון</td>
+<td>זהות אב דרכון</td>
 <td>צ'קבוקס</td>
 <td>מסמן שמדובר בדרכון</td>
 </tr>
@@ -463,7 +764,7 @@ code {
 <td>עם ולידציה, מוצג רק אם נשוי</td>
 </tr>
 <tr>
-<td>זהות אם דרקון</td>
+<td>זהות אם דרכון</td>
 <td>צ'קבוקס</td>
 <td>מסמן דרכון, מוצג רק אם נשוי</td>
 </tr>
@@ -779,8 +1080,9 @@ code {
 <li>משפחה חדשה → יצירת מסמך + היסטוריה</li>
 <li>משפחה קיימת → עדכון + רישום שינויים ב-familiesHistory</li>
 </ul>
-<hr>
-<h3 id="טאב-2---תמיכות-tmichotbakasha">טאב 2 - תמיכות (Tmichot/Bakasha)</h3>
+</div><!-- /#popup-tab-1 -->
+<div id="popup-tab-2" class="popup-tab-panel">
+<h3>טאב 2 - תמיכות (Tmichot/Bakasha)</h3>
 <p><strong>מטרה:</strong> הגשה וניהול בקשות תמיכה עבור המשפחה הספציפית</p>
 <p><strong>פעולות עם בקשות:</strong></p>
 <ul>
@@ -896,21 +1198,24 @@ code {
 </tr>
 </tbody>
 </table>
-<hr>
-<h3 id="טאב-3---לוג-שינויים-change-log">טאב 3 - לוג שינויים (Change Log)</h3>
+</div><!-- /#popup-tab-2 -->
+<div id="popup-tab-3" class="popup-tab-panel">
+<h3>טאב 3 - לוג שינויים (Change Log)</h3>
 <ul>
 <li>מציג היסטוריה של כל השינויים שנעשו במשפחה</li>
 <li>כל רשומה מציגה: שם משתמש + תאריך/שעה, ורשת שדות שהשתנו עם ערך ישן וחדש</li>
 </ul>
-<hr>
-<h3 id="טאבים-נוספים-4-7">טאבים נוספים (4-7)</h3>
+</div><!-- /#popup-tab-3 -->
+<div id="popup-tab-4" class="popup-tab-panel">
+<h3>טאבים נוספים (4-7)</h3>
 <blockquote>
 <p>טאבים נוספים בפופאפ המשפחה (לא תועד מלא – ייתכן שיש מידע נוסף בקוד):</p>
 </blockquote>
 <ul>
 <li>טאב 4 ואילך – מידע נוסף על המשפחה (הערות, תשלומים, קבלות ועוד)</li>
 </ul>
-<hr>
+</div><!-- /#popup-tab-4 -->
+</div><!-- /.popup-tab-container -->
 <hr>
 <h2 id="1-כניסה-למערכת">1. כניסה למערכת</h2>
 <p><strong>מסך:</strong> <code>/login</code></p>
@@ -3041,7 +3346,7 @@ code {
 </tr>
 <tr>
 <td>ת&quot;ז לא תקינה</td>
-<td>(אלא אם מסומן כדרקון)</td>
+<td>(אלא אם מסומן כדרכון)</td>
 </tr>
 <tr>
 <td>טלפון לא תקין</td>
@@ -3286,6 +3591,45 @@ code {
 </tr>
 </tbody>
 </table>
+</div><!-- /.main-content -->
+</div><!-- /.page-wrapper -->
+
+<script>
+// ===== TAB SWITCHING =====
+function switchPopupTab(btn, panelId) {
+  var container = btn.closest('.popup-tab-container');
+  container.querySelectorAll('.popup-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  container.querySelectorAll('.popup-tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+
+// ===== SIDEBAR SCROLL SPY =====
+(function() {
+  var allLinks = document.querySelectorAll('.sidebar a[href^="#"]');
+  var headings = [];
+  allLinks.forEach(function(link) {
+    var id = link.getAttribute('href').replace('#', '');
+    var el = document.getElementById(id);
+    if (el) headings.push({ el: el, link: link });
+  });
+
+  function onScroll() {
+    var scrollY = window.scrollY + 80;
+    var current = null;
+    for (var i = 0; i < headings.length; i++) {
+      if (headings[i].el.getBoundingClientRect().top + window.scrollY <= scrollY) {
+        current = headings[i].link;
+      }
+    }
+    allLinks.forEach(function(l) { l.classList.remove('active'); });
+    if (current) current.classList.add('active');
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+</script>
 
 </body>
 </html>
