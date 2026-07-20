@@ -164,6 +164,12 @@
             padding: 6px;
         }
 
+        .LinkBt[disabled] {
+            color: #c0c0c0;
+            text-decoration: none;
+            cursor: default;
+        }
+
         .CenterDiv { text-align: center; }
 
         .Screen { display: none; }
@@ -495,6 +501,7 @@
     <div id="BackToNedarim" style="text-align:center;margin-top:10px;display:none"> <input class="Bt" style="background-color:#ff6a00;display:inline-block;min-width:40%;padding:8px" type="button" value="חזרה לנדרים פלוס" id="BackToNedarimBottom" onclick="if (MasofId !== '') parent.closeIFrame()" /></div>
 
     <div class="PageWrap">
+        <div style="text-align:center;min-height:158px;font-size:0px"><img id="MainLogo" style="max-height: 180px; max-width: 100%; border-radius: 0px;" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" /></div>
         <div class="TopTitle"><h2 id="MainTitle">שירות אישי למשפחות עטרת שלמה</h2></div>
         <hr class="HrLine" />
 
@@ -630,7 +637,9 @@
         //==============================================================
         var CONFIG = {
             API_URL: 'https://api-test.atrsh.org',    // כתובת ה-API, בלי / בסוף
-            INACTIVITY_LOGOUT_MINUTES: 10             // התנתקות אוטומטית אחרי חוסר פעילות
+            MOSAD_ID: '7000322',                      // מספר מוסד - ללוגו מ-images.matara.pro
+            INACTIVITY_LOGOUT_MINUTES: 10,            // התנתקות אוטומטית אחרי חוסר פעילות
+            RESEND_COOLDOWN_SECONDS: 50               // המתנה לשליחה חוזרת של קוד אימות
         };
         //==============================================================
 
@@ -805,6 +814,7 @@
                     $('#CodePhoneTxt').text(phone);
                     $('#CodeInput').val('');
                     showScreen('ScreenCode');
+                    startResendCooldown();
                     $('#CodeInput').focus();
                 })
                 .fail(function (xhr) {
@@ -815,11 +825,31 @@
                 });
         }
 
+        // שליחה חוזרת נפתחת רק אחרי המתנה - כמו מסך הכניסה באתר
+        var resendTimer = null;
+        function startResendCooldown() {
+            var left = CONFIG.RESEND_COOLDOWN_SECONDS;
+            if (resendTimer) { clearInterval(resendTimer); }
+            $('#ResendBt').attr('disabled', 'disabled').val('שליחה חוזרת בעוד ' + left + ' שניות');
+            resendTimer = setInterval(function () {
+                left--;
+                if (left <= 0) {
+                    clearInterval(resendTimer);
+                    resendTimer = null;
+                    $('#ResendBt').removeAttr('disabled').val('שליחה חוזרת של קוד אימות');
+                } else {
+                    $('#ResendBt').val('שליחה חוזרת בעוד ' + left + ' שניות');
+                }
+            }, 1000);
+        }
+
         function resendCode() {
+            if ($('#ResendBt').attr('disabled')) { return; }
             setLoading(true);
             api('POST', '/auth/otp/request', { identifier: State.phone, appType: 'CUSTOMER' })
                 .done(function () {
                     setLoading(false);
+                    startResendCooldown();
                     showMsg('info', 'קוד אימות נשלח מחדש', 'ברגעים אלו אנו מחייגים אליכם שוב.');
                 })
                 .fail(function (xhr) {
@@ -1451,6 +1481,9 @@
 
         $(document).ready(function () {
             $.ajaxSetup({ cache: false });
+
+            // לוגו המוסד - כמו בטפסי נדרים
+            $("#MainLogo").attr('src', 'https://images.matara.pro/ClientsImages/' + CONFIG.MOSAD_ID + '.jpg?1');
 
             MasofId = GetURLParameter("MasofId");
             if (MasofId !== '') {
