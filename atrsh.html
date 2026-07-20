@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="he-IL" translate="no">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="robots" content="noindex" />
+
+    <title>שירות אישי למשפחות עטרת שלמה</title>
+
+    <link rel="preload" as="image" href="waitnew.gif">
+    <script type="text/javascript" src="Files/jquery-1.10.2.js"></script>
+
+    <style>
+        * {
+            font-family: 'Assistant', Arial, sans-serif;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #eef1f4;
+        }
+
+        body {
+            -webkit-user-select: none;
+        }
+
+        input, textarea, select {
+            -webkit-user-select: text;
+        }
+
+        .PageWrap {
+            text-align: right;
+            background-color: white;
+            border-radius: 10px;
+            margin: 10px auto 30px auto;
+            width: 94%;
+            max-width: 860px;
+            padding: 20px 0 30px 0;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+        }
+
+        .TopTitle {
+            text-align: center;
+            margin: 5px 20px 15px 20px;
+            color: #2B3A63;
+        }
+
+        .TopTitle h2 { margin: 5px 0; }
+
+        .HrLine {
+            margin: 10px 20% 20px 20%;
+            border: 0;
+            border-top: 1px solid #d7cece;
+        }
+
+        .Koteret {
+            font-size: 22px;
+            color: #ff6a00;
+            font-weight: bold;
+            text-align: right;
+            padding-right: 20px;
+            margin-top: 22px;
+            margin-bottom: 10px;
+            -webkit-user-select: none;
+        }
+
+        .SubNote {
+            font-size: 14px;
+            color: #808080;
+            padding-right: 20px;
+            margin-bottom: 8px;
+        }
+
+        .TextBox {
+            -webkit-appearance: none;
+            font-size: large;
+            color: #3f475e;
+            text-align: right;
+            padding: 8px;
+            border-color: #f7bb4d;
+            border-style: solid;
+            border-width: 0 0 2px 0;
+            margin: 5px 0;
+            background-color: #FFFFFB;
+            width: 100%;
+            border-radius: 0;
+        }
+
+        .TextBox[disabled] {
+            background-color: #eef0f3;
+            color: #808080;
+            border-color: #d0d0d0;
+        }
+
+        textarea:focus, input:focus, select:focus {
+            outline: none;
+            border-color: #38c232;
+        }
+
+        select.TextBox {
+            height: 42px;
+            background-color: #FFFFFB;
+        }
+
+        .fieldName {
+            display: inline-block;
+            text-align: right;
+            width: 100%;
+            font-size: medium;
+            color: #808080;
+            -webkit-user-select: none;
+        }
+
+        .FieldDiv {
+            display: inline-block;
+            vertical-align: bottom;
+            text-align: right;
+            width: 44%;
+            margin: 10px 3% 0 2%;
+        }
+
+        .FieldDivWide { width: 92%; }
+
+        .Bt {
+            -webkit-appearance: none;
+            font-size: 20px;
+            color: white;
+            background-color: #38c232;
+            text-align: center;
+            padding: 14px 30px;
+            border: 2px solid #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            min-width: 140px;
+        }
+
+        .Bt[disabled] {
+            background-color: #b9b6b6;
+            cursor: default;
+        }
+
+        .BtSecondary { background-color: #729aac; }
+        .BtOrange { background-color: #ff6a00; }
+        .BtDanger { background-color: #e05d5d; }
+        .BtSmall { font-size: 17px; padding: 9px 16px; min-width: 0; }
+
+        .LinkBt {
+            background: none;
+            border: 0;
+            color: #808080;
+            text-decoration: underline;
+            font-size: 15px;
+            cursor: pointer;
+            padding: 6px;
+        }
+
+        .CenterDiv { text-align: center; }
+
+        .Screen { display: none; }
+
+        .WaitNote {
+            text-align: center;
+            margin: 30px;
+            color: #808080;
+            font-size: 20px;
+        }
+
+        .LoginKoteret {
+            text-align: center;
+            font-size: large;
+            margin: 12px 0;
+            color: #0672a6;
+            font-weight: bold;
+        }
+
+        .LoginSubNote {
+            font-weight: normal;
+            margin: 10px auto;
+            width: 90%;
+            color: #945705;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .LoginFieldTitle {
+            color: #b42e2e;
+            font-size: large;
+            font-weight: bold;
+            text-align: center;
+            margin: 18px 0 4px 0;
+        }
+
+        .LoginInput {
+            width: 60%;
+            max-width: 320px;
+            text-align: center;
+            font-size: x-large;
+            font-weight: bold;
+        }
+
+        .CodeNote {
+            text-align: center;
+            font-size: 18px;
+            margin: 6px 15px;
+        }
+
+        .Card {
+            border: 1px solid #e2e2e2;
+            border-radius: 10px;
+            background-color: #fdfdfd;
+            margin: 10px 2.5%;
+            padding: 14px 16px;
+            text-align: right;
+        }
+
+        .CardTitle {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2B3A63;
+            margin-bottom: 6px;
+        }
+
+        .CardDesc {
+            font-size: 15px;
+            color: #808080;
+            margin-bottom: 4px;
+        }
+
+        .PendingTag {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: bold;
+            color: #9a7400;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        /* רשת שדות תצוגה בכרטיס המשפחה */
+        .InfoSection { margin-top: 12px; }
+
+        .InfoSectionTitle {
+            font-size: 17px;
+            font-weight: bold;
+            color: #2B3A63;
+            margin-bottom: 4px;
+        }
+
+        .InfoField {
+            display: inline-block;
+            vertical-align: top;
+            width: 24%;
+            min-width: 130px;
+            margin: 3px 0 3px 0;
+        }
+
+        .InfoField .Lbl {
+            display: block;
+            font-size: 13px;
+            color: #999;
+        }
+
+        .InfoField .Val {
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            color: #2B3A63;
+            word-break: break-word;
+        }
+
+        .SaleBt {
+            -webkit-appearance: none;
+            display: inline-block;
+            font-size: 17px;
+            color: white;
+            background-color: #0672a6;
+            border: 0;
+            border-radius: 6px;
+            padding: 10px 18px;
+            margin: 6px 0 2px 8px;
+            cursor: pointer;
+        }
+
+        /* טבלת מוצרים */
+        .AutoSaveNote {
+            background-color: #eaf3fd;
+            border: 1px solid #bcd9f5;
+            color: #2166a8;
+            border-radius: 8px;
+            margin: 10px 3%;
+            padding: 10px 12px;
+            text-align: center;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .ProdTable {
+            width: 94%;
+            margin: 10px 3%;
+            border-collapse: collapse;
+            border: 1px solid #e2e2e2;
+            border-radius: 8px;
+        }
+
+        .ProdTable th {
+            background-color: #f4f6f8;
+            color: #2B3A63;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 10px 6px;
+            border-bottom: 1px solid #e2e2e2;
+            text-align: center;
+        }
+
+        .ProdTable th.NameCol { text-align: right; padding-right: 12px; }
+
+        .ProdTable td {
+            padding: 10px 6px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+            font-size: 16px;
+            color: #2B3A63;
+        }
+
+        .ProdTable td.NameCol {
+            text-align: right;
+            padding-right: 12px;
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .ProdTable tr.HasQty td { background-color: #f0f8ef; }
+        .ProdTable tr.OutOfStock td { background-color: #f6f6f6; color: #a0a0a0; }
+
+        .OutOfStockTxt {
+            display: block;
+            font-weight: normal;
+            font-size: 13px;
+            color: #b42e2e;
+        }
+
+        .QtyBt {
+            -webkit-appearance: none;
+            font-size: 26px;
+            font-weight: bold;
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            border: 1px solid #c9c9c9;
+            background-color: #f6f6f6;
+            color: #2B3A63;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        .QtyBt[disabled] { color: #c9c9c9; cursor: default; }
+
+        .QtyVal {
+            display: inline-block;
+            width: 44px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            color: #2B3A63;
+            vertical-align: middle;
+        }
+
+        .TotalsBox {
+            border: 1px solid #e2e2e2;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin: 14px 3%;
+            padding: 10px 14px;
+        }
+
+        .TotalsLine {
+            font-size: 16px;
+            color: #808080;
+            padding: 4px 0;
+        }
+
+        .TotalsLine .TotalsVal {
+            float: left;
+            font-weight: bold;
+            color: #2B3A63;
+        }
+
+        .TotalsLine.Grand {
+            font-size: 18px;
+            border-top: 1px solid #e2e2e2;
+            margin-top: 4px;
+            padding-top: 8px;
+        }
+
+        .TotalsLine.Grand .TotalsVal { font-size: 20px; }
+
+        .WarnBanner {
+            background-color: #fdf3d7;
+            border: 1px solid #f0dfa3;
+            color: #9a7400;
+            border-radius: 8px;
+            margin: 10px 3%;
+            padding: 12px;
+            text-align: center;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .ApprovalBox {
+            border: 1px solid #e2e2e2;
+            border-radius: 10px;
+            margin: 12px 3%;
+            padding: 12px 16px;
+        }
+
+        .ApprovalContent {
+            max-height: 260px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 16px;
+            color: #4a5568;
+            text-align: right;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .ApprovalCheck {
+            font-size: 17px;
+            color: #2B3A63;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .ApprovalCheck input {
+            width: 22px;
+            height: 22px;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+
+        .NotRequiredTag {
+            font-size: 13px;
+            color: #999;
+            font-weight: normal;
+        }
+
+        .HomeBar {
+            text-align: center;
+            margin: 5px 10px 10px 10px;
+        }
+
+        .HomeBar .Bt { margin: 5px; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.5);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 90px auto;
+            padding: 22px;
+            border: 1px solid #888;
+            width: 86%;
+            max-width: 460px;
+            min-height: 150px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 0 30px 0 rgba(50, 50, 50, 0.75);
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .modal-title-success { color: #2c8f27; }
+        .modal-title-error { color: #b42e2e; }
+        .modal-title-info { color: #0672a6; }
+
+        .modal-text {
+            font-size: 18px;
+            color: #4a5568;
+            margin-bottom: 18px;
+        }
+
+        #LoadingOverlay {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(255,255,255);
+            background-color: rgba(255,255,255,0.75);
+        }
+
+        #LoadingOverlay .LoadingInner {
+            margin: 180px auto 0 auto;
+            text-align: center;
+            font-size: 22px;
+            color: #607D8B;
+            font-weight: bold;
+        }
+
+        /* טאבלט צר / מסכים קטנים */
+        @media screen and (max-width: 700px) {
+            .FieldDiv { width: 92%; }
+            .InfoField { width: 48%; }
+            .LoginInput { width: 80%; }
+            .QtyBt { width: 42px; height: 42px; }
+        }
+    </style>
+</head>
+<body dir="rtl" onscroll="UpdateClick()" oninput="UpdateClick()">
+
+    <!--כפתור עליון - מוצג רק כשהדף רץ בתוך עמדת נדרים (עם MasofId ב-query)-->
+    <div id="BackToNedarim" style="text-align:center;margin-top:10px;display:none"> <input class="Bt" style="background-color:#ff6a00;display:inline-block;min-width:40%;padding:8px" type="button" value="חזרה לנדרים פלוס" id="BackToNedarimBottom" onclick="if (MasofId !== '') parent.closeIFrame()" /></div>
+
+    <div class="PageWrap">
+        <div class="TopTitle"><h2 id="MainTitle">שירות אישי למשפחות עטרת שלמה</h2></div>
+        <hr class="HrLine" />
+
+        <!-- מסך כניסה: טלפון -->
+        <div id="ScreenLogin" class="Screen">
+            <div class="LoginKoteret">
+                התחברו לאזור האישי של משפחות עטרת שלמה
+                <div class="LoginSubNote">הכניסה מתבצעת באמצעות אימות טלפוני, ודאו שהטלפון הרשום במערכת נמצא לידכם</div>
+            </div>
+            <div class="LoginFieldTitle">מספר טלפון:</div>
+            <div class="CenterDiv"><input id="LoginPhone" class="TextBox LoginInput" type="tel" dir="ltr" autocomplete="off" maxlength="11" /></div>
+            <div class="CenterDiv" style="margin:18px">
+                <input class="Bt" type="button" id="LoginBt" value="שליחת קוד אימות" />
+            </div>
+            <div style="height:120px"></div>
+        </div>
+
+        <!-- מסך קוד אימות -->
+        <div id="ScreenCode" class="Screen">
+            <div class="CenterDiv" style="margin-bottom:25px">
+                <input type="button" class="Bt BtSecondary BtSmall" value="&#8618; חזרה" id="CodeBackBt" />
+            </div>
+            <div class="LoginKoteret">ברגעים אלו אנו מחייגים למספר: <span id="CodePhoneTxt" dir="ltr" style="color:#1196d2"></span></div>
+            <div class="CodeNote" style="color:#9a7400;font-weight:bold">יש להזין את 6 הספרות האחרונות של המספר שמחייג אליכם, ניתן גם לענות לשיחה ולהקשיב לקוד.</div>
+            <div class="LoginFieldTitle" style="color:#607D8B;font-weight:normal;margin-top:25px">קוד אימות:</div>
+            <div class="CenterDiv"><input id="CodeInput" class="TextBox LoginInput" type="tel" dir="ltr" autocomplete="off" maxlength="6" /></div>
+            <div class="CenterDiv" style="margin:18px">
+                <input class="Bt" type="button" id="CodeBt" value="התחברות" />
+            </div>
+            <div class="CenterDiv">
+                <input type="button" class="LinkBt" id="ResendBt" value="שליחה חוזרת של קוד אימות" />
+            </div>
+            <div style="height:120px"></div>
+        </div>
+
+        <!-- מסך אישורי תקנון -->
+        <div id="ScreenApprovals" class="Screen">
+            <div class="Koteret" style="text-align:center;padding-right:0">נדרש אישור תקנון</div>
+            <div class="CodeNote">לפני שנוכל להמשיך, עלינו לבקש את אישורך לסעיפים הבאים.</div>
+            <div id="ApprovalsList"></div>
+            <div class="CenterDiv" style="margin:20px">
+                <input class="Bt" type="button" id="ApprovalsBt" value="אשר והמשך" disabled="disabled" />
+            </div>
+            <div class="CenterDiv">
+                <input type="button" class="LinkBt" id="ApprovalsLogoutBt" value="התנתק" />
+            </div>
+        </div>
+
+        <!-- מסך בית -->
+        <div id="ScreenHome" class="Screen">
+            <div class="HomeBar">
+                <input type="button" class="Bt BtSecondary BtSmall" id="CardUpdateBt" value="עדכון אשראי למכירות" />
+                <input type="button" class="Bt BtDanger BtSmall" id="LogoutBt" value="ניתוק משתמש" />
+            </div>
+
+            <div id="FamilyInfo" class="Card"></div>
+
+            <div class="Koteret">בני המשפחה הלומדים בישיבה ומוסדותיה</div>
+            <div id="StudentsList"></div>
+        </div>
+
+        <!-- מסך עריכת פרטי הורים -->
+        <div id="ScreenEdit" class="Screen">
+            <div class="Koteret" style="text-align:center;padding-right:0">עריכת פרטי הורים</div>
+            <div class="CodeNote" style="color:#808080;font-size:15px">ניתן לעדכן פרטי קשר וכתובת. שם משפחה ומספרי זהות מוצגים בלבד.</div>
+
+            <div class="Koteret" style="font-size:18px">שם משפחה</div>
+            <div class="FieldDiv"><label class="fieldName" for="F_familyName">שם משפחה</label><input id="F_familyName" class="TextBox" type="text" disabled="disabled" /></div>
+
+            <div class="Koteret" style="font-size:18px">אב</div>
+            <div class="FieldDiv"><label class="fieldName" for="F_husbandFirstName">שם פרטי</label><input id="F_husbandFirstName" class="TextBox" type="text" maxlength="50" autocomplete="off" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_husbandIdNumber">מספר זהות</label><input id="F_husbandIdNumber" class="TextBox" type="text" dir="ltr" disabled="disabled" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_husbandPhoneNumber">פלאפון</label><input id="F_husbandPhoneNumber" class="TextBox" type="tel" dir="ltr" maxlength="11" autocomplete="off" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_husbandEmail">מייל</label><input id="F_husbandEmail" class="TextBox" type="text" dir="ltr" maxlength="100" autocomplete="off" /></div>
+
+            <div class="Koteret" style="font-size:18px">אם</div>
+            <div class="FieldDiv"><label class="fieldName" for="F_wifeFirstName">שם פרטי</label><input id="F_wifeFirstName" class="TextBox" type="text" maxlength="50" autocomplete="off" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_wifeIdNumber">מספר זהות</label><input id="F_wifeIdNumber" class="TextBox" type="text" dir="ltr" disabled="disabled" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_wifePhoneNumber">פלאפון</label><input id="F_wifePhoneNumber" class="TextBox" type="tel" dir="ltr" maxlength="11" autocomplete="off" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_wifeEmail">מייל</label><input id="F_wifeEmail" class="TextBox" type="text" dir="ltr" maxlength="100" autocomplete="off" /></div>
+
+            <div class="Koteret" style="font-size:18px">טלפון בית</div>
+            <div class="FieldDiv"><label class="fieldName" for="F_homePhoneNumber">טלפון בית</label><input id="F_homePhoneNumber" class="TextBox" type="tel" dir="ltr" maxlength="11" autocomplete="off" /></div>
+
+            <div class="Koteret" style="font-size:18px">פרטי כתובת</div>
+            <div class="FieldDiv"><label class="fieldName" for="F_cityId">עיר</label><select id="F_cityId" class="TextBox"></select></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_neighborhoodId">שכונה</label><select id="F_neighborhoodId" class="TextBox"></select></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_streetId">רחוב</label><select id="F_streetId" class="TextBox"></select></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_buildingNumber">בנין</label><input id="F_buildingNumber" class="TextBox" type="tel" dir="ltr" maxlength="5" autocomplete="off" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_apartmentNumber">דירה</label><input id="F_apartmentNumber" class="TextBox" type="tel" dir="ltr" maxlength="5" autocomplete="off" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_entrance">כניסה</label><input id="F_entrance" class="TextBox" type="text" maxlength="10" autocomplete="off" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_floorNumber">קומה</label><input id="F_floorNumber" class="TextBox" type="tel" dir="ltr" maxlength="3" autocomplete="off" /></div>
+
+            <div class="CenterDiv" style="margin:25px">
+                <input class="Bt BtSecondary BtSmall" type="button" id="EditCancelBt" value="ביטול" />
+                <input class="Bt" type="button" id="EditSaveBt" value="שמירה" />
+            </div>
+        </div>
+
+        <!-- מסך הזמנה במכירה -->
+        <div id="ScreenOrder" class="Screen">
+            <div class="CenterDiv" style="margin-bottom:5px">
+                <input type="button" class="Bt BtSecondary BtSmall" value="&#8618; חזרה" id="OrderBackBt" />
+            </div>
+            <div class="Koteret" style="text-align:center;padding-right:0"><span id="OrderTitle"></span></div>
+            <div class="CodeNote" style="color:#808080;font-size:15px" id="OrderDesc"></div>
+
+            <div class="AutoSaveNote">ההזמנה נשמרת אוטומטית בכל שינוי</div>
+
+            <div id="OrderCardWarn" class="WarnBanner" style="display:none">
+                כדי להוסיף מוצרים יש לעדכן כרטיס אשראי. לאחר העדכון ניתן להזמין מיד.
+            </div>
+
+            <div id="OrderList"></div>
+
+            <div class="TotalsBox">
+                <div class="TotalsLine" id="StationFeeLine" style="display:none">דמי הזמנה<span class="TotalsVal" id="StationFeeVal"></span><div style="clear:both"></div></div>
+                <div class="TotalsLine Grand">סה"כ לתשלום<span class="TotalsVal" id="GrandTotalVal"></span><div style="clear:both"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- חלונית הודעה -->
+    <div id="MsgModal" class="modal">
+        <div class="modal-content">
+            <div id="MsgTitle" class="modal-title"></div>
+            <div id="MsgText" class="modal-text"></div>
+            <input type="button" class="Bt" id="MsgOkBt" value="אישור" />
+        </div>
+    </div>
+
+    <!-- שכבת טעינה -->
+    <div id="LoadingOverlay">
+        <div class="LoadingInner"><img src="waitnew.gif" style="width:50px" /><br />נא להמתין...</div>
+    </div>
+
+    <script>
+        //==============================================================
+        // הגדרות - יש לעדכן את כתובת השרת לפני העלאה לעמדה
+        //==============================================================
+        var CONFIG = {
+            API_URL: 'https://api-test.atrsh.org',    // כתובת ה-API, בלי / בסוף
+            INACTIVITY_LOGOUT_MINUTES: 10             // התנתקות אוטומטית אחרי חוסר פעילות
+        };
+        //==============================================================
+
+        var MasofId = '';
+
+        function GetURLParameter(sParam) {
+            var sPageURL = window.location.search.substring(1);
+            var sURLVariables = sPageURL.split('&');
+            for (var i = 0; i < sURLVariables.length; i++) {
+                var sParameterName = sURLVariables[i].split('=');
+                if (sParameterName[0].toLowerCase() == sParam.toLowerCase()) {
+                    return sParameterName[1];
+                }
+            }
+            return ''
+        }
+
+        // בתוך עמדת נדרים - מעדכן את העמדה שיש פעילות (כמו בשאר הטפסים)
+        function UpdateClick() {
+            if (MasofId !== '') parent.UpdateClick()
+        }
+
+        var State = {
+            token: null,
+            user: null,
+            phone: '',
+            family: null,
+            students: [],
+            pendingApprovals: [],
+            lookups: { cities: [], neighborhoods: [], streets: [] },
+            order: null
+        };
+
+        //---------------------------------------------------------
+        // כלי עזר
+        //---------------------------------------------------------
+
+        function esc(s) {
+            if (s === null || s === undefined) { return ''; }
+            return String(s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        // תצוגת ערך כמו ב-family-client: ריק => '-'
+        function asDisplayValue(value) {
+            if (value === undefined || value === null) { return '-'; }
+            var asString = $.trim(String(value));
+            return asString.length > 0 ? asString : '-';
+        }
+
+        // 35 => "35.00 ₪"
+        function formatCurrency(value) {
+            var n = Number(value) || 0;
+            return n.toFixed(2) + ' ₪';
+        }
+
+        var loadingCount = 0;
+        function setLoading(on) {
+            loadingCount += (on ? 1 : -1);
+            if (loadingCount < 0) { loadingCount = 0; }
+            if (loadingCount > 0) { $('#LoadingOverlay').show(); } else { $('#LoadingOverlay').hide(); }
+        }
+
+        var msgCallback = null;
+        function showMsg(type, title, text, cb) {
+            $('#MsgTitle').attr('class', 'modal-title modal-title-' + type).html(title);
+            $('#MsgText').html(text || '');
+            msgCallback = cb || null;
+            $('#MsgModal').show();
+        }
+
+        function showScreen(id) {
+            $('.Screen').hide();
+            $('#' + id).show();
+            $('html, body').scrollTop(0);
+        }
+
+        function api(method, path, data) {
+            var opts = {
+                url: CONFIG.API_URL + path,
+                type: method,
+                cache: false,
+                timeout: 60000,
+                headers: {}
+            };
+            if (State.token) { opts.headers['Authorization'] = 'Bearer ' + State.token; }
+            if (data !== undefined && data !== null) {
+                opts.data = JSON.stringify(data);
+                opts.contentType = 'application/json';
+            }
+            var jq = $.ajax(opts);
+            jq.fail(function (xhr) {
+                if (xhr && xhr.status === 401 && State.token) {
+                    doLogout(true);
+                }
+            });
+            return jq;
+        }
+
+        function errJson(xhr) {
+            if (!xhr) { return null; }
+            if (xhr.responseJSON) { return xhr.responseJSON; }
+            if (xhr.responseText) {
+                try { return $.parseJSON(xhr.responseText); } catch (e) { }
+            }
+            return null;
+        }
+
+        function errText(xhr, fallback) {
+            var j = errJson(xhr);
+            var m = j && (j.message || j.error);
+            if (m && m.join) { m = m.join(', '); }
+            if (!m && xhr && xhr.status === 0) { m = 'אין תקשורת עם השרת. בדקו את חיבור האינטרנט.'; }
+            return m || fallback || 'אירעה שגיאה. נסו שוב.';
+        }
+
+        //---------------------------------------------------------
+        // התנתקות אוטומטית אחרי חוסר פעילות (מכשיר ציבורי)
+        //---------------------------------------------------------
+
+        var idleTimer = null;
+        function resetIdle() {
+            if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+            if (!State.token) { return; }
+            idleTimer = setTimeout(function () {
+                doLogout(false);
+                showMsg('info', 'התנתקת מהמערכת', 'החיבור נסגר עקב חוסר פעילות.');
+            }, CONFIG.INACTIVITY_LOGOUT_MINUTES * 60 * 1000);
+        }
+
+        function doLogout(sessionExpired) {
+            var hadToken = State.token;
+            if (hadToken && !sessionExpired) {
+                // מבטלים את החיבור בשרת - לא מחכים לתשובה
+                $.ajax({
+                    url: CONFIG.API_URL + '/auth/logout',
+                    type: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + hadToken },
+                    timeout: 10000
+                });
+            }
+            State.token = null;
+            State.user = null;
+            State.family = null;
+            State.students = [];
+            State.order = null;
+            if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+            $('#LoginPhone').val('');
+            $('#CodeInput').val('');
+            showScreen('ScreenLogin');
+            if (sessionExpired) {
+                showMsg('info', 'פג תוקף ההתחברות', 'נא להתחבר שוב.');
+            }
+        }
+
+        //---------------------------------------------------------
+        // כניסה: טלפון -> קוד אימות
+        //---------------------------------------------------------
+
+        function startLogin() {
+            var phone = $.trim($('#LoginPhone').val());
+            if (phone === '') {
+                showMsg('error', 'נא להזין מספר טלפון', '', function () { $('#LoginPhone').focus(); });
+                return;
+            }
+            if (!/^[0-9\-]{7,11}$/.test(phone)) {
+                showMsg('error', 'מספר טלפון לא תקין', 'יש להזין ספרות בלבד.', function () { $('#LoginPhone').focus(); });
+                return;
+            }
+            State.phone = phone;
+            setLoading(true);
+            api('POST', '/auth/otp/request', { identifier: phone, appType: 'CUSTOMER' })
+                .done(function () {
+                    setLoading(false);
+                    $('#CodePhoneTxt').text(phone);
+                    $('#CodeInput').val('');
+                    showScreen('ScreenCode');
+                    $('#CodeInput').focus();
+                })
+                .fail(function (xhr) {
+                    setLoading(false);
+                    showMsg('error', 'שגיאה בשליחת קוד אימות', errText(xhr, 'שגיאה בשליחת הקוד.'), function () {
+                        $('#LoginPhone').focus();
+                    });
+                });
+        }
+
+        function resendCode() {
+            setLoading(true);
+            api('POST', '/auth/otp/request', { identifier: State.phone, appType: 'CUSTOMER' })
+                .done(function () {
+                    setLoading(false);
+                    showMsg('info', 'קוד אימות נשלח מחדש', 'ברגעים אלו אנו מחייגים אליכם שוב.');
+                })
+                .fail(function (xhr) {
+                    setLoading(false);
+                    showMsg('error', 'שגיאה בשליחת קוד אימות', errText(xhr, 'שגיאה בשליחת הקוד.'));
+                });
+        }
+
+        function verifyCode() {
+            var code = $.trim($('#CodeInput').val());
+            if (code.length < 6) {
+                showMsg('error', 'נא להזין קוד בן 6 ספרות', '', function () { $('#CodeInput').focus(); });
+                return;
+            }
+            setLoading(true);
+            api('POST', '/auth/nedarim/otp/verify', { identifier: State.phone, code: code, appType: 'CUSTOMER' })
+                .done(function (resp) {
+                    State.token = resp.accessToken;
+                    State.user = resp.user;
+                    resetIdle();
+                    loadApprovalsAndContinue();
+                })
+                .fail(function (xhr) {
+                    setLoading(false);
+                    showMsg('error', 'קוד אימות שגוי או שפג תוקפו', errText(xhr, ''), function () {
+                        $('#CodeInput').val('');
+                        $('#CodeInput').focus();
+                    });
+                });
+        }
+
+        //---------------------------------------------------------
+        // אישורי תקנון (כמו ApprovalsGate)
+        //---------------------------------------------------------
+
+        function hasRequiredPending(list) {
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].isRequired) { return true; }
+            }
+            return false;
+        }
+
+        function loadApprovalsAndContinue() {
+            api('GET', '/customers/me/approvals/pending')
+                .done(function (list) {
+                    setLoading(false);
+                    State.pendingApprovals = list || [];
+                    // חסימה רק כשיש אישור חובה ממתין - כמו ApprovalsGate
+                    if (hasRequiredPending(State.pendingApprovals)) {
+                        renderApprovals();
+                        showScreen('ScreenApprovals');
+                    } else {
+                        goHome();
+                    }
+                })
+                .fail(function (xhr) {
+                    setLoading(false);
+                    if (!xhr || xhr.status !== 401) {
+                        // גם אם שליפת האישורים נכשלה - ממשיכים הביתה
+                        goHome();
+                    }
+                });
+        }
+
+        function renderApprovals() {
+            // חובה קודם, אחר כך לא-חובה - כמו ApprovalsGate
+            var ordered = [];
+            var i;
+            for (i = 0; i < State.pendingApprovals.length; i++) {
+                if (State.pendingApprovals[i].isRequired) { ordered.push(i); }
+            }
+            for (i = 0; i < State.pendingApprovals.length; i++) {
+                if (!State.pendingApprovals[i].isRequired) { ordered.push(i); }
+            }
+
+            var html = '';
+            for (i = 0; i < ordered.length; i++) {
+                var idx = ordered[i];
+                var a = State.pendingApprovals[idx];
+                html += '<div class="ApprovalBox">';
+                html += '<div class="CardTitle">' + esc(a.title) + (a.isRequired ? '' : ' <span class="NotRequiredTag">(לא חובה)</span>') + '</div>';
+                // ניסוח ייעודי לעמדות נדרים; כשלא הוגדר - הניסוח הרגיל של האתר
+                html += '<div class="ApprovalContent">' + (a.nedarimContentHtml || a.contentHtml || '') + '</div>';
+                html += '<label class="ApprovalCheck"><input type="checkbox" class="ApprovalChk" data-idx="' + idx + '" /> אני מאשר/ת</label>';
+                html += '</div>';
+            }
+            $('#ApprovalsList').html(html);
+            updateApprovalsButton();
+        }
+
+        function updateApprovalsButton() {
+            // הכפתור פעיל רק כשכל סעיפי החובה מסומנים - כמו ApprovalsGate
+            var allRequiredChecked = true;
+            $('.ApprovalChk').each(function () {
+                var idx = parseInt($(this).attr('data-idx'), 10);
+                var a = State.pendingApprovals[idx];
+                if (a.isRequired && !$(this).is(':checked')) {
+                    allRequiredChecked = false;
+                }
+            });
+            if (allRequiredChecked) {
+                $('#ApprovalsBt').removeAttr('disabled');
+            } else {
+                $('#ApprovalsBt').attr('disabled', 'disabled');
+            }
+        }
+
+        function submitApprovals() {
+            var ids = [];
+            $('.ApprovalChk').each(function () {
+                if ($(this).is(':checked')) {
+                    var idx = parseInt($(this).attr('data-idx'), 10);
+                    ids.push(State.pendingApprovals[idx].id);
+                }
+            });
+            if (ids.length === 0) { goHome(); return; }
+            setLoading(true);
+            api('POST', '/customers/me/approvals', { definitionIds: ids })
+                .done(function () {
+                    setLoading(false);
+                    goHome();
+                })
+                .fail(function (xhr) {
+                    setLoading(false);
+                    if (!xhr || xhr.status !== 401) {
+                        showMsg('error', 'אירעה שגיאה בשמירת האישורים, נא לנסות שוב', errText(xhr, ''));
+                    }
+                });
+        }
+
+        //---------------------------------------------------------
+        // מסך בית: פרטי משפחה + בני המשפחה
+        //---------------------------------------------------------
+
+        function goHome() {
+            setLoading(true);
+            var doneCount = 0;
+            var failed = false;
+
+            function finishOne() {
+                doneCount++;
+                if (doneCount === 2) {
+                    setLoading(false);
+                    if (failed) {
+                        showMsg('error', 'אירעה שגיאה בטעינת נתוני המשפחה.', 'נסו להתנתק ולהתחבר מחדש.', null);
+                    }
+                    renderHome();
+                    showScreen('ScreenHome');
+                }
+            }
+
+            api('GET', '/customers/me/family-registration')
+                .done(function (fam) { State.family = fam; })
+                .fail(function () { failed = true; })
+                .always(finishOne);
+
+            api('GET', '/customers/me/students')
+                .done(function (students) { State.students = students || []; })
+                .fail(function () { failed = true; })
+                .always(finishOne);
+        }
+
+        function infoField(label, value) {
+            return '<div class="InfoField"><span class="Lbl">' + label + '</span><span class="Val">' + esc(asDisplayValue(value)) + '</span></div>';
+        }
+
+        // כמו FamilyInfo: רחוב = "שם רחוב בנין דירה X"
+        function streetAddressText(f) {
+            var parts = [];
+            if (f.streetName) { parts.push(f.streetName); }
+            if (f.buildingNumber !== null && f.buildingNumber !== undefined && String(f.buildingNumber) !== '') { parts.push(String(f.buildingNumber)); }
+            if (f.apartmentNumber !== null && f.apartmentNumber !== undefined && String(f.apartmentNumber) !== '') { parts.push('דירה ' + f.apartmentNumber); }
+            return parts.join(' ');
+        }
+
+        function renderHome() {
+            var f = State.family;
+            var html = '';
+            if (f) {
+                html += '<div class="CardTitle">משפחת ' + esc(f.familyName) +
+                    ' <input type="button" class="Bt BtOrange BtSmall" id="EditFamilyBt" value="עריכה" style="float:left;margin-top:-6px" /><div style="clear:both"></div></div>';
+
+                html += '<div class="InfoSection"><div class="InfoSectionTitle">אב</div>';
+                html += infoField('שם פרטי', f.husbandFirstName);
+                html += infoField('ת"ז', f.husbandIdNumber);
+                html += infoField('פלאפון', f.husbandPhoneNumber);
+                html += infoField('מייל', f.husbandEmail);
+                html += '</div>';
+
+                html += '<div class="InfoSection"><div class="InfoSectionTitle">אם</div>';
+                html += infoField('שם פרטי', f.wifeFirstName);
+                html += infoField('ת"ז', f.wifeIdNumber);
+                html += infoField('פלאפון', f.wifePhoneNumber);
+                html += infoField('מייל', f.wifeEmail);
+                html += '</div>';
+
+                html += '<div class="InfoSection"><div class="InfoSectionTitle">כתובת</div>';
+                html += infoField('עיר', f.cityName);
+                html += infoField('שכונה', f.neighborhoodName);
+                html += infoField('רחוב', streetAddressText(f));
+                html += infoField('טלפון בית', f.homePhoneNumber);
+                html += '</div>';
+            } else {
+                html = '<div class="CardDesc">אירעה שגיאה בטעינת נתוני המשפחה.</div>';
+            }
+            $('#FamilyInfo').html(html);
+
+            var sHtml = '';
+            if (State.students.length === 0) {
+                sHtml = '<div class="WaitNote">לא קיימים תלמידים להצגה.</div>';
+            }
+            for (var i = 0; i < State.students.length; i++) {
+                var st = State.students[i];
+                var isAvrech = st.connectionType === 'student';
+                var pendingTag = st.approvalStatus === 'approved' ? '' : '<span class="PendingTag">ממתין לקבלה</span>';
+
+                sHtml += '<div class="Card">';
+                if (isAvrech) {
+                    // כמו AvrechCard: "אברך כולל" + סניף בלבד
+                    sHtml += '<div class="CardTitle">אברך כולל' + pendingTag + '</div>';
+                    sHtml += '<div class="CardDesc">' + esc(st.institutionBranchName || 'סניף לא עודכן') + '</div>';
+                } else {
+                    // כמו StudentCard: שם + "סוג מוסד | סניף | כיתה"
+                    sHtml += '<div class="CardTitle">' + esc(st.childName || 'שם תלמיד לא עודכן') + pendingTag + '</div>';
+                    sHtml += '<div class="CardDesc">' + esc(mapStudentClassName(st)) + '</div>';
+                }
+                var sales = st.allowedSales || [];
+                for (var j = 0; j < sales.length; j++) {
+                    sHtml += '<input type="button" class="SaleBt" data-st="' + i + '" data-sale="' + j + '" value="' + esc(sales[j].name) + '" />';
+                }
+                sHtml += '</div>';
+            }
+            $('#StudentsList').html(sHtml);
+        }
+
+        // כמו mapStudentClassName ב-family-client
+        function mapStudentClassName(student) {
+            var institutionTypePart = student.institutionTypeName || 'סוג מוסד לא עודכן';
+            var branchPart = student.institutionBranchName || 'סניף לא עודכן';
+            var classPart = student.cycleYearName || (student.cycleYear ? 'כיתה ' + student.cycleYear : 'כיתה לא עודכנה');
+            return institutionTypePart + ' | ' + branchPart + ' | ' + classPart;
+        }
+
+        //---------------------------------------------------------
+        // עריכת פרטי הורים (כמו FamilyEditDialog)
+        //---------------------------------------------------------
+
+        function fillSelect(sel, items, selectedId, placeholder) {
+            var html = '<option value="">' + placeholder + '</option>';
+            for (var i = 0; i < items.length; i++) {
+                var chosen = (selectedId !== null && selectedId !== undefined && Number(items[i].id) === Number(selectedId)) ? ' selected="selected"' : '';
+                html += '<option value="' + items[i].id + '"' + chosen + '>' + esc(items[i].name) + '</option>';
+            }
+            sel.html(html);
+        }
+
+        function openEdit() {
+            if (!State.family) {
+                showMsg('error', 'אירעה שגיאה בטעינת נתוני המשפחה.', '');
+                return;
+            }
+            var f = State.family;
+            $('#F_familyName').val(f.familyName || '');
+            $('#F_husbandFirstName').val(f.husbandFirstName || '');
+            $('#F_husbandIdNumber').val(f.husbandIdNumber || '');
+            $('#F_husbandPhoneNumber').val(f.husbandPhoneNumber || '');
+            $('#F_husbandEmail').val(f.husbandEmail || '');
+            $('#F_wifeFirstName').val(f.wifeFirstName || '');
+            $('#F_wifeIdNumber').val(f.wifeIdNumber || '');
+            $('#F_wifePhoneNumber').val(f.wifePhoneNumber || '');
+            $('#F_wifeEmail').val(f.wifeEmail || '');
+            $('#F_homePhoneNumber').val(f.homePhoneNumber || '');
+            $('#F_buildingNumber').val(f.buildingNumber !== null && f.buildingNumber !== undefined ? f.buildingNumber : '');
+            $('#F_entrance').val(f.entrance || '');
+            $('#F_apartmentNumber').val(f.apartmentNumber !== null && f.apartmentNumber !== undefined ? f.apartmentNumber : '');
+            $('#F_floorNumber').val(f.floorNumber !== null && f.floorNumber !== undefined ? f.floorNumber : '');
+
+            setLoading(true);
+            api('GET', '/globals/cities')
+                .done(function (cities) {
+                    setLoading(false);
+                    State.lookups.cities = cities || [];
+                    fillSelect($('#F_cityId'), State.lookups.cities, f.cityId, 'בחרו עיר');
+                    loadCityLookups(f.cityId, f.neighborhoodId, f.streetId);
+                    showScreen('ScreenEdit');
+                })
+                .fail(function (xhr) {
+                    setLoading(false);
+                    if (!xhr || xhr.status !== 401) {
+                        showMsg('error', 'לא נמצאו ערים', errText(xhr, ''));
+                    }
+                });
+        }
+
+        function loadCityLookups(cityId, selNeighborhood, selStreet) {
+            if (!cityId) {
+                State.lookups.neighborhoods = [];
+                State.lookups.streets = [];
+                fillSelect($('#F_neighborhoodId'), [], null, 'בחרו שכונה');
+                fillSelect($('#F_streetId'), [], null, 'בחרו רחוב');
+                return;
+            }
+            setLoading(true);
+            var done = 0;
+            function fin() { done++; if (done === 2) { setLoading(false); } }
+            api('GET', '/globals/neighborhoods?cityId=' + cityId)
+                .done(function (list) {
+                    State.lookups.neighborhoods = list || [];
+                    fillSelect($('#F_neighborhoodId'), State.lookups.neighborhoods, selNeighborhood, 'בחרו שכונה');
+                })
+                .always(fin);
+            api('GET', '/globals/streets?cityId=' + cityId)
+                .done(function (list) {
+                    State.lookups.streets = list || [];
+                    fillSelect($('#F_streetId'), State.lookups.streets, selStreet, 'בחרו רחוב');
+                })
+                .always(fin);
+        }
+
+        function toOptionalText(val) {
+            var trimmed = $.trim(val);
+            return trimmed.length > 0 ? trimmed : undefined;
+        }
+
+        function toOptionalNumber(val) {
+            var trimmed = $.trim(val);
+            if (trimmed === '') { return undefined; }
+            var n = Number(trimmed);
+            return isFinite(n) ? n : undefined;
+        }
+
+        function addField(dto, key, val) {
+            if (val !== undefined) { dto[key] = val; }
+        }
+
+        function saveEdit() {
+            var parsedCityId = toOptionalNumber($('#F_cityId').val());
+            if (!parsedCityId) {
+                showMsg('error', 'יש לבחור עיר', '');
+                return;
+            }
+
+            var dto = { cityId: parsedCityId };
+            addField(dto, 'husbandFirstName', toOptionalText($('#F_husbandFirstName').val()));
+            addField(dto, 'husbandPhoneNumber', toOptionalText($('#F_husbandPhoneNumber').val()));
+            addField(dto, 'husbandEmail', toOptionalText($('#F_husbandEmail').val()));
+            addField(dto, 'wifeFirstName', toOptionalText($('#F_wifeFirstName').val()));
+            addField(dto, 'wifePhoneNumber', toOptionalText($('#F_wifePhoneNumber').val()));
+            addField(dto, 'wifeEmail', toOptionalText($('#F_wifeEmail').val()));
+            addField(dto, 'homePhoneNumber', toOptionalText($('#F_homePhoneNumber').val()));
+            addField(dto, 'neighborhoodId', toOptionalNumber($('#F_neighborhoodId').val()));
+            addField(dto, 'streetId', toOptionalNumber($('#F_streetId').val()));
+            addField(dto, 'buildingNumber', toOptionalNumber($('#F_buildingNumber').val()));
+            addField(dto, 'apartmentNumber', toOptionalNumber($('#F_apartmentNumber').val()));
+            addField(dto, 'entrance', toOptionalText($('#F_entrance').val()));
+            addField(dto, 'floorNumber', toOptionalNumber($('#F_floorNumber').val()));
+
+            setLoading(true);
+            api('PUT', '/customers/me/family-registration', dto)
+                .done(function (fam) {
+                    setLoading(false);
+                    State.family = fam;
+                    renderHome();
+                    showScreen('ScreenHome');
+                    showMsg('success', 'פרטי ההורים עודכנו בהצלחה', '');
+                })
+                .fail(function (xhr) {
+                    setLoading(false);
+                    if (!xhr || xhr.status !== 401) {
+                        showMsg('error', 'אירעה שגיאה בעדכון פרטי ההורים', errText(xhr, ''));
+                    }
+                });
+        }
+
+        //---------------------------------------------------------
+        // הזמנה במכירה - נשמרת אוטומטית בכל שינוי (כמו useOrderSync)
+        //---------------------------------------------------------
+
+        var ORDER_SYNC_DEBOUNCE_MS = 600;
+
+        function openOrder(studentIdx, saleIdx) {
+            var st = State.students[studentIdx];
+            if (!st) { return; }
+            var sale = (st.allowedSales || [])[saleIdx];
+            if (!sale) { return; }
+
+            var isAvrech = st.connectionType === 'student';
+            State.order = {
+                connection: st,
+                sale: sale,
+                products: [],
+                qty: {},
+                serverOrder: null,
+                pending: {},
+                syncTimer: null,
+                isSyncing: false,
+                missingCreditCard: false
+            };
+
+            // כמו כותרת ה-drawer: "{מכירה} - אברך כולל" או "{מכירה} - {שם תלמיד}"
+            $('#OrderTitle').text(sale.name + ' - ' + (isAvrech ? 'אברך כולל' : (st.childName || 'תלמיד')));
+            $('#OrderDesc').text(isAvrech ? 'בחרו מוצרים וכמות.' : 'בחרו מוצרים וכמות לכל תלמיד.');
+
+            setLoading(true);
+            var done = 0;
+            var failed = false;
+            function fin() {
+                done++;
+                if (done === 2) {
+                    setLoading(false);
+                    if (failed) {
+                        showMsg('error', 'אירעה שגיאה בטעינת המכירה', 'נסו שוב.');
+                        return;
+                    }
+                    renderOrder();
+                    showScreen('ScreenOrder');
+                }
+            }
+
+            api('GET', '/orders/student/' + st.id + '/sale/' + sale.id + '/products')
+                .done(function (resp) {
+                    State.order.products = (resp && resp.products) || [];
+                    State.order.missingCreditCard = !!(resp && resp.missingCreditCard);
+                    for (var i = 0; i < State.order.products.length; i++) {
+                        var p = State.order.products[i];
+                        State.order.qty[p.id] = p.quantityInCart || 0;
+                    }
+                })
+                .fail(function () { failed = true; })
+                .always(fin);
+
+            api('GET', '/orders/student/' + st.id + '/sale/' + sale.id)
+                .done(function (order) { State.order.serverOrder = order || null; })
+                .always(fin);
+        }
+
+        // כמות מאושרת אחרונה מהשרת עבור מוצר
+        function serverQuantityOf(productId) {
+            var o = State.order;
+            var items = (o.serverOrder && o.serverOrder.items) || [];
+            for (var i = 0; i < items.length; i++) {
+                if (String(items[i].saleProductId) === String(productId)) { return items[i].quantity; }
+            }
+            return 0;
+        }
+
+        // תקרת כמות כמו ב-SaleDrawer: maxQuantity, והמלאי הזמין + מה שכבר בסל
+        function productMaxAllowed(p) {
+            var o = State.order;
+            var max = null;
+            if (p.maxQuantity !== null && p.maxQuantity !== undefined) { max = p.maxQuantity; }
+            if (p.availableStock !== null && p.availableStock !== undefined) {
+                var stockLimit = p.availableStock + (p.quantityInCart || 0);
+                if (max === null || stockLimit < max) { max = stockLimit; }
+            }
+            return max; // null = ללא הגבלה
+        }
+
+        function renderOrder() {
+            var o = State.order;
+            if (o.missingCreditCard) {
+                $('#OrderCardWarn').show();
+            } else {
+                $('#OrderCardWarn').hide();
+            }
+
+            var html = '';
+            if (o.products.length === 0) {
+                html = '<div class="WaitNote">אין מוצרים להצגה במכירה זו.</div>';
+            } else {
+                html += '<table class="ProdTable"><tr>';
+                html += '<th class="NameCol">שם מוצר</th><th>מחיר</th><th>כמות</th><th>סה"כ מוצר</th></tr>';
+                for (var i = 0; i < o.products.length; i++) {
+                    var p = o.products[i];
+                    var qty = o.qty[p.id] || 0;
+                    var max = productMaxAllowed(p);
+                    var isOutOfStock = p.outOfStock && qty === 0;
+                    var canIncrease = !isOutOfStock && !o.missingCreditCard && (max === null || qty < max);
+
+                    html += '<tr id="ProdRow_' + p.id + '" class="' + (isOutOfStock ? 'OutOfStock' : (qty > 0 ? 'HasQty' : '')) + '">';
+                    html += '<td class="NameCol">' + esc(p.name);
+                    if (isOutOfStock) { html += '<span class="OutOfStockTxt">אזל מהמלאי</span>'; }
+                    html += '</td>';
+                    html += '<td>' + formatCurrency(p.price) + '</td>';
+                    html += '<td style="white-space:nowrap">';
+                    html += '<input type="button" class="QtyBt QtyPlus" data-pid="' + p.id + '" value="+"' + (canIncrease ? '' : ' disabled="disabled"') + ' />';
+                    html += '<span class="QtyVal" id="Qty_' + p.id + '">' + qty + '</span>';
+                    html += '<input type="button" class="QtyBt QtyMinus" data-pid="' + p.id + '" value="&#8722;"' + ((qty <= 0 || isOutOfStock || o.missingCreditCard) ? ' disabled="disabled"' : '') + ' />';
+                    html += '</td>';
+                    html += '<td id="LineTotal_' + p.id + '">' + formatCurrency(qty * p.price) + '</td>';
+                    html += '</tr>';
+                }
+                html += '</table>';
+            }
+            $('#OrderList').html(html);
+            updateOrderTotals();
+        }
+
+        function updateOrderTotals() {
+            var o = State.order;
+            var itemsTotal = 0;
+            var totalUnits = 0;
+            for (var i = 0; i < o.products.length; i++) {
+                var p = o.products[i];
+                var q = o.qty[p.id] || 0;
+                itemsTotal += q * p.price;
+                totalUnits += q;
+            }
+            // דמי הזמנה כמו ב-SaleDrawer: מוצגים כשמוגדרים, נספרים רק כשיש פריטים
+            var stationFee = Number((o.serverOrder && o.serverOrder.stationFee) || 0);
+            var showStationFee = stationFee > 0;
+            var hasItems = totalUnits > 0;
+            var grandTotal = itemsTotal + (showStationFee && hasItems ? stationFee : 0);
+
+            if (showStationFee) {
+                $('#StationFeeVal').text(formatCurrency(stationFee));
+                $('#StationFeeLine').show();
+            } else {
+                $('#StationFeeLine').hide();
+            }
+            $('#GrandTotalVal').text(formatCurrency(grandTotal));
+        }
+
+        function refreshOrderRow(p) {
+            var o = State.order;
+            var qty = o.qty[p.id] || 0;
+            var max = productMaxAllowed(p);
+            var isOutOfStock = p.outOfStock && qty === 0;
+
+            $('#Qty_' + p.id).text(qty);
+            $('#LineTotal_' + p.id).text(formatCurrency(qty * p.price));
+            var row = $('#ProdRow_' + p.id);
+            row.attr('class', isOutOfStock ? 'OutOfStock' : (qty > 0 ? 'HasQty' : ''));
+            var canIncrease = !isOutOfStock && !o.missingCreditCard && (max === null || qty < max);
+            var minusBt = row.find('.QtyMinus');
+            var plusBt = row.find('.QtyPlus');
+            if (canIncrease) { plusBt.removeAttr('disabled'); } else { plusBt.attr('disabled', 'disabled'); }
+            if (qty > 0 && !o.missingCreditCard) { minusBt.removeAttr('disabled'); } else { minusBt.attr('disabled', 'disabled'); }
+        }
+
+        function changeQty(pid, delta) {
+            var o = State.order;
+            if (!o || o.missingCreditCard) { return; }
+            var p = null;
+            for (var i = 0; i < o.products.length; i++) {
+                if (String(o.products[i].id) === String(pid)) { p = o.products[i]; break; }
+            }
+            if (!p) { return; }
+            var qty = (o.qty[p.id] || 0) + delta;
+            if (qty < 0) { qty = 0; }
+            var max = productMaxAllowed(p);
+            if (max !== null && qty > max) { qty = max; }
+            if (qty === (o.qty[p.id] || 0)) { return; }
+            o.qty[p.id] = qty;
+
+            refreshOrderRow(p);
+            updateOrderTotals();
+
+            // צבירת שינוי ושליחה אחרי debounce - כמו useOrderSync
+            o.pending[p.id] = qty;
+            if (o.syncTimer) { clearTimeout(o.syncTimer); }
+            o.syncTimer = setTimeout(flushOrderChanges, ORDER_SYNC_DEBOUNCE_MS);
+        }
+
+        function flushOrderChanges() {
+            var o = State.order;
+            if (!o) { return; }
+            if (o.syncTimer) { clearTimeout(o.syncTimer); o.syncTimer = null; }
+            if (o.isSyncing) { return; }
+
+            var items = [];
+            for (var pid in o.pending) {
+                if (o.pending.hasOwnProperty(pid)) {
+                    items.push({ saleProductId: Number(pid), quantity: o.pending[pid] });
+                }
+            }
+            if (items.length === 0) { return; }
+            o.pending = {};
+            o.isSyncing = true;
+
+            api('POST', '/orders/student/' + o.connection.id + '/sale/' + o.sale.id + '/items', { items: items })
+                .done(function (order) {
+                    o.serverOrder = order || o.serverOrder;
+                    updateOrderTotals();
+                })
+                .fail(function (xhr) {
+                    // שחזור הכמויות לערכי השרת האחרונים עבור הפריטים שנכשלו
+                    for (var k = 0; k < items.length; k++) {
+                        var p = null;
+                        for (var x = 0; x < o.products.length; x++) {
+                            if (o.products[x].id === items[k].saleProductId) { p = o.products[x]; break; }
+                        }
+                        if (p) {
+                            o.qty[p.id] = serverQuantityOf(p.id);
+                            refreshOrderRow(p);
+                        }
+                    }
+                    updateOrderTotals();
+
+                    var j = errJson(xhr);
+                    if (j && j.code === 'MISSING_CREDIT_CARD') {
+                        o.missingCreditCard = true;
+                        renderOrder();
+                    } else if (!xhr || xhr.status !== 401) {
+                        showMsg('error', 'שגיאה בשמירת ההזמנה', errText(xhr, ''));
+                    }
+                })
+                .always(function () {
+                    o.isSyncing = false;
+                    // אם הצטברו שינויים חדשים בזמן הסנכרון - שלח שוב
+                    var hasMore = false;
+                    for (var pid2 in o.pending) {
+                        if (o.pending.hasOwnProperty(pid2)) { hasMore = true; break; }
+                    }
+                    if (hasMore) { flushOrderChanges(); }
+                });
+        }
+
+        function closeOrder() {
+            // שליחת שינויים ממתינים לפני יציאה מהמסך
+            flushOrderChanges();
+            State.order = null;
+            goHome();
+        }
+
+        //---------------------------------------------------------
+        // חיבור אירועים
+        //---------------------------------------------------------
+
+        $(document).ready(function () {
+            $.ajaxSetup({ cache: false });
+
+            MasofId = GetURLParameter("MasofId");
+            if (MasofId !== '') {
+                $("#BackToNedarim").show();
+            }
+
+            if (CONFIG.API_URL.indexOf('YOUR-SERVER') > -1) {
+                showMsg('error', 'העמדה לא הוגדרה', 'יש לעדכן את כתובת השרת (API_URL) בראש הקובץ.');
+            }
+
+            $('#LoginBt').click(startLogin);
+            $('#CodeBt').click(verifyCode);
+            $('#ResendBt').click(resendCode);
+            $('#CodeBackBt').click(function () { showScreen('ScreenLogin'); $('#LoginPhone').focus(); });
+
+            $('#LoginPhone').bind('keyup', function (e) { if (e.keyCode === 13) { startLogin(); } });
+            $('#CodeInput').bind('keyup', function (e) { if (e.keyCode === 13) { verifyCode(); } });
+
+            $('#ApprovalsBt').click(submitApprovals);
+            $('#ApprovalsLogoutBt').click(function () { doLogout(false); });
+            $('#ApprovalsList').on('change', '.ApprovalChk', updateApprovalsButton);
+
+            $('#LogoutBt').click(function () { doLogout(false); });
+            $('#FamilyInfo').on('click', '#EditFamilyBt', openEdit);
+            $('#CardUpdateBt').click(function () {
+                showMsg('info', 'עדכון אשראי למכירות', 'האפשרות תיפתח בעמדה בקרוב.<br />בינתיים ניתן לעדכן כרטיס באזור האישי באתר או במשרד.');
+            });
+
+            $('#EditCancelBt').click(function () { showScreen('ScreenHome'); });
+            $('#EditSaveBt').click(saveEdit);
+            $('#F_cityId').change(function () {
+                // בחירת עיר מאפסת שכונה ורחוב - כמו בדיאלוג העריכה
+                var cityId = parseInt($(this).val(), 10);
+                loadCityLookups(isNaN(cityId) ? null : cityId, null, null);
+            });
+
+            $('#OrderBackBt').click(closeOrder);
+
+            // אירועים דינמיים (הכפתורים נבנים בקוד)
+            $('#StudentsList').on('click', '.SaleBt', function () {
+                openOrder(parseInt($(this).attr('data-st'), 10), parseInt($(this).attr('data-sale'), 10));
+            });
+            $('#OrderList').on('click', '.QtyPlus', function () { changeQty($(this).attr('data-pid'), 1); });
+            $('#OrderList').on('click', '.QtyMinus', function () { changeQty($(this).attr('data-pid'), -1); });
+
+            $('#MsgOkBt').click(function () {
+                $('#MsgModal').hide();
+                var cb = msgCallback;
+                msgCallback = null;
+                if (cb) { cb(); }
+            });
+
+            // איפוס שעון חוסר פעילות בכל מגע
+            $(document).bind('click keydown touchstart', resetIdle);
+
+            showScreen('ScreenLogin');
+        });
+    </script>
+</body>
+</html>
