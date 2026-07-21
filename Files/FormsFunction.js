@@ -1,127 +1,229 @@
-﻿$(document).ready(function () {
+var ready = false;
+$(document).ready(function () {
+    if (ready == false) {
+        ready = true
 
-    var JsErrorCount = 0;
+        var style = document.createElement("style");
+        style.textContent = "* {font-family: 'Assistant';}"
+        document.head.appendChild(style);
 
-    window.onerror = function (msg, url, line, col, error) {
-        if (GetURLParameter("test") == '1') return false;
-        
-        if (JsErrorCount >= 1) return false;
-        if (error == 'EvalError: Possible side-effect in debug-evaluate' || error == 'SyntaxError: Invalid or unexpected token' || String(msg).indexOf("Maximum call stack size exceeded") != -1) return false;
+        var JsErrorCount = 0;
 
-        if (line == "1") { return false; }
+        window.onerror = function (msg, url, line, col, error) {
+            if (GetURLParameter("test") == '1') return false;
+            if (Json && Json.MosadId == '7006775') return false;
 
-        JsErrorCount += 1;
-        try {
-            $.ajax({
-                type: "POST",
-                url: "/nedarimplus/Forms/Manage.aspx?Action=JSError",
-                context: Text,
-                timeout: 30000,
-                data: "Masof=" + encodeURIComponent(GetURLParameter("MasofId"))
-                    + "&msg=" + encodeURIComponent(htmlEncode(msg))
-                    + "&line=" + encodeURIComponent(line)
-                    + "&col=" + encodeURIComponent(col)
-                    + "&url=" + encodeURIComponent(url)
-                    + "&error=" + encodeURIComponent(htmlEncode(error))
-            });
-        } catch (err) { }
-        EAlertConfirm("שגיאת תוכנה. פנה לתמיכה טכנית", "שגיאה: " + msg)
+            if (JsErrorCount >= 1) return false;
+            if (error == 'EvalError: Possible side-effect in debug-evaluate' || error == 'SyntaxError: Invalid or unexpected token' || error == 'TypeError: storedSiteData is not iterable' || String(msg).indexOf("Maximum call stack size exceeded") != -1) return false;
 
-    }
+            if (line == "1") { return false; }
 
-    if (GetURLParameter("test") == '1') {
-
-        console.log("2")
-        var HelpDiv = "<div style='text-align: center;color: white; position: fixed; top: 5px; left: 5px; opacity: 0.5;'>";
-
-
-        HelpDiv += "<div onclick='OpenHelpMenu()' style='text-align: -webkit-left;cursor: pointer;'><div style='width: 35px; height: 5px; background-color: black; margin: 6px 0;'></div> <div style='width: 35px; height: 5px; background-color: black; margin: 6px 0;'></div> <div style='width: 35px; height: 5px; background-color: black; margin: 6px 0;'></div></div>"
-
-        HelpDiv += ''
-
-
-
-        HelpDiv += "<div style='display:none;' id='HelpMenuDiv'>"
-        HelpDiv += "<div onclick='GetCheckDbName()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>Fields</div>"
-        HelpDiv += "<div onclick='OpenVertion_Dev()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #3F51B5; border-radius: 3px;ba'>גרסת פיתוח</div>"
-        HelpDiv += "<div onclick='ShowCallback()' style='cursor: pointer;font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>CallBack</div>"
-        HelpDiv += "<div onclick='Fill()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>מילוי טופס</div>"
-        HelpDiv += "<div onclick='GetExcel()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>אקסל</div>"
-        HelpDiv += "<div onclick='Test1530()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>בדיקות - 1530</div>"
-        HelpDiv += "<div onclick='Test770()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>בדיקות - 770</div>"
-        HelpDiv += "<div onclick='Test2560()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>בדיקות - 2560</div>"
-        HelpDiv += "<div onclick='Test899()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>בדיקות הלל - 899</div>"
-        HelpDiv += "<div onclick='ShowDbName()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>Attr_DbName</div>"
-        HelpDiv += "<div onclick='Resat_Form_770_1530_2560(7008068 , 770)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>איפוס 770</div>"
-        HelpDiv += "<div onclick='Resat_Form_770_1530_2560(7008068 , 1530)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>איפוס 1530</div>"
-        HelpDiv += "<div onclick='Resat_Form_770_1530_2560(0 , 2560)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>איפוס 2560</div>"
-        HelpDiv += "<div onclick='$(\"#AdminBt\").show()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>קישור מנהל</div>"
-
-
-
-        HelpDiv += "</div>"
-
-
-
-        HelpDiv += "</div>"
-
-        //$("body").append("<div style='text-align: center;color: white; position: fixed; top: 5px; left: 5px; opacity: 0.5;'>")
-        //$("body").append("<div onclick='ShowCallback()' style='cursor: pointer;font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #69839082; border-radius: 3px;'>CallBack</div>")
-        //$("body").append("<div onclick='GetCheckDbName()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #69839082; border-radius: 3px;'>שדות פנויים</div>")
-        //$("body").append("<div onclick='Fill()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #69839082; border-radius: 3px;'>מילוי טופס</div>")
-        //$("body").append("<div onclick='GetExcel()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #69839082; border-radius: 3px;'>אקסל</div>")
-        //$("body").append("</div>")
-        $("body").append(HelpDiv)
-    };
-
-
-    //$("body").append('<img id="TutPlusChecker" style="display:none" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" />')
-    //$('#TutPlusChecker').attr('src', 'https://www.matara.pro/nedarimplus/Forms/nedarim.png');
-    //$('#TutPlusChecker').load(function () {
-    //    var newImg = new Image();
-    //    newImg.src = $('#TutPlusChecker').attr('src')
-    //    setTimeout(function () {
-    //        if (newImg.width !== 80 && newImg.height !== 80) {
-    //            swal({
-    //                type: "warning",
-    //                title: 'להזמנת עמדת נדרים פלוס\nחייגו 03-7630543', text: "",
-    //                showConfirmButton: false,
-    //                allowOutsideClick: false,
-    //            });
-    //        };
-    //    }, 3000)
-    //}).error(function () {
-
-    //});
-
-    //if (window.navigator.userAgent.indexOf('SM-T515') > -1) {
-    //    swal({
-    //        type: "warning",
-    //        title: 'להזמנת עמדת נדרים פלוס\nחייגו 03-7630543', text: "",
-    //        showConfirmButton: false,
-    //        allowOutsideClick: false,
-    //    });
-    //}
-
-    var BlockList = ["1460", "1959", "746", "2180", "913", "1970", "909", "1320", "2060", "1244", "2195", "2218", "839", "1243", "1016", "2309", "2043"]
-
-    if (window.navigator.userAgent.indexOf('SM-T515') > -1) {
-        for (i = 0; i < BlockList.length; i++) {
-            if (window.location.href.indexOf(BlockList[i]) > -1) {
-                swal({
-                    type: "",
-                    title: "<img style='width: 150px; display: block; margin: -20px auto 13px;' src='https://matara.pro/nedarimplus/logo.png' alt='NedarimPlus'> טופס זה אינו פעיל בעמדת קהילות.<br/>גש לעמדת נדרים פלוס.", text: "<span>ניתן לרכוש עמדת נדרים פלוס במספר <b>03-7630543</b></span>",
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                    html: true
+            JsErrorCount += 1;
+            try {
+                $.ajax({
+                    type: "POST",
+                    url: "/nedarimplus/Forms/Manage.aspx?Action=JSError",
+                    context: Text,
+                    timeout: 30000,
+                    data: "Masof=" + encodeURIComponent(GetURLParameter("MasofId"))
+                        + "&msg=" + encodeURIComponent(htmlEncode(msg))
+                        + "&line=" + encodeURIComponent(line)
+                        + "&col=" + encodeURIComponent(col)
+                        + "&url=" + encodeURIComponent(url)
+                        + "&error=" + encodeURIComponent(htmlEncode(error))
                 });
-                break;
+            } catch (err) { }
+            EAlertConfirm("שגיאת תוכנה. פנה לתמיכה טכנית", "שגיאה: " + msg)
+
+        }
+
+        if (GetURLParameter("test") == '1') {
+
+            console.log("2")
+            var HelpDiv = "<div style='text-align: center;color: white; position: fixed; top: 5px; left: 5px; opacity: 0.5;'>";
+            HelpDiv += "<div onclick='OpenHelpMenu()' style='text-align: -webkit-left;cursor: pointer;'><div style='width: 35px; height: 5px; background-color: black; margin: 6px 0;'></div> <div style='width: 35px; height: 5px; background-color: black; margin: 6px 0;'></div> <div style='width: 35px; height: 5px; background-color: black; margin: 6px 0;'></div></div>"
+            HelpDiv += ''
+            HelpDiv += "<div style='display:none;' id='HelpMenuDiv'>"
+            HelpDiv += "<div onclick='GetCheckDbName()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>Fields</div>"
+            HelpDiv += "<div onclick='OpenVertion_Dev()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #3F51B5; border-radius: 3px;ba'>גרסת פיתוח</div>"
+            HelpDiv += "<div onclick='ShowCallback()' style='cursor: pointer;font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>CallBack</div>"
+            HelpDiv += "<div onclick='Fill()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>מילוי טופס</div>"
+            HelpDiv += "<div onclick='GetExcel()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>אקסל</div>"
+            HelpDiv += "<div onclick='SendTofesTest(7008068 , 1530)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>בדיקות - 1530</div>"
+            HelpDiv += "<div onclick='SendTofesTest(7008068 , 770)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>בדיקות - 770</div>"
+            HelpDiv += "<div onclick='SendTofesTest(0 , 2560)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>בדיקות - 2560</div>"
+            HelpDiv += "<div onclick='SendTofesTest(0, 899)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>בדיקות הלל - 899</div>"
+            HelpDiv += "<div onclick='SendTofesTest(0 , 3223)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>בדיקות ליאל - 3223</div>"
+            HelpDiv += "<div onclick='SendTofesTest(0 , 4196)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>בדיקות רבקה - 4196</div>"
+            HelpDiv += "<div onclick='ShowDbName()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>Attr_DbName</div>"
+            HelpDiv += "<div onclick='Resat_Form_special(7008068 , 770)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>איפוס 770</div>"
+            HelpDiv += "<div onclick='Resat_Form_special(7008068 , 1530)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>איפוס 1530</div>"
+            HelpDiv += "<div onclick='Resat_Form_special(0 , 2560)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>איפוס 2560</div>"
+            HelpDiv += "<div onclick='Resat_Form_special(0 , 3223)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>איפוס 3223</div>"
+            HelpDiv += "<div onclick='Resat_Form_special(0 , 1479)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>איפוס 1479</div>"
+            HelpDiv += "<div onclick='Resat_Form_special(0 , 4196)' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>איפוס 4196</div>"
+            HelpDiv += "<div onclick='$(\"#AdminBt\").show()' style='cursor: pointer; font-size: 16px; padding: 2px 9px; margin-bottom: 3px; background: #698390; border-radius: 3px;'>קישור מנהל</div>"
+            HelpDiv += "</div>"
+            HelpDiv += "</div>"
+            $("body").append(HelpDiv)
+        };
+
+
+        //$("body").append('<img id="TutPlusChecker" style="display:none" src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" />')
+        //$('#TutPlusChecker').attr('src', 'https://www.matara.pro/nedarimplus/Forms/nedarim.png');
+        //$('#TutPlusChecker').load(function () {
+        //    var newImg = new Image();
+        //    newImg.src = $('#TutPlusChecker').attr('src')
+        //    setTimeout(function () {
+        //        if (newImg.width !== 80 && newImg.height !== 80) {
+        //            swal({
+        //                type: "warning",
+        //                title: 'להזמנת עמדת נדרים פלוס\nחייגו 03-7630543', text: "",
+        //                showConfirmButton: false,
+        //                allowOutsideClick: false,
+        //            });
+        //        };
+        //    }, 3000)
+        //}).error(function () {
+
+        //});
+
+        //if (window.navigator.userAgent.indexOf('SM-T515') > -1) {
+        //    swal({
+        //        type: "warning",
+        //        title: 'להזמנת עמדת נדרים פלוס\nחייגו 03-7630543', text: "",
+        //        showConfirmButton: false,
+        //        allowOutsideClick: false,
+        //    });
+        //}
+
+        var BlockList = ["1460", "1959", "746", "2180", "913", "1970", "909", "1320", "2060", "1244", "2195", "2218", "839", "1243", "1016", "2309", "2043", "2521", "2820"]
+
+        if (window.navigator.userAgent.indexOf('SM-T515') > -1) {
+            for (i = 0; i < BlockList.length; i++) {
+                if (window.location.href.indexOf(BlockList[i]) > -1) {
+                    swal({
+                        type: "",
+                        title: "<img style='width: 150px; display: block; margin: -20px auto 13px;' src='https://matara.pro/nedarimplus/logo.png' alt='NedarimPlus'> טופס זה אינו פעיל בעמדת קהילות.<br/>גש לעמדת נדרים פלוס.", text: "<span>ניתן לרכוש עמדת נדרים פלוס במספר <b>03-7630543</b></span>",
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        html: true
+                    });
+                    break;
+                }
             }
         }
-    }
 
-    AppendBtOpenCreditCardList()
+
+        $.ajaxSetup({
+            cache: false,
+            success: function (Response) {
+                try {
+                    if (Response.Status == 'Error' && (["NEED CAPTCHA", "CAPTCHA ERROR", "שגיאת אשראי: נא לסמן \"אני לא רובוט\""].indexOf(Response.Message) > -1)) {
+                        if (window["SendData"] != undefined) {
+                            if (String(SendData).indexOf("Captcha") == -1) {
+                                Captcha("SendMail")
+                            } else {
+                                if (Response.Message == "NEED CAPTCHA" || Response.Message == "שגיאת אשראי: נא לסמן \"אני לא רובוט\"") Captcha("Creation")
+                                if (Response.Message == "CAPTCHA ERROR") Captcha("Reset")
+                            }
+                        }
+                    }
+                } catch (err) { console.log(err) }
+            }
+        });
+
+        AppendBtOpenCreditCardList()
+
+
+        if ($("#SaveDiv").html() !== undefined && typeof window["SendData"] == 'function') {
+            if (typeof Privacy_Detector == "undefined") {
+                LoadScript("/nedarimplus/Privacy.js?1", 0, function () { AddTakanon() }, "Privacy_Detector");
+            } else {
+                AddTakanon()
+            }
+        }
+
+        LoadScript("/nedarimplus/Accessibility.js?" + $.now(), 0, function () {
+            if (typeof window["resetAccessibility"] == 'function') {
+                resetAccessibility();
+            }
+        }, "Accessibility_Detector");
+
+
+        var AdminBtHtml = ""
+        if (Json && Json.MosadId) {
+            AdminBtHtml = '<a href="https://reports.matara.pro/more/forms?MosadId=' + Json.MosadId + '" target="_blank" '
+                + 'style="display:inline-block;background-color:#2e9e83;color:#ffffff;text-decoration:none;font-size:15px;font-weight:bold;padding:11px 26px;border-radius:8px;box-shadow:0 3px 10px rgba(46,158,131,0.3)" '
+                + 'onmouseover="this.style.backgroundColor=\'#268a72\'" onmouseout="this.style.backgroundColor=\'#2e9e83\'">'
+                + 'מעבר לממשק החדש &nbsp;&#8592;'
+                + '</a>'
+        }
+
+        $("#AdminBt").html(
+            '<div dir="rtl" style="background:#ffffff;border:1px solid #e8ecef;border-radius:12px;padding:28px 24px;max-width:480px;margin:16px auto;text-align:center;box-shadow:0 2px 10px rgba(30,43,60,0.06)">'
+
+            // אייקון עגול בירוק של המותג
+            + '<div style="width:52px;height:52px;line-height:52px;margin:0 auto 14px;background-color:#e7f5f0;border-radius:50%;text-align:center;font-size:24px;color:#2e9e83">&#8962;</div>'
+
+            // כותרת
+            + '<div style="font-size:17px;font-weight:bold;color:#1e2b3c;margin-bottom:6px">עברנו לממשק ניהול חדש</div>'
+
+            // טקסט משני
+            + '<div style="font-size:14px;color:#7a8699;line-height:1.6;margin-bottom:18px">לצפייה ברשומות ולהורדת קובץ אקסל,<br>יש להיכנס לממשק החדש תחת <b style="color:#1e2b3c">ניהול טפסים</b></div>'
+
+            // כפתור CTA בירוק המותג
+            + AdminBtHtml
+
+            + '</div>'
+        );
+    }
 });
+
+
+function Resat_Form_special(MosadId, Num) {
+    swal({
+        title: "<span style='font-size: 22px; color: #607d8b;'>טופס " + Num + "</span><br />איפוס המידע השמור בשרתים",
+        text: "על מנת לבצע איפוס, נא ללחוץ אישור\".",
+        html: true,
+        type: "info",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "אישור",
+        cancelButtonText: "ביטול",
+        //inputPlaceholder: "הקלד כאן את המילים: אני מאשר",
+        showLoaderOnConfirm: true,
+    }, function (inputValue) {
+        if (inputValue === false) return false;
+        $.ajax({
+            url: "/nedarimplus/Forms/Manage.aspx?Action=ResetForm&MosadId=" + MosadId + "&TofesId=" + Num,
+            context: Text,
+            timeout: 16000,
+        }).success(function (JsonData) {
+            if (JsonData.Status == 'Error' || JsonData.Result == 'Error') {
+                EAlertConfirm("שגיאה", JsonData.Message)
+            }
+            else {
+                IAlertConfirm("הפעולה בוצעה בהצלחה");
+            }
+        }).error(function () {
+            EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+        });
+    });
+}
+
+
+function SendTofesTest(MosadId, Num) {
+    Json.MosadId = MosadId;
+    Json.TofesId = Num;
+    Json.Version = "";
+
+    $("#MainLogo").attr('src', 'https://images.matara.pro/ClientsImages/' + Json.MosadId + '.jpg?1');
+    $("#MainLogo").after("<div style='color: #1c6094; font-size: 20px; font-weight: bold;'>" + Json.TofesId + "</div>")
+}
+
+
 
 
 function OpenVertion_Dev() {
@@ -307,7 +409,7 @@ function ParsePreData_Global(data) {
 }
 
 
- 
+
 
 
 function GetOldTofesData_Global() {
@@ -596,6 +698,13 @@ function Check_Tofes_Version(DivName, MyFunc) {
                     window.location.href = window.location.href + Connect + 'CheckVersion=' + JsonData.Message;
                 }
             } else {
+                if (JsonData.Enable == "0") {
+                    console.log("שימו לב, הטופס אינו פעיל.")
+                    if (GetURLParameter("test") != '1') {
+                        IAlertConfirm("שימו לב, הטופס אינו פעיל.");
+                    }
+                };
+
                 if (MyFunc) {
                     MyFunc();
                 } else {
@@ -703,7 +812,7 @@ function CheckDate(txt) {
 // ZeoutCheck
 function ValidateID(str) {
     var IDnum = String(str);
-    if ((IDnum.length > 9) || (IDnum.length < 5)) return false;
+    if ((IDnum.length > 9) || (IDnum.length < 7)) return false;
     if (isNaN(IDnum)) return false;
     if (IDnum.length < 9) while (IDnum.length < 9) IDnum = '0' + IDnum;
     var mone = 0;
@@ -1112,7 +1221,7 @@ function CreatingPopUpWindowJson(Data) {
 
 
     if (Data.SortKey != "") {
-        Data.JsonList.sort(function(a, b) {
+        Data.JsonList.sort(function (a, b) {
             var numA = (isNaN(a[Data.SortKey]) ? null : Number(a[Data.SortKey]));
             var numB = (isNaN(b[Data.SortKey]) ? null : Number(b[Data.SortKey]));
 
@@ -1123,7 +1232,7 @@ function CreatingPopUpWindowJson(Data) {
             } else if (numB !== null) {
                 return -1;
             } else {
-                return (a[Data.SortKey].toLowerCase()  > b[Data.SortKey].toLowerCase()  ? 1 : -1); // טקסטים בסדר עולה
+                return (a[Data.SortKey].toLowerCase() > b[Data.SortKey].toLowerCase() ? 1 : -1); // טקסטים בסדר עולה
             }
         })
     }
@@ -1138,22 +1247,27 @@ function CreatingPopUpWindowJson(Data) {
             AddOtherText()
         }
 
-        var KeyWord = $('#PopUpWindowSearch_' + Data.ElementId).val().split(' ')
+        var KeyWord = $('#PopUpWindowSearch_' + Data.ElementId).val().toLowerCase().split(' ')
         var Counter = 0
         for (var i = 0; i < Data.JsonList.length; i++) {
             var Exist = true
             for (var j = 0; j < KeyWord.length; j++) {
-                for (Key = 0; Key < Data.SearchKey.length; Key++) {
-                    if (Data.JsonList[i][Data.SearchKey[Key]] && Data.JsonList[i][Data.SearchKey[Key]].indexOf(KeyWord[j]) < 0) {
-                        Exist = false
-                    } else {
-                        break
+                var wordFound = false;
+                for (var k = 0; k < Data.SearchKey.length; k++) {
+                    var field = Data.JsonList[i][Data.SearchKey[k]];
+                    if (field && field.toString().toLowerCase().indexOf(KeyWord[j]) >= 0) {
+                        wordFound = true;
+                        break; // מילה זו נמצאה לפחות באחד השדות
                     }
+                }
+                if (!wordFound) {
+                    Exist = false; // מילה אחת לא נמצאה באף שדה - הרשומה לא תיכלל
+                    break;
                 }
             }
 
             for (Key = 0; Key < Data.SearchKey.length; Key++) {
-                if (Data.JsonList[i][Data.SearchKey[Key]] == $('#PopUpWindowSearch_' + Data.ElementId).val()) { Exist = true }
+                if (Data.JsonList[i][Data.SearchKey[Key]].toLowerCase() == $('#PopUpWindowSearch_' + Data.ElementId).val().toLowerCase()) { Exist = true }
             }
 
             if (Exist == true) {
@@ -1165,7 +1279,7 @@ function CreatingPopUpWindowJson(Data) {
                 for (Key = 0; Key < Object.keys(Data.JsonList[0]).length; Key++) {
                     TextLine = TextLine.replace("[" + Object.keys(Data.JsonList[0])[Key] + "]", Data.JsonList[i][Object.keys(Data.JsonList[i])[Key]])
                 }
-                
+
 
                 $('#PopUpWindowTable_' + Data.ElementId).append('<tr><td id="PopUpWindowBt_' + Data.ElementId + i + '" style="user-select: none;cursor:pointer;font-weight:bold;width:80%;text-align:right"><div style="text-align:center;font-size: 20px;color: #2B3A63;">' + TextLine + '</div></td></tr>');
 
@@ -1206,7 +1320,7 @@ function CreatingPopUpWindowJson(Data) {
         if (Data.OtherText != "" && Data.OtherTextTopList != true) {
             AddOtherText()
         }
-        
+
     }
 
     PopUpWindowSearch()
@@ -1362,7 +1476,7 @@ function CreatingPopUpWindow(Data) {
         }
 
         if (Data.Search == true && Counter > ShowMaxResults) {
-            $('#CardFixedCount_' + Data.ElementId + '').html("<div style='color: indianred;'>ישנם מעל " + ShowMaxResults+" תוצאות, מומלץ לצמצם חיפוש.</div>")
+            $('#CardFixedCount_' + Data.ElementId + '').html("<div style='color: indianred;'>ישנם מעל " + ShowMaxResults + " תוצאות, מומלץ לצמצם חיפוש.</div>")
         } else {
             $('#CardFixedCount_' + Data.ElementId).html('סה"כ תוצאות: <span>' + Counter + '</span>')
         }
@@ -1508,81 +1622,46 @@ function GetExcel() {
     form.submit();
 }
 
-function Resat_Form_770_1530_2560(MosadId, Num) {
-    if (Num !== 770 && Num !== 1530 && Num !== 2560) {
-        return false;
-    }
-    swal({
-        title: "<span style='font-size: 22px; color: #607d8b;'>טופס " + Num + "</span><br />איפוס המידע השמור בשרתים",
-        text: "על מנת לבצע איפוס, נא ללחוץ אישור\".",
-        html: true,
-        type: "info",
-        showCancelButton: true,
-        closeOnConfirm: false,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "אישור",
-        cancelButtonText: "ביטול",
-        //inputPlaceholder: "הקלד כאן את המילים: אני מאשר",
-        showLoaderOnConfirm: true,
-    }, function (inputValue) {
-        if (inputValue === false) return false;
-        $.ajax({
-            url: "/nedarimplus/Forms/Manage.aspx?Action=ResetForm&MosadId=" + MosadId + "&TofesId=" + Num,
-            context: Text,
-            timeout: 16000,
-        }).success(function (JsonData) {
-            if (JsonData.Status == 'Error' || JsonData.Result == 'Error') {
-                EAlertConfirm("שגיאה", JsonData.Message)
-            }
-            else {
-                IAlertConfirm("הפעולה בוצעה בהצלחה");
-            }
-        }).error(function () {
-            EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
-        });
-    });
+//function ResetForm() {
+//    swal({
+//        title: "<span style='font-size: 22px; color: #607d8b;'>טופס " + Json.TofesId + "</span><br />איפוס המידע השמור בשרתים",
+//        text: "על מנת לבצע איפוס, נא להקליד \"אני מאשר\".",
+//        html: true,
+//        type: "input",
+//        showCancelButton: true,
+//        closeOnConfirm: false,
+//        confirmButtonColor: "#DD6B55",
+//        confirmButtonText: "אישור",
+//        cancelButtonText: "ביטול",
+//        inputPlaceholder: "הקלד כאן את המילים: אני מאשר",
+//        showLoaderOnConfirm: true,
+//    }, function (inputValue) {
+//        if (inputValue === false) return false;
+//        if (inputValue === "") {
+//            swal.showInputError("נא להקליד: אני מאשר");
+//            return false
+//        }
+//        if (inputValue !== "אני מאשר" && inputValue !== "tbh ntar") {
+//            swal.showInputError("נא להקליד: אני מאשר");
+//            return false
+//        }
+//        $.ajax({
+//            url: "/nedarimplus/Forms/Manage.aspx?Action=ResetForm&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId,
+//            context: Text,
+//            timeout: 16000,
+//        }).success(function (JsonData) {
+//            if (JsonData.Status == 'Error' || JsonData.Result == 'Error') {
+//                EAlertConfirm("שגיאה", JsonData.Message)
+//            }
+//            else {
+//                IAlertConfirm("הפעולה בוצעה בהצלחה");
+//            }
+//        }).error(function () {
+//            EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
+//        });
+//    });
 
-}
-function ResetForm() {
-    swal({
-        title: "<span style='font-size: 22px; color: #607d8b;'>טופס " + Json.TofesId + "</span><br />איפוס המידע השמור בשרתים",
-        text: "על מנת לבצע איפוס, נא להקליד \"אני מאשר\".",
-        html: true,
-        type: "input",
-        showCancelButton: true,
-        closeOnConfirm: false,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "אישור",
-        cancelButtonText: "ביטול",
-        inputPlaceholder: "הקלד כאן את המילים: אני מאשר",
-        showLoaderOnConfirm: true,
-    }, function (inputValue) {
-        if (inputValue === false) return false;
-        if (inputValue === "") {
-            swal.showInputError("נא להקליד: אני מאשר");
-            return false
-        }
-        if (inputValue !== "אני מאשר" && inputValue !== "tbh ntar") {
-            swal.showInputError("נא להקליד: אני מאשר");
-            return false
-        }
-        $.ajax({
-            url: "/nedarimplus/Forms/Manage.aspx?Action=ResetForm&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId,
-            context: Text,
-            timeout: 16000,
-        }).success(function (JsonData) {
-            if (JsonData.Status == 'Error' || JsonData.Result == 'Error') {
-                EAlertConfirm("שגיאה", JsonData.Message)
-            }
-            else {
-                IAlertConfirm("הפעולה בוצעה בהצלחה");
-            }
-        }).error(function () {
-            EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת")
-        });
-    });
-
-}
+//}
 
 function EAlertConfirm(message, insidetext) {
     swal({
@@ -1655,7 +1734,7 @@ function GetCheckDbName() {
     }
 
     for (i = 0; i < MaxObj.length; i++) {
-        totMax[MaxObj[i].substring(5, 6)] = MaxObj[i]
+        totMax[parseInt(MaxObj[i].substring(5, MaxObj[i].indexOf("Max")))] = MaxObj[i]
     }
 
     for (i = 0; i < totMax.length; i++) {
@@ -1988,7 +2067,7 @@ function CardFixed_2_listGetAdders(NameVariable, Search, Idadders, idcity) {
     $("#CardFixed_" + NameVariable + "2_listCitywait").show()
 
     $.ajax({
-        url: "https://matara.pro/nedarimplus/Forms/Manage.aspx?Action=GetStreets&Cityid=" + $(idcity).attr('Cityid'),
+        url: "/nedarimplus/Forms/Manage.aspx?Action=GetStreets&Cityid=" + $(idcity).attr('Cityid'),
         context: Text,
         timeout: 16000,
     }).success(function (res) {
@@ -2072,6 +2151,9 @@ function CardFixed_2_listCityDom(NameVariable, Search, Idadders) {
 //    SortCard1: true,
 //    DeleteDuplicatesCard1: true,
 //    FocusCard1: true,
+//    FunctionAfterSelectCard1: function (Response) {
+//        console.log(Response)
+//    },
 
 
 //    // הגדרות לחלון שני
@@ -2083,6 +2165,9 @@ function CardFixed_2_listCityDom(NameVariable, Search, Idadders) {
 //    DeleteDuplicatesCard2: true,
 //    FocusCard2: true,
 //    AutoFillOneResultCard2: true,
+//    FunctionAfterSelectCard2: function (Response) {
+//        console.log(Response)
+//    },
 
 
 //    // הגדרות לחלון שלישי
@@ -2094,6 +2179,9 @@ function CardFixed_2_listCityDom(NameVariable, Search, Idadders) {
 //    DeleteDuplicatesCard3: true,
 //    FocusCard3: true,
 //    AutoFillOneResultCard3: true,
+//    FunctionAfterSelectCard3: function (Response) {
+//        console.log(Response)
+//    },
 
 //    // הגדרות לחלון רביעי
 //    Card4: true,
@@ -2104,6 +2192,9 @@ function CardFixed_2_listCityDom(NameVariable, Search, Idadders) {
 //    DeleteDuplicatesCard4: true,
 //    FocusCard4: true,
 //    AutoFillOneResultCard4: true,
+//    FunctionAfterSelectCard4: function (Response) {
+//        console.log(Response)
+//    },
 
 //    // אם לפתוח את החלון הבא אחרי הבחירה
 //    OpenCard2AfterSelectCard1: true,
@@ -2111,7 +2202,6 @@ function CardFixed_2_listCityDom(NameVariable, Search, Idadders) {
 //    OpenCard4AfterSelectCard3: true,
 
 //    // רשימה
-//    http://www.unit-conversion.info/texttools/replace-text/
 //    ArrayData: [
 //        { "Card1": "ארמון הנציב ", "Card2": "חניכי הישיבות ", "Card3": "יעקב רז 19", "Card4": "הרב חגי לוי" }]
 //})
@@ -2199,6 +2289,7 @@ function CreatingPopUpWindowDoubel(Data) {
                                 Card2Focus()
                             }
                         }
+                        if (Data.FunctionAfterSelectCard1) Data.FunctionAfterSelectCard1(ArrayDataParsCard1[i])
                     });
                 })(i);
             };
@@ -2349,6 +2440,7 @@ function CreatingPopUpWindowDoubel(Data) {
                                             Card3Focus()
                                         }
                                     }
+                                    if (Data.FunctionAfterSelectCard2) Data.FunctionAfterSelectCard2(ArrayDataParsCard2[i])
                                 });
                             })(i);
                         };
@@ -2486,6 +2578,7 @@ function CreatingPopUpWindowDoubel(Data) {
                                             Card4Focus()
                                         }
                                     }
+                                    if (Data.FunctionAfterSelectCard3) Data.FunctionAfterSelectCard3(ArrayDataParsCard3[i])
                                 });
                             })(i);
                         };
@@ -2615,6 +2708,7 @@ function CreatingPopUpWindowDoubel(Data) {
                                     $("#" + Data.ElementIdCard4).val(ArrayDataParsCard4[i])
                                     $("#PopUpWindow_" + Data.ElementIdCard4).hide()
                                     setTimeout(function () { ScrollUp($('#' + Data.ElementIdCard4)) }, 100);
+                                    if (Data.FunctionAfterSelectCard4) Data.FunctionAfterSelectCard4(ArrayDataParsCard4[i])
                                 });
                             })(i);
                         };
@@ -2643,18 +2737,25 @@ function ShowCallback() {
         html += '<div style="display: inline-block; font-family: Assistant, sans-serif; font-size: 22px; color: #ff6a00; font-weight: bold; width: 90%; margin-top: 27px; margin-bottom: 18px; -webkit-user-select: none; text-align: center; padding: 0;">יצירת Callback</div>'
         html += '<input oninput="getCallback()" type="text" id="Card_Callback_Url" placeholder="URL" style="font-size: 17px; padding: 5px 11px; width: 100%; box-sizing: border-box; border-radius: 6px; border: 1px solid #b3b3b3; display: block; transition: 0.2s; outline: none; margin: 10px auto;">'
         html += '<div style="border: 1px solid #cecece; border-radius: 7px; display: flex; flex-direction: column; grid-gap: 7px; padding: 9px 7px;">'
-        html += '<div style="text-align: right; color: #2B3A63; font-weight: bold;"><label for="Card_Callback_AddFField_1" style="display: flex; align-items: center;"><input onchange="getCallback()" type="CheckBox" dir="rtl" id="Card_Callback_AddFField_1"><span>מספר מוסד</span></label></div>'
-        html += '<div style="text-align: right; color: #2B3A63; font-weight: bold;"><label for="Card_Callback_AddFField_2" style="display: flex; align-items: center;"><input onchange="getCallback()" type="CheckBox" dir="rtl" id="Card_Callback_AddFField_2"><span>מספר טופס</span></label></div>'
-        html += '<div style="text-align: right; color: #2B3A63; font-weight: bold;"><label for="Card_Callback_AddFField_3" style="display: flex; align-items: center;"><input onchange="getCallback()" type="CheckBox" dir="rtl" id="Card_Callback_AddFField_3"><span>מספר סידורי של הטופס שנוצר</span></label></div>'
-        html += '<div style="text-align: right; color: #2B3A63; font-weight: bold;"><label for="Card_Callback_AddFField_4" style="display: flex; align-items: center;"><input onchange="getCallback()" type="CheckBox" dir="rtl" id="Card_Callback_AddFField_4"><span>מספר טופס</span></label></div>'
-        html += '<div style="text-align: right; color: #2B3A63; font-weight: bold;"><label for="Card_Callback_AddFField_5" style="display: flex; align-items: center;"><input onchange="getCallback()" type="CheckBox" dir="rtl" id="Card_Callback_AddFField_5"><span>מספר עסקת אשראי / הו"ק</span></label></div>'
+        html += '<div style="text-align: right; color: #2B3A63; font-weight: bold;"><label for="Card_Callback_AddFField_1" style="display: flex; align-items: center;"><input onchange="getCallback()" type="CheckBox" dir="rtl" id="Card_Callback_AddFField_1" checked><span>מספר מוסד</span></label></div>'
+        html += '<div style="text-align: right; color: #2B3A63; font-weight: bold;"><label for="Card_Callback_AddFField_2" style="display: flex; align-items: center;"><input onchange="getCallback()" type="CheckBox" dir="rtl" id="Card_Callback_AddFField_2" checked><span>מספר טופס</span></label></div>'
+        html += '<div style="text-align: right; color: #2B3A63; font-weight: bold;"><label for="Card_Callback_AddFField_3" style="display: flex; align-items: center;"><input onchange="getCallback()" type="CheckBox" dir="rtl" id="Card_Callback_AddFField_3" checked><span>מספר סידורי של הטופס שנוצר</span></label></div>'
+        html += '<div style="text-align: right; color: #2B3A63; font-weight: bold;"><label for="Card_Callback_AddFField_4" style="display: flex; align-items: center;"><input onchange="getCallback()" type="CheckBox" dir="rtl" id="Card_Callback_AddFField_4" checked><span>מספר טופס</span></label></div>'
+        html += '<div style="text-align: right; color: #2B3A63; font-weight: bold;"><label for="Card_Callback_AddFField_5" style="display: flex; align-items: center;"><input onchange="getCallback()" type="CheckBox" dir="rtl" id="Card_Callback_AddFField_5" checked><span>מספר עסקת אשראי / הו"ק</span></label></div>'
         html += '</div>'
 
 
         html += '<div style="font-size: 19px; font-weight: 900; direction: rtl; background: #607d8b; border-radius: 5px 5px 0 0; margin: 10px 0 0; text-align: center; padding: 3px; color: white;">Json</div>'
         html += '<textarea id="CallbackJson" style="direction: ltr;font-size: 17px; padding: 10px 15px; width: 100%; box-sizing: border-box; margin: auto; height: 350px; resize: none; border: 1px solid #b3b3b3; display: block; outline: none; border-radius: 0 0 5px 5px; border-top: 0;"></textarea>'
+
         html += '<div style="font-size: 19px; font-weight: 900; direction: rtl; background: #607d8b; border-radius: 5px 5px 0 0; margin: 10px 0 0; text-align: center; padding: 3px; color: white;">Form</div>'
         html += '<textarea id="Callbackform" style="direction: ltr;font-size: 17px; padding: 10px 15px; width: 100%; box-sizing: border-box; margin: auto; height: 350px; resize: none; border: 1px solid #b3b3b3; display: block; outline: none; border-radius: 0 0 5px 5px; border-top: 0;"></textarea>'
+
+        html += '<div style="font-size: 19px; font-weight: 900; direction: rtl; background: #607d8b; border-radius: 5px 5px 0 0; margin: 10px 0 0; text-align: center; padding: 3px; color: white;">GetJson</div>'
+        html += '<textarea id="CallbackGetJson" style="direction: ltr;font-size: 17px; padding: 10px 15px; width: 100%; box-sizing: border-box; margin: auto; height: 350px; resize: none; border: 1px solid #b3b3b3; display: block; outline: none; border-radius: 0 0 5px 5px; border-top: 0;"></textarea>'
+
+        html += '<div style="font-size: 19px; font-weight: 900; direction: rtl; background: #607d8b; border-radius: 5px 5px 0 0; margin: 10px 0 0; text-align: center; padding: 3px; color: white;">Google Sheets</div>'
+        html += '<textarea id="CallbackGoogleSheets" style="direction: ltr;font-size: 17px; padding: 10px 15px; width: 100%; box-sizing: border-box; margin: auto; height: 350px; resize: none; border: 1px solid #b3b3b3; display: block; outline: none; border-radius: 0 0 5px 5px; border-top: 0;"></textarea>'
 
         html += '</div></div>'
 
@@ -2706,6 +2807,42 @@ function getCallback() {
     }
     textCallback = textCallback.substring(0, textCallback.length - 1)
     $('#Callbackform').val(textCallback)
+
+
+
+    textCallback = '{'
+    for (var Element in Json.FormElements) {
+        var JsonElement = Json.FormElements[Element]
+        if (JsonElement.DbName) {
+            textCallback += '"' + JsonElement.ElementId + '":"[' + JsonElement.DbName + ']",'
+        }
+    }
+    textCallback = textCallback.substring(0, textCallback.length - 1)
+    textCallback = textCallback + '}'
+    $('#CallbackGetJson').val(textCallback)
+
+
+
+    var elementIds = [];
+    var fieldNames = [];
+    if ($("#Card_Callback_AddFField_1").is(':checked') == true) { textCallback += elementIds.push("MosadId"); fieldNames.push("מזהה מוסד") }
+    if ($("#Card_Callback_AddFField_2").is(':checked') == true) { textCallback += elementIds.push("TofesId"); fieldNames.push("מזהה טופס") }
+    if ($("#Card_Callback_AddFField_3").is(':checked') == true) { textCallback += elementIds.push("IdFormsSend"); fieldNames.push("מזהה טופס שנוצר") }
+    if ($("#Card_Callback_AddFField_4").is(':checked') == true) { textCallback += elementIds.push("Emda"); fieldNames.push("מזהה עמדה בבית כנסת") }
+    if ($("#Card_Callback_AddFField_5").is(':checked') == true) { textCallback += elementIds.push("TransactionId"); fieldNames.push("מזהה עסקה בנדרים פלוס") }
+
+    for (var Element in Json.FormElements) {
+        var JsonElement = Json.FormElements[Element]
+        if (JsonElement.DbName) {
+            elementIds.push(JsonElement.ElementId || "");
+            fieldNames.push(JsonElement.fieldName || "");
+        }
+    }
+
+    var elementRow = elementIds.join("\t");
+    var fieldRow = fieldNames.join("\t");
+
+    $('#CallbackGoogleSheets').val(elementRow + "\n" + fieldRow)
 }
 
 
@@ -2723,46 +2860,6 @@ function ShowDbName() {
     OpenHelpMenu()
 
 }
-
-function Test1530() {
-    Json.MosadId = "7008068";
-    Json.TofesId = "1530";
-    Json.Version = "";
-
-    $("#MainLogo").attr('src', 'https://images.matara.pro/ClientsImages/' + Json.MosadId + '.jpg?1');
-    $("#MainLogo").after("<div style='color: #1c6094; font-size: 20px; font-weight: bold;'>1530</div>")
-
-}
-
-function Test770() {
-    Json.MosadId = "7008068";
-    Json.TofesId = "770";
-    Json.Version = "";
-    $("#MainLogo").attr('src', 'https://images.matara.pro/ClientsImages/' + Json.MosadId + '.jpg?1');
-    $("#MainLogo").after("<div style='color: #1c6094; font-size: 20px; font-weight: bold;'>770</div>")
-}
-
-
-
-function Test2560() {
-    Json.MosadId = "0";
-    Json.TofesId = "2560";
-    Json.Version = "";
-    $("#MainLogo").attr('src', 'https://images.matara.pro/ClientsImages/' + Json.MosadId + '.jpg?1');
-    $("#MainLogo").after("<div style='color: #1c6094; font-size: 20px; font-weight: bold;'>2560</div>")
-}
-
-
-
-function Test899() {
-    Json.MosadId = "0";
-    Json.TofesId = "899";
-    Json.Version = "";
-    $("#MainLogo").attr('src', 'https://images.matara.pro/ClientsImages/' + Json.MosadId + '.jpg?1');
-    $("#MainLogo").after("<div style='color: #1c6094; font-size: 20px; font-weight: bold;'>899</div>")
-}
-
-
 
 
 function Fill() {
@@ -2788,15 +2885,15 @@ function Fill() {
             else {
                 $("#" + JsonElement.ElementId).val("בדיקה")
             }
-        } else if (JsonElement.Type == "Tel") {
+        } else if (JsonElement.ElementId.indexOf("Tel") > -1 || JsonElement.ElementId.indexOf("Phone") > -1) {
             if (JsonElement.Date == true || JsonElement.ElementId.indexOf("BDE") > -1) {
                 $("#" + JsonElement.ElementId).val("10/10/2020")
             }
-            else if (JsonElement.Phone == true || JsonElement.ElementId.indexOf("Tel") > -1) {
+            else if (JsonElement.Phone == true || JsonElement.ElementId.indexOf("Tel") > -1 || JsonElement.ElementId.indexOf("Phone") > -1) {
                 $("#" + JsonElement.ElementId).val("0528969696")
             }
             else if (JsonElement.ElementId.indexOf("Zeout") > -1) {
-                $("#" + JsonElement.ElementId).val("203187380")
+                $("#" + JsonElement.ElementId).val("212126445")
             }
             else if (JsonElement.ElementId.indexOf("Bank") > -1) {
                 $("#" + JsonElement.ElementId).val("52")
@@ -2810,7 +2907,6 @@ function Fill() {
             else {
                 $("#" + JsonElement.ElementId).val("123")
             }
-
         }
     }
 }
@@ -2845,8 +2941,8 @@ function AppendBtOpenCreditCardList() {
     if ($("#CreditCard").html() == undefined) return false;
     if ($("#CardExpiration").html() == undefined) return false;
 
-    if (typeof ClientJs_Detector == "undefined") { LoadScript("/NedarimPlus/Client/Client.js?0"); return false; };
-    if (typeof ClientFormJs_Detector == "undefined") { LoadScript("Files/ClientForm.js?0"); return false; };
+    if (typeof ClientJs_Detector == "undefined") { LoadScript("/NedarimPlus/Client/Client.js?0", 0, function () { AppendBtOpenCreditCardList() }, "ClientJs_Detector"); return false; };
+    if (typeof ClientFormJs_Detector == "undefined") { LoadScript("Files/ClientForm.js?0", 0, function () { AppendBtOpenCreditCardList() }, "ClientFormJs_Detector"); return false; };
     LoadClientCss()
 
     var CC_List_BtS_Display = "inline-block";
@@ -2869,7 +2965,7 @@ function AppendBtOpenCreditCardList() {
     $("#CreditCardList_BtOpen_Reset").hide()
 }
 
-function LoadScript(Path, TryCounter) {
+function LoadScript(Path, TryCounter, FunAfterLoad, Variable) {
     try {
         console.log('Loading ' + Path)
         if (TryCounter == undefined) TryCounter = 0;
@@ -2884,13 +2980,15 @@ function LoadScript(Path, TryCounter) {
                 if (!isAbort) {
                     setTimeout(
                         function () {
-                            if (typeof ClientJs_Detector == "undefined") {
-                                if (TryCounter > 2) { console.log('שגיאה במשיכת JS לקוח. ייתכן וחלק מהמערכות של הטופס לא יעבדו בצורה תקינה'); return false; }
+                            if (typeof [Variable] == "undefined") {
+                                if (TryCounter > 2) { console.log('שגיאה במשיכת JS ייתכן וחלק מהמערכות של הטופס לא יעבדו בצורה תקינה'); return false; }
                                 TryCounter += 1
-                                LoadScript(Path, TryCounter);
+                                LoadScript(Path, TryCounter, FunAfterLoad, Variable);
                             } else {
-                                console.log('Loading ClientJs - Done')
-                                AppendBtOpenCreditCardList()
+                                console.log('Loading - ' + Path)
+                                if (FunAfterLoad) {
+                                    FunAfterLoad()
+                                }
                             }
                         }
                         , 0);
@@ -2899,16 +2997,18 @@ function LoadScript(Path, TryCounter) {
             }
         };
         script.onerror = function () {
-            if (TryCounter > 2) { console.log('שגיאה במשיכת JS לקוח. ייתכן וחלק מהמערכות של הטופס לא יעבדו בצורה תקינה'); return false; }
+            if (TryCounter > 2) { console.log('שגיאה במשיכת JS ייתכן וחלק מהמערכות של הטופס לא יעבדו בצורה תקינה'); return false; }
             TryCounter += 1
-            LoadScript(Path, TryCounter);
+            LoadScript(Path, TryCounter, FunAfterLoad, Variable);
         }
         script.src = Path
         prior.parentNode.insertBefore(script, prior);
     } catch (err) {
-        console.log('שגיאה במשיכת JS לקוח. ייתכן וחלק מהמערכות של הטופס לא יעבדו בצורה תקינה'); return false;
+        console.log('שגיאה במשיכת JS ייתכן וחלק מהמערכות של הטופס לא יעבדו בצורה תקינה'); return false;
     }
 }
+
+
 function LoadClientCss() {
     var lnk = document.createElement('link');
     lnk.href = '/NedarimPlus/Client/Client.css';
@@ -3317,4 +3417,585 @@ function GetNumHigh(Num1, Num2) {
     }
 
     return [+Total_Num1, +Total_Num2, +Total_Double]
+}
+
+
+
+
+
+function Captcha(Type) {
+    if (!window._captchaState) {
+        window._captchaState = {
+            script: undefined,
+            data: undefined,
+            rendered: false,
+            Location: ""
+        };
+
+        window.recaptchaCallback = function () {
+            var elem = document.getElementById('CaptchaNedarim');
+            if (!_captchaState.rendered && elem) {
+                try {
+                    _captchaState.data = grecaptcha.render('CaptchaNedarim', {
+                        'sitekey': '6LfFJngaAAAAAMke2q968QXNubZX52z6QAwJqxT1',
+                        'callback': function (token) {
+                            console.log("אימות תקין")
+                        }
+                    });
+                    _captchaState.rendered = true;
+                } catch (err) {
+                    console.error("שגיאה ב-render של CAPTCHA:", err);
+                }
+            }
+        };
+    }
+
+    var state = window._captchaState;
+
+    if (Type === "Creation") {
+        if (GetURLParameter("MasofId") != "") {
+            MySwal("לא ניתן ליצור CAPTCHA במכשיר זה, פנה לתמיכה.")
+            return false;
+        }
+
+        if (typeof grecaptcha !== "undefined" || state.script !== undefined) return;
+
+        // הוספת האלמנט CaptchaNedarim לפני SignAlert אם לא קיים
+        if (!document.getElementById('CaptchaNedarim')) {
+            var signAlertElem = document.getElementById('SignAlert');
+            if (signAlertElem) {
+                _captchaState.Location = "SignAlert"
+                var captchaDiv = document.createElement('div');
+                captchaDiv.id = 'CaptchaNedarim';
+                captchaDiv.style.display = 'flex';
+                captchaDiv.style.justifyContent = 'center';
+                captchaDiv.style.margin = '20px 0';
+
+                signAlertElem.parentNode.insertBefore(captchaDiv, signAlertElem);
+            } else {
+                _captchaState.Location = "Fixed"
+                MySwal("לא נמצא אלמנט SignAlert בדף");
+                return;
+            }
+        }
+
+        try {
+            state.script = document.createElement('script');
+            state.script.async = true;
+            state.script.defer = true;
+            state.script.onerror = function () {
+                MySwal("שגיאה בטעינת CAPTCHA");
+            };
+
+            // ===== זיהוי שפת ה-CAPTCHA =====
+            var languageMap = {
+                // עברית
+                "iw": "iw", "he": "iw", "heb": "iw", "hbr": "iw",
+                "eb": "iw", "ebr": "iw", "hebrew": "iw",
+                "ivrit": "iw", "ivrith": "iw",
+                "עברית": "iw", "עברי": "iw",
+
+                // אנגלית
+                "en": "en", "eng": "en", "english": "en",
+                "en-us": "en", "en-gb": "en", "en-uk": "en",
+                "en-au": "en", "en-ca": "en",
+                "american": "en", "british": "en",
+                "אנגלית": "en", "אנגלי": "en", "אנגליה": "en",
+
+                // צרפתית
+                "fr": "fr", "fre": "fr", "fra": "fr",
+                "french": "fr", "francais": "fr", "français": "fr",
+                "fr-fr": "fr", "fr-ca": "fr",
+                "צרפתית": "fr", "צרפתי": "fr"
+            };
+
+            // קלט ראשוני: הגדרה ידנית מנצחת, אחרת שפת דפדפן (תואם IE9)
+            var rawLang = (typeof window["Captcha_Language"] === "string")
+                ? window["Captcha_Language"]
+                : (navigator.language || navigator.userLanguage ||
+                    navigator.browserLanguage || navigator.systemLanguage || "en");
+
+            // ניקוי וזיהוי
+            var cleanLang = rawLang.replace(/^\s+|\s+$/g, "").toLowerCase();
+            var Captcha_Language = languageMap[cleanLang] ||
+                languageMap[cleanLang.split("-")[0]] ||
+                "en";
+            // ===== סוף זיהוי שפה =====
+
+            state.script.src = "https://www.google.com/recaptcha/api.js?onload=recaptchaCallback&render=explicit&hl=" + Captcha_Language + "&ts=" + Date.now();
+            var firstScript = document.getElementsByTagName('script')[0];
+            firstScript.parentNode.insertBefore(state.script, firstScript);
+        } catch (err) {
+            MySwal("שגיאה בהפעלת Captcha");
+        }
+    }
+
+    if (Type === "Reset") {
+        if (typeof grecaptcha !== "undefined" && state.rendered) {
+            try {
+                grecaptcha.reset();
+                console.log(_captchaState.Location)
+            } catch (err) {
+                MySwal("שגיאה באיפוס Captcha");
+            }
+        }
+    }
+
+
+    if (Type === "Check") {
+        if (_captchaState.rendered == false) {
+            return true
+        }
+
+        var response = Captcha("Get");
+        if (response == "") {
+            MySwal("יש לבצע אימות כי אתה לא רובוט.")
+            console.log(_captchaState.Location)
+            return false;
+        }
+        if (response == "error") {
+            MySwal("שגיאה בהפעלת Captcha")
+            return false;
+        }
+        return true
+    }
+
+
+    if (Type === "Get") {
+        var response = "";
+        if (typeof grecaptcha !== "undefined" && state.data !== undefined) {
+            try {
+                response = grecaptcha.getResponse(state.data);
+                if (response === "") response = "";
+            } catch (err) {
+                // למקרה שיש שגיאה בקבלת נתונים, אז נאפס אותו
+                response = "";
+                Captcha("Reset")
+            }
+        } else {
+            // למקרה שלא הופעל כמו שצריך, אז נאפס אותו
+            Captcha("Reset")
+        }
+        return response;
+    }
+
+
+    if (Type === "SendMail") {
+        try {
+            $.ajax({
+                type: "POST",
+                url: "https://www.matara.pro/nedarimplus/Forms/Manage.aspx?Action=MailCaptcha",
+                context: Text,
+                timeout: 30000,
+                data: "TofesId=" + encodeURIComponent(Json.TofesId)
+            });
+        } catch (err) { }
+    }
+}
+
+
+
+
+(function (win, doc, $) {
+    if (!$) { throw new Error("ResetForm requires jQuery 1.x (IE9 compatible)."); }
+
+    var MODAL_ID = "resetOverlayIE9";
+
+    // הזרקת CSS (תואם IE9, ללא flex)
+    function injectStylesOnce() {
+        if (doc.getElementById(MODAL_ID + "_style")) return;
+        var css =
+            ".reset-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.35);display:none;z-index:9999;}" +
+            ".reset-modal{background:#fff;border:1px solid #e7e9ee;border-radius:8px;direction:rtl;overflow:hidden;width:600px;max-width:92%;margin:90px auto;}" +
+            ".reset-header{padding:12px 16px;background:#f6f8fb;border-bottom:1px solid #e7e9ee;overflow:hidden;zoom:1;}" +
+            ".reset-title{float:right;font-size:18px;font-weight:bold;color:#37474f;}" +
+            ".reset-close{float:left;}" +
+            ".reset-body{padding:14px 16px;}" +
+            ".reset-row{margin:10px 0;}" +
+            ".label{font-weight:bold;color:#455a64;margin-bottom:0px;display:block;}" +
+            ".muted{color:#78909c;font-size:12px;}" +
+            ".warn{color:#b71c1c;font-weight:bold;}" +
+            ".input,.textarea{width:100%;-ms-box-sizing:border-box;box-sizing:border-box;border:1px solid #d9dee7;border-radius:6px;padding:8px 10px;font-size:14px;}" +
+            "#idsTextareaIE9{height:90px;}" +
+            "#idsTextareaIE9:focus, #resetConfirmTextIE9:focus {outline: none; border-width: 1px; border-color: #606060;}" +
+            ".reset-footer{padding:10px 16px;border-top:1px solid #e7e9ee;}" +
+            ".btn{display:inline-block;border:1px solid #cfd5df;background:#fff;color:#37474f;padding:8px 12px;border-radius:6px;cursor:pointer;text-decoration:none;}" +
+            ".btn-primary{background:#d32f2f;color:#fff;border-color:#c62828;}" +
+            ".btn[disabled]{opacity:.6;cursor:default;}" +
+            ".radio-line{margin: 6px -3px;}";
+        var style = doc.createElement("style");
+        style.type = "text/css"; style.id = MODAL_ID + "_style";
+        if (style.styleSheet) { style.styleSheet.cssText = css; } else { style.appendChild(doc.createTextNode(css)); }
+        doc.getElementsByTagName("head")[0].appendChild(style);
+    }
+
+    // יצירת ה־DOM של המודאל
+    function ensureModalDom() {
+        if (doc.getElementById(MODAL_ID)) return;
+        var title = "איפוס מאגר טופס " + (win.Json && win.Json.TofesId ? win.Json.TofesId : "");
+        var html = ''
+            + '<div class="reset-overlay" id="' + MODAL_ID + '" role="dialog" aria-modal="true" aria-labelledby="resetTitleIE9">'
+            + '  <div class="reset-modal" aria-describedby="resetDescIE9">'
+            + '    <div class="reset-header">'
+            + '      <div class="reset-title" id="resetTitleIE9">' + title + '</div>'
+            + '      <button type="button" class="btn reset-close" id="resetCloseBtnIE9">סגור</button>'
+            + '    </div>'
+            + '    <div class="reset-body">'
+            + '      <div class="reset-row" id="resetDescIE9">'
+            + '        <div class="warn">אזהרה: פעולה זו בלתי הפיכה! לאחר המחיקה לא ניתן לשחזר את המידע.</div>'
+            + '      </div>'
+            + '      <div class="reset-row">'
+            + '        <span class="label">בחר פעולה:</span>'
+            + '        <div class="radio-line" style="display: flex ; font-size: 16px;"><label style="display: flex;"><input type="radio" name="resetScopeIE9" value="all"> מחיקה מלאה של כל המאגר</label></div>'
+            + '        <div class="radio-line" style="display: flex ; font-size: 16px;"><label style="display: flex;"><input type="radio" name="resetScopeIE9" value="byIds">מחיקת טפסים לפי רשימת מזהים</label></div>'
+            + '      </div>'
+            + '      <div class="reset-row" id="idsBlockIE9" style="display:none;">'
+            + '        <span class="label">הדבק כאן רשימת מזהים (כל מזהה בשורה חדשה):</span>'
+            + '        <textarea id="idsTextareaIE9" class="textarea"></textarea>'
+            + '      </div>'
+            + '      <div class="reset-row">'
+            + '        <span class="label">אימות פעולה</span>'
+            + '        <div class="muted">הקלד במדויק: <b>אני מאשר</b></div>'
+            + '        <input id="resetConfirmTextIE9" class="input" value="" />'
+            + '      </div>'
+            + '    </div>'
+            + '    <div class="reset-footer" id="reset_footer_Bts">'
+            + '      <button class="btn btn-primary" id="resetSubmitBtnIE9">אישור מחיקה</button>'
+            + '      <button class="btn" id="resetCancelBtnIE9">ביטול</button>'
+            + '      <span id="resetStatusIE9" class="muted" style="margin-right:8px;color: #c74436; font-weight: bold; font-size: 15px;"></span>'
+            + '    </div>'
+            + '    <div class="reset-footer" id="reset_footer_wait" style="display:none;"><img src="waitnew.gif" style="width:32px;" /></div>'
+            + '  </div>'
+            + '</div>';
+        var container = doc.createElement("div");
+        container.innerHTML = html;
+        doc.body.appendChild(container);
+    }
+
+    // עזר: בניית query string
+    function toQuery(obj) {
+        var s = [], k;
+        for (k in obj) if (obj.hasOwnProperty(k) && obj[k] !== undefined && obj[k] !== null) {
+            s.push(encodeURIComponent(k) + "=" + encodeURIComponent(obj[k]));
+        }
+        return s.join("&");
+    }
+
+    // עזר: מצב כפתור
+    function setBusy($btn, busy, textBusy, textIdle) {
+        if (busy) { $btn.prop("disabled", true).text(textBusy); }
+        else { $btn.prop("disabled", false).text(textIdle); }
+    }
+
+    // ניקוי רשימת מזהים שהודבקה (מפסיקי שורות/רווחים/טאבים לנקודה-פסיק אחיד)
+    function normalizeIds(raw) {
+        var s = raw || "";
+        s = s.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+        s = s.replace(/[\n\t ;]+/g, ","); // שורות/טאבים/רווחים/; -> פסיק
+        var parts = s.split(","), out = [], seen = {};
+        for (var i = 0; i < parts.length; i++) {
+            var id = $.trim(parts[i]);
+            if (!id) continue;
+            if (!seen[id]) { seen[id] = 1; out.push(id); }
+        }
+        return out.join(",");
+    }
+
+    function bindEventsOnce() {
+        var $overlay = $("#" + MODAL_ID);
+
+        $("#resetCloseBtnIE9, #resetCancelBtnIE9").off("click").on("click", function () {
+            $overlay.hide();
+        });
+
+        $("input[name=resetScopeIE9]").off("change").on("change", function () {
+            $("#resetConfirmTextIE9").val("");
+            $("#resetStatusIE9").text("");
+            var scope = $("input[name=resetScopeIE9]:checked").val();
+            if (scope === "byIds") { $("#idsBlockIE9").show(); } else { $("#idsBlockIE9").hide(); }
+        }).trigger("change");
+
+        $("#resetConfirmTextIE9").off("keydown").on("keydown", function (e) {
+            e = e || win.event;
+            var code = e.which || e.keyCode;
+            if (code === 13) { $("#resetSubmitBtnIE9").click(); }
+        });
+
+        $("#resetSubmitBtnIE9").off("click").on("click", function () {
+            var $btn = $(this);
+
+
+            var scope = $("input[name=resetScopeIE9]:checked").val();
+            if (scope == undefined) {
+                $("#resetStatusIE9").text('נא לבחור סוג מחיקת נתונים.');
+                return;
+            }
+            var queryObj = {
+                Action: "ResetForm",
+                MosadId: Json.MosadId,
+                TofesId: Json.TofesId,
+                TypeReset: (scope === "all" ? "all" : "byIds")
+            };
+
+            var dataObj = {};
+            if (scope === "byIds") {
+                var ids = $("#idsTextareaIE9").val();
+                if (!ids) {
+                    $("#resetStatusIE9").text("נא להדביק רשימת מזהים למחיקה.");
+                    $("#idsTextareaIE9").focus();
+                    return;
+                }
+                dataObj.ListId = ids; // בצד שרת: פרסר CSV
+            }
+
+            var confirmText = $.trim($("#resetConfirmTextIE9").val());
+            if (confirmText !== "אני מאשר" && confirmText !== "tbh ntar") {
+                $("#resetStatusIE9").text('נא להקליד: "אני מאשר"');
+                $("#resetConfirmTextIE9").focus();
+                return;
+            }
+
+            setBusy($btn, true, "מבצע...", "אישור מחיקה");
+            $("#resetStatusIE9").text("");
+            $("#reset_footer_wait").show();
+            $("#reset_footer_Bts").hide();
+
+
+            $.ajax({
+                url: "/nedarimplus/Forms/Manage.aspx?" + toQuery(queryObj),
+                type: "POST",
+                data: toQuery(dataObj),
+                timeout: 20000
+            }).success(function (JsonData) {
+                $("#reset_footer_wait").hide();
+                $("#reset_footer_Bts").show();
+
+                setBusy($btn, false, "", "אישור מחיקה");
+                if (typeof JsonData === "string") {
+                    try { JsonData = win.JSON ? win.JSON.parse(JsonData) : eval("(" + JsonData + ")"); } catch (e) { }
+                }
+                if (JsonData && (JsonData.Status === "Error" || JsonData.Result === "Error")) {
+                    if (typeof win.EAlertConfirm === "function") win.EAlertConfirm("שגיאה", JsonData.Message || "שגיאת מערכת");
+                    else alert("שגיאה: " + (JsonData && JsonData.Message ? JsonData.Message : ""));
+                    return;
+                }
+                if (typeof win.IAlertConfirm === "function") win.IAlertConfirm("הפעולה בוצעה בהצלחה");
+                else alert("הפעולה בוצעה בהצלחה");
+                $overlay.hide();
+
+            }).error(function () {
+                $("#reset_footer_wait").hide();
+                $("#reset_footer_Bts").show();
+
+                setBusy($btn, false, "", "אישור מחיקה");
+                if (typeof win.EAlertConfirm === "function") win.EAlertConfirm("שגיאה בקבלת נתונים. בדוק תקשורת");
+                else alert("שגיאה בקבלת נתונים. בדוק תקשורת");
+            });
+        });
+    }
+
+    // API ציבורי: פתיחת המודאל עם נתוני Json קיימים
+    function openResetDataModalIE9() {
+        injectStylesOnce();
+        ensureModalDom();
+        var $overlay = $("#" + MODAL_ID);
+        // reset fields
+        $("#idsTextareaIE9").val("");
+        $("#resetConfirmTextIE9").val("");
+        $("#resetStatusIE9").text("");
+        $("input[name=resetScopeIE9]").prop("checked", false).change();
+        bindEventsOnce();
+        $overlay.show();
+    }
+
+    // === הפונקציה שביקשת: ללא פרמטרים ===
+    // לוקחת את MosadId/TofesId מה-Json שלך, ופותחת את חלון האיפוס.
+    win.ResetForm = function () {
+        openResetDataModalIE9();
+    };
+
+})(window, document, window.jQuery);
+
+
+
+function GetExcel_Prodact() {
+    //console.log(true)
+    var url = "/nedarimplus/Forms/Manage.aspx?Action=GetExcel&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId
+    //var FormData = '<form action="' + url + '" method="post" target="_blank" style="display:none">'
+    var FormData = '<form action="' + url + '" method="post" style="display:none">'
+    for (var Element in Json.FormElements) {
+        var JsonElement = Json.FormElements[Element]
+        if (JsonElement.Type == "Margin" || JsonElement.Type == "List" || JsonElement.Type == "Koteret" || JsonElement.DbName == undefined) { continue; }
+        if (JsonElement.fieldName == "עמודה שמורה למוצר") { continue; }
+        FormData += '<input type="text" name="' + JsonElement.DbName + '" value="' + JsonElement.fieldName.replace(/"/g, '&quot;').replace(/<b>/g, '').replace(/<\/b>/g, '') + '" />'
+    }
+    FormData += '</form>'
+    var form = $(FormData);
+
+    $('body').append(form);
+    form.submit();
+}
+
+
+
+function AddTakanon() {
+    var takanonHtml =
+        '<div style="-webkit-user-select:none; font-size:15px; margin-bottom: 10px; font-family: \'Noto Sans Hebrew\',\'Assistant\', Arial, sans-serif;">' +
+        '    <label style="cursor: pointer; margin-bottom: 5px; line-height: 20px;">' +
+        '        <input type="checkbox" id="TakanonCheckbox" style="vertical-align:middle; width: 14px; height: 14px; cursor: pointer;">' +
+        '        <span style="vertical-align:middle; font-weight: bold; color: #333;"> אני מסכים </span>' +
+        '    </label>' +
+        '        <span style="color: blue; cursor: pointer; vertical-align: middle; text-decoration: underline; padding-right:3px;" onclick="(typeof NedarimPrivacyModalLoader == \'undefined\' ? null : NedarimPrivacyModalLoader.open())">למדיניות הפרטיות</span>' +
+        '    <div id="TakanonAlert" style="display:none;background-color: rgb(255, 244, 244);color: rgb(192, 57, 43);border-image: initial;padding: 8px 12px;font-size: 14px;margin-top: 5px;box-sizing: border-box;border: 1px solid  rgb(217, 83, 79);border-radius: 5px;font-weight: bold;">' +
+        '       שים לב: חובה לאשר את המדיניות פרטיות כדי להמשיך' +
+        '    </div>' +
+        '</div>';
+
+    $("#SaveDiv").prepend(takanonHtml);
+
+
+
+    $("#TakanonCheckbox").change(function () {
+        if ($(this).is(":checked")) {
+            $("#TakanonAlert").hide();
+        }
+    });
+
+
+    var originalSendData = SendData;
+
+    SendData = function (params) {
+        if (!$("#TakanonCheckbox").is(":checked") && IsVisible("SaveDiv") == true) {
+            $("#TakanonAlert").show();
+            return false;
+        }
+
+        ReplaceCharsInFields();
+
+        return originalSendData.apply(this, arguments);
+    };
+    // שומר על שקיפות ל-String(SendData): בדיקת הקאפצה ב-ajaxSetup קוראת את קוד המקור של SendData,
+    // ולכן ה-wrapper חייב להחזיר את קוד הפונקציה המקורית (שמכילה את Captcha) ולא את קוד ה-wrapper.
+    SendData.toString = function () { return originalSendData.toString(); };
+
+    CheckboxToken();
+}
+
+
+// מחליף תווים מהרשימה בכל שדות הקלט של הטופס
+function ReplaceCharsInFields() {
+
+    var CharsToReplace = [
+        { Find: "<", Replace: "" },
+        { Find: ">", Replace: "" }
+    ];
+
+    if (typeof Json === 'undefined' || !Json || !Json.FormElements) return false;
+
+    for (var Element in Json.FormElements) {
+        var JsonElement = Json.FormElements[Element];
+        if (JsonElement == undefined) continue;
+        if (JsonElement.ElementId == undefined) continue;
+
+        // שדות ללא ערך טקסטואלי חופשי - אין מה לנקות
+        if (JsonElement.Type == "Radio" || JsonElement.Type == "Radio2" || JsonElement.Type == "CheckBox") continue;
+        if (JsonElement.Type == "Koteret" || JsonElement.Type == "Margin" || JsonElement.Type == "Hr") continue;
+        if (JsonElement.Type == "Div" || JsonElement.Type == "DivOpen" || JsonElement.Type == "DivClose") continue;
+        if (JsonElement.Type == "List" || JsonElement.Type == "IndexNumber") continue;
+
+        // דילוג על שדה אשראי - עלול להכיל ערך מיוחד של כרטיס שמור
+        if (JsonElement.ElementId == "CreditCard") continue;
+
+        var $Field = $("#" + JsonElement.ElementId);
+        if ($Field.length == 0) continue;
+
+        var Value = $Field.val();
+        if (Value == undefined || Value === "") continue;
+
+        Value = String(Value);
+        var NewValue = Value;
+
+        for (var i = 0; i < CharsToReplace.length; i++) {
+            // split+join במקום replace עם רג'קס - מחליף את כל המופעים בלי צורך ב-escape של תווים מיוחדים
+            NewValue = NewValue.split(CharsToReplace[i].Find).join(CharsToReplace[i].Replace);
+        }
+
+        if (NewValue !== Value) {
+            $Field.val(NewValue);
+        }
+    }
+}
+
+
+
+
+
+var ListFormsCheckboxToken = [4037, 3962, 3924, 3677, 3635, 3124, 2981, 2895, 2889, 2783, 2407, 2385, 2342, 1139];
+var ListMosadCheckboxToken = [];
+
+function CheckboxToken() {
+    if ($("#CheckboxTokenInput").length > 0) return;
+
+    if (typeof Json === 'undefined' || !Json || !Json.FormElements) return false;
+
+    var creditCardHasValidDbName = false;
+    for (var i = 0; i < Json.FormElements.length; i++) {
+        var element = Json.FormElements[i];
+        if (element && ["CreditCard", "CreditCard1", "CreditCard2"].indexOf(element.ElementId) > -1) {
+            if (element.DbName && String(element.DbName).trim() !== "") {
+                creditCardHasValidDbName = true;
+            }
+            break;
+        }
+    }
+
+    if (!creditCardHasValidDbName) return false;
+
+
+    // המרה למספרים כדי למנוע בעיות של טיפוסים (String vs Number)
+    var currentTofes = Json.TofesId ? parseInt(Json.TofesId, 10) : null;
+    var currentMosad = Json.MosadId ? parseInt(Json.MosadId, 10) : null;
+
+    var isTofesMatch = currentTofes && ListFormsCheckboxToken.indexOf(currentTofes) > -1;
+    var isMosadMatch = currentMosad && ListMosadCheckboxToken.indexOf(currentMosad) > -1;
+
+    // הבדיקה החדשה: האם הוגדר ב-JSON להציג ספציפית (תומך בבוליאני או במחרוזת)
+    var isJsonForceShow = (Json.ShowCheckboxToken === true || Json.ShowCheckboxToken === "true");
+
+    // אם אף אחד מהתנאים לא מתקיים - צא מהפונקציה
+    if (!(isTofesMatch || isMosadMatch || isJsonForceShow)) return false;
+
+    // עיצוב מותאם לטפסים (קו כתום תחתון וכוכבית חובה)
+    var CheckboxHtml =
+        '<div id="CheckboxTokenContainer" style="-ms-user-select:none; -webkit-user-select:none; font-size:14px; margin-bottom: 15px; font-family: Arial, sans-serif; direction: rtl; ' +
+        'background-color: #f4f7f9; border: 1px solid #d1d9e0;border-right: 5px solid #ff6a00; padding: 12px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">' +
+        '    <label style="cursor: pointer; display: block; margin: 0;">' +
+        '        <input type="checkbox" id="CheckboxTokenInput" style="vertical-align: middle; width: 14px; height: 14px; cursor: pointer; margin-left: 6px; margin-top: 5px;">' +
+        '        <span style="vertical-align:middle; font-weight: bold; color: #333; line-height: 1.5;">' +
+        'אני מאשר כי ידוע לי שבעל הטופס יקבל את פרטי האשראי המלאים שלי לצורך גבייה במערכת חיצונית לנדרים פלוס.' +
+        '        </span>' +
+        '    </label>' +
+        '</div>';
+    $("#SaveDiv").prepend(CheckboxHtml);
+
+
+    if (typeof SendData !== 'undefined' && !SendData.isPatched) {
+        var originalSendData = SendData;
+        SendData = function (params) {
+            var isVisible = (typeof IsVisible === 'function') ? IsVisible("SaveDiv") : $("#SaveDiv").is(":visible");
+
+            if ($("#CheckboxTokenInput").length > 0 && !$("#CheckboxTokenInput").is(":checked") && isVisible) {
+                if (typeof MySwal === 'function') {
+                    MySwal("חובה לאשר כי ידוע לך שבעל הטופס יקבל את פרטי האשראי המלאים לצורך גבייה במערכת חיצונית לנדרים פלוס.");
+                } else {
+                    alert("חובה לאשר את התנאים כדי להמשיך.");
+                }
+                return false;
+            }
+            return originalSendData.apply(this, arguments);
+        };
+        // שומר על שקיפות ל-String(SendData) - ראה הערה ב-AddTakanon.
+        SendData.toString = function () { return originalSendData.toString(); };
+        SendData.isPatched = true;
+    }
 }
