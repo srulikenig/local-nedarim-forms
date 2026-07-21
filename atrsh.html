@@ -251,35 +251,86 @@
             margin-right: 8px;
         }
 
-        /* רשת שדות תצוגה בכרטיס המשפחה */
-        .InfoSection { margin-top: 12px; }
+        /* שורות קומפקטיות בכרטיס המשפחה */
+        .CompactLine {
+            font-size: 15px;
+            color: #4a5568;
+            margin: 5px 0;
+            line-height: 1.5;
+            word-break: break-word;
+        }
 
-        .InfoSectionTitle {
+        .CompactLine .CompactLbl {
+            font-weight: bold;
+            color: #2B3A63;
+        }
+
+        .CompactLine .Dot { color: #c0c0c0; }
+
+        /* מסך עדכון אשראי */
+        .CardIntro {
+            background-color: #f8f9fa;
+            border: 1px solid #e2e2e2;
+            color: #4a5568;
+            border-radius: 8px;
+            margin: 10px 3%;
+            padding: 12px;
+            font-size: 15px;
+            text-align: right;
+        }
+
+        .SavedCardBox {
+            border: 1px solid #e2e2e2;
+            border-radius: 8px;
+            background-color: white;
+            padding: 12px;
+            margin-top: 8px;
+        }
+
+        .SavedCardNum {
             font-size: 17px;
             font-weight: bold;
             color: #2B3A63;
-            margin-bottom: 4px;
+            letter-spacing: 2px;
         }
 
-        .InfoField {
-            display: inline-block;
-            vertical-align: top;
-            width: 48%;
-            margin: 3px 0 3px 0;
-        }
-
-        .InfoField .Lbl {
-            display: block;
+        .SavedCardMeta {
             font-size: 13px;
             color: #999;
+            margin-top: 2px;
         }
 
-        .InfoField .Val {
-            display: block;
-            font-size: 16px;
-            font-weight: 500;
-            color: #2B3A63;
-            word-break: break-word;
+        .NoCardBox {
+            border: 1px dashed #c9c9c9;
+            border-radius: 8px;
+            text-align: center;
+            color: #a0a0a0;
+            padding: 20px 10px;
+            margin-top: 8px;
+            font-size: 15px;
+        }
+
+        #NedarimIframe {
+            width: 100%;
+            border: 0;
+            border-radius: 8px;
+            background-color: white;
+        }
+
+        .CardFormBox {
+            border: 1px solid #e2e2e2;
+            border-radius: 8px;
+            background-color: #fbfbfb;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .CardFormError {
+            color: #b42e2e;
+            font-weight: bold;
+            text-align: center;
+            font-size: 15px;
+            margin: 8px 0;
         }
 
         .SaleBt {
@@ -534,7 +585,10 @@
             <div class="CenterDiv">
                 <input type="button" class="LinkBt" id="ResendBt" value="שליחה חוזרת של קוד אימות" />
             </div>
-            <div style="height:120px"></div>
+            <div class="CodeNote" style="color:#808080;font-size:15px;margin-top:25px">
+                לא קיבלתם קוד אימות? כנראה שמספר הטלפון שלכם אינו מעודכן במערכת -<br />יש לפנות למזכירות המוסד לעדכון הפרטים.
+            </div>
+            <div style="height:100px"></div>
         </div>
 
         <!-- מסך אישורי תקנון -->
@@ -612,7 +666,8 @@
             <div class="AutoSaveNote">ההזמנה נשמרת אוטומטית בכל שינוי</div>
 
             <div id="OrderCardWarn" class="WarnBanner" style="display:none">
-                כדי להוסיף מוצרים יש לעדכן כרטיס אשראי. לאחר העדכון ניתן להזמין מיד.
+                כדי להוסיף מוצרים יש לעדכן כרטיס אשראי. לאחר העדכון ניתן להזמין מיד.<br />
+                <input type="button" class="Bt BtOrange BtSmall" id="OrderGoCardBt" value="לעדכון כרטיס אשראי" style="margin-top:8px" />
             </div>
 
             <div id="OrderList"></div>
@@ -621,6 +676,20 @@
                 <div class="TotalsLine" id="StationFeeLine" style="display:none">דמי הזמנה<span class="TotalsVal" id="StationFeeVal"></span><div style="clear:both"></div></div>
                 <div class="TotalsLine Grand">סה"כ לתשלום<span class="TotalsVal" id="GrandTotalVal"></span><div style="clear:both"></div></div>
             </div>
+        </div>
+
+        <!-- מסך עדכון אשראי למכירות -->
+        <div id="ScreenCard" class="Screen">
+            <div class="CenterDiv" style="margin-bottom:5px">
+                <input type="button" class="Bt BtSecondary BtSmall" value="&#8618; חזרה" id="CardBackBt" />
+            </div>
+            <div class="Koteret" style="text-align:center;padding-right:0">עדכון אשראי למכירות</div>
+            <div class="CardIntro">
+                <b>כרטיס אשראי משפחתי</b><br />
+                הכרטיס נשמר ברמת המשפחה ומשמש לחיוב עבור <b>כל תלמידי המשפחה</b>.
+                לפני השמירה מתבצע חיוב אימות של 1 &#8362; שמבוטל מיד.
+            </div>
+            <div id="CardProvidersList"></div>
         </div>
     </div>
 
@@ -660,7 +729,8 @@
             students: [],
             pendingApprovals: [],
             lookups: { cities: [], neighborhoods: [], streets: [] },
-            order: null
+            order: null,
+            card: null
         };
 
         //---------------------------------------------------------
@@ -1012,8 +1082,15 @@
                 .always(finishOne);
         }
 
-        function infoField(label, value) {
-            return '<div class="InfoField"><span class="Lbl">' + label + '</span><span class="Val">' + esc(asDisplayValue(value)) + '</span></div>';
+        // שורה קומפקטית: תווית + ערכים קיימים בלבד, מופרדים בנקודה
+        function compactLine(label, parts) {
+            var vals = [];
+            for (var i = 0; i < parts.length; i++) {
+                var v = parts[i];
+                if (v !== null && v !== undefined && $.trim(String(v)) !== '') { vals.push(esc(String(v))); }
+            }
+            if (vals.length === 0) { return ''; }
+            return '<div class="CompactLine"><span class="CompactLbl">' + label + ': </span>' + vals.join(' <span class="Dot">&#183;</span> ') + '</div>';
         }
 
         // כמו FamilyInfo: רחוב = "שם רחוב בנין דירה X"
@@ -1032,26 +1109,12 @@
                 html += '<div class="CardTitle">משפחת ' + esc(f.familyName) +
                     ' <input type="button" class="Bt BtOrange BtSmall" id="EditFamilyBt" value="עריכה" style="float:left;margin-top:-6px" /><div style="clear:both"></div></div>';
 
-                html += '<div class="InfoSection"><div class="InfoSectionTitle">אב</div>';
-                html += infoField('שם פרטי', f.husbandFirstName);
-                html += infoField('ת"ז', f.husbandIdNumber);
-                html += infoField('פלאפון', f.husbandPhoneNumber);
-                html += infoField('מייל', f.husbandEmail);
-                html += '</div>';
-
-                html += '<div class="InfoSection"><div class="InfoSectionTitle">אם</div>';
-                html += infoField('שם פרטי', f.wifeFirstName);
-                html += infoField('ת"ז', f.wifeIdNumber);
-                html += infoField('פלאפון', f.wifePhoneNumber);
-                html += infoField('מייל', f.wifeEmail);
-                html += '</div>';
-
-                html += '<div class="InfoSection"><div class="InfoSectionTitle">כתובת</div>';
-                html += infoField('עיר', f.cityName);
-                html += infoField('שכונה', f.neighborhoodName);
-                html += infoField('רחוב', streetAddressText(f));
-                html += infoField('טלפון בית', f.homePhoneNumber);
-                html += '</div>';
+                // תצוגה קומפקטית: שורה אחת לכל הורה ושורה לכתובת
+                html += compactLine('אב', [f.husbandFirstName, f.husbandIdNumber, f.husbandPhoneNumber, f.husbandEmail]);
+                html += compactLine('אם', [f.wifeFirstName, f.wifeIdNumber, f.wifePhoneNumber, f.wifeEmail]);
+                var addrParts = [f.cityName, f.neighborhoodName, streetAddressText(f)];
+                if (f.homePhoneNumber) { addrParts.push('טלפון בית ' + f.homePhoneNumber); }
+                html += compactLine('כתובת', addrParts);
             } else {
                 html = '<div class="CardDesc">אירעה שגיאה בטעינת נתוני המשפחה.</div>';
             }
@@ -1476,6 +1539,257 @@
         }
 
         //---------------------------------------------------------
+        // עדכון אשראי למכירות (כמו CardUpdateTab - iframe נדרים+)
+        //---------------------------------------------------------
+
+        function formatExpiry(exp) {
+            return (exp && exp.length === 4) ? exp.substring(0, 2) + '/' + exp.substring(2) : (exp || '');
+        }
+
+        function resetCardState() {
+            if (State.card && State.card.pollTimer) { clearInterval(State.card.pollTimer); }
+            State.card = { contexts: [], adding: null, expiry: '', paying: false, linkId: null, pollTimer: null };
+        }
+
+        function openCardScreen() {
+            resetCardState();
+            setLoading(true);
+            api('GET', '/customers/me/card-update-context')
+                .done(function (contexts) {
+                    setLoading(false);
+                    State.card.contexts = contexts || [];
+                    renderCardContexts();
+                    showScreen('ScreenCard');
+                })
+                .fail(function (xhr) {
+                    setLoading(false);
+                    if (!xhr || xhr.status !== 401) {
+                        showMsg('error', 'שגיאה בטעינת אמצעי התשלום', errText(xhr, ''));
+                    }
+                });
+        }
+
+        function closeCardScreen() {
+            resetCardState();
+            goHome();
+        }
+
+        function renderCardContexts() {
+            var contexts = State.card.contexts;
+            var html = '';
+            if (contexts.length === 0) {
+                html = '<div class="NoCardBox">אין כרגע מכירות פתוחות הדורשות אמצעי תשלום</div>';
+            }
+            for (var i = 0; i < contexts.length; i++) {
+                var c = contexts[i];
+                var salesNames = [];
+                for (var j = 0; j < (c.sales || []).length; j++) { salesNames.push(c.sales[j].saleName); }
+                html += '<div class="Card">';
+                html += '<div class="CardTitle" style="font-size:17px">' + (salesNames.length > 0 ? 'עבור: ' + esc(salesNames.join(', ')) : 'ללא מכירה פתוחה כרגע') + '</div>';
+                if (c.savedCard) {
+                    html += '<div class="SavedCardBox">';
+                    html += '<div class="SavedCardNum">&#8226;&#8226;&#8226;&#8226; ' + esc(c.savedCard.creditCardNumber) + '</div>';
+                    html += '<div class="SavedCardMeta">' + esc(c.savedCard.cardHebrewName || '') + ' | תוקף ' + esc(formatExpiry(c.savedCard.creditCardExpDate)) + '</div>';
+                    html += '<div class="CenterDiv" style="margin-top:10px"><input type="button" class="Bt BtSecondary BtSmall CardAddBt" data-idx="' + i + '" value="החלפת כרטיס" /></div>';
+                    html += '</div>';
+                } else {
+                    html += '<div class="NoCardBox">לא הוגדר כרטיס אשראי<br />';
+                    html += '<input type="button" class="Bt BtSmall CardAddBt" data-idx="' + i + '" value="הוספת כרטיס" style="margin-top:10px" /></div>';
+                }
+                html += '<div class="CardAddArea" id="CardAddArea_' + i + '"></div>';
+                html += '</div>';
+            }
+            $('#CardProvidersList').html(html);
+        }
+
+        function openAddCard(idx) {
+            var c = State.card.contexts[idx];
+            if (!c) { return; }
+
+            // ספק שאינו נדרים+ - אין עדכון עצמאי
+            if (c.providerType !== 'nedarim_plus') {
+                showMsg('info', 'עדכון כרטיס', 'ספק הסליקה של מכירה זו אינו נתמך עדיין בעדכון עצמאי - פנו למזכירות.');
+                return;
+            }
+
+            State.card.adding = { idx: idx, providerId: c.paymentProviderId, iframeConfig: null };
+            State.card.expiry = '';
+            State.card.paying = false;
+
+            setLoading(true);
+            api('GET', '/nedarim-plus/' + c.paymentProviderId + '/iframe-config')
+                .done(function (cfg) {
+                    setLoading(false);
+                    if (!State.card.adding) { return; }
+                    State.card.adding.iframeConfig = cfg || {};
+                    renderAddCardForm();
+                })
+                .fail(function (xhr) {
+                    setLoading(false);
+                    State.card.adding = null;
+                    if (!xhr || xhr.status !== 401) {
+                        showMsg('error', 'שגיאה בטעינת טופס הכרטיס', errText(xhr, ''));
+                    }
+                });
+        }
+
+        function renderAddCardForm() {
+            var adding = State.card.adding;
+            if (!adding) { return; }
+            var html = '<div class="CardFormBox">';
+            html += '<div class="FieldDiv FieldDivWide" style="margin-right:0;width:100%"><label class="fieldName" for="CardHolderName">שם בעל הכרטיס</label><input id="CardHolderName" class="TextBox" type="text" maxlength="100" autocomplete="off" /></div>';
+            html += '<div class="FieldDiv" style="margin-right:0"><label class="fieldName" for="CardHolderId">מספר זהות בעל הכרטיס</label><input id="CardHolderId" class="TextBox" type="tel" dir="ltr" maxlength="9" autocomplete="off" /></div>';
+            html += '<div class="FieldDiv"><label class="fieldName" for="CardExpiry">תוקף הכרטיס (MM/YY)</label><input id="CardExpiry" class="TextBox" type="tel" dir="ltr" maxlength="5" autocomplete="off" /></div>';
+            html += '<div style="margin-top:10px"><iframe id="NedarimIframe" scrolling="no" style="height:260px" allow="payment"></iframe></div>';
+            html += '<div id="CardVerifying" class="WaitNote" style="display:none;margin:15px">מאמת את הכרטיס - מתבצע חיוב של 1 &#8362; וביטולו...<br /><img src="waitnew.gif" style="width:40px;margin-top:8px" /></div>';
+            html += '<div id="CardFormError" class="CardFormError" style="display:none"></div>';
+            html += '<div class="CenterDiv" style="margin-top:12px">';
+            html += '<input type="button" class="Bt BtSecondary BtSmall" id="CardAddCancelBt" value="ביטול" /> ';
+            html += '<input type="button" class="Bt BtSmall" id="CardSaveBt" value="שמירת כרטיס" />';
+            html += '</div>';
+            html += '</div>';
+
+            // סוגרים טפסים פתוחים אחרים ומציגים את הנוכחי
+            $('.CardAddArea').html('');
+            $('#CardAddArea_' + adding.idx).html(html);
+            $('.CardAddBt').attr('disabled', 'disabled');
+
+            // ה-src נקבע אחרי ההזרקה כדי שאירוע ה-load ייתפס
+            $('#NedarimIframe').on('load', function () {
+                postToNedarimIframe({ Name: 'GetHeight' });
+            }).attr('src', adding.iframeConfig.iframeUrl || '');
+        }
+
+        function closeAddCardForm() {
+            if (State.card.pollTimer) { clearInterval(State.card.pollTimer); State.card.pollTimer = null; }
+            State.card.adding = null;
+            State.card.linkId = null;
+            State.card.paying = false;
+            $('.CardAddArea').html('');
+            $('.CardAddBt').removeAttr('disabled');
+        }
+
+        function postToNedarimIframe(data) {
+            var frame = document.getElementById('NedarimIframe');
+            if (frame && frame.contentWindow) { frame.contentWindow.postMessage(data, '*'); }
+        }
+
+        // פרוטוקול ה-postMessage של נדרים+ (Height + TransactionResponse)
+        function onNedarimMessage(event) {
+            var d = event.data;
+            if (typeof d === 'string') { try { d = $.parseJSON(d); } catch (e) { return; } }
+            if (!d || !d.Name) { return; }
+            if (!State.card || !State.card.adding) { return; }
+
+            if (d.Name === 'Height') {
+                $('#NedarimIframe').css('height', (parseInt(d.Value, 10) + 15) + 'px');
+            } else if (d.Name === 'TransactionResponse') {
+                var v = d.Value || {};
+                if (v.Status === 'Error') {
+                    cardFormError(v.Message || 'שגיאה ביצירת הטוקן מול נדרים+');
+                } else {
+                    // תגובה לדוגמה: { Status: 'OK', Token: '746940', LastNum: '1984' }
+                    createCardUpdateLink(v);
+                }
+            }
+        }
+
+        function cardFormError(text) {
+            State.card.paying = false;
+            $('#CardVerifying').hide();
+            $('#CardSaveBt').removeAttr('disabled').val('שמירת כרטיס');
+            $('#CardFormError').text(text).show();
+        }
+
+        function createCardUpdateLink(v) {
+            var adding = State.card.adding;
+            if (!adding) { return; }
+            api('POST', '/nedarim-plus/' + adding.providerId + '/card-update-links', {
+                token: v.Token || v.TransactionToken,
+                tokef: State.card.expiry,
+                last4Digits: v.LastNum || v.Last4Digits,
+                cardHolderName: $.trim($('#CardHolderName').val()),
+                cardHolderId: $('#CardHolderId').val(),
+                cardBrand: v.Brand || v.CardType
+            })
+                .done(function (resp) {
+                    State.card.linkId = resp.linkId;
+                    startCardStatusPolling();
+                })
+                .fail(function (xhr) {
+                    cardFormError(errText(xhr, 'שגיאה בשמירת הכרטיס'));
+                });
+        }
+
+        // polling על סטטוס האימות (חיוב 1 ש"ח + ביטול בצד השרת) - כל 2 שניות
+        function startCardStatusPolling() {
+            $('#CardFormError').hide();
+            $('#CardVerifying').show();
+            if (State.card.pollTimer) { clearInterval(State.card.pollTimer); }
+            State.card.pollTimer = setInterval(function () {
+                if (!State.card.linkId) { return; }
+                api('GET', '/nedarim-plus/card-update-links/' + State.card.linkId)
+                    .done(function (resp) {
+                        if (!resp || resp.status === 'PENDING') { return; }
+                        clearInterval(State.card.pollTimer);
+                        State.card.pollTimer = null;
+                        if (resp.status === 'SUCCESS') {
+                            closeAddCardForm();
+                            showMsg('success', 'הכרטיס אומת ונשמר בהצלחה', '');
+                            // רענון ההקשר כדי להציג את הכרטיס החדש
+                            api('GET', '/customers/me/card-update-context').done(function (contexts) {
+                                State.card.contexts = contexts || [];
+                                renderCardContexts();
+                            });
+                        } else {
+                            cardFormError(resp.errorMessage || 'אימות הכרטיס נכשל');
+                        }
+                    });
+            }, 2000);
+        }
+
+        function submitCard() {
+            if (State.card.paying) { return; }
+            var name = $.trim($('#CardHolderName').val());
+            var holderId = $('#CardHolderId').val();
+            if (name.length < 2) { cardFormError('יש להזין את שם בעל הכרטיס'); return; }
+            if (holderId.length < 5) { cardFormError('יש להזין מספר זהות תקין'); return; }
+            if (State.card.expiry.length !== 4) { cardFormError('יש להזין תוקף בפורמט MM/YY'); return; }
+
+            var meta = (State.card.adding && State.card.adding.iframeConfig && State.card.adding.iframeConfig.meta) || {};
+            State.card.paying = true;
+            $('#CardFormError').hide();
+            $('#CardSaveBt').attr('disabled', 'disabled').val('מבצע...');
+
+            var nameParts = name.split(/\s+/);
+            postToNedarimIframe({
+                Name: 'FinishTransaction2',
+                Value: {
+                    Mosad: meta.mosad,
+                    ApiValid: meta.apiValid,
+                    PaymentType: 'CreateToken',
+                    Currency: '1',
+                    Zeout: holderId,
+                    FirstName: nameParts[0] || '',
+                    LastName: nameParts.slice(1).join(' '),
+                    Street: '',
+                    City: '',
+                    Phone: '',
+                    Mail: '',
+                    Amount: '1',
+                    Tashlumim: '1',
+                    Groupe: '',
+                    Comment: '',
+                    Param1: '',
+                    Param2: '',
+                    CallBack: '',
+                    CallBackMailError: '',
+                    Tokef: ''
+                }
+            });
+        }
+
+        //---------------------------------------------------------
         // חיבור אירועים
         //---------------------------------------------------------
 
@@ -1508,9 +1822,31 @@
 
             $('#LogoutBt').click(function () { doLogout(false); });
             $('#FamilyInfo').on('click', '#EditFamilyBt', openEdit);
-            $('#CardUpdateBt').click(function () {
-                showMsg('info', 'עדכון אשראי למכירות', 'האפשרות תיפתח בעמדה בקרוב.<br />בינתיים ניתן לעדכן כרטיס באזור האישי באתר או במשרד.');
+
+            $('#CardUpdateBt').click(openCardScreen);
+            $('#CardBackBt').click(closeCardScreen);
+            $('#CardProvidersList').on('click', '.CardAddBt', function () {
+                if ($(this).attr('disabled')) { return; }
+                openAddCard(parseInt($(this).attr('data-idx'), 10));
             });
+            $('#CardProvidersList').on('click', '#CardAddCancelBt', closeAddCardForm);
+            $('#CardProvidersList').on('click', '#CardSaveBt', submitCard);
+            // תוקף הכרטיס: שומרים ספרות, מציגים MM/YY
+            $('#CardProvidersList').on('input propertychange', '#CardExpiry', function () {
+                var digits = $(this).val().replace(/[^0-9]/g, '').substring(0, 4);
+                State.card.expiry = digits;
+                $(this).val(digits.length > 2 ? digits.substring(0, 2) + '/' + digits.substring(2) : digits);
+            });
+            $('#CardProvidersList').on('input propertychange', '#CardHolderId', function () {
+                $(this).val($(this).val().replace(/[^0-9]/g, ''));
+            });
+
+            // הודעות מה-iframe של נדרים+
+            if (window.addEventListener) {
+                window.addEventListener('message', onNedarimMessage, false);
+            } else {
+                window.attachEvent('onmessage', onNedarimMessage);
+            }
 
             $('#EditCancelBt').click(function () { showScreen('ScreenHome'); });
             $('#EditSaveBt').click(saveEdit);
@@ -1521,6 +1857,7 @@
             });
 
             $('#OrderBackBt').click(closeOrder);
+            $('#OrderGoCardBt').click(function () { State.order = null; openCardScreen(); });
 
             // אירועים דינמיים (הכפתורים נבנים בקוד)
             $('#StudentsList').on('click', '.SaleBt', function () {
