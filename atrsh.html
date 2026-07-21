@@ -1307,6 +1307,8 @@
 
             var isAvrech = st.connectionType === 'student';
             State.order = {
+                studentIdx: studentIdx,
+                saleIdx: saleIdx,
                 connection: st,
                 sale: sale,
                 products: [],
@@ -1554,11 +1556,14 @@
 
         function resetCardState() {
             if (State.card && State.card.pollTimer) { clearInterval(State.card.pollTimer); }
-            State.card = { contexts: [], adding: null, expiry: '', paying: false, linkId: null, pollTimer: null };
+            State.card = { contexts: [], adding: null, expiry: '', paying: false, linkId: null, pollTimer: null, returnToOrder: null };
         }
 
-        function openCardScreen() {
+        // returnToOrder: { st, sale } (אינדקסים) - אם הוגדר, נחזור למסך ההזמנה
+        // הזה במקום לבית, גם בכפתור "חזרה" וגם אחרי שמירת כרטיס מוצלחת
+        function openCardScreen(returnToOrder) {
             resetCardState();
+            State.card.returnToOrder = returnToOrder || null;
             setLoading(true);
             api('GET', '/customers/me/card-update-context')
                 .done(function (contexts) {
@@ -1576,8 +1581,9 @@
         }
 
         function closeCardScreen() {
+            var returnTo = State.card.returnToOrder;
             resetCardState();
-            goHome();
+            if (returnTo) { openOrder(returnTo.st, returnTo.sale); } else { goHome(); }
         }
 
         function renderCardContexts() {
@@ -1741,12 +1747,20 @@
                         State.card.pollTimer = null;
                         if (resp.status === 'SUCCESS') {
                             closeAddCardForm();
+                            var returnTo = State.card.returnToOrder;
+                            if (returnTo) {
+                                // חוזרים למסך ההזמנה שבאנו ממנו - ה-missingCreditCard יתעדכן
+                                // מעצמו כי openOrder טוען מחדש את המוצרים מהשרת
+                                State.card.returnToOrder = null;
+                                openOrder(returnTo.st, returnTo.sale);
+                            } else {
+                                // רענון ההקשר כדי להציג את הכרטיס החדש בלי לצאת מהמסך
+                                api('GET', '/customers/me/card-update-context').done(function (contexts) {
+                                    State.card.contexts = contexts || [];
+                                    renderCardContexts();
+                                });
+                            }
                             showMsg('success', 'הכרטיס אומת ונשמר בהצלחה', '');
-                            // רענון ההקשר כדי להציג את הכרטיס החדש
-                            api('GET', '/customers/me/card-update-context').done(function (contexts) {
-                                State.card.contexts = contexts || [];
-                                renderCardContexts();
-                            });
                         } else {
                             cardFormError(resp.errorMessage || 'אימות הכרטיס נכשל');
                         }
@@ -1829,7 +1843,7 @@
             $('#LogoutBt').click(function () { doLogout(false); });
             $('#FamilyInfo').on('click', '#EditFamilyBt', openEdit);
 
-            $('#CardUpdateBt').click(openCardScreen);
+            $('#CardUpdateBt').click(function () { openCardScreen(); });
             $('#CardBackBt').click(closeCardScreen);
             $('#CardProvidersList').on('click', '.CardAddBt', function () {
                 if ($(this).attr('disabled')) { return; }
@@ -1863,7 +1877,11 @@
             });
 
             $('#OrderBackBt').click(closeOrder);
-            $('#OrderGoCardBt').click(function () { State.order = null; openCardScreen(); });
+            $('#OrderGoCardBt').click(function () {
+                var returnTo = State.order ? { st: State.order.studentIdx, sale: State.order.saleIdx } : null;
+                State.order = null;
+                openCardScreen(returnTo);
+            });
 
             // אירועים דינמיים (הכפתורים נבנים בקוד)
             $('#StudentsList').on('click', '.SaleBt', function () {
