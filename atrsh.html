@@ -698,6 +698,12 @@
         <div class="LoadingInner"><img src="waitnew.gif" style="width:50px" /><br />נא להמתין...</div>
     </div>
 
+    <script>
+        // FormsFunction.js מצפה שמשתנה Json גלובלי כבר קיים (כמו בטפסים
+        // הרגילים, שם הוא מכיל את הגדרת הטופס) - כאן אין טופס כזה, אבל
+        // בלעדיו הריצה הראשונית של FormsFunction.js נכשלת ב-Json is not defined
+        var Json = {};
+    </script>
     <script type="text/javascript" src="Files/FormsFunction.js"></script>
 
     <script>
