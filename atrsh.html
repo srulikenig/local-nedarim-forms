@@ -562,6 +562,8 @@
                 התחברו לאזור האישי של משפחות עטרת שלמה
                 <div class="LoginSubNote">הכניסה מתבצעת באמצעות אימות טלפוני, ודאו שהטלפון הרשום במערכת נמצא לידכם</div>
             </div>
+            <div class="LoginFieldTitle">תעודת זהות (אחד ההורים):</div>
+            <div class="CenterDiv"><input id="LoginIdNumber" class="TextBox LoginInput" type="tel" dir="ltr" autocomplete="off" maxlength="9" /></div>
             <div class="LoginFieldTitle">מספר טלפון:</div>
             <div class="CenterDiv"><input id="LoginPhone" class="TextBox LoginInput" type="tel" dir="ltr" autocomplete="off" maxlength="11" /></div>
             <div class="CenterDiv" style="margin:18px">
@@ -573,7 +575,7 @@
         <!-- מסך קוד אימות -->
         <div id="ScreenCode" class="Screen">
             <div class="CenterDiv" style="margin-bottom:25px">
-                <input type="button" class="Bt BtSecondary BtSmall" value="&#8618; חזרה" id="CodeBackBt" />
+                <input type="button" class="Bt BtSecondary BtSmall" value="&#8618; טעיתי בפרטים, חזרה לעריכה" id="CodeBackBt" />
             </div>
             <div class="LoginKoteret">ברגעים אלו אנו מחייגים למספר: <span id="CodePhoneTxt" dir="ltr" style="color:#1196d2"></span></div>
             <div class="CodeNote" style="color:#9a7400;font-weight:bold">יש להזין את 6 הספרות האחרונות של המספר שמחייג אליכם, ניתן גם לענות לשיחה ולהקשיב לקוד.</div>
@@ -731,6 +733,7 @@
             token: null,
             user: null,
             phone: '',
+            idNumber: '',
             family: null,
             students: [],
             pendingApprovals: [],
@@ -860,6 +863,7 @@
             State.students = [];
             State.order = null;
             if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+            $('#LoginIdNumber').val('');
             $('#LoginPhone').val('');
             $('#CodeInput').val('');
             showScreen('ScreenLogin');
@@ -873,7 +877,12 @@
         //---------------------------------------------------------
 
         function startLogin() {
+            var idNumber = $.trim($('#LoginIdNumber').val());
             var phone = $.trim($('#LoginPhone').val());
+            if (idNumber === '') {
+                showMsg('error', 'נא להזין מספר תעודת זהות', '', function () { $('#LoginIdNumber').focus(); });
+                return;
+            }
             if (phone === '') {
                 showMsg('error', 'נא להזין מספר טלפון', '', function () { $('#LoginPhone').focus(); });
                 return;
@@ -882,9 +891,10 @@
                 showMsg('error', 'מספר טלפון לא תקין', 'יש להזין ספרות בלבד.', function () { $('#LoginPhone').focus(); });
                 return;
             }
+            State.idNumber = idNumber;
             State.phone = phone;
             setLoading(true);
-            api('POST', '/auth/otp/request', { identifier: phone, appType: 'CUSTOMER' })
+            api('POST', '/auth/otp/request', { identifier: phone, idNumber: idNumber, appType: 'CUSTOMER' })
                 .done(function () {
                     setLoading(false);
                     $('#CodePhoneTxt').text(phone);
@@ -922,7 +932,7 @@
         function resendCode() {
             if ($('#ResendBt').attr('disabled')) { return; }
             setLoading(true);
-            api('POST', '/auth/otp/request', { identifier: State.phone, appType: 'CUSTOMER' })
+            api('POST', '/auth/otp/request', { identifier: State.phone, idNumber: State.idNumber, appType: 'CUSTOMER' })
                 .done(function () {
                     setLoading(false);
                     startResendCooldown();
@@ -941,7 +951,7 @@
                 return;
             }
             setLoading(true);
-            api('POST', '/auth/nedarim/otp/verify', { identifier: State.phone, code: code, appType: 'CUSTOMER' })
+            api('POST', '/auth/nedarim/otp/verify', { identifier: State.phone, idNumber: State.idNumber, code: code, appType: 'CUSTOMER' })
                 .done(function (resp) {
                     State.token = resp.accessToken;
                     State.user = resp.user;
@@ -1833,6 +1843,7 @@
             $('#ResendBt').click(resendCode);
             $('#CodeBackBt').click(function () { showScreen('ScreenLogin'); $('#LoginPhone').focus(); });
 
+            $('#LoginIdNumber').bind('keyup', function (e) { if (e.keyCode === 13) { startLogin(); } });
             $('#LoginPhone').bind('keyup', function (e) { if (e.keyCode === 13) { startLogin(); } });
             $('#CodeInput').bind('keyup', function (e) { if (e.keyCode === 13) { verifyCode(); } });
 
