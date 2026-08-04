@@ -671,6 +671,9 @@
             <div class="Koteret" style="text-align:center;padding-right:0"><span id="OrderTitle"></span></div>
             <div class="CodeNote" style="color:#808080;font-size:15px" id="OrderDesc"></div>
 
+            <!-- הערת המכירה לעדכון חוסרים (sale.shortageUpdateNote) -->
+            <div id="ShortageNote" class="WarnBanner" style="display:none;white-space:pre-line;font-weight:normal"></div>
+
             <div class="AutoSaveNote" id="OrderAutoSaveNote">ההזמנה נשמרת אוטומטית בכל שינוי</div>
 
             <div id="OrderCardWarn" class="WarnBanner" style="display:none">
@@ -724,7 +727,7 @@
         // הגדרות - יש לעדכן את כתובת השרת לפני העלאה לעמדה
         //==============================================================
         var CONFIG = {
-            API_URL: 'https://api-test.atrsh.org',          // כתובת ה-API, בלי / בסוף
+            API_URL: 'https://api.atrsh.org',          // כתובת ה-API, בלי / בסוף
             MOSAD_ID: '7000322',                      // מספר מוסד - ללוגו מ-images.matara.pro
             INACTIVITY_LOGOUT_MINUTES: 10,            // התנתקות אוטומטית אחרי חוסר פעילות
             RESEND_COOLDOWN_SECONDS: 50               // המתנה לשליחה חוזרת של קוד אימות
@@ -1349,6 +1352,7 @@
             // כמו כותרת ה-drawer: "{מכירה} - אברך כולל" או "{מכירה} - {שם תלמיד}"
             $('#OrderTitle').text(sale.name + ' - ' + (isAvrech ? 'אברך כולל' : (st.childName || 'תלמיד')));
             $('#OrderDesc').text(isAvrech ? 'בחרו מוצרים וכמות.' : 'בחרו מוצרים וכמות לכל תלמיד.');
+            $('#ShortageNote').hide().text('');
 
             setLoading(true);
             var done = 0;
@@ -1387,13 +1391,18 @@
             var st = State.students[studentIdx];
             var sale = (st.shortageUpdateSales || [])[saleIdx];
             if (!sale) { return; }
+            var isAvrech = st.connectionType === 'student';
             State.order = { isReceipt: true, studentIdx: studentIdx, saleIdx: saleIdx, connection: st, sale: sale, serverOrder: null, receiptValues: {}, savedReceiptValues: {} };
-            $('#OrderTitle').text('עדכון חוסרים - ' + sale.name);
+            // כמו כותרת ה-drawer: "עדכון חוסרים - {מכירה} - אברך כולל" או "... - {שם תלמיד}"
+            $('#OrderTitle').text('עדכון חוסרים - ' + sale.name + ' - ' + (isAvrech ? 'אברך כולל' : (st.childName || 'תלמיד')));
             $('#OrderDesc').text('עדכנו כמה יחידות התקבלו בפועל ולחצו על שמירה.');
+            $('#ShortageNote').hide().text('');
             $('#OrderCardWarn').hide(); $('#TotalsBox').hide(); $('#OrderAutoSaveNote').hide(); $('#ReceiptActions').show(); setLoading(true);
             api('GET', '/orders/student/' + st.id + '/sale/' + sale.id + '/receipt')
                 .done(function (order) {
                     State.order.serverOrder = order;
+                    var note = order && order.shortageUpdateNote ? String(order.shortageUpdateNote) : '';
+                    if (note.replace(/^\s+|\s+$/g, '')) { $('#ShortageNote').text(note).show(); }
                     var items = (order && order.items) || [];
                     for (var i = 0; i < items.length; i++) {
                         var received = items[i].receivedQuantity === null || items[i].receivedQuantity === undefined ? items[i].quantity : items[i].receivedQuantity;
