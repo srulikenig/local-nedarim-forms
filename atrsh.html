@@ -346,6 +346,12 @@
             cursor: pointer;
         }
 
+        .SaleBt.ShortageBt {
+            background-color: #fff3cd;
+            color: #7a4b00;
+            border: 1px solid #e6b94f;
+        }
+
         /* טבלת מוצרים */
         .AutoSaveNote {
             background-color: #eaf3fd;
@@ -665,7 +671,7 @@
             <div class="Koteret" style="text-align:center;padding-right:0"><span id="OrderTitle"></span></div>
             <div class="CodeNote" style="color:#808080;font-size:15px" id="OrderDesc"></div>
 
-            <div class="AutoSaveNote">ההזמנה נשמרת אוטומטית בכל שינוי</div>
+            <div class="AutoSaveNote" id="OrderAutoSaveNote">ההזמנה נשמרת אוטומטית בכל שינוי</div>
 
             <div id="OrderCardWarn" class="WarnBanner" style="display:none">
                 כדי להוסיף מוצרים יש לעדכן כרטיס אשראי. לאחר העדכון ניתן להזמין מיד.<br />
@@ -674,7 +680,12 @@
 
             <div id="OrderList"></div>
 
-            <div class="TotalsBox">
+            <div id="ReceiptUnsaved" class="WarnBanner" style="display:none">יש שינויים שלא נשמרו</div>
+            <div id="ReceiptActions" class="CenterDiv" style="display:none;margin:20px">
+                <input class="Bt" type="button" id="ReceiptSaveBt" value="שמירת עדכון החוסרים" disabled="disabled" />
+            </div>
+
+            <div class="TotalsBox" id="TotalsBox">
                 <div class="TotalsLine" id="StationFeeLine" style="display:none">דמי הזמנה<span class="TotalsVal" id="StationFeeVal"></span><div style="clear:both"></div></div>
                 <div class="TotalsLine Grand">סה"כ לתשלום<span class="TotalsVal" id="GrandTotalVal"></span><div style="clear:both"></div></div>
             </div>
@@ -713,7 +724,7 @@
         // הגדרות - יש לעדכן את כתובת השרת לפני העלאה לעמדה
         //==============================================================
         var CONFIG = {
-            API_URL: 'https://api.atrsh.org',          // כתובת ה-API, בלי / בסוף
+            API_URL: 'https://api-test.atrsh.org',          // כתובת ה-API, בלי / בסוף
             MOSAD_ID: '7000322',                      // מספר מוסד - ללוגו מ-images.matara.pro
             INACTIVITY_LOGOUT_MINUTES: 10,            // התנתקות אוטומטית אחרי חוסר פעילות
             RESEND_COOLDOWN_SECONDS: 50               // המתנה לשליחה חוזרת של קוד אימות
@@ -1159,6 +1170,10 @@
                 for (var j = 0; j < sales.length; j++) {
                     sHtml += '<input type="button" class="SaleBt" data-st="' + i + '" data-sale="' + j + '" value="' + esc(sales[j].name) + '" />';
                 }
+                var shortageSales = st.shortageUpdateSales || [];
+                for (var k = 0; k < shortageSales.length; k++) {
+                    sHtml += '<input type="button" class="SaleBt ShortageBt" data-st="' + i + '" data-sale="' + k + '" value="עדכון חוסרים - ' + esc(shortageSales[k].name) + '" />';
+                }
                 sHtml += '</div>';
             }
             $('#StudentsList').html(sHtml);
@@ -1310,6 +1325,7 @@
         var ORDER_SYNC_DEBOUNCE_MS = 600;
 
         function openOrder(studentIdx, saleIdx) {
+            $('#TotalsBox').show();
             var st = State.students[studentIdx];
             if (!st) { return; }
             var sale = (st.allowedSales || [])[saleIdx];
@@ -1365,6 +1381,98 @@
             api('GET', '/orders/student/' + st.id + '/sale/' + sale.id)
                 .done(function (order) { State.order.serverOrder = order || null; })
                 .always(fin);
+        }
+
+        function openReceipt(studentIdx, saleIdx) {
+            var st = State.students[studentIdx];
+            var sale = (st.shortageUpdateSales || [])[saleIdx];
+            if (!sale) { return; }
+            State.order = { isReceipt: true, studentIdx: studentIdx, saleIdx: saleIdx, connection: st, sale: sale, serverOrder: null, receiptValues: {}, savedReceiptValues: {} };
+            $('#OrderTitle').text('עדכון חוסרים - ' + sale.name);
+            $('#OrderDesc').text('עדכנו כמה יחידות התקבלו בפועל ולחצו על שמירה.');
+            $('#OrderCardWarn').hide(); $('#TotalsBox').hide(); $('#OrderAutoSaveNote').hide(); $('#ReceiptActions').show(); setLoading(true);
+            api('GET', '/orders/student/' + st.id + '/sale/' + sale.id + '/receipt')
+                .done(function (order) {
+                    State.order.serverOrder = order;
+                    var items = (order && order.items) || [];
+                    for (var i = 0; i < items.length; i++) {
+                        var received = items[i].receivedQuantity === null || items[i].receivedQuantity === undefined ? items[i].quantity : items[i].receivedQuantity;
+                        State.order.receiptValues[items[i].orderItemId] = received;
+                        State.order.savedReceiptValues[items[i].orderItemId] = received;
+                    }
+                    renderReceipt();
+                    showScreen('ScreenOrder');
+                })
+                .fail(function (xhr) { showMsg('error', 'לא ניתן לטעון את עדכון החוסרים', errText(xhr, '')); })
+                .always(function () { setLoading(false); });
+        }
+
+        function receiptHasUnsavedChanges() {
+            var o = State.order;
+            if (!o || !o.isReceipt) { return false; }
+            for (var id in o.receiptValues) {
+                if (o.receiptValues.hasOwnProperty(id) && Number(o.receiptValues[id]) !== Number(o.savedReceiptValues[id])) { return true; }
+            }
+            return false;
+        }
+
+        function updateReceiptUnsavedState() {
+            var dirty = receiptHasUnsavedChanges();
+            $('#ReceiptUnsaved').toggle(dirty);
+            $('#ReceiptSaveBt').prop('disabled', !dirty);
+        }
+
+        function renderReceipt() {
+            var items = (State.order.serverOrder && State.order.serverOrder.items) || [];
+            var html = '<div class="WarnBanner">השינויים יישמרו רק לאחר לחיצה על כפתור השמירה.</div><table class="ProdTable"><tr><th class="NameCol">מוצר</th><th>הוזמן</th><th>התקבל</th></tr>';
+            for (var i = 0; i < items.length; i++) {
+                var item = items[i];
+                var received = State.order.receiptValues[item.orderItemId];
+                html += '<tr><td class="NameCol">' + esc(item.productName || ('מוצר ' + item.saleProductId)) + '</td><td>' + item.quantity + '</td><td><input class="TextBox ReceiptQty" style="width:60px" type="number" min="0" max="' + item.quantity + '" data-item="' + item.orderItemId + '" value="' + received + '" /> <input type="button" class="LinkBt ReceiptNoneBt" data-item="' + item.orderItemId + '" value="לא קיבלתי" /></td></tr>';
+            }
+            $('#OrderList').html(html + '</table>');
+            updateReceiptUnsavedState();
+        }
+
+        function changeReceipt(input) {
+            var value = Number($(input).val());
+            var max = Number($(input).attr('max'));
+            if (!Number.isInteger(value) || value < 0 || value > max) {
+                showMsg('error', 'כמות לא תקינה', '');
+                renderReceipt();
+                return;
+            }
+            State.order.receiptValues[$(input).attr('data-item')] = value;
+            updateReceiptUnsavedState();
+        }
+
+        function saveReceiptBatch() {
+            var o = State.order;
+            if (!o || !o.isReceipt || !receiptHasUnsavedChanges()) { return; }
+            var items = [];
+            for (var id in o.receiptValues) {
+                if (
+                    o.receiptValues.hasOwnProperty(id) &&
+                    Number(o.receiptValues[id]) !== Number(o.savedReceiptValues[id])
+                ) {
+                    items.push({ orderItemId: Number(id), receivedQuantity: Number(o.receiptValues[id]) });
+                }
+            }
+            $('#ReceiptSaveBt').prop('disabled', true);
+            setLoading(true);
+            api('POST', '/orders/student/' + o.connection.id + '/sale/' + o.sale.id + '/receipt', { items: items })
+                .done(function () {
+                    for (var i = 0; i < items.length; i++) {
+                        o.savedReceiptValues[items[i].orderItemId] = items[i].receivedQuantity;
+                    }
+                    updateReceiptUnsavedState();
+                    showMsg('success', 'השינויים נשמרו', '');
+                })
+                .fail(function (xhr) {
+                    updateReceiptUnsavedState();
+                    showMsg('error', 'השינויים לא נשמרו', errText(xhr, ''));
+                })
+                .always(function () { setLoading(false); });
         }
 
         // כמות מאושרת אחרונה מהשרת עבור מוצר
@@ -1550,9 +1658,12 @@
         }
 
         function closeOrder() {
-            // שליחת שינויים ממתינים לפני יציאה מהמסך
-            flushOrderChanges();
+            if (!State.order || !State.order.isReceipt) {
+                // שליחת שינויים ממתינים לפני יציאה מהמסך
+                flushOrderChanges();
+            }
             State.order = null;
+            $('#ReceiptActions').hide(); $('#ReceiptUnsaved').hide(); $('#OrderAutoSaveNote').show();
             goHome();
         }
 
@@ -1896,8 +2007,15 @@
 
             // אירועים דינמיים (הכפתורים נבנים בקוד)
             $('#StudentsList').on('click', '.SaleBt', function () {
+                if ($(this).hasClass('ShortageBt')) { openReceipt(parseInt($(this).attr('data-st'), 10), parseInt($(this).attr('data-sale'), 10)); return; }
                 openOrder(parseInt($(this).attr('data-st'), 10), parseInt($(this).attr('data-sale'), 10));
             });
+            $('#OrderList').on('input propertychange', '.ReceiptQty', function () { changeReceipt(this); });
+            $('#OrderList').on('click', '.ReceiptNoneBt', function () {
+                State.order.receiptValues[$(this).attr('data-item')] = 0;
+                renderReceipt();
+            });
+            $('#ReceiptSaveBt').click(saveReceiptBatch);
             $('#OrderList').on('click', '.QtyPlus', function () { changeQty($(this).attr('data-pid'), 1); });
             $('#OrderList').on('click', '.QtyMinus', function () { changeQty($(this).attr('data-pid'), -1); });
 
