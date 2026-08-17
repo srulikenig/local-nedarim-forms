@@ -23,256 +23,6 @@
 
     <title>טופס - נדרים פלוס</title>
 
-    <!--
-    <style>
-
-                                                if (!zeout) {
-                                                    LoginSwal("נא להקיש מספר זהות", "ZeoutCheckText");
-                                                    return false;
-                                                }
-                                                if (!$.isNumeric(zeout) || zeout.length !== 9) {
-                                                    LoginSwal("מספר זהות לא תקין", "ZeoutCheckText");
-                                                    return false;
-                                                }
-                                                if (!phone) {
-                                                    LoginSwal("נא להזין מספר טלפון", "PhoneCheckText");
-                                                    return false;
-                                                }
-                                                var phoneValue = phone.replace(/-/g, "");
-                                                if (!$.isNumeric(phoneValue) || phoneValue.length < 9 || phoneValue.length > 10) {
-                                                    LoginSwal("מספר טלפון לא תקין (9-10 ספרות)", "PhoneCheckText");
-                                                    return false;
-                                                }
-
-                                                $("#ZeoutCheckSave").hide();
-                                                $("#SendOtpDiv").hide();
-                                                $("#ZeoutCheckWaitText").text("שולח קוד אימות...");
-                                                $("#ZeoutCheckWait").show();
-
-                                                $.ajax({
-                                                    url: BASE_API_URL + "/nedarimForm-sendOtp",
-                                                    type: "POST",
-                                                    var otpSent = false;
-
-                                                    function sendOtp() {
-                                                        var zeout = $("#ZeoutCheckText").val();
-                                                        var phone = $("#PhoneCheckText").val();
-
-                                                        if (!zeout) {
-                                                            LoginSwal("נא להקיש מספר זהות", "ZeoutCheckText");
-                                                            return false;
-                                                        }
-                                                        if (!$.isNumeric(zeout) || zeout.length !== 9) {
-                                                            LoginSwal("מספר זהות לא תקין", "ZeoutCheckText");
-                                                            return false;
-                                                        }
-                                                        if (!phone) {
-                                                            LoginSwal("נא להזין מספר טלפון", "PhoneCheckText");
-                                                            return false;
-                                                        }
-                                                        var phoneValue = phone.replace(/-/g, "");
-                                                        if (!$.isNumeric(phoneValue) || phoneValue.length < 9 || phoneValue.length > 10) {
-                                                            LoginSwal("מספר טלפון לא תקין (9-10 ספרות)", "PhoneCheckText");
-                                                            return false;
-                                                        }
-
-                                                        $("#ZeoutCheckSave").hide();
-                                                        $("#SendOtpDiv").hide();
-                                                        $("#ZeoutCheckWaitText").text("שולח קוד אימות...");
-                                                        $("#ZeoutCheckWait").show();
-
-                                                        $.ajax({
-                                                            url: BASE_API_URL + "/nedarimForm-sendOtp",
-                                                            type: "POST",
-                                                            var otpSent = false;
-
-                                                            function sendOtp() {
-                                                                var zeout = $("#ZeoutCheckText").val();
-                                                                var phone = $("#PhoneCheckText").val();
-
-                                                                if (!zeout) {
-                                                                    LoginSwal("נא להקיש מספר זהות", "ZeoutCheckText");
-                                                                    return false;
-                                                                }
-                                                                if (!$.isNumeric(zeout) || zeout.length !== 9) {
-                                                                    LoginSwal("מספר זהות לא תקין", "ZeoutCheckText");
-                                                                    return false;
-                                                                }
-                                                                if (!phone) {
-                                                                    LoginSwal("נא להזין מספר טלפון", "PhoneCheckText");
-                                                                    return false;
-                                                                }
-                                                                var phoneValue = phone.replace(/-/g, "");
-                                                                if (!$.isNumeric(phoneValue) || phoneValue.length < 9 || phoneValue.length > 10) {
-                                                                    LoginSwal("מספר טלפון לא תקין (9-10 ספרות)", "PhoneCheckText");
-                                                                    return false;
-                                                                }
-
-                                                                $("#ZeoutCheckSave").hide();
-                                                                $("#SendOtpDiv").hide();
-                                                                $("#ZeoutCheckWaitText").text("שולח קוד אימות...");
-                                                                $("#ZeoutCheckWait").show();
-
-                                                                $.ajax({
-                                                                    url: BASE_API_URL + "/nedarimForm-sendOtp",
-                                                                    type: "POST",
-                                                                    data: JSON.stringify({ idNumber: zeout, phone: phoneValue }),
-                                                                    contentType: "application/json; charset=utf-8",
-                                                                    timeout: 30000,
-                                                                }).success(function () {
-                                                                    otpSent = true;
-                                                                    $("#OtpCheckDiv").show();
-                                                                    $("#ZeoutCheckWait").hide();
-                                                                    $("#SendOtpDiv").show();
-                                                                    $("#ZeoutCheckSave").show();
-                                                                    $("#OtpCheckText").focus();
-                                                                }).error(function () {
-                                                                    otpSent = false;
-                                                                    $("#ZeoutCheckWait").hide();
-                                                                    $("#SendOtpDiv").show();
-                                                                    $("#ZeoutCheckSave").show();
-                                                                    LoginSwal("שגיאה בשליחת הקוד. נסה שוב", "SendOtpBt");
-                                                                });
-                                                            }
-
-                                                            // אופציות שכונות לפי עיר
-                                                            var neighborhoodOptions = {};
-                                                                    type: 'GET',
-                                                                    timeout: 60000,
-                                                                }).success(function (JsonData) {
-                                                                    // שמירת נתוני המשפחה במשתנה הגלובלי
-                                                                    GlobalFamilyData = JsonData;
-
-                                                                    // מילוי האינפוטים לפי הנתונים שהתקבלו מהשרת
-                                                                    if (JsonData && typeof JsonData === 'object') {
-                                                                        if (JsonData.status != "success") {
-                                                                            // אם הסטטוס לא הצליח, הצג הודעת שגיאה
-                                                                            MySwal("שגיאה: " + JsonData.message, "ZeoutCheckText");
-                                                                            // טיפול בשגיאה
-                                                                            $("#ZeoutCheckSave").show();
-                                                                            $("#SendOtpDiv").show();
-                                                                            $("#ZeoutCheckWait").hide();
-                                                                            return;
-                                                                        }
-                                                                        // עדכון אופציות הסלקטים אם קיימות
-                                                                        if (JsonData.selectOptions) {
-                                                                            console.log("Received selectOptions from server:", JsonData.selectOptions);
-                                                                            updateSelectOptionsFromServer(JsonData);
-                                                                        }
-
-                                                                        // הגדרת אופציות לסלקטים
-                                                                        setupSelectOptions();
-
-                                                                        // מילוי שדות המשפחה
-                                                                        if (JsonData.family && typeof JsonData.family === 'object') {
-                                                                            for (var fieldName in JsonData.family) {
-                                                                                var $field = $('#' + fieldName);
-                                                                                if ($field.length > 0) {
-                                                                                    var fieldValue = JsonData.family[fieldName];
-
-                                                                                    // טיפול בסוגי שדות שונים
-                                                                                    if ($field.is('select')) {
-                                                                                        console.log("Updating select field:", fieldName, "with value:", fieldValue);
-                                                                                        $field.val(fieldValue);
-                                                                                    } else if ($field.is('input[type=\"checkbox\"]')) {
-                                                                                        $field.prop('checked', fieldValue === true || fieldValue === 'true' || fieldValue === 1 || fieldValue === '1');
-                                                                                    } else if ($field.is('input[type=\"radio\"]')) {
-                                                                                        $('input[name=\"' + fieldName + '\"][value=\"' + fieldValue + '\"]').prop('checked', true);
-                                                                                    } else if ($field.is('input') || $field.is('textarea')) {
-                                                                                        $field.val(fieldValue);
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                            var studyTypeValue = JsonData.family.kollelStudyTypeId || JsonData.family.kolelType;
-                                                                            if (studyTypeValue == "יום שלם") {
-                                                                                $('#kollelStudyTypeId_Radio0').prop('checked', true);
-                                                                            } else if (studyTypeValue == "חצי יום") {
-                                                                                $('#kollelStudyTypeId_Radio1').prop('checked', true);
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    $("#cityId").trigger('change');
-
-                                                                    //השהיה קצרה לטעינת שכונה
-                                                                    setTimeout(function () {
-                                                                        var neighborhoodValue = JsonData.family.neighborhoodId || JsonData.family.shchuna;
-                                                                        if (neighborhoodValue) {
-                                                                            $("#neighborhoodId").val(neighborhoodValue);
-                                                                        }
-                                                                    }, 200)
-
-                                                                    // בכל מקרה ממשיכים לטופס
-
-                                                                    // הגדרת מעקב אחר שדות חדשים בקבוצות
-                                                                    setupGroupFieldsWatcher();
-
-                                                                    // הגדרת הסתרה/הצגה של שדות תלויים
-                                                                    setupConditionalFields();
-
-                                                                    // הפעלה ידנית של טריגרים לצ'קבוקסים שנטענו עם נתונים
-                                                                    triggerConditionalFieldsAfterDataLoad();
-
-                                                                    //הגדרת רשימת הערים
-                                                                    listCityGetAllCity({
-                                                                        CityId: '#cityId',
-                                                                        StreetId: '#streetId',
-                                                                        Auto_Focus_After_City_Selection: true,
-                                                                        list_Citys: [],
-                                                                        CityDefault: JsonData.family.cityId || JsonData.family.city || "",
-                                                                    })
-
-                                                                    // הסתרת מסך הכניסה והצגת הטופס
-                                                                    $("#ZeoutCheck").hide();
-                                                                    $("#ZeoutCheckWait").hide();
-
-                                                                    if (JsonData.family && JsonData.family.status && JsonData.family.status != 0 && JsonData.family.status != 4) {
-                                                                        $("#ZeoutCheckSave").show();
-                                                                        $("#AllMainForm").show();
-                                                                        if (JsonData.family.status == 1) {
-                                                                            $("#alertStatus1").show();
-                                                                        } if (JsonData.family.status == 2) {
-                                                                            $("#alertStatus2").show();
-                                                                        }
-                                                                    } else if (JsonData.family && JsonData.family.status == 4) {
-                                                                        $("#Status4Div").show(); // הצגת מסך הכניסה
-                                                                    } else {
-                                                                        $("#NotRegisteredDiv").show(); // הצגת מסך הכניסה
-                                                                    }
-                                                                }).error(function () {
-                                                                    // טיפול בשגיאה
-                                                                    $("#ZeoutCheckSave").show();
-                                                                    $("#SendOtpDiv").show();
-                                                                    $("#ZeoutCheckWait").hide();
-                                                                });
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-        .group-row input[type="tel"],
-        .group-row select {
-            margin-top: 5px;
-        }
-
-        .group-buttons {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .group-buttons .Bt {
-            margin: 0 5px;
-            min-width: 120px;
-        }
-        */
-    </style>
-    -->
     <style>
         * {
             font-family: 'Assistant', Arial, sans-serif;
@@ -2674,8 +2424,8 @@
             // בדיקה אם יש קהילה תקינה
             var communityId = $("#communityId").val() || '';
             var communityNameText = $('#communityNameText').text();
-            var hasValidCommunity = communityId.trim() !== '' && 
-                                   $('#communityNameText').is(':visible') && 
+            var hasValidCommunity = communityId.trim() !== '' &&
+                                   $('#communityNameText').is(':visible') &&
                                    communityNameText.indexOf('לא קיימת') === -1 &&
                                    communityNameText.trim() !== '';
 
@@ -3293,6 +3043,11 @@
                     setLoginInputsDisabled(false);
                     toggleOtpActions(true, false);
                     $("#ZeoutCheckSave").hide();
+                    // דחייה בגלל cooldown - נעילת הכפתור לפי מה שהשרת אמר
+                    if (response.retryAfterSeconds > 0) {
+                        startResendTimer(response.retryAfterSeconds);
+                        toggleOtpActions(false, true);
+                    }
                     LoginSwal(response.message || "שגיאה בשליחת הקוד", "SendOtpBt");
                     return;
                 }
@@ -3301,7 +3056,7 @@
                 $("#OtpCheckDiv").show();
                 $("#ZeoutCheckWait").hide();
                 toggleOtpActions(false, true);
-                startResendTimer();
+                startResendTimer(response && response.retryAfterSeconds);
                 $("#ZeoutCheckSave").show();
                 $("#OtpCheckText").focus();
             }).error(function (xhr) {
@@ -3310,15 +3065,26 @@
                 setLoginInputsDisabled(false);
                 toggleOtpActions(true, false);
                 $("#ZeoutCheckSave").hide();
-                var apiMessage = (xhr && xhr.responseJSON && xhr.responseJSON.message)
+                var errorJson = (xhr && xhr.responseJSON) || {};
+                // 429 מגיע גם מה-rate limit הגלובלי וגם מה-cooldown של השרת
+                if (errorJson.retryAfterSeconds > 0) {
+                    startResendTimer(errorJson.retryAfterSeconds);
+                    toggleOtpActions(false, true);
+                }
+                var apiMessage = errorJson.message
                     || (xhr && xhr.responseText)
                     || "שגיאה בשליחת הקוד. נסה שוב";
                 LoginSwal(apiMessage, "SendOtpBt");
             });
         }
 
-        function startResendTimer() {
-             resendCooldown = 40;
+        // הקאונטר הוא תצוגה בלבד - האכיפה היא בשרת. כשהשרת מחזיר
+        // retryAfterSeconds אנחנו מסתנכרנים אליו, כדי שהכפתור לא ייפתח
+        // לפני שהשרת מוכן לקבל בקשה נוספת.
+        var DEFAULT_RESEND_COOLDOWN = 40;
+
+        function startResendTimer(seconds) {
+             resendCooldown = seconds > 0 ? seconds : DEFAULT_RESEND_COOLDOWN;
              updateResendButton();
              if (resendTimer) clearInterval(resendTimer);
              resendTimer = setInterval(function() {
@@ -3328,6 +3094,19 @@
                      clearInterval(resendTimer);
                  }
              }, 1000);
+        }
+
+        // חזרה למצב "שלח קוד" אחרי שהקוד נשרף בשרת (יותר מדי ניסיונות שגויים).
+        // בלי זה המשתמש ממשיך להקיש לתוך קוד מת.
+        function resetToSendCodeState() {
+            otpSent = false;
+            if (resendTimer) clearInterval(resendTimer);
+            resendCooldown = 0;
+            $("#OtpCheckText").val("");
+            $("#OtpCheckDiv").hide();
+            $("#ZeoutCheckSave").hide();
+            setLoginInputsDisabled(false);
+            toggleOtpActions(true, false);
         }
 
         function updateResendButton() {
@@ -3373,6 +3152,12 @@
             }).success(function (verifyResponse) {
                 if (verifyResponse && verifyResponse.status && verifyResponse.status !== "success") {
                     $("#ZeoutCheckWait").hide();
+                    // הקוד נשרף בשרת - אין טעם להשאיר את שדה ה-OTP פתוח
+                    if (verifyResponse.mustRequestNewCode) {
+                        resetToSendCodeState();
+                        LoginSwal(verifyResponse.message || "קוד אימות לא תקין", "SendOtpBt");
+                        return;
+                    }
                     toggleOtpActions(false, true);
                     $("#ZeoutCheckSave").show();
                     LoginSwal(verifyResponse.message || "קוד אימות לא תקין", "OtpCheckText");
