@@ -1392,7 +1392,7 @@
             var sale = (st.shortageUpdateSales || [])[saleIdx];
             if (!sale) { return; }
             var isAvrech = st.connectionType === 'student';
-            State.order = { isReceipt: true, studentIdx: studentIdx, saleIdx: saleIdx, connection: st, sale: sale, serverOrder: null, receiptValues: {}, savedReceiptValues: {} };
+            State.order = { isReceipt: true, studentIdx: studentIdx, saleIdx: saleIdx, connection: st, sale: sale, serverOrder: null, receiptValues: {}, savedReceiptValues: {}, newItems: [], addableProducts: [], allowShortageAddProduct: false };
             // כמו כותרת ה-drawer: "עדכון חוסרים - {מכירה} - אברך כולל" או "... - {שם תלמיד}"
             $('#OrderTitle').text('עדכון חוסרים - ' + sale.name + ' - ' + (isAvrech ? 'אברך כולל' : (st.childName || 'תלמיד')));
             $('#OrderDesc').text('עדכנו כמה יחידות התקבלו בפועל ולחצו על שמירה.');
@@ -1401,6 +1401,8 @@
             api('GET', '/orders/student/' + st.id + '/sale/' + sale.id + '/receipt')
                 .done(function (order) {
                     State.order.serverOrder = order;
+                    State.order.allowShortageAddProduct = !!(order && order.allowShortageAddProduct);
+                    State.order.addableProducts = (order && order.addableProducts) || [];
                     var note = order && order.shortageUpdateNote ? String(order.shortageUpdateNote) : '';
                     if (note.replace(/^\s+|\s+$/g, '')) { $('#ShortageNote').text(note).show(); }
                     var items = (order && order.items) || [];
@@ -1419,10 +1421,43 @@
         function receiptHasUnsavedChanges() {
             var o = State.order;
             if (!o || !o.isReceipt) { return false; }
+            if ((o.newItems || []).length > 0) { return true; }
             for (var id in o.receiptValues) {
                 if (o.receiptValues.hasOwnProperty(id) && Number(o.receiptValues[id]) !== Number(o.savedReceiptValues[id])) { return true; }
             }
             return false;
+        }
+
+        // מוצר בר-הוספה לפי saleProductId (מתוך State.order.addableProducts)
+        function findAddableProduct(saleProductId) {
+            var list = State.order.addableProducts || [];
+            for (var i = 0; i < list.length; i++) {
+                if (Number(list[i].saleProductId) === Number(saleProductId)) { return list[i]; }
+            }
+            return null;
+        }
+
+        // מוצרים בני-הוספה שעוד לא נוספו לרשימה הזמנית
+        function availableAddableProducts() {
+            var list = State.order.addableProducts || [];
+            var newItems = State.order.newItems || [];
+            var used = {};
+            for (var i = 0; i < newItems.length; i++) { used[newItems[i].saleProductId] = true; }
+            var result = [];
+            for (var j = 0; j < list.length; j++) {
+                if (!used[list[j].saleProductId]) { result.push(list[j]); }
+            }
+            return result;
+        }
+
+        // הוספת מוצר לרשימה הזמנית (לא נשלח לשרת עד השמירה)
+        function addReceiptNewItem() {
+            var saleProductId = parseInt($('#ReceiptAddSelect').val(), 10);
+            var quantity = parseInt($('#ReceiptAddQty').val(), 10);
+            if (!saleProductId) { showMsg('error', 'יש לבחור מוצר', ''); return; }
+            if (!quantity || quantity < 1) { showMsg('error', 'כמות לא תקינה', ''); return; }
+            State.order.newItems.push({ saleProductId: saleProductId, receivedQuantity: quantity });
+            renderReceipt();
         }
 
         function updateReceiptUnsavedState() {
@@ -1432,21 +1467,47 @@
         }
 
         function renderReceipt() {
-            var items = (State.order.serverOrder && State.order.serverOrder.items) || [];
+            var o = State.order;
+            var items = (o.serverOrder && o.serverOrder.items) || [];
             var html = '<div class="WarnBanner">השינויים יישמרו רק לאחר לחיצה על כפתור השמירה.</div><table class="ProdTable"><tr><th class="NameCol">מוצר</th><th>הוזמן</th><th>התקבל</th></tr>';
             for (var i = 0; i < items.length; i++) {
                 var item = items[i];
-                var received = State.order.receiptValues[item.orderItemId];
-                html += '<tr><td class="NameCol">' + esc(item.productName || ('מוצר ' + item.saleProductId)) + '</td><td>' + item.quantity + '</td><td><input class="TextBox ReceiptQty" style="width:60px" type="number" min="0" max="' + item.quantity + '" data-item="' + item.orderItemId + '" value="' + received + '" /> <input type="button" class="LinkBt ReceiptNoneBt" data-item="' + item.orderItemId + '" value="לא קיבלתי" /></td></tr>';
+                var received = o.receiptValues[item.orderItemId];
+                var maxAttr = o.allowShortageAddProduct ? '' : ' max="' + item.quantity + '"';
+                html += '<tr><td class="NameCol">' + esc(item.productName || ('מוצר ' + item.saleProductId)) + '</td><td>' + item.quantity + '</td><td><input class="TextBox ReceiptQty" style="width:60px" type="number" min="0"' + maxAttr + ' data-item="' + item.orderItemId + '" value="' + received + '" /> <input type="button" class="LinkBt ReceiptNoneBt" data-item="' + item.orderItemId + '" value="לא קיבלתי" /></td></tr>';
             }
-            $('#OrderList').html(html + '</table>');
+            var newItems = o.newItems || [];
+            for (var j = 0; j < newItems.length; j++) {
+                var ni = newItems[j];
+                var prod = findAddableProduct(ni.saleProductId);
+                html += '<tr><td class="NameCol">' + esc(prod ? prod.name : ('מוצר ' + ni.saleProductId)) + ' <span class="PendingTag">חדש</span></td><td>-</td><td>' + ni.receivedQuantity + ' <input type="button" class="LinkBt NewItemRemoveBt" data-index="' + j + '" value="הסר" /></td></tr>';
+            }
+            html += '</table>';
+
+            if (o.allowShortageAddProduct) {
+                var availableToAdd = availableAddableProducts();
+                html += '<div class="CenterDiv" style="margin:15px 0;text-align:right">';
+                html += '<select id="ReceiptAddSelect" class="TextBox" style="width:auto;max-width:260px;display:inline-block">';
+                html += '<option value="">בחרו מוצר שאספתם ולא היה בהזמנה...</option>';
+                for (var k = 0; k < availableToAdd.length; k++) {
+                    var p = availableToAdd[k];
+                    html += '<option value="' + p.saleProductId + '">' + esc(p.name) + (p.sku ? ' (' + esc(p.sku) + ')' : '') + '</option>';
+                }
+                html += '</select> ';
+                html += '<input class="TextBox" style="width:60px" type="number" min="1" id="ReceiptAddQty" value="1" /> ';
+                html += '<input type="button" class="Bt BtSecondary BtSmall" id="ReceiptAddBt" value="הוסף לרשימה" />';
+                html += '</div>';
+            }
+
+            $('#OrderList').html(html);
             updateReceiptUnsavedState();
         }
 
         function changeReceipt(input) {
             var value = Number($(input).val());
-            var max = Number($(input).attr('max'));
-            if (!Number.isInteger(value) || value < 0 || value > max) {
+            var maxAttr = $(input).attr('max');
+            var max = maxAttr === undefined ? null : Number(maxAttr);
+            if (!Number.isInteger(value) || value < 0 || (max !== null && value > max)) {
                 showMsg('error', 'כמות לא תקינה', '');
                 renderReceipt();
                 return;
@@ -1467,21 +1528,22 @@
                     items.push({ orderItemId: Number(id), receivedQuantity: Number(o.receiptValues[id]) });
                 }
             }
+            var body = { items: items };
+            if ((o.newItems || []).length > 0) { body.newItems = o.newItems; }
             $('#ReceiptSaveBt').prop('disabled', true);
             setLoading(true);
-            api('POST', '/orders/student/' + o.connection.id + '/sale/' + o.sale.id + '/receipt', { items: items })
+            api('POST', '/orders/student/' + o.connection.id + '/sale/' + o.sale.id + '/receipt', body)
                 .done(function () {
-                    for (var i = 0; i < items.length; i++) {
-                        o.savedReceiptValues[items[i].orderItemId] = items[i].receivedQuantity;
-                    }
-                    updateReceiptUnsavedState();
+                    setLoading(false);
                     showMsg('success', 'השינויים נשמרו', '');
+                    // טוען מחדש מהשרת - כדי לקבל orderItemId אמיתי לפריטים החדשים שנוספו
+                    openReceipt(o.studentIdx, o.saleIdx);
                 })
                 .fail(function (xhr) {
+                    setLoading(false);
                     updateReceiptUnsavedState();
                     showMsg('error', 'השינויים לא נשמרו', errText(xhr, ''));
-                })
-                .always(function () { setLoading(false); });
+                });
         }
 
         // כמות מאושרת אחרונה מהשרת עבור מוצר
@@ -2023,6 +2085,14 @@
             $('#OrderList').on('click', '.ReceiptNoneBt', function () {
                 State.order.receiptValues[$(this).attr('data-item')] = 0;
                 renderReceipt();
+            });
+            $('#OrderList').on('click', '.NewItemRemoveBt', function () {
+                var index = parseInt($(this).attr('data-index'), 10);
+                State.order.newItems.splice(index, 1);
+                renderReceipt();
+            });
+            $('#OrderList').on('click', '#ReceiptAddBt', function () {
+                addReceiptNewItem();
             });
             $('#ReceiptSaveBt').click(saveReceiptBatch);
             $('#OrderList').on('click', '.QtyPlus', function () { changeQty($(this).attr('data-pid'), 1); });
