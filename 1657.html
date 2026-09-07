@@ -427,7 +427,7 @@
                 , { "ElementId": "OA4ChulKidomet", "MaxLength": 5, "Width": 30, "fieldName": "קידומת טלפון האם", "fieldNameShow": "קידומת", "Type": "Select", "Mandatory": false, "Br": false, "SelectVal": Kidomet }
                 , { "ElementId": "TelAvChul", "MaxLength": 11, "Width": 40, "fieldNameShow": "טלפון בית", "fieldName": "טלפון - בית | חו\"ל", "Type": "Tel", "Mandatory": true, "Br": false }
                 , { "ElementId": "TelAvChulKidomet", "MaxLength": 5, "Width": 30, "fieldName": "קידומת טלפון בית", "fieldNameShow": "קידומת", "Type": "Select", "Mandatory": true, "Br": false, "SelectVal": Kidomet }
-                , { "ElementId": "CuntryAv", "MaxLength": 50, "Width": 40, "fieldName": "ארץ | חו\"ל", "fieldNameShow": "ארץ", "Type": "Text", "Mandatory": true, "DbName": "Field64", "Br": false }
+                , { "ElementId": "CuntryAv", "MaxLength": 50, "Width": 40, "fieldName": "ארץ | חו\"ל", "fieldNameShow": "ארץ", "Type": "Text", "Mandatory": true, "DbName": "Field64", "Br": false, "Send": true }
                 , { "ElementId": "CityChulAv", "MaxLength": 50, "Width": 40, "fieldName": "עיר | חו\"ל", "fieldNameShow": "עיר", "Type": "Text", "Mandatory": true, "Br": false }
                 , { "ElementId": "AddressChulAv", "MaxLength": 50, "Width": 90, "fieldName": "כתובת | חו\"ל", "fieldNameShow": "כתובת", "Type": "Text", "Mandatory": true, "Br": false }
                 , { "Type": "DivClose" }
@@ -458,7 +458,7 @@
                 , { "ElementId": "OA9ChulKidomet", "MaxLength": 5, "Width": 30, "fieldName": "קידומת טלפון האם", "fieldNameShow": "קידומת", "Type": "Select", "Mandatory": false, "Br": false, "SelectVal": Kidomet }
                 , { "ElementId": "TelEmChul", "MaxLength": 11, "Width": 40, "fieldNameShow": "טלפון בית", "fieldName": "טלפון - בית | חו\"ל", "Type": "Tel", "Mandatory": true, "Br": false }
                 , { "ElementId": "TelEmChulKidomet", "MaxLength": 5, "Width": 30, "fieldName": "קידומת טלפון בית", "fieldNameShow": "קידומת", "Type": "Select", "Mandatory": true, "Br": false, "SelectVal": Kidomet }
-                , { "ElementId": "CuntryEm", "MaxLength": 50, "Width": 40, "fieldName": "ארץ | חו\"ל", "fieldNameShow": "ארץ", "Type": "Text", "Mandatory": true, "DbName": "Field74", "Br": false }
+                , { "ElementId": "CuntryEm", "MaxLength": 50, "Width": 40, "fieldName": "ארץ | חו\"ל", "fieldNameShow": "ארץ", "Type": "Text", "Mandatory": true, "DbName": "Field74", "Br": false, "Send": true }
                 , { "ElementId": "CityChulEm", "MaxLength": 50, "Width": 40, "fieldName": "עיר | חו\"ל", "fieldNameShow": "עיר", "Type": "Text", "Mandatory": true, "Br": false }
                 , { "ElementId": "AddressChulEm", "MaxLength": 50, "Width": 90, "fieldName": "כתובת | חו\"ל", "fieldNameShow": "כתובת", "Type": "Text", "Mandatory": true, "Br": false }
                 , { "Type": "DivClose" }
@@ -545,6 +545,17 @@
             { "SnifName": "מחזור י'" },
             { "SnifName": 'מחזור י"א' }
         ]
+
+        // הגדרות מכירה - שינוי Active ל-false מכבה את כל הסקשן
+        var Sale = {
+            "Active": true,
+            "Title": "מכירת XX",
+            "ButtonText": "מעבר למכירת XX",
+            "Options": [
+                { "Text": "חבילה כוללת", "Amount": 200 },
+                { "Text": "חלקי", "Amount": 50 }
+            ]
+        }
 
 
         var MasofId = ''
@@ -1069,6 +1080,21 @@
             $("#CountryTypeParentsEm_Radio0").prop("checked", true)
             $('#DivOpenMother,#OA7Div,#OA9Div').show()
 
+            // אתחול סקשן מכירה
+            if (Sale.Active == true) {
+                $("#SaleTopBt").val(Sale.ButtonText)
+                $("#SaleTitle").html(Sale.Title)
+                var SaleOpts = ''
+                for (var i = 0; i < Sale.Options.length; i++) {
+                    SaleOpts += '<div style="display:inline-block"><label class="RadioBtLbl" for="SaleOption_Radio' + i + '"><input id="SaleOption_Radio' + i + '" type="radio" name="SaleOption" value="' + i + '"> ' + Sale.Options[i].Text + ' - ' + Sale.Options[i].Amount + ' ₪</label></div>'
+                }
+                $("#SaleOptions").html(SaleOpts)
+                $('input[type=radio][name=SaleOption]').change(function () {
+                    $("#SaleTotal").text(Sale.Options[+$(this).val()].Amount)
+                })
+                $("#SaleTopBtDiv,#SaleDiv").show()
+            }
+
             Calculate()
 
 
@@ -1289,6 +1315,14 @@
                     //$("#Home2").val(User_Dt.HIbinyan);
                     $("#Tachana").val(User_Dt.Tachana);
 
+                    // רכישה - ברירת מחדל לת"ז בעל הכרטיס + תצוגת רכישה קיימת
+                    if (Sale.Active == true) {
+                        $("#Sale_CC_Zeout").val(User_Dt.zihuy || ZeoutTxt)
+                        if (User_Dt.mechiraBechira) {
+                            ShowSaleReadOnly(User_Dt.mechiraBechira, User_Dt.mechiraHeara)
+                        }
+                    }
+
                     $("#ZeoutCheck").hide();
                     $("#ZeoutCheckWait").hide();
                     $("#ZeoutCheckSave").show();
@@ -1331,6 +1365,12 @@
                 }
 
             }
+        }
+
+        function ShowSaleReadOnly(Bechira, Heara) {
+            $("#SaleFormDiv").hide()
+            $("#SaleAlreadyDiv").html("רכישה קיימת: " + Bechira + ((Heara && Heara !== '') ? "<br/>הערה: " + Heara : "")).show()
+            $("#SaleTopBt").val(Sale.Title + " - רכישה קיימת")
         }
 
         function LoginSwal(Text, Id) {
@@ -1738,6 +1778,8 @@
                     $("#TelAv").val($("#TelAvChulKidomet").val() + "-" + FormatPhone($("#TelAvChul").val()))
                     $("#City1").val($("#CityChulAv").val())
                     $("#Street1").val($("#AddressChulAv").val())
+                } else {
+                    $("#CuntryAv").val("ישראל");
                 }
 
                 if ($('input[name=CountryTypeParentsEm]:checked').val() == "חו\"ל") {
@@ -1746,6 +1788,8 @@
                     $("#TelEm").val($("#TelEmChulKidomet").val() + "-" + FormatPhone($("#TelEmChul").val()))
                     $("#City2").val($("#CityChulEm").val())
                     $("#Street2").val($("#AddressChulEm").val())
+                } else {
+                    $("#CuntryEm").val("ישראל");
                 }
 
                 if (JsonElement.DbName == undefined) { continue; }
@@ -1754,6 +1798,46 @@
             }
 
             PostData = PostData.substring(1, PostData.length)
+
+            // צירוף רכישה ותשלום לאותה שליחה (אנדפוינט אחד)
+            var SaleChosen = false;
+            if (Sale.Active == true && $("#SaleFormDiv").is(":visible")) {
+                var SaleIdx = $('input[name=SaleOption]:checked').val()
+                if (SaleIdx !== undefined) {
+                    var SaleOpt = Sale.Options[+SaleIdx]
+
+                    if ($("#Sale_CC_Name").val() == '') return MySwal("נא למלא שם בעל הכרטיס", "Sale_CC_Name")
+                    if ($("#Sale_CreditCard").val().length < 8) return MySwal("נא למלא מספר כרטיס אשראי תקין", "Sale_CreditCard")
+                    if ($("#Sale_CardExpiration").val().length !== 4) return MySwal("נא למלא תוקף בתבנית MMYY (לדוגמא 0229)", "Sale_CardExpiration")
+                    if ($("#Sale_CVV").val().length < 3) return MySwal("נא למלא CVV", "Sale_CVV")
+
+                    // ת"ז בעל הכרטיס - ברירת מחדל הת"ז של הממלא
+                    var SaleZeout = $("#Sale_CC_Zeout").val().trim()
+                    if (SaleZeout == '') SaleZeout = ZeoutTxt
+
+                    var SalePhone = $("#Tel2").val()
+                    if ((SalePhone == '' || SalePhone == undefined) && $("#Tel2Chul").val() !== '') SalePhone = $("#Kidomet2").val() + "-" + FormatPhone($("#Tel2Chul").val())
+
+                    var SaleNote = $("#SaleNote").val().trim()
+                    SaleChosen = true;
+
+                    PostData += "&Field96=" + encodeURIComponent(SaleOpt.Text) + "&Field96_Name=" + encodeURIComponent("בחירת רכישה")
+                    PostData += "&Field97=" + encodeURIComponent(SaleNote) + "&Field97_Name=" + encodeURIComponent("הערת רכישה")
+                    PostData += "&Field98=" + encodeURIComponent(SaleZeout) + "&Field98_Name=" + encodeURIComponent("ת\"ז בעל הכרטיס")
+                    PostData += "&CreditCard_Type=" + encodeURIComponent('Ragil')
+                    PostData += "&CreditCard_ClientName=" + encodeURIComponent($("#Sale_CC_Name").val())
+                    PostData += "&CreditCard_Amount=" + encodeURIComponent(SaleOpt.Amount)
+                    PostData += "&CreditCard_Zeout=" + encodeURIComponent(SaleZeout)
+                    PostData += "&CreditCard_Tashloumim=1"
+                    PostData += "&CreditCard_Phone=" + encodeURIComponent(SalePhone)
+                    PostData += "&CreditCard_CreditCard=" + encodeURIComponent($("#Sale_CreditCard").val())
+                    PostData += "&CreditCard_Tokef=" + encodeURIComponent($("#Sale_CardExpiration").val())
+                    PostData += "&CreditCard_Cvv=" + encodeURIComponent($("#Sale_CVV").val())
+                    PostData += "&CreditCard_Mail=" + encodeURIComponent($("#Mail").val())
+                    PostData += "&CreditCard_Currency=1"
+                    PostData += "&CreditCard_Comment=" + encodeURIComponent(SaleNote)
+                }
+            }
 
             if (Json.NeedSign == true) {
                 if (SignData == "") { $('#SignPad').show(); return false; }
@@ -1765,7 +1849,7 @@
             $("#WaitDiv").show()
 
             $.ajax({
-                url: "Manage.aspx?Action=AddData&AjaxId=" + $.now() + "&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&Version=" + Json.Version + "&MasofId=" + MasofId + "&ClientId=" + ClientId + "&OldTofesId=" + OldTofesId + "&SpecialCheck=" + encodeURIComponent(Json.SpecialCheck) + "&MainTitle=" + encodeURIComponent(htmlEncode(Json.MainTitle)),
+                url: "Manage.aspx?Action=AddData&AjaxId=" + $.now() + "&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&Version=" + Json.Version + "&MasofId=" + MasofId + "&ClientId=" + ClientId + "&OldTofesId=" + OldTofesId + "&SpecialCheck=" + encodeURIComponent(Json.SpecialCheck + (SaleChosen ? "CreditCardPayment;" : "")) + "&MainTitle=" + encodeURIComponent(htmlEncode(Json.MainTitle)),
                 context: Text,
                 timeout: 32000,
                 type: "POST",
@@ -2015,7 +2099,47 @@
         </div>
 
         <div id="AllMainForm" style="display:none;">
+            <div id="SaleTopBtDiv" style="text-align:center;margin-top:15px;display:none">
+                <input class="Bt" id="SaleTopBt" style="background-color:#f7a11a;display:inline-block;min-width:40%;padding:10px" type="button" value="" onclick="ScrollUp('#SaleDiv')" />
+            </div>
+
             <div style="color: #888;margin-right: auto;margin-left: auto;margin-top:20px;text-align: center;font-family: Assistant;width:80%;">מילוי הטופס אורך מספר דקות ודורש סבלנות ושימת לב. נא מלא את הפרטים במתינות. בהצלחה</div>
+
+            <div id="SaleDiv" style="display:none;border:2px solid #f7bb4d;border-radius:10px;margin:20px;padding:15px 5px;background-color:#fffdf5">
+                <div class="Koteret" id="SaleTitle" style="text-align:center;padding-right:0px;margin-top:0px"></div>
+                <div id="SaleAlreadyDiv" style="display:none;text-align:center;color:cadetblue;font-weight:bold;font-family:Assistant;font-size:18px;margin:10px"></div>
+                <div id="SaleFormDiv">
+                    <div id="SaleOptions" style="text-align:center;margin-top:10px"></div>
+                    <div style="text-align:center;font-family:Assistant;font-size:20px;font-weight:bold;color:#2B3A63;margin:15px">סה"כ לתשלום: <span id="SaleTotal">0</span> ₪</div>
+                    <div style="width:90%;display:inline-block;vertical-align:top;text-align:right;margin-right:20px">
+                        <label for="SaleNote" class="fieldName">הערה</label><br />
+                        <textarea id="SaleNote" class="TextBox" rows="2" dir="rtl" autocomplete="off" maxlength="200" style="width:90%;resize:none" onfocus="ScrollUp(this)"></textarea>
+                    </div>
+                    <div class="SubKoteret" style="padding-right:20px">פרטי תשלום</div>
+                    <div style="width:40%;display:inline-block;vertical-align:top;text-align:right;margin-top:10px;margin-right:20px">
+                        <label for="Sale_CC_Name" class="fieldName"><span style="color:indianred">*</span>שם בעל הכרטיס</label><br />
+                        <input class="TextBox" dir="rtl" autocomplete="off" type="text" style="width:90%" maxlength="50" id="Sale_CC_Name" onfocus="ScrollUp(this)" />
+                    </div>
+                    <div style="width:40%;display:inline-block;vertical-align:top;text-align:right;margin-top:10px;margin-right:20px">
+                        <label for="Sale_CC_Zeout" class="fieldName">ת"ז בעל הכרטיס (אם שונה משלך)</label><br />
+                        <input class="TextBox" dir="ltr" autocomplete="off" type="tel" style="width:90%" maxlength="9" id="Sale_CC_Zeout" onfocus="ScrollUp(this)" oninput="OnlyNumber(this.id)" />
+                    </div>
+                    <br />
+                    <div style="width:40%;display:inline-block;vertical-align:top;text-align:right;margin-top:10px;margin-right:20px">
+                        <label for="Sale_CreditCard" class="fieldName"><span style="color:indianred">*</span>מספר כרטיס אשראי</label><br />
+                        <input class="TextBox" dir="ltr" autocomplete="off" type="tel" style="width:90%" maxlength="19" id="Sale_CreditCard" onfocus="ScrollUp(this)" oninput="OnlyNumber(this.id)" />
+                    </div>
+                    <div style="width:20%;display:inline-block;vertical-align:top;text-align:right;margin-top:10px;margin-right:20px">
+                        <label for="Sale_CardExpiration" class="fieldName"><span style="color:indianred">*</span>תוקף (0229)</label><br />
+                        <input class="TextBox" dir="ltr" autocomplete="off" type="tel" style="width:90%" maxlength="4" id="Sale_CardExpiration" onfocus="ScrollUp(this)" oninput="OnlyNumber(this.id)" />
+                    </div>
+                    <div style="width:15%;display:inline-block;vertical-align:top;text-align:right;margin-top:10px;margin-right:20px">
+                        <label for="Sale_CVV" class="fieldName"><span style="color:indianred">*</span>CVV</label><br />
+                        <input class="TextBox" dir="ltr" autocomplete="off" type="tel" style="width:90%" maxlength="4" id="Sale_CVV" onfocus="ScrollUp(this)" oninput="OnlyNumber(this.id)" />
+                    </div>
+                    <div style="text-align:center;margin:20px;font-family:Assistant;color:#808080;font-size:15px">התשלום יתבצע יחד עם שליחת הטופס בתחתית הדף</div>
+                </div>
+            </div>
 
             <div id="EditNote" style="text-align:center;font-size:18px;color:indianred;font-weight:bold;font-family:Assistant;display:none;"><span style="font-size:24px;">שים לב!</span><br /> טופס זה במצב עריכה.<br /> בעת שליחת הטופס, הנתונים שתזינו יחליפו את הקודמים.</div>
             <!-- ברגע עדכון הטופס, המידע הקודם ימחק ויוחלף בזה שתשלחו כעת.-->
