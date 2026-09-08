@@ -1091,6 +1091,20 @@
                 $('input[type=radio][name=SaleOption]').change(function () {
                     $("#SaleTotal").text(Sale.Options[+$(this).val()].Amount)
                 })
+
+                // ביטול הסימון מנקה את כל שדות הרכישה
+                $('#SaleInterested').change(function () {
+                    if ($(this).is(':checked')) {
+                        $('#SalePurchaseDiv').show()
+                        $("#Sale_CC_Zeout").val(ZeoutTxt)
+                    } else {
+                        $('#SalePurchaseDiv').hide()
+                        $('input[name=SaleOption]').prop('checked', false)
+                        $("#SaleTotal").text('0')
+                        $('#SaleNote,#Sale_CC_Name,#Sale_CC_Zeout,#Sale_CreditCard,#Sale_CardExpiration,#Sale_CVV').val('')
+                    }
+                })
+
                 $("#SaleTopBtDiv,#SaleDiv").show()
             }
             Calculate()
@@ -1793,42 +1807,41 @@
 
             // צירוף רכישה ותשלום לאותה שליחה
             var SaleChosen = false;
-            if (Sale.Active == true && $("#SaleFormDiv").is(":visible")) {
+            if (Sale.Active == true && $("#SaleFormDiv").is(":visible") && $("#SaleInterested").is(":checked")) {
                 var SaleIdx = $('input[name=SaleOption]:checked').val()
-                if (SaleIdx !== undefined) {
-                    var SaleOpt = Sale.Options[+SaleIdx]
+                if (SaleIdx == undefined) return MySwal("נא לבחור אחת מאפשרויות הרכישה או לבטל את סימון \"מעוניין ברכישה\"", "SaleInterested")
 
-                    if ($("#Sale_CC_Name").val() == '') return MySwal("נא למלא שם בעל הכרטיס", "Sale_CC_Name")
-                    if ($("#Sale_CreditCard").val().length < 8) return MySwal("נא למלא מספר כרטיס אשראי תקין", "Sale_CreditCard")
-                    if ($("#Sale_CardExpiration").val().length !== 4) return MySwal("נא למלא תוקף בתבנית MMYY (לדוגמא 0229)", "Sale_CardExpiration")
-                    if ($("#Sale_CVV").val().length < 3) return MySwal("נא למלא CVV", "Sale_CVV")
+                var SaleOpt = Sale.Options[+SaleIdx]
 
-                    // ת"ז בעל הכרטיס - ברירת מחדל הת"ז של הממלא
-                    var SaleZeout = $("#Sale_CC_Zeout").val().trim()
-                    if (SaleZeout == '') SaleZeout = ZeoutTxt
+                if ($("#Sale_CC_Name").val() == '') return MySwal("נא למלא שם בעל הכרטיס", "Sale_CC_Name")
+                if ($("#Sale_CreditCard").val().length < 8) return MySwal("נא למלא מספר כרטיס אשראי תקין", "Sale_CreditCard")
+                if ($("#Sale_CardExpiration").val().length !== 4) return MySwal("נא למלא תוקף בתבנית MMYY (לדוגמא 0229)", "Sale_CardExpiration")
+                if ($("#Sale_CVV").val().length < 3) return MySwal("נא למלא CVV", "Sale_CVV")
 
-                    var SalePhone = $("#Tel2").val()
-                    if ((SalePhone == '' || SalePhone == undefined) && $("#Tel2Chul").val() !== '') SalePhone = $("#Kidomet2").val() + "-" + FormatPhone($("#Tel2Chul").val())
+                // ת"ז בעל הכרטיס - ברירת מחדל הת"ז של הממלא
+                var SaleZeout = $("#Sale_CC_Zeout").val().trim()
+                if (SaleZeout == '') SaleZeout = ZeoutTxt
 
-                    var SaleNote = $("#SaleNote").val().trim()
-                    SaleChosen = true;
+                var SalePhone = $("#Tel2").val()
+                if ((SalePhone == '' || SalePhone == undefined) && $("#Tel2Chul").val() !== '') SalePhone = $("#Kidomet2").val() + "-" + FormatPhone($("#Tel2Chul").val())
 
-                    PostData += "&Field96=" + encodeURIComponent(SaleOpt.Text) + "&Field96_Name=" + encodeURIComponent("בחירת רכישה")
-                    PostData += "&Field97=" + encodeURIComponent(SaleNote) + "&Field97_Name=" + encodeURIComponent("הערת רכישה")
-                    PostData += "&Field98=" + encodeURIComponent(SaleZeout) + "&Field98_Name=" + encodeURIComponent("ת\"ז בעל הכרטיס")
-                    PostData += "&CreditCard_Type=" + encodeURIComponent('Ragil')
-                    PostData += "&CreditCard_ClientName=" + encodeURIComponent($("#Sale_CC_Name").val())
-                    PostData += "&CreditCard_Amount=" + encodeURIComponent(SaleOpt.Amount)
-                    PostData += "&CreditCard_Zeout=" + encodeURIComponent(SaleZeout)
-                    PostData += "&CreditCard_Tashloumim=1"
-                    PostData += "&CreditCard_Phone=" + encodeURIComponent(SalePhone)
-                    PostData += "&CreditCard_CreditCard=" + encodeURIComponent($("#Sale_CreditCard").val())
-                    PostData += "&CreditCard_Tokef=" + encodeURIComponent($("#Sale_CardExpiration").val())
-                    PostData += "&CreditCard_Cvv=" + encodeURIComponent($("#Sale_CVV").val())
-                    PostData += "&CreditCard_Mail=" + encodeURIComponent($("#Mail").val())
-                    PostData += "&CreditCard_Currency=1"
-                    PostData += "&CreditCard_Comment=" + encodeURIComponent(SaleNote)
-                }
+                var SaleNote = $("#SaleNote").val().trim()
+                SaleChosen = true;
+
+                PostData += "&Field96=" + encodeURIComponent(SaleOpt.Text) + "&Field96_Name=" + encodeURIComponent("בחירת רכישה")
+                PostData += "&Field97=" + encodeURIComponent(SaleNote) + "&Field97_Name=" + encodeURIComponent("הערת רכישה")
+                PostData += "&Field98=" + encodeURIComponent(SaleZeout) + "&Field98_Name=" + encodeURIComponent("ת\"ז בעל הכרטיס")
+                PostData += "&CreditCard_ClientName=" + encodeURIComponent($("#Sale_CC_Name").val())
+                PostData += "&CreditCard_Amount=" + encodeURIComponent(SaleOpt.Amount)
+                PostData += "&CreditCard_Zeout=" + encodeURIComponent(SaleZeout)
+                PostData += "&CreditCard_Adresse="
+                PostData += "&CreditCard_Tashloumim=1"
+                PostData += "&CreditCard_Phone=" + encodeURIComponent(SalePhone)
+                PostData += "&CreditCard_CreditCard=" + encodeURIComponent($("#Sale_CreditCard").val())
+                PostData += "&CreditCard_Tokef=" + encodeURIComponent($("#Sale_CardExpiration").val())
+                PostData += "&CreditCard_Cvv=" + encodeURIComponent($("#Sale_CVV").val())
+                PostData += "&CreditCard_Mail=" + encodeURIComponent($("#Mail").val())
+                PostData += "&CreditCard_Comment=" + encodeURIComponent(SaleNote)
             }
             if (Json.NeedSign == true) {
                 if (SignData == "") { $('#SignPad').show(); return false; }
@@ -1840,7 +1853,7 @@
             $("#WaitDiv").show()
 
             $.ajax({
-                url: "Manage.aspx?Action=AddData&AjaxId=" + $.now() + "&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&Version=" + Json.Version + "&MasofId=" + MasofId + "&ClientId=" + ClientId + "&OldTofesId=" + OldTofesId + "&SpecialCheck=" + encodeURIComponent(Json.SpecialCheck + (SaleChosen ? "CreditCardPayment;" : "")) + "&MainTitle=" + encodeURIComponent(htmlEncode(Json.MainTitle)),
+                url: "Manage.aspx?Action=AddData&AjaxId=" + $.now() + "&MosadId=" + Json.MosadId + "&TofesId=" + Json.TofesId + "&Version=" + Json.Version + "&MasofId=" + MasofId + "&ClientId=" + ClientId + "&OldTofesId=" + OldTofesId + "&SpecialCheck=" + encodeURIComponent((SaleChosen ? "CreditCardPayment;" : "") + Json.SpecialCheck) + "&MainTitle=" + encodeURIComponent(htmlEncode(Json.MainTitle)),
                 context: Text,
                 timeout: 32000,
                 type: "POST",
@@ -2098,6 +2111,10 @@
                 <div class="Koteret" id="SaleTitle" style="text-align:center;padding-right:0px;margin-top:0px"></div>
                 <div id="SaleAlreadyDiv" style="display:none;text-align:center;color:cadetblue;font-weight:bold;font-family:Assistant;font-size:18px;margin:10px"></div>
                 <div id="SaleFormDiv">
+                    <div class="checkbox" style="-webkit-user-select:none;text-align:center;margin:10px">
+                        <label for="SaleInterested"><input type="CheckBox" id="SaleInterested" /> <span>מעוניין ברכישה</span></label>
+                    </div>
+                    <div id="SalePurchaseDiv" style="display:none">
                     <div id="SaleOptions" style="text-align:center;margin-top:10px"></div>
                     <div style="text-align:center;font-family:Assistant;font-size:20px;font-weight:bold;color:#2B3A63;margin:15px">סה"כ לתשלום: <span id="SaleTotal">0</span> &#8362;</div>
                     <div style="width:90%;display:inline-block;vertical-align:top;text-align:right;margin-right:20px">
@@ -2127,6 +2144,7 @@
                         <input class="TextBox" dir="ltr" autocomplete="off" type="tel" style="width:90%" maxlength="4" id="Sale_CVV" onfocus="ScrollUp(this)" oninput="OnlyNumber(this.id)" />
                     </div>
                     <div style="text-align:center;margin:20px;font-family:Assistant;color:#808080;font-size:15px">התשלום יתבצע יחד עם שליחת הטופס בתחתית הדף</div>
+                    </div>
                 </div>
             </div>
             <div style="color: #888;margin-right: auto;margin-left: auto;margin-top:20px;text-align: center;font-family: Assistant;width:80%;">מילוי הטופס אורך מספר דקות ודורש סבלנות ושימת לב. נא מלא את הפרטים במתינות. בהצלחה</div>
