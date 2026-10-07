@@ -544,6 +544,81 @@
             font-weight: bold;
         }
 
+        /* טופס פרטי משפחה (רישום ועריכה) */
+        .Req { color: #b42e2e; font-weight: bold; }
+
+        .FieldHint {
+            font-size: 13px;
+            color: #a0a0a0;
+        }
+
+        .FieldErr {
+            font-size: 14px;
+            color: #b42e2e;
+            font-weight: bold;
+        }
+
+        .TextBox.Invalid {
+            border-color: #e05d5d;
+            background-color: #fff6f6;
+        }
+
+        .InfoBox {
+            background-color: #eaf3fd;
+            border: 1px solid #bcd9f5;
+            color: #2166a8;
+            border-radius: 8px;
+            margin: 10px 3%;
+            padding: 12px;
+            font-size: 17px;
+            text-align: right;
+        }
+
+        .GroupNote {
+            background-color: #f4f6f8;
+            color: #4a5568;
+            border-radius: 6px;
+            margin: 6px 3%;
+            padding: 8px 12px;
+            font-size: 15px;
+        }
+
+        .GroupNote.GroupErr {
+            background-color: #fdecec;
+            color: #b42e2e;
+            font-weight: bold;
+        }
+
+        .FormErrBox {
+            background-color: #fdecec;
+            border: 1px solid #f3c2c2;
+            color: #b42e2e;
+            border-radius: 8px;
+            margin: 15px 3%;
+            padding: 12px;
+            text-align: center;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .SubKoteret {
+            font-size: 18px;
+            color: #2B3A63;
+        }
+
+        .CheckLine {
+            font-size: 17px;
+            color: #2B3A63;
+            cursor: pointer;
+        }
+
+        .CheckLine input {
+            width: 22px;
+            height: 22px;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+
         /* טאבלט צר / מסכים קטנים */
         @media screen and (max-width: 500px) {
             .FieldDiv { width: 92%; }
@@ -575,7 +650,65 @@
             <div class="CenterDiv" style="margin:18px">
                 <input class="Bt" type="button" id="LoginBt" value="שליחת קוד אימות" />
             </div>
+            <div class="CenterDiv" style="margin-top:30px">
+                <div class="CodeNote" style="color:#808080;font-size:16px">משפחה שעדיין לא רשומה במערכת?</div>
+                <input class="Bt BtOrange" type="button" id="RegisterBt" value="רישום משפחה חדשה" />
+            </div>
             <div style="height:120px"></div>
+        </div>
+
+        <!-- מסך רישום משפחה חדשה -->
+        <div id="ScreenRegister" class="Screen">
+            <div class="CenterDiv" style="margin-bottom:5px">
+                <input type="button" class="Bt BtSecondary BtSmall" value="&#8618; חזרה למסך הכניסה" id="RegisterBackBt" />
+            </div>
+            <div class="Koteret" style="text-align:center;padding-right:0">רישום משפחה חדשה</div>
+            <div class="InfoBox">כדי לרשום תלמידים למוסדות, יש לבצע תחילה רישום כללי של המשפחה בטופס זה. לאחר מכן, באזור האישי, מבצעים רישום לכל תלמיד.</div>
+            <div class="SubNote">שדות המסומנים ב-<span class="Req">*</span> הם שדות חובה</div>
+
+            <div class="Koteret">1. שם המשפחה</div>
+            <div class="FieldDiv"><label class="fieldName" for="R_familyName">שם משפחה <span class="Req">*</span></label><input id="R_familyName" class="TextBox" type="text" maxlength="100" autocomplete="off" /><div class="FieldErr"></div></div>
+
+            <div class="Koteret">2. פרטי ההורים</div>
+            <div class="GroupNote" id="R_parents_note" data-note="חובה: שם ות&quot;ז של לפחות אחד ההורים"></div>
+            <div id="R_parents"></div>
+
+            <div class="Koteret">3. טלפונים</div>
+            <div class="GroupNote" id="R_phones_note" data-note="חובה: לפחות טלפון אחד (פלאפון של האב, פלאפון של האם או טלפון בבית)"></div>
+            <div class="FieldDiv"><label class="fieldName" for="R_homePhoneNumber">טלפון בבית</label><input id="R_homePhoneNumber" class="TextBox PhoneInput" type="tel" dir="ltr" autocomplete="off" /><div class="FieldHint">חובה לפחות טלפון אחד</div><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="R_additionalPhone">טלפון נוסף</label><input id="R_additionalPhone" class="TextBox PhoneInput" type="tel" dir="ltr" autocomplete="off" /><div class="FieldHint">לא נספר כטלפון החובה</div><div class="FieldErr"></div></div>
+
+            <div class="Koteret">4. כתובת מגורים</div>
+            <div class="FieldDiv"><label class="fieldName" for="R_cityId">עיר <span class="Req">*</span></label><select id="R_cityId" class="TextBox CitySelect" data-prefix="R_"></select><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="R_neighborhoodId">שכונה</label><select id="R_neighborhoodId" class="TextBox"></select><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="R_streetId">רחוב <span class="Req">*</span></label><select id="R_streetId" class="TextBox"></select><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="R_buildingNumber">מספר בניין <span class="Req">*</span></label><input id="R_buildingNumber" class="TextBox DigitsInput" type="tel" dir="ltr" maxlength="5" autocomplete="off" /><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="R_entrance">כניסה</label><input id="R_entrance" class="TextBox" type="text" maxlength="10" autocomplete="off" /><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="R_apartmentNumber">דירה</label><input id="R_apartmentNumber" class="TextBox DigitsInput" type="tel" dir="ltr" maxlength="5" autocomplete="off" /><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="R_floorNumber">קומה</label><input id="R_floorNumber" class="TextBox" type="tel" dir="ltr" maxlength="3" autocomplete="off" /><div class="FieldErr"></div></div>
+
+            <div id="R_general_err" class="FormErrBox" style="display:none"></div>
+
+            <div class="CenterDiv" style="margin:25px">
+                <input class="Bt" type="button" id="RegisterSaveBt" value="שליחת הרישום" />
+            </div>
+            <div class="CenterDiv">
+                <input type="button" class="LinkBt" id="RegisterLoginLinkBt" value="כבר רשומים? כניסה לאזור האישי" />
+            </div>
+            <div style="height:60px"></div>
+        </div>
+
+        <!-- מסך סיום רישום -->
+        <div id="ScreenRegisterDone" class="Screen">
+            <div class="Koteret" style="text-align:center;padding-right:0;color:#38c232">הרישום הכללי התקבל בהצלחה</div>
+            <div class="CodeNote" style="font-size:18px;margin:15px 20px">
+                כעת ניתן להתחבר לאזור האישי עם מספר תעודת הזהות של אחד ההורים ומספר טלפון שהוזן ברישום.<br />
+                באזור האישי מבצעים רישום לכל תלמיד.
+            </div>
+            <div class="CenterDiv" style="margin:25px">
+                <input class="Bt" type="button" id="RegisterDoneBt" value="חזרה למסך הכניסה" />
+            </div>
+            <div style="height:80px"></div>
         </div>
 
         <!-- מסך קוד אימות -->
@@ -634,28 +767,31 @@
             <div class="FieldDiv"><label class="fieldName" for="F_familyName">שם משפחה</label><input id="F_familyName" class="TextBox" type="text" disabled="disabled" /></div>
 
             <div class="Koteret" style="font-size:18px">אב</div>
-            <div class="FieldDiv"><label class="fieldName" for="F_husbandFirstName">שם פרטי</label><input id="F_husbandFirstName" class="TextBox" type="text" maxlength="50" autocomplete="off" /></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_husbandIdNumber">מספר זהות</label><input id="F_husbandIdNumber" class="TextBox" type="text" dir="ltr" disabled="disabled" /></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_husbandPhoneNumber">פלאפון</label><input id="F_husbandPhoneNumber" class="TextBox" type="tel" dir="ltr" maxlength="11" autocomplete="off" /></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_husbandEmail">מייל</label><input id="F_husbandEmail" class="TextBox" type="text" dir="ltr" maxlength="100" autocomplete="off" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_husbandFirstName">שם פרטי</label><input id="F_husbandFirstName" class="TextBox" type="text" maxlength="50" autocomplete="off" /><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_husbandIdNumber">מספר זהות</label><input id="F_husbandIdNumber" class="TextBox" type="text" dir="ltr" disabled="disabled" /><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_husbandPhoneNumber">פלאפון</label><input id="F_husbandPhoneNumber" class="TextBox PhoneInput" type="tel" dir="ltr" autocomplete="off" /><div class="FieldHint">חובה לפחות טלפון אחד</div><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_husbandEmail">מייל</label><input id="F_husbandEmail" class="TextBox" type="text" dir="ltr" maxlength="100" autocomplete="off" /><div class="FieldErr"></div></div>
 
             <div class="Koteret" style="font-size:18px">אם</div>
-            <div class="FieldDiv"><label class="fieldName" for="F_wifeFirstName">שם פרטי</label><input id="F_wifeFirstName" class="TextBox" type="text" maxlength="50" autocomplete="off" /></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_wifeIdNumber">מספר זהות</label><input id="F_wifeIdNumber" class="TextBox" type="text" dir="ltr" disabled="disabled" /></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_wifePhoneNumber">פלאפון</label><input id="F_wifePhoneNumber" class="TextBox" type="tel" dir="ltr" maxlength="11" autocomplete="off" /></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_wifeEmail">מייל</label><input id="F_wifeEmail" class="TextBox" type="text" dir="ltr" maxlength="100" autocomplete="off" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_wifeFirstName">שם פרטי</label><input id="F_wifeFirstName" class="TextBox" type="text" maxlength="50" autocomplete="off" /><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_wifeIdNumber">מספר זהות</label><input id="F_wifeIdNumber" class="TextBox" type="text" dir="ltr" disabled="disabled" /><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_wifePhoneNumber">פלאפון</label><input id="F_wifePhoneNumber" class="TextBox PhoneInput" type="tel" dir="ltr" autocomplete="off" /><div class="FieldHint">חובה לפחות טלפון אחד</div><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_wifeEmail">מייל</label><input id="F_wifeEmail" class="TextBox" type="text" dir="ltr" maxlength="100" autocomplete="off" /><div class="FieldErr"></div></div>
 
             <div class="Koteret" style="font-size:18px">טלפון בית</div>
-            <div class="FieldDiv"><label class="fieldName" for="F_homePhoneNumber">טלפון בית</label><input id="F_homePhoneNumber" class="TextBox" type="tel" dir="ltr" maxlength="11" autocomplete="off" /></div>
+            <div class="GroupNote" id="F_phones_note" data-note="חובה: לפחות טלפון אחד (פלאפון של האב, פלאפון של האם או טלפון בבית)"></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_homePhoneNumber">טלפון בית</label><input id="F_homePhoneNumber" class="TextBox PhoneInput" type="tel" dir="ltr" autocomplete="off" /><div class="FieldHint">חובה לפחות טלפון אחד</div><div class="FieldErr"></div></div>
 
             <div class="Koteret" style="font-size:18px">פרטי כתובת</div>
-            <div class="FieldDiv"><label class="fieldName" for="F_cityId">עיר</label><select id="F_cityId" class="TextBox"></select></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_neighborhoodId">שכונה</label><select id="F_neighborhoodId" class="TextBox"></select></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_streetId">רחוב</label><select id="F_streetId" class="TextBox"></select></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_buildingNumber">בנין</label><input id="F_buildingNumber" class="TextBox" type="tel" dir="ltr" maxlength="5" autocomplete="off" /></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_apartmentNumber">דירה</label><input id="F_apartmentNumber" class="TextBox" type="tel" dir="ltr" maxlength="5" autocomplete="off" /></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_entrance">כניסה</label><input id="F_entrance" class="TextBox" type="text" maxlength="10" autocomplete="off" /></div>
-            <div class="FieldDiv"><label class="fieldName" for="F_floorNumber">קומה</label><input id="F_floorNumber" class="TextBox" type="tel" dir="ltr" maxlength="3" autocomplete="off" /></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_cityId">עיר <span class="Req">*</span></label><select id="F_cityId" class="TextBox CitySelect" data-prefix="F_"></select><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_neighborhoodId">שכונה</label><select id="F_neighborhoodId" class="TextBox"></select><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_streetId">רחוב <span class="Req">*</span></label><select id="F_streetId" class="TextBox"></select><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_buildingNumber">בנין <span class="Req">*</span></label><input id="F_buildingNumber" class="TextBox DigitsInput" type="tel" dir="ltr" maxlength="5" autocomplete="off" /><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_apartmentNumber">דירה</label><input id="F_apartmentNumber" class="TextBox DigitsInput" type="tel" dir="ltr" maxlength="5" autocomplete="off" /><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_entrance">כניסה</label><input id="F_entrance" class="TextBox" type="text" maxlength="10" autocomplete="off" /><div class="FieldErr"></div></div>
+            <div class="FieldDiv"><label class="fieldName" for="F_floorNumber">קומה</label><input id="F_floorNumber" class="TextBox" type="tel" dir="ltr" maxlength="3" autocomplete="off" /><div class="FieldErr"></div></div>
+
+            <div id="F_general_err" class="FormErrBox" style="display:none"></div>
 
             <div class="CenterDiv" style="margin:25px">
                 <input class="Bt BtSecondary BtSmall" type="button" id="EditCancelBt" value="ביטול" />
@@ -751,7 +887,7 @@
             family: null,
             students: [],
             pendingApprovals: [],
-            lookups: { cities: [], neighborhoods: [], streets: [] },
+            registering: false,
             order: null,
             card: null
         };
@@ -850,13 +986,19 @@
         // התנתקות אוטומטית אחרי חוסר פעילות (מכשיר ציבורי)
         //---------------------------------------------------------
 
+        // גם מסך הרישום (בלי התחברות) מתאפס וחוזר למסך הראשי, כדי שהמשפחה הבאה
+        // בעמדה לא תראה את הפרטים של קודמתה
         var idleTimer = null;
         function resetIdle() {
             if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
-            if (!State.token) { return; }
+            if (!State.token && !State.registering) { return; }
             idleTimer = setTimeout(function () {
-                doLogout(false);
-                showMsg('info', 'התנתקת מהמערכת', 'החיבור נסגר עקב חוסר פעילות.');
+                if (State.token) {
+                    doLogout(false);
+                    showMsg('info', 'התנתקת מהמערכת', 'החיבור נסגר עקב חוסר פעילות.');
+                } else {
+                    leaveRegistration();
+                }
             }, CONFIG.INACTIVITY_LOGOUT_MINUTES * 60 * 1000);
         }
 
@@ -1191,6 +1333,374 @@
         }
 
         //---------------------------------------------------------
+        // טופס פרטי משפחה - כללים משותפים לרישום ולעריכה
+        // (אותם כללים שהשרת אוכף; כאן רק כדי להציג שגיאה ליד השדה)
+        //---------------------------------------------------------
+
+        var CITY_WITHOUT_STREETS_MESSAGE = 'לעיר שנבחרה אין עדיין רחובות במערכת. נא לפנות למזכירות.';
+        var PASSPORT_MAX_DIGITS = 15;
+        var PARENTS = ['husband', 'wife'];
+        // הטלפונים שנספרים בכלל "לפחות טלפון אחד" - הטלפון הנוסף לא נספר
+        var REQUIRED_PHONE_FIELDS = ['husbandPhoneNumber', 'wifePhoneNumber', 'homePhoneNumber'];
+
+        function digitsOnly(val) {
+            return String(val || '').replace(/[^0-9]/g, '');
+        }
+
+        // ת"ז ישראלית: 9 ספרות עם ספרת ביקורת
+        function isValidIsraeliID(id) {
+            if (!/^\d{9}$/.test(id)) { return false; }
+            var sum = 0;
+            for (var i = 0; i < 9; i++) {
+                var digit = Number(id.charAt(i)) * ((i % 2) + 1);
+                if (digit > 9) { digit = Math.floor(digit / 10) + (digit % 10); }
+                sum += digit;
+            }
+            return sum % 10 === 0;
+        }
+
+        // ספרות בלבד (רווחים מוסרים), משלים ל-9 ספרות. null כשיש תו שאינו ספרה
+        function normalizeIdNumber(id) {
+            var clean = String(id).replace(/\s/g, '');
+            if (!/^\d+$/.test(clean)) { return null; }
+            while (clean.length < 9) { clean = '0' + clean; }
+            return clean;
+        }
+
+        function isValidIsraeliPhone(phone) {
+            return /^0([57][0-9]|[2-4]|[8-9])[0-9]{7}$/.test(phone);
+        }
+
+        function isValidEmail(email) {
+            if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) { return false; }
+            var parts = email.split('@');
+            if (parts.length !== 2) { return false; }
+            var localPart = parts[0];
+            var domain = parts[1];
+            if (localPart.charAt(0) === '.' || localPart.charAt(localPart.length - 1) === '.') { return false; }
+            if (localPart.indexOf('..') > -1 || domain.indexOf('..') > -1) { return false; }
+            return domain.indexOf('.') > -1;
+        }
+
+        // מפתחות השדות שהערך שלהם כבר הופיע בשדה קודם
+        function repeatedKeys(values, keys) {
+            var seen = {};
+            var repeated = [];
+            for (var i = 0; i < keys.length; i++) {
+                var v = values[keys[i]];
+                if (!v) { continue; }
+                if (seen.hasOwnProperty(v)) { repeated.push(keys[i]); }
+                seen[v] = true;
+            }
+            return repeated;
+        }
+
+        // ערכי הטופס לפי קידומת (R_ רישום, F_ עריכה)
+        function readFamilyForm(prefix) {
+            var keys = ['familyName', 'husbandFirstName', 'husbandIdNumber', 'husbandCitizenshipCountryId', 'husbandPhoneNumber', 'husbandEmail',
+                'wifeFirstName', 'wifeIdNumber', 'wifeCitizenshipCountryId', 'wifePhoneNumber', 'wifeEmail',
+                'homePhoneNumber', 'additionalPhone', 'cityId', 'neighborhoodId', 'streetId', 'buildingNumber', 'entrance', 'apartmentNumber', 'floorNumber'];
+            var values = {};
+            for (var i = 0; i < keys.length; i++) {
+                var el = $('#' + prefix + keys[i]);
+                values[keys[i]] = el.length ? $.trim(el.val() || '') : '';
+            }
+            values.husbandIsIsraelResident = $('#' + prefix + 'husbandIsIsraelResident').is(':checked');
+            values.wifeIsIsraelResident = $('#' + prefix + 'wifeIsIsraelResident').is(':checked');
+            return values;
+        }
+
+        // isRegistration: ברישום גם שם משפחה, הורים, ת"ז ואזרחות; בעריכה הם לקריאה בלבד
+        function validateFamilyForm(v, isRegistration, cityHasStreets) {
+            var errors = {};
+            var i;
+
+            // שם פרטי שמולא - לפחות 2 תווים (ברישום ובעריכה)
+            for (i = 0; i < PARENTS.length; i++) {
+                var firstName = v[PARENTS[i] + 'FirstName'];
+                if (firstName && firstName.length < 2) { errors[PARENTS[i] + 'FirstName'] = 'שם פרטי חייב להכיל לפחות 2 תווים'; }
+            }
+
+            if (isRegistration) {
+                if (v.familyName.length < 2) { errors.familyName = 'שם משפחה חייב להכיל לפחות 2 תווים'; }
+
+                var hasCompleteParent = false;
+                var normalizedIds = {};
+                for (i = 0; i < PARENTS.length; i++) {
+                    var p = PARENTS[i];
+                    if (v[p + 'FirstName'] && v[p + 'IdNumber']) { hasCompleteParent = true; }
+                    var isIsraeli = v[p + 'IsIsraelResident'];
+                    if (!isIsraeli && !v[p + 'CitizenshipCountryId']) { errors[p + 'CitizenshipCountryId'] = 'יש לבחור מדינת אזרחות'; }
+                    if (!v[p + 'IdNumber']) { continue; }
+                    var normalized = normalizeIdNumber(v[p + 'IdNumber']);
+                    if (normalized === null) {
+                        errors[p + 'IdNumber'] = 'מספר זהות יכול להכיל רק ספרות';
+                    } else if (isIsraeli && !isValidIsraeliID(normalized)) {
+                        errors[p + 'IdNumber'] = 'מספר תעודת זהות אינו תקין';
+                    } else if (!isIsraeli && normalized.length > PASSPORT_MAX_DIGITS) {
+                        errors[p + 'IdNumber'] = 'מספר דרכון יכול להכיל עד ' + PASSPORT_MAX_DIGITS + ' ספרות';
+                    } else {
+                        normalizedIds[p] = normalized;
+                    }
+                }
+                if (!hasCompleteParent) { errors.parents = 'יש למלא שם פרטי ומספר זהות של לפחות אחד ההורים'; }
+                if (normalizedIds.husband && normalizedIds.husband === normalizedIds.wife) {
+                    errors.wifeIdNumber = 'מספר הזהות זהה למספר הזהות של האב';
+                }
+            }
+
+            var phoneFields = isRegistration ? REQUIRED_PHONE_FIELDS.concat(['additionalPhone']) : REQUIRED_PHONE_FIELDS;
+            for (i = 0; i < phoneFields.length; i++) {
+                if (v[phoneFields[i]] && !isValidIsraeliPhone(v[phoneFields[i]])) { errors[phoneFields[i]] = 'מספר טלפון אינו תקין'; }
+            }
+            var hasPhone = false;
+            for (i = 0; i < REQUIRED_PHONE_FIELDS.length; i++) {
+                if (v[REQUIRED_PHONE_FIELDS[i]]) { hasPhone = true; }
+            }
+            if (!hasPhone) { errors.phones = 'יש למלא לפחות טלפון אחד: פלאפון של האב, פלאפון של האם או טלפון בבית'; }
+            var repeatedPhones = repeatedKeys(v, phoneFields);
+            for (i = 0; i < repeatedPhones.length; i++) {
+                if (!errors[repeatedPhones[i]]) { errors[repeatedPhones[i]] = 'מספר טלפון זה כבר הוזן בשדה אחר'; }
+            }
+
+            var emails = { husbandEmail: v.husbandEmail.toLowerCase(), wifeEmail: v.wifeEmail.toLowerCase() };
+            if (emails.husbandEmail && !isValidEmail(emails.husbandEmail)) { errors.husbandEmail = 'כתובת מייל אינה תקינה'; }
+            if (emails.wifeEmail && !isValidEmail(emails.wifeEmail)) { errors.wifeEmail = 'כתובת מייל אינה תקינה'; }
+            if (emails.husbandEmail && emails.husbandEmail === emails.wifeEmail && !errors.wifeEmail) {
+                errors.wifeEmail = 'כתובת המייל זהה למייל של ההורה השני';
+            }
+
+            // כתובת: עיר, רחוב ומספר בניין חובה
+            if (!v.cityId) {
+                errors.cityId = 'יש לבחור עיר';
+            } else if (cityHasStreets === false) {
+                errors.cityId = CITY_WITHOUT_STREETS_MESSAGE;
+            } else if (!v.streetId) {
+                errors.streetId = 'יש לבחור רחוב';
+            }
+            if (!v.buildingNumber) { errors.buildingNumber = 'יש להזין מספר בניין'; }
+
+            return errors;
+        }
+
+        // מסמן שגיאות ליד השדות: שגיאת שדה, כללי "לפחות אחד" והודעה כללית
+        function showFormErrors(prefix, errors) {
+            var screen = prefix === 'R_' ? $('#ScreenRegister') : $('#ScreenEdit');
+            screen.find('.Invalid').removeClass('Invalid');
+            screen.find('.FieldErr').text('');
+            screen.find('.GroupNote').each(function () {
+                $(this).removeClass('GroupErr').text($(this).attr('data-note'));
+            });
+            $('#' + prefix + 'general_err').hide().text('');
+
+            for (var key in errors) {
+                if (!errors.hasOwnProperty(key)) { continue; }
+                var note = $('#' + prefix + key + '_note');
+                var field = $('#' + prefix + key);
+                if (note.length) {
+                    note.addClass('GroupErr').text(errors[key]);
+                } else if (field.length && key !== 'general') {
+                    field.addClass('Invalid');
+                    // השגיאה של השדה עצמו (במספר הזהות יש גם שדה מדינה בתוך אותו בלוק)
+                    field.closest('.CountryDiv, .FieldDiv').find('.FieldErr').first().text(errors[key]);
+                } else {
+                    var box = $('#' + prefix + 'general_err');
+                    box.text(box.text() ? box.text() + '; ' + errors[key] : errors[key]).show();
+                }
+            }
+
+            var first = screen.find('.Invalid, .GroupErr, .FormErrBox:visible').first();
+            if (first.length) {
+                $('html, body').scrollTop(Math.max(first.offset().top - 90, 0));
+            }
+        }
+
+        // שגיאה מהשרת: fieldErrors ליד השדות, ואם אין - ההודעה כהודעה כללית
+        function showServerErrors(prefix, xhr) {
+            var j = errJson(xhr);
+            var fieldErrors = (j && j.fieldErrors) || {};
+            var hasAny = false;
+            for (var key in fieldErrors) {
+                if (fieldErrors.hasOwnProperty(key)) { hasAny = true; break; }
+            }
+            showFormErrors(prefix, hasAny ? fieldErrors : { general: errText(xhr, 'אירעה שגיאה. נסו שוב.') });
+        }
+
+        //---------------------------------------------------------
+        // ערים, שכונות, מדינות ורחובות - נתיבים ציבוריים (גם בלי התחברות)
+        //---------------------------------------------------------
+
+        var AddressLookups = { loaded: false, cities: [], neighborhoods: [], countries: [], streetsByCity: {} };
+        // לכל טופס: האם לעיר שנבחרה יש רחובות (undefined כל עוד לא ידוע)
+        var CityHasStreets = { R_: undefined, F_: undefined };
+
+        function loadAddressLookups(cb) {
+            if (AddressLookups.loaded) { cb(true); return; }
+            setLoading(true);
+            api('GET', '/globals/public/address-lookups')
+                .done(function (resp) {
+                    AddressLookups.cities = (resp && resp.cities) || [];
+                    AddressLookups.neighborhoods = (resp && resp.neighborhoods) || [];
+                    AddressLookups.countries = (resp && resp.countries) || [];
+                    AddressLookups.loaded = true;
+                    cb(true);
+                })
+                .fail(function (xhr) {
+                    showMsg('error', 'לא ניתן לטעון את רשימת הערים', errText(xhr, ''));
+                    cb(false);
+                })
+                .always(function () { setLoading(false); });
+        }
+
+        function neighborhoodsOfCity(cityId) {
+            var list = [];
+            for (var i = 0; i < AddressLookups.neighborhoods.length; i++) {
+                if (Number(AddressLookups.neighborhoods[i].cityId) === Number(cityId)) { list.push(AddressLookups.neighborhoods[i]); }
+            }
+            return list;
+        }
+
+        // שכונות לפי עיר, ורחובות נטענים לפי עיר. עיר בלי רחובות - חוסמת ומפנה למזכירות
+        function loadCityLookups(prefix, cityId, selNeighborhood, selStreet) {
+            var streetSel = $('#' + prefix + 'streetId');
+            var cityField = $('#' + prefix + 'cityId');
+            cityField.removeClass('Invalid').closest('.FieldDiv').find('.FieldErr').text('');
+            CityHasStreets[prefix] = undefined;
+            fillSelect($('#' + prefix + 'neighborhoodId'), cityId ? neighborhoodsOfCity(cityId) : [], selNeighborhood, 'בחרו שכונה');
+            fillSelect(streetSel, [], null, 'בחרו רחוב');
+            streetSel.removeAttr('disabled');
+            if (!cityId) { return; }
+
+            function applyStreets(streets) {
+                CityHasStreets[prefix] = streets.length > 0;
+                fillSelect(streetSel, streets, selStreet, 'בחרו רחוב');
+                if (streets.length === 0) {
+                    streetSel.attr('disabled', 'disabled');
+                    cityField.addClass('Invalid').closest('.FieldDiv').find('.FieldErr').text(CITY_WITHOUT_STREETS_MESSAGE);
+                }
+            }
+
+            if (AddressLookups.streetsByCity[cityId]) {
+                applyStreets(AddressLookups.streetsByCity[cityId]);
+                return;
+            }
+            setLoading(true);
+            api('GET', '/globals/public/streets?cityId=' + cityId)
+                .done(function (list) {
+                    AddressLookups.streetsByCity[cityId] = list || [];
+                    applyStreets(AddressLookups.streetsByCity[cityId]);
+                })
+                .fail(function (xhr) { showMsg('error', 'לא ניתן לטעון את רשימת הרחובות', errText(xhr, '')); })
+                .always(function () { setLoading(false); });
+        }
+
+        //---------------------------------------------------------
+        // רישום משפחה חדשה (בלי התחברות)
+        //---------------------------------------------------------
+
+        // פרטי הורה - אותו HTML לאב ולאם
+        function parentFieldsHtml(parent, title) {
+            var id = 'R_' + parent;
+            var hint = '<div class="FieldHint">חובה לאחד ההורים</div>';
+            var html = '<div class="Koteret SubKoteret">' + title + '</div>';
+            html += '<div class="FieldDiv" style="vertical-align:top"><label class="fieldName" for="' + id + 'FirstName">שם פרטי</label><input id="' + id + 'FirstName" class="TextBox" type="text" maxlength="50" autocomplete="off" />' + hint + '<div class="FieldErr"></div></div>';
+            // אזרחות צמודה למספר הזהות: היא קובעת אם זו ת"ז או דרכון
+            html += '<div class="FieldDiv" style="vertical-align:top"><label class="fieldName IdLabel" for="' + id + 'IdNumber">מספר תעודת זהות</label><input id="' + id + 'IdNumber" class="TextBox DigitsInput" type="tel" dir="ltr" maxlength="15" autocomplete="off" />' + hint + '<div class="FieldErr"></div>' +
+                '<label class="CheckLine" style="display:block;margin-top:4px"><input type="checkbox" id="' + id + 'IsIsraelResident" class="ResidentChk" data-parent="' + parent + '" checked="checked" />אזרחות ישראלית</label>' +
+                '<div class="CountryDiv" style="display:none;margin-top:8px"><label class="fieldName" for="' + id + 'CitizenshipCountryId">מדינת אזרחות <span class="Req">*</span></label><select id="' + id + 'CitizenshipCountryId" class="TextBox"></select><div class="FieldErr"></div></div></div>';
+            html += '<div class="FieldDiv"><label class="fieldName" for="' + id + 'PhoneNumber">פלאפון</label><input id="' + id + 'PhoneNumber" class="TextBox PhoneInput" type="tel" dir="ltr" autocomplete="off" /><div class="FieldHint">חובה לפחות טלפון אחד</div><div class="FieldErr"></div></div>';
+            html += '<div class="FieldDiv"><label class="fieldName" for="' + id + 'Email">מייל</label><input id="' + id + 'Email" class="TextBox" type="text" dir="ltr" maxlength="100" autocomplete="off" /><div class="FieldErr"></div></div>';
+            return html;
+        }
+
+        function onResidentChange(chk) {
+            var parent = $(chk).attr('data-parent');
+            var isIsraeli = $(chk).is(':checked');
+            $('#R_' + parent + 'CitizenshipCountryId').closest('.CountryDiv').toggle(!isIsraeli);
+            $('#R_' + parent + 'IdNumber').closest('.FieldDiv').find('.IdLabel').text(isIsraeli ? 'מספר תעודת זהות' : 'מספר דרכון');
+        }
+
+        function resetRegisterForm() {
+            $('#R_parents').html(parentFieldsHtml('husband', 'אב') + parentFieldsHtml('wife', 'אם'));
+            $('#ScreenRegister input[type=text], #ScreenRegister input[type=tel]').val('');
+            fillSelect($('#R_cityId'), AddressLookups.cities, null, 'בחרו עיר');
+            fillSelect($('#R_husbandCitizenshipCountryId'), AddressLookups.countries, null, 'בחרו מדינה');
+            fillSelect($('#R_wifeCitizenshipCountryId'), AddressLookups.countries, null, 'בחרו מדינה');
+            loadCityLookups('R_', null, null, null);
+            showFormErrors('R_', {});
+        }
+
+        function openRegister() {
+            loadAddressLookups(function (ok) {
+                if (!ok) { return; }
+                State.registering = true;
+                resetRegisterForm();
+                showScreen('ScreenRegister');
+                resetIdle();
+            });
+        }
+
+        // יציאה ממסך הרישום (חזרה, סיום או חוסר פעילות) - מנקה את כל הפרטים שהוזנו
+        function leaveRegistration() {
+            State.registering = false;
+            if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+            $('#R_parents').html('');
+            $('#ScreenRegister input[type=text], #ScreenRegister input[type=tel]').val('');
+            showFormErrors('R_', {});
+            showScreen('ScreenLogin');
+        }
+
+        function toNumberOrUndefined(val) {
+            if (val === '') { return undefined; }
+            var n = Number(val);
+            return isFinite(n) ? n : undefined;
+        }
+
+        // שמות השדות זהים לשרת: הבקשה נבנית מבחירת מפתחות
+        function buildRegistrationPayload(v) {
+            var textKeys = ['familyName', 'husbandFirstName', 'husbandIdNumber', 'husbandPhoneNumber', 'husbandEmail',
+                'wifeFirstName', 'wifeIdNumber', 'wifePhoneNumber', 'wifeEmail', 'homePhoneNumber', 'additionalPhone', 'entrance'];
+            var numberKeys = ['cityId', 'neighborhoodId', 'streetId', 'buildingNumber', 'apartmentNumber', 'floorNumber'];
+            var dto = {
+                husbandIsIsraelResident: v.husbandIsIsraelResident,
+                wifeIsIsraelResident: v.wifeIsIsraelResident
+            };
+            var i;
+            for (i = 0; i < textKeys.length; i++) { addField(dto, textKeys[i], toOptionalText(v[textKeys[i]])); }
+            for (i = 0; i < numberKeys.length; i++) { addField(dto, numberKeys[i], toNumberOrUndefined(v[numberKeys[i]])); }
+            // מדינת אזרחות נשלחת רק למי שאינו בעל אזרחות ישראלית
+            for (i = 0; i < PARENTS.length; i++) {
+                if (!v[PARENTS[i] + 'IsIsraelResident']) {
+                    addField(dto, PARENTS[i] + 'CitizenshipCountryId', toNumberOrUndefined(v[PARENTS[i] + 'CitizenshipCountryId']));
+                }
+            }
+            return dto;
+        }
+
+        function submitRegister() {
+            var v = readFamilyForm('R_');
+            var errors = validateFamilyForm(v, true, CityHasStreets.R_);
+            showFormErrors('R_', errors);
+            for (var key in errors) {
+                if (errors.hasOwnProperty(key)) { return; }
+            }
+
+            setLoading(true);
+            api('POST', '/auth/nedarim/register/family', buildRegistrationPayload(v))
+                .done(function () {
+                    setLoading(false);
+                    // הפרטים לא נשארים בעמדה אחרי הרישום
+                    $('#R_parents').html('');
+                    $('#ScreenRegister input[type=text], #ScreenRegister input[type=tel]').val('');
+                    showScreen('ScreenRegisterDone');
+                })
+                .fail(function (xhr) {
+                    setLoading(false);
+                    showServerErrors('R_', xhr);
+                });
+        }
+
+        //---------------------------------------------------------
         // עריכת פרטי הורים (כמו FamilyEditDialog)
         //---------------------------------------------------------
 
@@ -1224,46 +1734,13 @@
             $('#F_apartmentNumber').val(f.apartmentNumber !== null && f.apartmentNumber !== undefined ? f.apartmentNumber : '');
             $('#F_floorNumber').val(f.floorNumber !== null && f.floorNumber !== undefined ? f.floorNumber : '');
 
-            setLoading(true);
-            api('GET', '/globals/cities')
-                .done(function (cities) {
-                    setLoading(false);
-                    State.lookups.cities = cities || [];
-                    fillSelect($('#F_cityId'), State.lookups.cities, f.cityId, 'בחרו עיר');
-                    loadCityLookups(f.cityId, f.neighborhoodId, f.streetId);
-                    showScreen('ScreenEdit');
-                })
-                .fail(function (xhr) {
-                    setLoading(false);
-                    if (!xhr || xhr.status !== 401) {
-                        showMsg('error', 'לא נמצאו ערים', errText(xhr, ''));
-                    }
-                });
-        }
-
-        function loadCityLookups(cityId, selNeighborhood, selStreet) {
-            if (!cityId) {
-                State.lookups.neighborhoods = [];
-                State.lookups.streets = [];
-                fillSelect($('#F_neighborhoodId'), [], null, 'בחרו שכונה');
-                fillSelect($('#F_streetId'), [], null, 'בחרו רחוב');
-                return;
-            }
-            setLoading(true);
-            var done = 0;
-            function fin() { done++; if (done === 2) { setLoading(false); } }
-            api('GET', '/globals/neighborhoods?cityId=' + cityId)
-                .done(function (list) {
-                    State.lookups.neighborhoods = list || [];
-                    fillSelect($('#F_neighborhoodId'), State.lookups.neighborhoods, selNeighborhood, 'בחרו שכונה');
-                })
-                .always(fin);
-            api('GET', '/globals/streets?cityId=' + cityId)
-                .done(function (list) {
-                    State.lookups.streets = list || [];
-                    fillSelect($('#F_streetId'), State.lookups.streets, selStreet, 'בחרו רחוב');
-                })
-                .always(fin);
+            loadAddressLookups(function (ok) {
+                if (!ok) { return; }
+                showFormErrors('F_', {});
+                fillSelect($('#F_cityId'), AddressLookups.cities, f.cityId, 'בחרו עיר');
+                loadCityLookups('F_', f.cityId, f.neighborhoodId, f.streetId);
+                showScreen('ScreenEdit');
+            });
         }
 
         function toOptionalText(val) {
@@ -1283,13 +1760,13 @@
         }
 
         function saveEdit() {
-            var parsedCityId = toOptionalNumber($('#F_cityId').val());
-            if (!parsedCityId) {
-                showMsg('error', 'יש לבחור עיר', '');
-                return;
+            var errors = validateFamilyForm(readFamilyForm('F_'), false, CityHasStreets.F_);
+            showFormErrors('F_', errors);
+            for (var key in errors) {
+                if (errors.hasOwnProperty(key)) { return; }
             }
 
-            var dto = { cityId: parsedCityId };
+            var dto = { cityId: toOptionalNumber($('#F_cityId').val()) };
             addField(dto, 'husbandFirstName', toOptionalText($('#F_husbandFirstName').val()));
             addField(dto, 'husbandPhoneNumber', toOptionalText($('#F_husbandPhoneNumber').val()));
             addField(dto, 'husbandEmail', toOptionalText($('#F_husbandEmail').val()));
@@ -1316,7 +1793,7 @@
                 .fail(function (xhr) {
                     setLoading(false);
                     if (!xhr || xhr.status !== 401) {
-                        showMsg('error', 'אירעה שגיאה בעדכון פרטי ההורים', errText(xhr, ''));
+                        showServerErrors('F_', xhr);
                     }
                 });
         }
@@ -2063,10 +2540,29 @@
 
             $('#EditCancelBt').click(function () { showScreen('ScreenHome'); });
             $('#EditSaveBt').click(saveEdit);
-            $('#F_cityId').change(function () {
-                // בחירת עיר מאפסת שכונה ורחוב - כמו בדיאלוג העריכה
+            $('.CitySelect').change(function () {
+                // בחירת עיר מאפסת שכונה ורחוב - ברישום ובעריכה
                 var cityId = parseInt($(this).val(), 10);
-                loadCityLookups(isNaN(cityId) ? null : cityId, null, null);
+                loadCityLookups($(this).attr('data-prefix'), isNaN(cityId) ? null : cityId, null, null);
+            });
+
+            // רישום משפחה חדשה
+            $('#RegisterBt').click(openRegister);
+            $('#RegisterBackBt').click(leaveRegistration);
+            $('#RegisterLoginLinkBt').click(leaveRegistration);
+            $('#RegisterDoneBt').click(leaveRegistration);
+            $('#RegisterSaveBt').click(submitRegister);
+            $('#R_parents').on('click change', '.ResidentChk', function () { onResidentChange(this); });
+
+            // טלפונים: ספרות בלבד - כל תו אחר נמחק תוך כדי הקלדה או הדבקה.
+            // מספר בניין ודירה: ספרות בלבד
+            $(document).on('input propertychange keyup paste', '.PhoneInput, .DigitsInput', function () {
+                var input = this;
+                setTimeout(function () {
+                    var val = $(input).val();
+                    var digits = digitsOnly(val);
+                    if (val !== digits) { $(input).val(digits); }
+                }, 0);
             });
 
             $('#OrderBackBt').click(closeOrder);
